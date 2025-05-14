@@ -4,7 +4,7 @@ const path = require('path');
 const XLSX = require('xlsx');
 
 const baseUrl = 'https://developer.obiebank-sbx.banfico.io';
-const outputDir = path.join(process.cwd(), 'pure_apis');
+const outputDir = path.join(process.cwd(), 'developer_obiebank_apis');
 
 // Function to sanitize Page Name for valid filenames and handle duplicates
 function sanitizeFileName(name, existingFiles) {

@@ -1,0 +1,1101 @@
+<div class="MuiBox-root css-w0ig6s"> <div class="MuiContainer-root MuiContainer-maxWidthLg css-1rvugi0"><h1 class="MuiBox-root css-0">Account and Transaction API Specification v3.1.10</h1><h3 class="MuiBox-root css-0" id="account-access-consent-request"> Account Access Consent Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>POST /account-access-consents</pre><p class="MuiBox-root css-0">The API allows the AISP to ask an ASPSP to create a new account-access-consent resource.</p><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Body</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadData1</td><td>Mandatory</td><td></td></tr><tr><td>Risk</td><td>OBRisk2</td><td>Mandatory</td><td>The Risk section is sent by the initiating party to the ASPSP. It is used to specify additional details for risk scoring for Account Info.</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Location</td><td>String</td><td>Mandatory</td><td>Location of the created resource.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id.</td></tr><tr><td>Content-Type</td><td>String</td><td>Mandatory</td><td>application/json</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Body</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadConsentResponse1Data</td><td>Mandatory</td><td></td></tr><tr><td>Risk</td><td>OBRisk2</td><td>Mandatory</td><td>The Risk section is sent by the initiating party to the ASPSP. It is used to specify additional details for risk scoring for Account Info.</td></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0">Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>OK</td></tr><tr><td>201</td><td>Account Access Consents Created</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr><td>415</td><td>Unsupported Media Type</td></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+POST /account-access-consents HTTP/1.1
+Authorization: Bearer 2YotnFZFEjr1zCsicMWpAA
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time: Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Data": {
+    "Permissions": [
+      "ReadAccountsDetail",
+      "ReadBalances",
+      "ReadBeneficiariesDetail",
+      "ReadDirectDebits",
+      "ReadProducts",
+      "ReadStandingOrdersDetail",
+      "ReadTransactionsCredits",
+      "ReadTransactionsDebits",
+      "ReadTransactionsDetail",
+      "ReadOffers",
+      "ReadPAN",
+      "ReadParty",
+      "ReadPartyPSU",
+      "ReadScheduledPaymentsDetail",
+      "ReadStatementsDetail"
+    ],
+    "ExpirationDateTime": "2017-05-02T00:00:00+00:00",
+    "TransactionFromDateTime": "2017-05-03T00:00:00+00:00",
+    "TransactionToDateTime": "2017-12-03T00:00:00+00:00"
+  },
+  "Risk": {}
+}</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 201 Created
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "ConsentId": "urn-alphabank-intent-88379",
+    "Status": "AwaitingAuthorisation",,
+    "StatusUpdateDateTime": "2017-05-02T00:00:00+00:00"
+    "CreationDateTime": "2017-05-02T00:00:00+00:00",
+    "Permissions": [
+      "ReadAccountsDetail",
+      "ReadBalances",
+      "ReadBeneficiariesDetail",
+      "ReadDirectDebits",
+      "ReadProducts",
+      "ReadStandingOrdersDetail",
+      "ReadTransactionsCredits",
+      "ReadTransactionsDebits",
+      "ReadTransactionsDetail",
+      "ReadOffers",
+      "ReadPAN",
+      "ReadParty",
+      "ReadPartyPSU",
+      "ReadScheduledPaymentsDetail",
+      "ReadStatementsDetail"
+    ],
+    "ExpirationDateTime": "2017-08-02T00:00:00+00:00",
+    "TransactionFromDateTime": "2017-05-03T00:00:00+00:00",
+    "TransactionToDateTime": "2017-12-03T00:00:00+00:00"
+
+  },
+  "Risk": {},
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/account-access-consents/urn-alphabank-intent-88379"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="account-access-consent-status"> Account Access Consent Status</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /account-access-consents/{ConsentId}</pre><p class="MuiBox-root css-0">An AISP may optionally retrieve an account-access-consent resource that they have created to check its status.</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>ConsentId</td><td>String</td><td>Account Access Consent ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadConsentResponse1Data</td><td>Mandatory</td><td></td></tr><tr><td>Risk</td><td>OBRisk2</td><td>Mandatory</td><td>The Risk section is sent by the initiating party to the ASPSP. It is used to specify additional details for risk scoring for Account Info.</td></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Account Access Consents Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /account-access-consents/urn-alphabank-intent-88379 HTTP/1.1
+Authorization: Bearer 2YotnFZFEjr1zCsicMWpAA
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time: Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "ConsentId": "urn-alphabank-intent-88379",
+    "Status": "AwaitingAuthorisation",
+    "StatusUpdateDateTime": "2017-05-02T00:00:00+00:00",
+    "CreationDateTime": "2017-05-02T00:00:00+00:00",
+    "Permissions": [
+      "ReadAccountsDetail",
+      "ReadBalances",
+      "ReadBeneficiariesDetail",
+      "ReadDirectDebits",
+      "ReadProducts",
+      "ReadStandingOrdersDetail",
+      "ReadTransactionsCredits",
+      "ReadTransactionsDebits",
+      "ReadTransactionsDetail",
+      "ReadOffers",
+      "ReadPAN",
+      "ReadParty",
+      "ReadPartyPSU",
+      "ReadScheduledPaymentsDetail",
+      "ReadStatementsDetail"
+    ],
+    "ExpirationDateTime": "2017-08-02T00:00:00+00:00",
+    "TransactionFromDateTime": "2017-05-03T00:00:00+00:00",
+    "TransactionToDateTime": "2017-12-03T00:00:00+00:00"
+  },
+  "Risk": {},
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/account-access-consents/urn-alphabank-intent-88379"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="remove-account-access-consent"> Remove Account Access Consent</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>DELETE /account-access-consents/{ConsentId}</pre><p class="MuiBox-root css-0">An AISP may delete an account-access-consent resource that they have created to check its status.</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>ConsentId</td><td>String</td><td>Account Access Consent ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr></tr><tr></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id.</td></tr><tr></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>204</td><td>Account Access Consents Deleted</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+DELETE /account-access-consents/1bfeb79e-70da-405d-88aa-e3d8221d4aeb HTTP/1.1
+Authorization: Bearer 2YotnFZFEjr1zCsicMWpAA
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 204 No Content
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  Account Access Consents Deleted
+}</pre><h3 class="MuiBox-root css-0" id="accounts-request"> List of all Accounts Details Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /accounts</pre><p class="MuiBox-root css-0">The first step for an AISP after an account-request is authorised - is to call the GET /accounts endpoint. An AISP will be given the full list of accounts (the AccountId(s)) that the PSU has authorised the AISP to access.</p><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadAccount3Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Accounts Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /accounts HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time: Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "Account": [
+      {
+        "AccountId": "22289",
+        "Currency": "GBP",
+        "AccountType": "Personal",
+        "AccountSubType": "CurrentAccount",
+        "Nickname": "Bills",
+        "Account": [{
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "80200110203345",
+          "Name": "Mr Kevin",
+          "SecondaryIdentification": "00021"
+        }]
+      },
+      {
+        "AccountId": "31820",
+        "Currency": "GBP",
+        "AccountType": "Personal",
+        "AccountSubType": "CurrentAccount",
+        "Nickname": "Household",
+        "Account": [{
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "80200110203348",
+          "Name": "Mr Kevin"
+        }]
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/accounts/"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="account-details-request"> Account Details Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /accounts/{AccountId}</pre><p class="MuiBox-root css-0">An AISP may retrieve the account information resources for the AccountId (which is retrieved in the call to GET /accounts).</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadAccount3Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Accounts Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /accounts/22289 HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time: Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "Account": [
+      {
+        "AccountId": "22289",
+        "Currency": "GBP",
+        "AccountType": "Personal",
+        "AccountSubType": "CurrentAccount",
+        "Nickname": "Bills",
+        "Account": [{
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "80200110203345",
+          "Name": "Mr Kevin",
+          "SecondaryIdentification": "00021"
+        }]
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/accounts/22289"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="account-balances-request"> Account Balance Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /accounts/{AccountId}/balances</pre><p class="MuiBox-root css-0">An AISP may retrieve the account balance information resource for a specific AccountId (which is retrieved in the call to GET /accounts).</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadBalance1Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>OK</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /accounts/22289/balances HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time: Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "Balance": [
+      {
+        "AccountId": "22289",
+        "Amount": {
+          "Amount": "1230.00",
+          "Currency": "GBP"
+        },
+        "CreditDebitIndicator": "Credit",
+        "Type": "InterimAvailable",
+        "DateTime": "2017-04-05T10:43:07+00:00",
+        "CreditLine": [
+          {
+            "Included": true,
+            "Amount": {
+              "Amount": "1000.00",
+              "Currency": "GBP"
+            },
+            "Type": "Pre-Agreed"
+          }
+        ]
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/accounts/22289/balances/"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="balances-request">All Accounts Balances Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /balances</pre><p class="MuiBox-root css-0">An AISP may retrieve the account balance information resource for all AccountId (which is retrieved in the call to GET /accounts).</p><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadBalance1Data</td><td>Mandatory</td><td></td></tr><tr><td>Risk</td><td>OBRisk2</td><td>Mandatory</td><td>The Risk section is sent by the initiating party to the ASPSP. It is used to specify additional details for risk scoring for Account Info.</td></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Balances Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr><td>415</td><td>Unsupported Media Type</td></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /balances HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time:  Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "Balance": [
+      {
+        "AccountId": "22289",
+        "Amount": {
+          "Amount": "1230.00",
+          "Currency": "GBP"
+        },
+        "CreditDebitIndicator": "Credit",
+        "Type": "InterimAvailable",
+        "DateTime": "2017-04-05T10:43:07+00:00",
+        "CreditLine": [
+          {
+            "Included": true,
+            "Amount": {
+              "Amount": "1000.00",
+              "Currency": "GBP"
+            },
+            "Type": "Pre-Agreed"
+          }
+        ]
+      },
+      {
+        "AccountId": "31820",
+        "Amount": {
+          "Amount": "57.36",
+          "Currency": "GBP"
+        },
+        "CreditDebitIndicator": "Debit",
+        "Type": "InterimBooked",
+        "DateTime": "2017-05-02T14:22:09+00:00"
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/balances/"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="account-beneficiaries-request"> Get Accounts Beneficiaries Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /accounts/{AccountId}/beneficiaries</pre><p class="MuiBox-root css-0">An AISP may retrieve the account beneficiaries information resource for a specific AccountId (which is retrieved in the call to GET /accounts).</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadBeneficiary3Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Beneficiaries Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+GET /accounts/93458383-bafb-4a53-b2d4-87c6f78115d0/beneficiaries HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time:  Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "Beneficiary": [
+      {
+        "AccountId": "22289",
+        "BeneficiaryId": "Ben1",
+        "Reference": "Towbar Club",
+        "CreditorAccount": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "80200112345678",
+          "Name": "Mrs Juniper"
+        }
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/accounts/22289/beneficiaries/"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="beneficiaries-request"> All Accounts Beneficiaries Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /beneficiaries</pre><p class="MuiBox-root css-0">If an ASPSP has implemented the bulk retrieval endpoints for beneficiaries, an AISP may optionally retrieve the beneficiaries' information in bulk.</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadBeneficiary3Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Beneficiaries Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /beneficiaries HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-customer-last-logged-time:  Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "Beneficiary": [
+      {
+        "AccountId": "22289",
+        "BeneficiaryId": "Ben1",
+        "Reference": "Towbar Club",
+        "CreditorAccount": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "80200112345678",
+          "Name": "Mrs Juniper"
+        }
+      },
+      {
+        "AccountId": "31820",
+        "BeneficiaryId": "Ben37",
+        "Reference": "Golf Club",
+        "CreditorAccount": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "87562298675421",
+          "Name": "Mr Large"
+        }
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/beneficiaries/"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="account-direct-debits-request"> Account Direct Debits Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /accounts/{AccountId}/direct-debits</pre><p class="MuiBox-root css-0">An ASPSP must provide this endpoint for AISPs to retrieve the direct-debits for a specific account identified by AccountId.</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadDirectDebit1Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0">Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Direct Debits Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /accounts/22289/direct-debits HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time:  Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "DirectDebit": [
+      {
+        "AccountId": "22289",
+        "DirectDebitId": "DD03",
+        "MandateIdentification": "Caravanners",
+        "DirectDebitStatusCode": "Active",
+        "Name": "Towbar Club 3 - We Love Towbars",
+        "PreviousPaymentDateTime": "2017-04-05T10:43:07+00:00",
+        "PreviousPaymentAmount": {
+          "Amount": "0.57",
+          "Currency": "GBP"
+        }
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/accounts/22289/direct-debits/"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="direct-debits-request"> All Accounts Direct Debits Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /direct-debits</pre><p class="MuiBox-root css-0">An ASPSP may provide this endpoint for AISPs to retrieve direct-debits for all accounts that the PSU has consented to. This will retrieve the direct-debit resources for all authorised accounts linked to the account-request.</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadDirectDebit1Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0">Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Direct Debits Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /direct-debits HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time:  Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "DirectDebit": [
+      {
+        "AccountId": "22289",
+        "DirectDebitId": "DD03",
+        "MandateIdentification": "Caravanners",
+        "DirectDebitStatusCode": "Active",
+        "Name": "Towbar Club 3 - We Love Towbars",
+        "PreviousPaymentDateTime": "2017-04-05T10:43:07+00:00",
+        "PreviousPaymentAmount": {
+          "Amount": "0.57",
+          "Currency": "GBP"
+        }
+      },
+      {
+        "AccountId": "31820",
+        "DirectDebitId": "DD77",
+        "MandateIdentification": "Golfers",
+        "DirectDebitStatusCode": "Active",
+        "Name": "Golf Club",
+        "PreviousPaymentDateTime": "2017-05-06T09:00:00+00:00",
+        "PreviousPaymentAmount": {
+          "Amount": "22.30",
+          "Currency": "GBP"
+        }
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/direct-debits/"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="party-request"> List of all Party Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /party</pre><p class="MuiBox-root css-0">An AISP may retrieve the party resource for a specific AccountId (which is retrieved in the call to GET /accounts).</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr></tr><tr></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadStandingOrder4Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Standing Orders Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /party HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "Party": {
+        "PartyId": "f8a752e6-5301-4265-80b8-1d7f4ff5609d",
+        "PartyType": "Sole",
+        "Name": "Alexander Ben Stokes",
+        "LegalStructure": "UK.OBIE.Individual",
+        "BeneficialOwnership": true,
+        "AccountRole": "UK.OBIE.Principal",
+        "EmailAddress": "alexander.stokes110769_skipkyx@jpmchase.com",
+        "Mobile": "+44-7786-778565",
+        "Address": [
+            {
+                "AddressLine": [
+                    "226",
+                    "HIGH STREET",
+                    "HIGH STREET",
+                    "SWANSEA"
+                ],
+                "PostCode": "SA1 1NY",
+                "TownName": "SWANSEA",
+                "Country": "GB"
+            }
+        ]
+    }
+}</pre><h3 class="MuiBox-root css-0" id="account-party-request"> Party Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /accounts/{AccountId}/party</pre><p class="MuiBox-root css-0">An AISP may retrieve the party resource for a specific AccountId (which is retrieved in the call to GET /accounts).</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr></tr><tr></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadStandingOrder4Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Standing Orders Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /accounts/22289/party HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "Party": {
+        "PartyId": "f8a752e6-5301-4265-80b8-1d7f4ff5609d",
+        "PartyType": "Sole",
+        "Name": "Alexander Ben Stokes",
+        "LegalStructure": "UK.OBIE.Individual",
+        "BeneficialOwnership": true,
+        "AccountRole": "UK.OBIE.Principal",
+        "EmailAddress": "alexander.stokes110769_skipkyx@jpmchase.com",
+        "Mobile": "+44-7786-778565",
+        "Address": [
+            {
+                "AddressLine": [
+                    "226",
+                    "HIGH STREET",
+                    "HIGH STREET",
+                    "SWANSEA"
+                ],
+                "PostCode": "SA1 1NY",
+                "TownName": "SWANSEA",
+                "Country": "GB"
+            }
+        ]
+    }
+}</pre><h3 class="MuiBox-root css-0" id="account-parties-request"> Parties Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /accounts/{AccountId}/parties</pre><p class="MuiBox-root css-0">An AISP may retrieve the party resource for a specific AccountId (which is retrieved in the call to GET /accounts).</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr></tr><tr></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadStandingOrder4Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Standing Orders Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /accounts/22289/parties HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "Party": {
+        "PartyId": "f8a752e6-5301-4265-80b8-1d7f4ff5609d",
+        "PartyType": "Sole",
+        "Name": "Alexander Ben Stokes",
+        "LegalStructure": "UK.OBIE.Individual",
+        "BeneficialOwnership": true,
+        "AccountRole": "UK.OBIE.Principal",
+        "EmailAddress": "alexander.stokes110769_skipkyx@jpmchase.com",
+        "Mobile": "+44-7786-778565",
+        "Address": [
+            {
+                "AddressLine": [
+                    "226",
+                    "HIGH STREET",
+                    "HIGH STREET",
+                    "SWANSEA"
+                ],
+                "PostCode": "SA1 1NY",
+                "TownName": "SWANSEA",
+                "Country": "GB"
+            }
+        ]
+    }
+}</pre><h3 class="MuiBox-root css-0" id="product-request"> List of all Product Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /product</pre><p class="MuiBox-root css-0">An AISP may retrieve the product resource (which is retrieved in the call to GET /accounts).</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr></tr><tr></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadStandingOrder4Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Standing Orders Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /product HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+
+{
+  "Data": {
+      "Product": [
+          {
+              "ProductName": "Chase Saver",
+              "ProductId": "98e69c93-94de-45db-9892-b970201a4017",
+              "AccountId": "485d269a-5e07-4279-b4a6-536a0aa03039",
+              "ProductType": "PersonalCurrentAccount",
+              "PCA": {
+                  "CreditInterest": {
+                      "TierBandSet": [
+                          {
+                              "TierBandMethod": "Whole",
+                              "TierBand": [
+                                  {
+                                      "Identification": "4017",
+                                      "TierValueMinimum": "0.00",
+                                      "TierValueMaximum": "500000.00",
+                                      "CalculationFrequency": "Daily",
+                                      "ApplicationFrequency": "Monthly",
+                                      "FixedVariableInterestRateType": "Variable",
+                                      "AER": "3.00",
+                                      "BankInterestRateType": "Gross",
+                                      "BankInterestRate": "2.96"
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              }
+          },
+          {
+              "ProductName": "Current account",
+              "ProductId": "25e14d2f-9761-467d-b14d-319b5600766f",
+              "AccountId": "ab9330fb-6c88-432d-8c5b-1a4d99760d25",
+              "ProductType": "PersonalCurrentAccount"
+          },
+          {
+              "ProductName": "Round-Up",
+              "ProductId": "27feabdc-3a75-4c37-99da-7cf2aa47c4db",
+              "AccountId": "291b9022-884b-45b7-9a81-1217eae405bd",
+              "ProductType": "PersonalCurrentAccount",
+              "PCA": {
+                  "CreditInterest": {
+                      "TierBandSet": [
+                          {
+                              "TierBandMethod": "Whole",
+                              "TierBand": [
+                                  {
+                                      "Identification": "c4db",
+                                      "TierValueMinimum": "0.00",
+                                      "CalculationFrequency": "Daily",
+                                      "ApplicationFrequency": "Monthly",
+                                      "FixedVariableInterestRateType": "Variable",
+                                      "AER": "5.00",
+                                      "BankInterestRateType": "Gross",
+                                      "BankInterestRate": "4.89"
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              }
+          }
+      ]
+  },
+  "Links": {
+      "Self": "/products/"
+  },
+  "Meta": {
+      "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="account-product-request"> Product Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /accounts/{AccountId}/product</pre><p class="MuiBox-root css-0">An AISP may retrieve the product resource for a specific AccountId (which is retrieved in the call to GET /accounts).</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr></tr><tr></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadStandingOrder4Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Standing Orders Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /product HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+
+{
+  "Data": {
+      "Product": [
+          {
+              "ProductName": "Chase Saver",
+              "ProductId": "98e69c93-94de-45db-9892-b970201a4017",
+              "AccountId": "485d269a-5e07-4279-b4a6-536a0aa03039",
+              "ProductType": "PersonalCurrentAccount",
+              "PCA": {
+                  "CreditInterest": {
+                      "TierBandSet": [
+                          {
+                              "TierBandMethod": "Whole",
+                              "TierBand": [
+                                  {
+                                      "Identification": "4017",
+                                      "TierValueMinimum": "0.00",
+                                      "TierValueMaximum": "500000.00",
+                                      "CalculationFrequency": "Daily",
+                                      "ApplicationFrequency": "Monthly",
+                                      "FixedVariableInterestRateType": "Variable",
+                                      "AER": "3.00",
+                                      "BankInterestRateType": "Gross",
+                                      "BankInterestRate": "2.96"
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              }
+          },
+          {
+              "ProductName": "Current account",
+              "ProductId": "25e14d2f-9761-467d-b14d-319b5600766f",
+              "AccountId": "ab9330fb-6c88-432d-8c5b-1a4d99760d25",
+              "ProductType": "PersonalCurrentAccount"
+          },
+          {
+              "ProductName": "Round-Up",
+              "ProductId": "27feabdc-3a75-4c37-99da-7cf2aa47c4db",
+              "AccountId": "291b9022-884b-45b7-9a81-1217eae405bd",
+              "ProductType": "PersonalCurrentAccount",
+              "PCA": {
+                  "CreditInterest": {
+                      "TierBandSet": [
+                          {
+                              "TierBandMethod": "Whole",
+                              "TierBand": [
+                                  {
+                                      "Identification": "c4db",
+                                      "TierValueMinimum": "0.00",
+                                      "CalculationFrequency": "Daily",
+                                      "ApplicationFrequency": "Monthly",
+                                      "FixedVariableInterestRateType": "Variable",
+                                      "AER": "5.00",
+                                      "BankInterestRateType": "Gross",
+                                      "BankInterestRate": "4.89"
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              }
+          }
+      ]
+  },
+  "Links": {
+      "Self": "/products/"
+  },
+  "Meta": {
+      "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="account-standing-orders-request"> Account Standing Order Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /accounts/{AccountId}/standing-orders</pre><p class="MuiBox-root css-0">An AISP may retrieve the standing-order resource for a specific AccountId (which is retrieved in the call to GET /accounts).</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadStandingOrder4Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Standing Orders Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /accounts/22289/standing-orders HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time:  Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "StandingOrder": [
+      {
+        "AccountId": "22289",
+        "StandingOrderId": "Ben3",
+        "Frequency": "EvryWorkgDay",
+        "Reference": "Towbar Club 2 - We Love Towbars",
+        "FirstPaymentDateTime": "2017-08-12T00:00:00+00:00",
+        "FirstPaymentAmount": {
+          "Amount": "0.57",
+          "Currency": "GBP"
+        },
+        "NextPaymentDateTime": "2017-08-13T00:00:00+00:00",
+        "NextPaymentAmount": {
+          "Amount": "0.56",
+          "Currency": "GBP"
+        },
+        "FinalPaymentDateTime": "2027-08-12T00:00:00+00:00",
+        "FinalPaymentAmount": {
+          "Amount": "0.56",
+          "Currency": "GBP"
+        },
+        "StandingOrderStatusCode": "Active",
+        "CreditorAccount": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "80200112345678",
+          "Name": "Mrs Juniper"
+        }
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/accounts/22289/standing-orders/"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="standing-orders-request"> All Accounts Standing Order Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /standing-orders</pre><p class="MuiBox-root css-0">If an ASPSP has implemented the bulk retrieval endpoints, an AISP may optionally retrieve the standing-order resources in bulk.</p><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadStandingOrder4Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Standing Orders Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /standing-orders HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time:  Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "StandingOrder": [
+      {
+        "AccountId": "22289",
+        "StandingOrderId": "Ben3",
+        "Frequency": "EvryWorkgDay",
+        "Reference": "Towbar Club 2 - We Love Towbars",
+        "FirstPaymentDateTime": "2017-08-12T00:00:00+00:00",
+        "FirstPaymentAmount": {
+          "Amount": "0.57",
+          "Currency": "GBP"
+        },
+        "NextPaymentDateTime": "2017-08-13T00:00:00+00:00",
+        "NextPaymentAmount": {
+          "Amount": "0.56",
+          "Currency": "GBP"
+        },
+        "FinalPaymentDateTime": "2027-08-12T00:00:00+00:00",
+        "FinalPaymentAmount": {
+          "Amount": "0.56",
+          "Currency": "GBP"
+        },
+        "StandingOrderStatusCode": "Active",
+        "CreditorAccount": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "80200112345678",
+          "Name": "Mrs Juniper"
+        }
+      },
+      {
+        "AccountId": "22289",
+        "StandingOrderId": "Ben5",
+        "Frequency": "WkinMnthDay(2)",
+        "Reference": "Golf - We Love Golf",
+        "FirstPaymentDateTime": "2017-06-12T00:00:00+00:00",
+        "FirstPaymentAmount": {
+          "Amount": "23.00",
+          "Currency": "GBP"
+        },
+        "NextPaymentDateTime": "2017-07-12T00:00:00+00:00",
+        "NextPaymentAmount": {
+          "Amount": "23.00",
+          "Currency": "GBP"
+        },
+        "FinalPaymentDateTime": "2018-06-12T00:00:00+00:00",
+        "FinalPaymentAmount": {
+          "Amount": "23.00",
+          "Currency": "GBP"
+        },
+        "StandingOrderStatusCode": "Active",
+        "CreditorAccount": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "23605490179017",
+          "Name": "Mr Tee"
+        }
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/standing-orders/"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="account-scheduled-payments-request"> Account Scheduled Payments Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /accounts/{AccountId}/scheduled-payments</pre><p class="MuiBox-root css-0">An AISP may retrieve the scheduled-payments resource for a specific AccountId (which is retrieved in the call to GET /accounts).</p><h4 class="MuiBox-root css-0"> Path Parameters</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>AccountId</td><td>String</td><td>Account ID</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadScheduledPayment2Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Scheduled Payments Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /accounts/22289/scheduled-payments HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time:  Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+ 
+{
+  "Data": {
+    "ScheduledPayment": [
+      {
+        "AccountId": "22289",
+        "ScheduledPaymentId": "SP03",
+        "ScheduledPaymentDateTime": "2017-05-05T00:00:00+00:00",
+        "ScheduledType": "Execution",
+        "InstructedAmount": {
+          "Amount": "10.00",
+          "Currency": "GBP"
+        },
+        "CreditorAccount": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "23605490179017",
+          "Name": "Mr Tee"
+        }
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/accounts/22289/scheduled-payments/"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="scheduled-payments-request"> All Accounts Scheduled Payments Request</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /scheduled-payments</pre><p class="MuiBox-root css-0">If an ASPSP has implemented the bulk retrieval endpoints, an AISP may optionally retrieve the scheduled-payments resources in bulk.</p><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadScheduledPayment2Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Scheduled Payments Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /scheduled-payments HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time:  Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+ 
+{
+  "Data": {
+    "ScheduledPayment": [
+      {
+        "AccountId": "22289",
+        "ScheduledPaymentId": "SP03",
+        "ScheduledPaymentDateTime": "2017-05-05T00:00:00+00:00",
+        "ScheduledType": "Execution",
+        "InstructedAmount": {
+          "Amount": "10.00",
+          "Currency": "GBP"
+        },
+        "CreditorAccount": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "23605490179017",
+          "Name": "Mr Tee"
+        }
+      },
+      {
+        "AccountId": "39570",
+        "ScheduledPaymentId": "SP77",
+        "ScheduledPaymentDateTime": "2017-04-05T00:00:00+00:00",
+        "ScheduledType": "Execution",
+        "InstructedAmount": {
+          "Amount": "12.00",
+          "Currency": "GBP"
+        },
+        "CreditorAccount": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "Identification": "23605490179017",
+          "Name": "Mr Tee"
+        }
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/scheduled-payments/"
+  },
+  "Meta": {
+    "TotalPages": 1
+  }
+}</pre><h3 class="MuiBox-root css-0" id="account-transactions-request"> Get transaction for account</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /accounts/{AccountId}/transactions</pre><p class="MuiBox-root css-0">The API allows an AISP to retrieve the transaction resource for a specific AccountId</p><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Path Params</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>fromBookingDateTime</td><td>string</td><td>Optional</td><td>The UTC ISO 8601 Date Time to filter transactions FROM NB Time component is optional - set to 00:00:00 for just Date. If the Date Time contains a timezone, the ASPSP must ignore the timezone component.</td></tr><tr><td>toBookingDateTime</td><td>string</td><td>Optional</td><td>The UTC ISO 8601 Date Time to filter transactions TO NB Time component is optional - set to 00:00:00 for just Date. If the Date Time contains a timezone, the ASPSP must ignore the timezone component.</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>Content-Type</td><td>String</td><td>Mandatory</td><td>application/json</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Body</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadTransaction4Data</td><td>Mandatory</td><td></td></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload </td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Optional</td><td>Meta Data Relevant to the payload </td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Transaction Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /accounts/22289/transactions HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time:  Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "Transaction": [
+      {
+        "AccountId": "22289",
+        "TransactionId": "123",
+        "TransactionReference": "Ref 1",
+        "Amount": {
+          "Amount": "10.00",
+          "Currency": "GBP"
+        },
+        "CreditDebitIndicator": "Credit",
+        "Status": "Booked",
+        "BookingDateTime": "2017-04-05T10:43:07+00:00",
+        "ValueDateTime": "2017-04-05T10:45:22+00:00",
+        "TransactionInformation": "Cash from Aubrey",
+        "BankTransactionCode": {
+          "Code": "ReceivedCreditTransfer",
+          "SubCode": "DomesticCreditTransfer"
+        },
+        "ProprietaryBankTransactionCode": {
+          "Code": "Transfer",
+          "Issuer": "AlphaBank"
+        },
+        "Balance": {
+          "Amount": {
+            "Amount": "230.00",
+            "Currency": "GBP"
+          },
+          "CreditDebitIndicator": "Credit",
+          "Type": "InterimBooked"
+        }
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/accounts/22289/transactions/"
+  },
+  "Meta": {
+    "TotalPages": 1,
+    "FirstAvailableDateTime": "2017-05-03T00:00:00+00:00",
+    "LastAvailableDateTime": "2017-12-03T00:00:00+00:00"
+  }
+}</pre><h3 class="MuiBox-root css-0" id="transactions-request"> Get All Transaction for accounts</h3><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button>GET /transactions</pre><p class="MuiBox-root css-0">The API allows an AISP to retrieve the transaction resource for a specific AccountId</p><h4 class="MuiBox-root css-0"> Request Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Authorization</td><td>String</td><td>Mandatory</td><td><span class="MuiBox-root css-olgnlr" href="An Authorisation Token as per" target="_self">An Authorisation Token as per</span> <a class="MuiBox-root css-olgnlr" href="https://tools.ietf.org/html/rfc6750" target="_blank">https://tools.ietf.org/html/rfc6750</a> </td></tr><tr><td>x-fapi-financial-id</td><td>UUID</td><td>Mandatory</td><td>The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.</td></tr><tr><td>x-fapi-customer-last-logged-time</td><td>String</td><td>Optional</td><td>The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC</td></tr><tr><td>x-fapi-customer-ip-address</td><td>String</td><td>Optional</td><td>The PSU's IP address if the PSU is currently logged in with the TPP.</td></tr><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>x-customer-user-agent</td><td>String</td><td>Optional</td><td>Indicates the user-agent that the PSU is using</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Request Path Params</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>fromBookingDateTime</td><td>string</td><td>Optional</td><td>The UTC ISO 8601 Date Time to filter transactions FROM NB Time component is optional - set to 00:00:00 for just Date. If the Date Time contains a timezone, the ASPSP must ignore the timezone component</td></tr><tr><td>toBookingDateTime</td><td>string</td><td>Optional</td><td>The UTC ISO 8601 Date Time to filter transactions TO NB Time component is optional - set to 00:00:00 for just Date. If the Date Time contains a timezone, the ASPSP must ignore the timezone component</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>x-fapi-interaction-id</td><td>String</td><td>Optional</td><td>An RFC4122 UID used as a correlation id</td></tr><tr><td>Content-Type</td><td>String</td><td>Mandatory</td><td>application/json</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Headers</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Attribute</th><th>Type</th><th>Condition</th><th>Description</th></tr></thead><tbody><tr><td>Data</td><td>OBReadTransaction4Data</td><td>Mandatory</td><td></td></tr><tr></tr><tr><td>Links</td><td>PaymentResponseLinks</td><td>Mandatory</td><td>Link URIs relevant to the payload</td></tr><tr><td>Meta</td><td>PaymentResponse Meta</td><td>Mandatory</td><td>Meta Data Relevant to the payload</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Response Codes</h4><div class="MuiBox-root css-0"><table><thead><tr><th>Status Code</th><th>Description</th></tr></thead><tbody><tr><td>200</td><td>Transaction Read</td></tr><tr><td>400</td><td>Bad Request</td></tr><tr><td>401</td><td>Unauthorized</td></tr><tr><td>403</td><td>Forbidden</td></tr><tr><td>404</td><td>Not Found</td></tr><tr><td>405</td><td>Method Not Allowed</td></tr><tr><td>406</td><td>Not Acceptable</td></tr><tr></tr><tr><td>429</td><td>Too Many Requests</td></tr><tr><td>500</td><td>Internal Server Error</td></tr></tbody></table></div><h4 class="MuiBox-root css-0"> Example</h4><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Request
+GET /transactions HTTP/1.1
+Authorization: Bearer Az90SAOJklae
+x-fapi-financial-id: OB/2017/001
+x-fapi-customer-last-logged-time:  Sun, 10 Sep 2017 19:43:31 GMT
+x-fapi-customer-ip-address: 104.25.212.99
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Accept: application/json</pre><pre class="MuiBox-root css-79elbk"><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall css-1pzmp4" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-colorAction MuiSvgIcon-fontSizeMedium css-1prob85" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ContentCopyRoundedIcon"><path d="M15 20H5V7c0-.55-.45-1-1-1s-1 .45-1 1v13c0 1.1.9 2 2 2h10c.55 0 1-.45 1-1s-.45-1-1-1m5-4V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9c1.1 0 2-.9 2-2m-2 0H9V4h9z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button># Response
+HTTP/1.1 200 OK
+x-fapi-interaction-id: 93bac548-d2de-4546-b106-880a5018460d
+Content-Type: application/json
+
+{
+  "Data": {
+    "Transaction": [
+      {
+        "AccountId": "22289",
+        "TransactionId": "123",
+        "TransactionReference": "Ref 123",
+        "Amount": {
+          "Amount": "10.00",
+          "Currency": "GBP"
+        },
+        "CreditDebitIndicator": "Credit",
+        "Status": "Booked",
+        "BookingDateTime": "date",
+        "ValueDateTime": "2017-04-05T10:45:22+00:00",
+        "TransactionInformation": "Cash from Aubrey",
+        "BankTransactionCode": {
+          "Code": "ReceivedCreditTransfer",
+          "SubCode": "DomesticCreditTransfer"
+        },
+        "ProprietaryBankTransactionCode": {
+          "Code": "Transfer",
+          "Issuer": "AlphaBank"
+        },
+        "Balance": {
+          "Amount": {
+            "Amount": "230.00",
+            "Currency": "GBP"
+          },
+          "CreditDebitIndicator": "Credit",
+          "Type": "InterimBooked"
+        }
+      },
+      {
+        "AccountId": "31820",
+        "TransactionId": "567",
+        "TransactionReference": "Ref 124",
+        "Amount": {
+          "Amount": "100.00",
+          "Currency": "GBP"
+        },
+        "CreditDebitIndicator": "Debit",
+        "Status": "Booked",
+        "BookingDateTime": "2017-05-02T14:22:09+00:00",
+        "ValueDateTime": "2017-05-02T14:22:09+00:00",
+        "TransactionInformation": "Paid the gas bill",
+        "AddressLine": "Coventry",
+        "BankTransactionCode": {
+          "Code": "IssuedCreditTransfer",
+          "SubCode": "AutomaticTransfer"
+        },
+        "ProprietaryBankTransactionCode": {
+          "Code": "DirectDebit",
+          "Issuer": "AlphaBank"
+        },
+        "Balance": {
+          "Amount": {
+            "Amount": "57.36",
+            "Currency": "GBP"
+          },
+          "CreditDebitIndicator": "Debit",
+          "Type": "InterimBooked"
+        }
+      }
+    ]
+  },
+  "Links": {
+    "Self": "https://api.alphabank.com/open-banking/v3.1.10/aisp/transactions"
+  },
+  "Meta": {
+    "TotalPages": 1,
+    "FirstAvailableDateTime": "2017-05-03T00:00:00+00:00",
+    "LastAvailableDateTime": "2017-12-03T00:00:00+00:00"
+  }
+}</pre></div></div>
