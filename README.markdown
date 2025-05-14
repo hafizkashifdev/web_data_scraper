@@ -265,7 +265,15 @@ File issues or suggestions on [GitHub Issues](https://github.com/your-username/S
 ## License
 [MIT License](LICENSE)
 
+## Author
+**Hafiz Kashif**  
+*Senior Frontend Developer*  
+- 🌐 [Portfolio](https://hafizkashifdev.com)  
+- 🔗 [GitHub](https://github.com/hafizkashifdev)  
+- 💼 [LinkedIn](https://linkedin.com/in/hafizkashifdev)  
+- 📞 [+92 3116327401](tel:+923116327401)
+
 ---
 
-*Crafted with ❤️ by a web scraping agent*  
-*Updated: May 14, 2025, 04:22 PM PKT*
+*Crafted with ❤️ by Hafiz Kashif*  
+*Updated: May 14, 2025, 04:31 PM PKT*
