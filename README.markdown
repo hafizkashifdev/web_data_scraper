@@ -1,11 +1,11 @@
-# SPADocScraper: Extracting Clean API Documentation with Puppeteer
+# web_data_scraper: Extracting Clean API Documentation with Puppeteer
 
 [![Node.js](https://img.shields.io/badge/Node.js-v18+-green)](https://nodejs.org)
 [![Puppeteer](https://img.shields.io/badge/Puppeteer-24.8.2-blue)](https://pptr.dev)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
-[![SPADocScraper](https://img.shields.io/badge/Repo-SPADocScraper-blue)](https://github.com/your-username/SPADocScraper)
+[![web_data_scraper](https://img.shields.io/badge/Repo-web_data_scraper-blue)](https://github.com/hafizkashifdev/web_data_scraper.git)
 
-Welcome to **SPADocScraper**, a robust Node.js tool powered by Puppeteer to scrape clean API documentation from single-page applications (SPAs). Designed for efficiency, it extracts content like code snippets, tables, and headings from sites such as `https://developer.obiebank-sbx.banfico.io`, while removing unwanted navigation menus (e.g., "Home," "Accounts API"). Driven by an Excel file (`links_with_page_names.xlsx`), it uses client-side routing to minimize HTTP requests and saves results as HTML files. Whether you're archiving API docs or building offline references, SPADocScraper is your go-to solution! 🚀
+Welcome to **web_data_scraper**, a robust Node.js tool powered by Puppeteer to scrape clean API documentation from single-page applications (SPAs). Designed for efficiency, it extracts content like code snippets, tables, and headings from sites such as `https://developer.obiebank-sbx.banfico.io`, while removing unwanted navigation menus (e.g., "Home," "Accounts API"). Driven by an Excel file (`links_with_page_names.xlsx`), it uses client-side routing to minimize HTTP requests and saves results as HTML files. Whether you're archiving API docs or building offline references, web_data_scraper is your go-to solution! 🚀
 
 ## Table of Contents
 - [Project Overview](#project-overview)
@@ -23,7 +23,7 @@ Welcome to **SPADocScraper**, a robust Node.js tool powered by Puppeteer to scra
 - [License](#license)
 
 ## Project Overview
-SPADocScraper tackles the challenge of extracting API documentation from SPAs, where dynamic routing and navigation menus complicate traditional scraping. It navigates the SPA with a single initial HTTP request, removes the navigation sidebar (`<ul class="MuiList-root MuiList-padding">`), and saves clean HTML files containing only the desired content (e.g., `<h3>`, `<pre>`, `<table>`). The script reads URLs and page names from an Excel file, making it easy to scrape multiple pages in one go.
+web_data_scraper tackles the challenge of extracting API documentation from SPAs, where dynamic routing and navigation menus complicate traditional scraping. It navigates the SPA with a single initial HTTP request, removes the navigation sidebar (`<ul class="MuiList-root MuiList-padding">`), and saves clean HTML files containing only the desired content (e.g., `<h3>`, `<pre>`, `<table>`). The script reads URLs and page names from an Excel file, making it easy to scrape multiple pages in one go.
 
 **Use Case**: Extracting API endpoints (e.g., `POST /account-access-consents`) from `https://developer.obiebank-sbx.banfico.io` for offline use, without the clutter of navigation links.
 
@@ -38,7 +38,7 @@ SPADocScraper tackles the challenge of extracting API documentation from SPAs, w
 
 ## Project Structure
 ```
-SPADocScraper/
+web_data_scraper/
 ├── config/
 │   └── selectors.json           # Optional: DOM selectors for navigation and content
 ├── examples/
@@ -72,8 +72,8 @@ npm -v
 ## Installation
 1. **Clone or Create the Repository**:
    ```bash
-   mkdir SPADocScraper
-   cd SPADocScraper
+   mkdir web_data_scraper
+   cd web_data_scraper
    git init
    ```
 
@@ -101,7 +101,7 @@ npm -v
    ```javascript
    const puppeteer = require('puppeteer');
    const XLSX = require('xlsx');
-   console.log('SPADocScraper dependencies ready!');
+   console.log('web_data_scraper dependencies ready!');
    ```
    Run:
    ```bash
@@ -260,7 +260,7 @@ A: Modify `fs.writeFileSync` in `scraper.js` to output JSON.
 4. Push to the branch: `git push origin feature/your-feature`.
 5. Open a pull request.
 
-File issues or suggestions on [GitHub Issues](https://github.com/your-username/SPADocScraper/issues).
+File issues or suggestions on [GitHub Issues](https://github.com/hafizkashifdev/web_data_scraper.git/issues).
 
 ## License
 [MIT License](LICENSE)
