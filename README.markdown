@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 [![SPADocScraper](https://img.shields.io/badge/Repo-SPADocScraper-blue)](https://github.com/your-username/SPADocScraper)
 
-Welcome to **SPADocScraper**, a robust Node.js tool powered by Puppeteer to scrape clean API documentation from single-page applications (SPAs). Designed for efficiency, it extracts content like code snippets, tables, and headings from sites like `https://developer.obiebank-sbx.banfico.io`, while removing unwanted navigation menus (e.g., "Home," "Accounts API"). Driven by an Excel file (`links_with_page_names.xlsx`), it uses client-side routing to minimize HTTP requests and saves results as HTML files. Whether you're archiving API docs or building offline references, SPADocScraper is your go-to solution! 🚀
+Welcome to **SPADocScraper**, a robust Node.js tool powered by Puppeteer to scrape clean API documentation from single-page applications (SPAs). Designed for efficiency, it extracts content like code snippets, tables, and headings from sites such as `https://developer.obiebank-sbx.banfico.io`, while removing unwanted navigation menus (e.g., "Home," "Accounts API"). Driven by an Excel file (`links_with_page_names.xlsx`), it uses client-side routing to minimize HTTP requests and saves results as HTML files. Whether you're archiving API docs or building offline references, SPADocScraper is your go-to solution! 🚀
 
 ## Table of Contents
 - [Project Overview](#project-overview)
@@ -54,14 +54,14 @@ SPADocScraper/
 ```
 
 ## Prerequisites
-| Requirement | Details |
-|-------------|---------|
-| **Node.js** | v18 or later ([Download](https://nodejs.org)) |
-| **Google Chrome** | Puppeteer downloads Chromium (~200MB) |
-| **Excel File** | `links_with_page_names.xlsx` with `Page Name` and `URL` columns |
-| **Disk Space** | ~500MB for dependencies and Chromium |
-| **Internet** | For dependency installation and SPA access |
-| **OS** | Windows, macOS, Linux |
+| Requirement       | Details                                                                 |
+|-------------------|-------------------------------------------------------------------------|
+| **Node.js**       | v18 or later ([Download](https://nodejs.org))                          |
+| **Google Chrome** | Puppeteer downloads Chromium (~200MB)                                  |
+| **Excel File**    | `links_with_page_names.xlsx` with `Page Name` and `URL` columns        |
+| **Disk Space**    | ~500MB for dependencies and Chromium                                   |
+| **Internet**      | For dependency installation and SPA access                             |
+| **OS**            | Windows, macOS, Linux                                                 |
 
 Verify Node.js:
 ```bash
@@ -220,13 +220,13 @@ let contentElement = document.querySelector('main') || ...
 - **Debug Files**: Full page HTML for troubleshooting (e.g., `debug_Account_Access_Consent_Request.html`).
 
 ## Troubleshooting
-| Issue | Solution |
-|-------|----------|
+| Issue                     | Solution                                                                 |
+|---------------------------|-------------------------------------------------------------------------|
 | **Navigation menu remains** | Check debug HTML. Update selector in `scraper.js` (e.g., `ul.MuiList-root`). |
-| **No content scraped** | Inspect debug HTML for content container. Add selector (e.g., `.docs-content`). |
-| **Slow loading** | Increase timeout: `await page.waitForSelector('...', { timeout: 20000 });` |
-| **Excel errors** | Verify column names (`Page Name`, `URL`). Check file path. |
-| **Puppeteer crashes** | Ensure disk space. Reinstall: `npm install puppeteer@24.8.2`. |
+| **No content scraped**    | Inspect debug HTML for content container. Add selector (e.g., `.docs-content`). |
+| **Slow loading**          | Increase timeout: `await page.waitForSelector('...', { timeout: 20000 });` |
+| **Excel errors**          | Verify column names (`Page Name`, `URL`). Check file path.               |
+| **Puppeteer crashes**     | Ensure disk space. Reinstall: `npm install puppeteer@24.8.2`.            |
 
 **Debugging**:
 1. Open `scraped_data/debug_*.html`.
@@ -254,10 +254,10 @@ A: They indicate content extraction issues. Use them to refine selectors.
 A: Modify `fs.writeFileSync` in `scraper.js` to output JSON.
 
 ## Contributing
-1. Fork the repo.
+1. Fork the repository.
 2. Create a branch: `git checkout -b feature/your-feature`.
-3. Commit: `git commit -m "Add your feature"`.
-4. Push: `git push origin feature/your-feature`.
+3. Commit your changes: `git commit -m "Add your feature"`.
+4. Push to the branch: `git push origin feature/your-feature`.
 5. Open a pull request.
 
 File issues or suggestions on [GitHub Issues](https://github.com/your-username/SPADocScraper/issues).

@@ -1,10 +1,14 @@
+// SPADocScraper - Puppeteer-based SPA documentation scraper
+// Copyright (c) 2025 Hafiz Kashif
+// Licensed under the MIT License. See LICENSE file in the project root for details.
+
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 const XLSX = require('xlsx');
 
 const baseUrl = 'https://developer.obiebank-sbx.banfico.io';
-const outputDir = path.join(process.cwd(), 'developer_obiebank_apis');
+const outputDir = path.join(process.cwd(), 'scraped_data');
 
 // Function to sanitize Page Name for valid filenames and handle duplicates
 function sanitizeFileName(name, existingFiles) {
