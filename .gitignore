@@ -1,0 +1,33 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Output files from scraping
+scraped_*.txt
+
+# Excel file (if you don't want to track it)
+links_with_page_names.xlsx
+
+# Environment variables
+.env
+
+# Build artifacts
+dist/
+build/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# Dependency lock files (optional, if you don't want to track them)
+package-lock.json
+yarn.lock
