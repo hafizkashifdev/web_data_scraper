@@ -1,6 +1,12 @@
 {
   "dependencies": {
     "puppeteer": "^24.8.2",
+    "sanitize-filename": "^1.6.3",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
+    "prettier": "^3.5.3"
   }
 }

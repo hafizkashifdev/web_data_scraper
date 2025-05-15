@@ -1,0 +1,159 @@
+
+
+
+<div class="banner bg-primary pattern pattern--xl pattern--diagonal-left pattern--right pattern--connect-bottom no-animate inview-onload inview">
+    <div class="container">
+
+
+            <h1 class="display-2">OIDC (OpenID Connect) API</h1>
+        <h2 class="strapline">Version 1.1.5 (Current version)</h2>
+        
+
+
+        
+            <div class="pattern__inner">
+                <svg role="presentation" viewBox="0 0 1600 320">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/svg/pattern.svg#pattern-1"></use>
+                </svg>
+            </div>
+    </div>
+    <div class="banner__bg">
+        
+    </div>
+
+    <hr role="presentation" class="hr--clear">
+</div>
+
+<div class="container container--expand content-list bg-light no-animate inview-onload inview">
+    <h2 class="content-list__title h3">Page contents</h2>
+    <ul class="list-links row">
+            <li class="col-12 col-sm-6 col-md-4">
+                <a href="#endpoints" data-icon="/assets/svg/rebrand-ui.svg#anchor" data-icon-left="" style="animation-delay: 0.5s;"><span class="svg__wrapper  svg__wrapper--fill"><svg class=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/svg/rebrand-ui.svg#anchor"></use></svg></span>Endpoint config</a>
+            </li>
+            <li class="col-12 col-sm-6 col-md-4">
+                <a href="#calls" data-icon="/assets/svg/rebrand-ui.svg#anchor" data-icon-left="" style="animation-delay: 0.75s;"><span class="svg__wrapper  svg__wrapper--fill"><svg class=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/svg/rebrand-ui.svg#anchor"></use></svg></span>API calls</a>
+            </li>
+            <li class="col-12 col-sm-6 col-md-4">
+                <a href="#models" data-icon="/assets/svg/rebrand-ui.svg#anchor" data-icon-left="" style="animation-delay: 1s;"><span class="svg__wrapper  svg__wrapper--fill"><svg class=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/svg/rebrand-ui.svg#anchor"></use></svg></span>Models</a>
+            </li>
+    </ul>
+</div>
+
+
+
+<div class="container bg-secondary-2 not-inview" id="oidc---sub-heading" data-device="">
+
+            <h2>What this API does:</h2><p class="lead">Open Banking compliant OpenID Connect provider</p><p>This API supports OpenID Connect code and hybrid flows as per:<span>&nbsp;</span><a href="https://openid.net/specs/openid-connect-core-1_0.html">https://openid.net/specs/openid-connect-core-1_0.html</a><span>&nbsp;</span>The documentation on this page is illustrative of the behaviour of the API, but should not be considered binding. Instead, the behaviour of this API is defined in the OpenBanking security profile, which inherits from the FAPI RW specification, which inherits from the OpenID Connect specification, which in turn inherits from OAuth2.0 (<a href="https://tools.ietf.org/html/rfc6749">https://tools.ietf.org/html/rfc6749</a>).</p><p><strong>IMPORTANT&nbsp;</strong>In production this API is hosted across two endpoints as the TLS requirements for each of the calls is different. The endpoints should be used as follows:</p><ul><li><strong>/authorize&nbsp;</strong>establishes a one-way TLS connection (acceptable for the PSU's user agent)</li><li><strong>/token&nbsp;</strong>establishes a mutually authenticated TLS connection (required to access Open Banking resources)</li></ul><p>The production endpoints are documented in Frequently Asked Questions</p><div>Documentation<p><a rel="noopener" href="https://openbanking.atlassian.net/wiki/spaces/DZ/pages/83919096/Open+Banking+Security+Profile+-+Implementer+s+Draft+v1.1.2" target="_blank" data-icon="/assets/svg/rebrand-ui.svg#new-window" class="btn--icon-right">Open Banking Security Profile<span class="visually-hidden"> Link opens in a new window</span><span class="svg__wrapper  svg__wrapper--fill"><svg class=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/svg/rebrand-ui.svg#new-window"></use></svg></span></a></p></div>
+
+</div>
+
+
+
+
+
+<div class="container bg-light not-inview">
+    			<h2 class="text-primary">Endpoint configuration</h2>		
+
+    <div class="accordion mw-100" id="endpoints">
+
+            <div class="item">
+                <div class="accordion__tab" id="img-srcdownloadspill-getpng-alt-classmr-2-mb-0get-oauth2authorize-title">
+                    <a href="#img-srcdownloadspill-getpng-alt-classmr-2-mb-0get-oauth2authorize" class="accordion__title collapsed" data-toggle="collapse" aria-expanded="false" aria-controls="img-srcdownloadspill-getpng-alt-classmr-2-mb-0get-oauth2authorize"><img src="/downloads/pill-get.png" alt="" class="mr-2 mb-0">GET /oauth2/authorize<span class="accordion__icon">&nbsp;</span></a>
+                </div>
+                <div id="img-srcdownloadspill-getpng-alt-classmr-2-mb-0get-oauth2authorize" class="collapse" role="tabpanel" aria-labelledby="img-srcdownloadspill-getpng-alt-classmr-2-mb-0get-oauth2authorize-title" data-parent="#endpoints">
+
+                                  <div class="row"><div class="col col-12 col-md-9"><p style="animation-delay: 0.5s;"><span class="strong">Production:&nbsp;</span> <span id="production01">https://api.prod.ob.virginmoney.com/vmpsd2-psd2prod/psd2-production/oidcapi/oauth2/authorize</span></p></div><div class="col col-12 col-md-3"><button class="btn btn-secondary" id="production01-copy" data-clipboard-target="#production01" style="animation-delay: 0.75s;">Copy to clipboard</button></div></div>            
+
+                </div>
+            </div>
+            <div class="item">
+                <div class="accordion__tab" id="img-srcdownloadspill-postpng-alt-classmr-2-mb-0post-oauth2token-title">
+                    <a href="#img-srcdownloadspill-postpng-alt-classmr-2-mb-0post-oauth2token" class="accordion__title collapsed" data-toggle="collapse" aria-expanded="false" aria-controls="img-srcdownloadspill-postpng-alt-classmr-2-mb-0post-oauth2token"><img src="/downloads/pill-post.png" alt="" class="mr-2 mb-0">POST /oauth2/token<span class="accordion__icon">&nbsp;</span></a>
+                </div>
+                <div id="img-srcdownloadspill-postpng-alt-classmr-2-mb-0post-oauth2token" class="collapse" role="tabpanel" aria-labelledby="img-srcdownloadspill-postpng-alt-classmr-2-mb-0post-oauth2token-title" data-parent="#endpoints">
+
+                                  <div class="row"><div class="col col-12 col-md-9"><p style="animation-delay: 0.5s;"><span class="strong">Production:&nbsp;</span> <span id="production02">https://secureapi.prod.ob.virginmoney.com/vmpsd2-psd2prod/psd2-production/oidcapi/oauth2/token</span></p></div><div class="col col-12 col-md-3"><button class="btn btn-secondary" id="production02-copy" data-clipboard-target="#production02" style="animation-delay: 0.75s;">Copy to clipboard</button></div></div>            
+
+                </div>
+            </div>
+
+    </div>
+
+    
+</div>
+
+
+
+<div class="container not-inview" id="calls" data-device="">
+
+			<h2>API calls</h2>		        <div class="row ">
+                <div class="col col-12">
+
+
+
+                                  <div style="animation-delay: 0.5s;">                <img src="/img/pill-post.png" class="mr-2" alt=""> <a href="#post-oauth2-token" class="btn btn-link collapsed" data-toggle="collapse" aria-expanded="false">POST /oauth2/token&nbsp;<span class="small">Request Access Tokens</span></a><div id="post-oauth2-token" class="collapse"><h4>Supported Flows:</h4><ul><li><strong>Authorization Code</strong> (exchange code for access token)</li><li><strong>Client Credentials</strong> The table below indicates the required parameters for each specific grant_type options. Empty cells indicate a parameter is ignored for that specific grant type.</li></ul><h4>Scopes:</h4><p>The following scopes are supported:</p><ul><li class="pb-0"><strong>openid</strong></li><li class="pb-0"><strong>accounts</strong></li><li class="pb-0"><strong>payments</strong></li><li><strong>fundsconfirmations</strong></li></ul><h4>Client authentication:</h4><p>Clients must authenticate using one of the supported authentication mechanisms below:</p><ul><li><strong>client_secret_basic:</strong> Authenticate using client_id and client_secret via HTTP Basic Authentication.</li><li><strong>client_secret_post:</strong> Post the client_id and client_secret as formData parameters.</li><li><strong>mtls_client_auth:</strong> Post the client_id as a formData parameter and establish a Mutually Authenticated TLS connection with the token endpoint, using a valid OpenBanking signed certificate</li><li><strong>client_secret_jwt:</strong> Post a JWT signed using an HMAC SHA algorithm (e.g. HS256). The HMAC is calculated using the octets of the UTF-8 representation of the client_secret issued during onboarding ( <a rel="noopener noreferrer" target="_blank" href="https://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication" data-icon="/assets/svg/rebrand-ui.svg#new-window" class="btn--icon-right">https://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication<span class="visually-hidden"> Link opens in a new window</span><span class="svg__wrapper  svg__wrapper--fill"><svg class=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/svg/rebrand-ui.svg#new-window"></use></svg></span></a> ).</li><li><strong>private_key_jwt:</strong> Post a JWT signed using an RSASSA-PSS SHA algorithm (e.g. PS256). The signature is created using a private key that corresponds to any public key with use: 'sig', that is hosted in the in the organisation's software_jwks_endpoint ( <a rel="noopener noreferrer" target="_blank" href="https://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication" data-icon="/assets/svg/rebrand-ui.svg#new-window" class="btn--icon-right">https://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication<span class="visually-hidden"> Link opens in a new window</span><span class="svg__wrapper  svg__wrapper--fill"><svg class=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/svg/rebrand-ui.svg#new-window"></use></svg></span></a> ).</li></ul><div class="table__wrapper"><table class="table"><thead><tr><th scope="col">grant_type</th><th scope="col">code</th><th scope="col">client_credentials</th></tr></thead><tbody><tr><th scope="row">client_id</th><td>required</td><td>required</td></tr><tr><th scope="row">client_secret</th><td>optional</td><td>optional</td></tr><tr><th scope="row">code</th><td>required</td><td>&nbsp;</td></tr><tr><th scope="row">redirect_uri</th><td>required</td><td>&nbsp;</td></tr><tr><th scope="row">scope</th><td>required</td><td>required</td></tr><tr><th scope="row">client_assertion</th><td>optional</td><td>optional</td></tr><tr><th scope="row">client_assertion_type</th><td>optional</td><td>optional</td></tr></tbody></table></div><div class="table__wrapper"><table class="table"><thead><tr><th scope="col">Name</th><th scope="col">Description</th></tr></thead><tbody><tr><th scope="row"><strong>grant_type</strong> &nbsp; <span class="text-primary">*<sup>required</sup></span><br><code>string</code><br><var>(formData)</var></th><td><em>Available values</em> : authorization_code, client_credentials</td></tr><tr><th scope="row">client_id<br><code>string</code><br><var>(formData)</var></th><td>Application secret, must be provided in formData or using HTTP Basic Authentication</td></tr><tr><th scope="row">client_secret<br><code>string</code><br><var>(formData)</var></th><td>Application client ID, can be provided in formData or using HTTP Basic Authentication</td></tr><tr><th scope="row">code<br><code>string</code><br><var>(formData)</var></th><td>Authorization code provided by the /oauth2/authorize endpoint</td></tr><tr><th scope="row">redirect_uri<br><code>string</code><br><var>(formData)</var></th><td>required only if the redirect_uri parameter was included in the authorization request /oauth2/authorize; their values MUST be identical.</td></tr><tr><th scope="row"><strong>scope</strong> &nbsp; <span class="text-primary">*<sup>required</sup></span><br><code>string</code><br><var>(formData)</var></th><td>Scope being requested</td></tr><tr><th scope="row">client_assertion<br><code>string</code><br><var>(formData)</var></th><td>Signed assertion if using either client_secret_jwt or private_key_jwt client authentication schemes</td></tr><tr><th scope="row">client_assertion_type<br><code>string</code><br><var>(formData)</var></th><td>Type of client assertion if using either client_secret_jwt or private_key_jwt client authentication schemes</td></tr></tbody></table></div><p class="lead">Responses</p><p>Response content type:<code>&nbsp;text/html</code></p><div class="table__wrapper"><table class="table"><thead><tr><th scope="col">Code</th><th scope="col">Description</th></tr></thead><tbody><tr><th scope="row">200</th><td><div class="bg-dark p-3">json document containing token, etc.</div><p class="pb-1 pt-3"><a href="#oauth2-token-200-ex" class="btn btn-link collapsed" data-toggle="collapse" aria-expanded="false">Example Value</a> <a href="#oauth2-token-200-mo" class="btn btn-link ml-5 collapsed" data-toggle="collapse" aria-expanded="false">Model</a></p><div class="bg-secondary p-3 mb-3 col-6 collapse" id="oauth2-token-200-ex"><span>{</span><br><span>"token_type"</span> <span>:</span> <span>&nbsp;</span> <span>"bearer"</span> <span>,</span><br><span>"access_token"</span> <span>:</span> <span>&nbsp;</span> <span>"string"</span> <span>,</span><br><span>"expires_in"</span> <span>:</span> <span>&nbsp;</span> <span>0</span> <span>,</span><br><span>"scope"</span> <span>:</span> <span>&nbsp;</span> <span>"string"</span> <span>,</span><br><span>"id_token"</span> <span>:</span> <span>&nbsp;</span> <span>"string"</span> <span>,</span><br><span>"consented_on"</span> <span>:</span> <span>&nbsp;</span> <span>"string"</span><br><span>}</span></div><div class="bg-light p-3 mb-3 col-12 collapse" id="oauth2-token-200-mo"><table><tbody><tr><td>token_type<span class="text-primary">&nbsp;*</span></td><td><span><span><span>string</span> <span>Enum:<br><span class=""><span>Array [ 1 ]<br>[ bearer ]</span></span></span></span></span></td></tr><tr><td>access_token<span class="text-primary">&nbsp;*</span></td><td><span><span><span>string</span></span></span></td></tr><tr><td>expires_in<span class="text-primary">&nbsp;*</span></td><td><span><span><span>integer</span></span></span></td></tr><tr><td>scope<span class="text-primary">&nbsp;*</span></td><td><span><span><span>string</span></span></span></td></tr><tr><td style="vertical-align: top; padding-right: 0.2em;">id_token</td><td><span><span><span>string</span></span></span></td></tr><tr><td>consented_on<span class="text-primary">&nbsp;*</span></td><td><span><span><span>string</span></span></span></td></tr></tbody></table></div></td></tr><tr><th scope="row">400</th><td><div class="bg-dark p-3">json document that may contain additional details about the failure</div></td></tr><tr><th scope="row">401</th><td><div class="bg-dark p-3">json document that may contain additional details about the failure</div></td></tr></tbody></table></div></div></div>            
+
+                </div>
+                <div class="col col-12">
+
+
+
+                    			<div style="animation-delay: 0.75s;">				<img src="/img/pill-get.png" class="mr-2" alt="">				<a href="#get-oauth2-authorize" class="btn btn-link collapsed" data-toggle="collapse" aria-expanded="false">GET /oauth2​/authorize&nbsp;<span class="small">Endpoint for Hybrid flow grant types</span></a>								<div class="collapse" id="get-oauth2-authorize"><div class="table__wrapper"><table class="table"><thead><tr><th scope="col">Name</th><th scope="col">Description</th></tr></thead><tbody><tr><th scope="row">									<strong>response_type</strong>									&nbsp;									<span class="text-primary">*<sup>required</sup><br></span>									 									<code>string</code>																		<br>																		<var>(string)</var>								</th><td>request an authorization code or or access token (implicit)<br><br><em>Available values</em> : code, code id_token</td></tr><tr><th scope="row">									<strong>scope</strong>									&nbsp;									<span class="text-primary">*<sup>required</sup><br></span>									 									<code>string</code>																		<br>																		<var>(string)</var>								</th><td>Scope being requested</td></tr><tr><th scope="row">									<strong>redirect_uri</strong>									&nbsp;									<span class="text-primary">*<sup>required</sup><br></span>									 									<code>string</code>																		<br>																		<var>(string)</var>								</th><td>URI where user is redirected to after authorization</td></tr><tr><th scope="row">state<br><code>string</code><br><var>(string)</var></th><td>This string will be echoed back to application when user is redirected</td></tr><tr><th scope="row">									<strong>client_id</strong>									&nbsp;									<span class="text-primary">*<sup>required</sup><br></span>									 									<code>string</code>																		<br>																		<var>(string)</var>								</th><td>The client ID of the calling application</td></tr><tr><th scope="row">									<strong>request</strong>									&nbsp;									<span class="text-primary">*<sup>required</sup><br></span>									 									<code>string</code>																		<br>																		<var>(string)</var>								</th><td>The signed request object</td></tr><tr><th scope="row">nonce<br><code>string</code><br><var>(string)</var></th><td>A string value used to associate a Client session with an ID Token</td></tr></tbody></table></div><p class="lead">Responses</p><p>Response content type:<code>&nbsp;text/html</code></p><div class="table__wrapper"><table class="table"><thead><tr><th scope="col">Code</th><th scope="col">Description</th></tr></thead><tbody><tr><th scope="row">200</th><td><div class="bg-dark p-3">An HTML form for authentication or authorization of this request.</div></td></tr><tr><th scope="row">302</th><td><div class="bg-dark p-3">Redirect to the clients redirect_uri containing either an authorization code or an error in case of errors, such as the user has denied the request. For hybrid flow requests the redirection response will also contain an ID_Token.</div></td></tr></tbody></table></div></div>							</div>		
+
+                </div>
+        </div>
+
+
+</div>
+
+
+
+<div class="container bg-light not-inview" id="models" data-device="">
+
+              <h2>Models</h2>                    <div class="row p-3">
+                <div class="col col-12">
+
+
+
+                                  <p class="pb-1" style="animation-delay: 0.5s;">                <a href="#access_token_response" class="btn btn-link collapsed" data-toggle="collapse" aria-expanded="false">access_token_response</a>              </p><div class="p-3 mb-3 col-12 collapse" id="access_token_response" style="animation-delay: 0.5s;"><div class="table__wrapper"><table class="model"><tbody><tr><td>token_type<span class="text-primary">&nbsp;*</span></td><td><span class="model"><span><span>string</span><span>Enum:<br><span class=""><span>Array [ 1 ]<br>[ bearer ]</span></span></span></span></span></td></tr><tr><td>access_token<span class="text-primary">&nbsp;*</span></td><td><span class="model"><span><span>string</span></span></span></td></tr><tr><td>expires_in<span class="text-primary">&nbsp;*</span></td><td><span class="model"><span><span>integer</span></span></span></td></tr><tr><td>scope<span class="text-primary">&nbsp;*</span></td><td><span class="model"><span><span>string</span></span></span></td></tr><tr><td style="vertical-align: top; padding-right: 0.2em;">id_token</td><td><span class="model"><span><span>string</span></span></span></td></tr><tr><td>consented_on<span class="text-primary">&nbsp;*</span></td><td><span class="model"><span><span>string</span></span></span></td></tr></tbody></table></div></div>
+
+                </div>
+        </div>
+
+
+</div>
+
+
+
+<div class="container container--split container--split-short not-inview" id="having-trouble---container" data-device="">
+
+        <div class="row ">
+                <div class="col bg-dark">
+
+
+
+                                  <h2 style="animation-delay: 0.5s;">Having trouble?</h2><p style="animation-delay: 0.5s;">Contact our dedicated team members via our ticketing system or via our support mailbox</p><p style="animation-delay: 0.5s;"><a href="mailto:OpenBankingResponse@virginmoney.com">OpenBankingResponse@virginmoney.com</a></p><p style="animation-delay: 0.5s;"><a href="https://virginmoney.com/openbankingsupport/" target="_blank" class="btn btn-primary" data-icon="/assets/svg/rebrand-ui.svg#new-window"><span class="svg__wrapper  svg__wrapper--fill"><svg class=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/svg/rebrand-ui.svg#new-window"></use></svg></span>Contact us<span class="visually-hidden"> Link opens in a new window</span></a></p>
+
+                </div>
+                <div class="col contains-img">
+
+
+                        <picture style="animation-delay: 0.75s;">
+                            <source srcset="/img/img_app-lg_tcm142-127348.jpg" media="(min-width:62em)">
+                                <source srcset="/img/img_app-sm_tcm142-127347.jpg" media="(min-width:36em)">
+
+                                <source srcset="/img/img_app-sm_tcm142-127347.jpg">
+                            <img src="/img/img_app-lg_tcm142-127348.jpg" alt="" loading="lazy">
+                        </picture>
+
+                    
+
+                </div>
+        </div>
+
+
+</div>
+
+
+
+
