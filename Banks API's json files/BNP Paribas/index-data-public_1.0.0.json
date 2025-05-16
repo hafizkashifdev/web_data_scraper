@@ -1,0 +1,784 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Index public data",
+    "description": "Index Data Public Provider",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.sandbox.cib.bnpparibas.com/gm-index-public-data-internet",
+      "description": "cibcore-internet-sdx"
+    }
+  ],
+  "tags": [
+    {
+      "name": "index-public-data",
+      "description": "API's for index public data"
+    }
+  ],
+  "paths": {
+    "/v1/index": {
+      "get": {
+        "tags": [
+          "index-public-data"
+        ],
+        "summary": "List of all available indexes",
+        "description": "Returns all the available list of indexes",
+        "operationId": "getAllIndexesWithPagination",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1000
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "launchDate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "x-correlation-id": {
+                "$ref": "#/components/headers/generic_xCorrelationId"
+              }
+            },
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexRecords"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {
+              "x-correlation-id": {
+                "$ref": "#/components/headers/generic_xCorrelationId"
+              }
+            },
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "x-correlation-id": {
+                "$ref": "#/components/headers/generic_xCorrelationId"
+              }
+            },
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server error",
+            "headers": {
+              "x-correlation-id": {
+                "$ref": "#/components/headers/generic_xCorrelationId"
+              }
+            },
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/index/{mdsCode}": {
+      "get": {
+        "tags": [
+          "index-public-data"
+        ],
+        "summary": "Fetch detailed information of all available indexes based on mds code",
+        "description": "Returns the detailed information available for requested index",
+        "operationId": "indexData",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mdsCode",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "x-correlation-id": {
+                "$ref": "#/components/headers/generic_xCorrelationId"
+              }
+            },
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "headers": {
+              "x-correlation-id": {
+                "$ref": "#/components/headers/generic_xCorrelationId"
+              }
+            },
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "x-correlation-id": {
+                "$ref": "#/components/headers/generic_xCorrelationId"
+              }
+            },
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server error",
+            "headers": {
+              "x-correlation-id": {
+                "$ref": "#/components/headers/generic_xCorrelationId"
+              }
+            },
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "IndexDataFlags": {
+        "type": "object",
+        "properties": {
+          "advanceCompoAvailable": {
+            "type": "boolean"
+          },
+          "compoAvailable": {
+            "type": "boolean"
+          }
+        }
+      },
+      "IndexInfoDTO": {
+        "type": "object",
+        "properties": {
+          "bbgCode": {
+            "type": "string"
+          },
+          "mdsCode": {
+            "type": "string"
+          },
+          "marketingName": {
+            "type": "string"
+          },
+          "technicalName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "compoFlags": {
+            "$ref": "#/components/schemas/IndexDataFlags"
+          }
+        }
+      },
+      "IndexRecords": {
+        "type": "object",
+        "properties": {
+          "totalRecords": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IndexInfoDTO"
+            }
+          }
+        }
+      },
+      "ErrorDTO": {
+        "required": [
+          "code",
+          "message",
+          "timeStamp"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          },
+          "timeStamp": {
+            "type": "string"
+          }
+        }
+      },
+      "AnnualReturnDTO": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "volatility": {
+            "type": "number"
+          },
+          "return": {
+            "type": "number"
+          }
+        }
+      },
+      "CalendarReturnDTO": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "number",
+            "format": "double"
+          },
+          "return": {
+            "type": "number"
+          }
+        }
+      },
+      "CompositionAdvance": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string"
+          },
+          "isin": {
+            "type": "string"
+          },
+          "sector": {
+            "type": "string"
+          },
+          "subSector": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          }
+        }
+      },
+      "IndexComposition": {
+        "type": "object",
+        "properties": {
+          "underlying": {
+            "type": "string"
+          },
+          "bbgCode": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "nosh": {
+            "type": "number",
+            "format": "double"
+          },
+          "compDate": {
+            "type": "number",
+            "format": "double"
+          },
+          "spot": {
+            "type": "number",
+            "format": "double"
+          },
+          "advanceComp": {
+            "$ref": "#/components/schemas/CompositionAdvance"
+          }
+        }
+      },
+      "IndexData": {
+        "type": "object",
+        "properties": {
+          "marketingName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "codeMDS": {
+            "type": "string"
+          },
+          "bbgCode": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "assetClass": {
+            "type": "string"
+          },
+          "geography": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "number",
+            "format": "double"
+          },
+          "launchDate": {
+            "type": "number",
+            "format": "double"
+          },
+          "productType": {
+            "type": "string"
+          },
+          "closingPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "objectives": {
+            "type": "string"
+          },
+          "disclaimer": {
+            "type": "string"
+          },
+          "additionalDisclaimer": {
+            "type": "string"
+          },
+          "countryCode": {
+            "type": "string"
+          },
+          "providerData": {
+            "$ref": "#/components/schemas/ProviderData"
+          },
+          "performanceTable": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerformanceTableDto"
+            }
+          },
+          "performanceYearly": {
+            "$ref": "#/components/schemas/PerformanceYearlyResponse"
+          },
+          "calendarReturns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CalendarReturnDTO"
+            }
+          },
+          "annualReturns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AnnualReturnDTO"
+            }
+          },
+          "indexComposition": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IndexComposition"
+            }
+          },
+          "historicalChart": {
+            "$ref": "#/components/schemas/TimeSeriesResponse"
+          },
+          "standardDisclaimer": {
+            "type": "boolean"
+          },
+          "technicalName": {
+            "type": "string"
+          }
+        }
+      },
+      "PerformanceTableDto": {
+        "type": "object",
+        "properties": {
+          "perf1M": {
+            "type": "number"
+          },
+          "perf3M": {
+            "type": "number"
+          },
+          "perf6M": {
+            "type": "number"
+          },
+          "perf1Y": {
+            "type": "number"
+          },
+          "perf3Y": {
+            "type": "number"
+          },
+          "perfYTD": {
+            "type": "number"
+          },
+          "beta3Y": {
+            "type": "number"
+          },
+          "betaLife": {
+            "type": "number"
+          },
+          "maxDrawdown3Y": {
+            "type": "number"
+          },
+          "maxDrawdownLife": {
+            "type": "number"
+          },
+          "sharpeRatio3Y": {
+            "type": "number"
+          },
+          "sharpeRatioLife": {
+            "type": "number"
+          },
+          "timeToRecovery3Y": {
+            "type": "number"
+          },
+          "timeToRecoveryLife": {
+            "type": "number"
+          },
+          "volatility3Y": {
+            "type": "number"
+          },
+          "volatilityLife": {
+            "type": "number"
+          },
+          "life": {
+            "type": "number"
+          },
+          "perf5Y": {
+            "type": "number"
+          },
+          "perf10Y": {
+            "type": "number"
+          },
+          "maxDrawdown1M": {
+            "type": "number"
+          },
+          "maxDrawdown3M": {
+            "type": "number"
+          },
+          "maxDrawdown6M": {
+            "type": "number"
+          },
+          "maxDrawdown1Y": {
+            "type": "number"
+          },
+          "maxDrawdown10Y": {
+            "type": "number"
+          },
+          "volatility1M": {
+            "type": "number"
+          },
+          "volatility3M": {
+            "type": "number"
+          },
+          "volatility6M": {
+            "type": "number"
+          },
+          "volatility1Y": {
+            "type": "number"
+          },
+          "volatility10Y": {
+            "type": "number"
+          },
+          "perf1D": {
+            "type": "number"
+          },
+          "volatility5Y": {
+            "type": "number"
+          },
+          "volatilityYTD": {
+            "type": "number"
+          },
+          "sharpeRatio1M": {
+            "type": "number"
+          },
+          "sharpeRatio3M": {
+            "type": "number"
+          },
+          "sharpeRatio6M": {
+            "type": "number"
+          },
+          "sharpeRatio1Y": {
+            "type": "number"
+          },
+          "sharpeRatio5Y": {
+            "type": "number"
+          },
+          "sharpeRatio10Y": {
+            "type": "number"
+          },
+          "sharpeRatioYTD": {
+            "type": "number"
+          },
+          "beta1M": {
+            "type": "number"
+          },
+          "beta3M": {
+            "type": "number"
+          },
+          "beta6M": {
+            "type": "number"
+          },
+          "beta1Y": {
+            "type": "number"
+          },
+          "beta5Y": {
+            "type": "number"
+          },
+          "beta10Y": {
+            "type": "number"
+          },
+          "betaYTD": {
+            "type": "number"
+          },
+          "timeToRecovery1M": {
+            "type": "number"
+          },
+          "timeToRecovery3M": {
+            "type": "number"
+          },
+          "timeToRecovery6M": {
+            "type": "number"
+          },
+          "timeToRecovery1Y": {
+            "type": "number"
+          },
+          "timeToRecovery5Y": {
+            "type": "number"
+          },
+          "timeToRecovery10Y": {
+            "type": "number"
+          },
+          "timeToRecoveryYTD": {
+            "type": "number"
+          },
+          "maxDrawdown5Y": {
+            "type": "number"
+          },
+          "maxDrawdownYTD": {
+            "type": "number"
+          }
+        }
+      },
+      "PerformanceYearlyDto": {
+        "type": "object",
+        "properties": {
+          "perfDate": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perfValue": {
+            "type": "number"
+          }
+        }
+      },
+      "PerformanceYearlyResponse": {
+        "type": "object",
+        "properties": {
+          "yearWiseData": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerformanceYearlyDto"
+            }
+          }
+        }
+      },
+      "ProviderData": {
+        "type": "object",
+        "properties": {
+          "composedBy": {
+            "type": "string"
+          },
+          "calculatedBy": {
+            "type": "string"
+          }
+        }
+      },
+      "TimeSeriesResponse": {
+        "type": "object",
+        "properties": {
+          "valoDataArray": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValoData"
+            }
+          }
+        }
+      },
+      "ValoData": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "gatewayErrors": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "401": {
+        "description": "Unauthorized,  Access token is missing or invalid.",
+        "headers": {
+          "x-correlation-id": {
+            "$ref": "#/components/headers/correlationIdHeader"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/gatewayErrors"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found, no resource available.",
+        "headers": {
+          "x-correlation-id": {
+            "$ref": "#/components/headers/correlationIdHeader"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/gatewayErrors"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too many requests.",
+        "headers": {
+          "x-correlation-id": {
+            "$ref": "#/components/headers/correlationIdHeader"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/gatewayErrors"
+            }
+          }
+        }
+      }
+    },
+    "headers": {
+      "generic_xCorrelationId": {
+        "description": "API Provider internal correlation ID",
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "correlationIdHeader": {
+        "description": "Correlation header to be set in a request and retrieved in the relevant response",
+        "$ref": "#/components/headers/correlationIdHeader"
+      }
+    }
+  }
+}

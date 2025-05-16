@@ -1,0 +1,1899 @@
+swagger: '2.0'
+info:
+  description: >-
+    Obtain authorized & cleared transaction details on a Virtual Cards for
+    reporting and payment reconciliation.
+
+
+    Download our SDKs:
+
+
+    * [Python
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=python&apiTitle=all&isClientSecReq=true)
+
+    * [Java
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=java&apiTitle=all&isClientSecReq=true)
+
+    * [.Net
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=dotnet&apiTitle=all&isClientSecReq=true)
+
+    * [Ruby
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=ruby&apiTitle=all&isClientSecReq=true)
+
+    * [NodeJS
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=nodejs&apiTitle=all&isClientSecReq=true)
+
+    * [Go
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=go&apiTitle=all&isClientSecReq=true)
+
+    * [CLI Tool
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=ccapi-cli&apiTitle=all&isClientSecReq=true)
+
+
+    Note: You must be logged in to download the SDKs.
+  version: 2.0.0
+  title: VCA Reporting
+  x-ibm-name: vca-reporting
+servers:
+  - url: https://tts.apib2b.citi.com/tts/cards
+    description: production gateway URL
+  - url: https://tts.sandbox.apib2b.citi.com/tts/cards
+    description: sandbox URL
+security:
+  - Client Credentials: []
+schemes:
+  - https
+paths:
+  /vca/v2/reports/authorization:
+    post:
+      summary: Obtain Authorized Transaction Details
+      description: >-
+        Obtain authorized transaction details on a VCA for reporting & payment
+        reconciliation
+      operationId: Authorization Report
+      parameters:
+        - name: client_id
+          in: query
+          required: true
+          description: >-
+            This is your unique identifier shared during your CitiConnect API
+            onboarding. This is the same `client_id` used for oauth token
+            generation
+          type: string
+        - name: Authorization
+          in: header
+          description: The OAuth Token prefixed with "Bearer" and space in between.
+          required: true
+          type: string
+        - name: Content-Type
+          in: header
+          description: Supports application/json.
+          required: true
+          type: string
+        - name: country
+          in: header
+          description: >-
+            Three character length country code used during onboarding into
+            GRACE
+          type: string
+          required: true
+        - name: region
+          in: header
+          description: >-
+            This value will be used by APIm to route to the respective GRACE
+            backend instance
+          type: string
+          required: true
+        - name: req-sys-id
+          in: header
+          description: >-
+            Unique ID of the API message sent. This ID will be provided back in
+            the corresponding response. The ID can be used for investigation and
+            troubleshooting. The ID must be unique per integration.
+          type: string
+          required: false
+        - name: AuthReportInboundRequest
+          in: body
+          description: AuthReportInboundRequest
+          required: true
+          schema:
+            $ref: '#/definitions/AuthReportInboundRequest'
+      responses:
+        '200':
+          description: >-
+            <table><tr><td>Code</td><td>Details</td></tr><tr><tr><td>AuthReportInboundResponse</td><td>success</td></tr></table>
+          schema:
+            $ref: '#/definitions/AuthReportInboundResponse'
+        '400':
+          description: >-
+            <table><tr><td>ErrorResponseForAuthReport</td><td><table><tr><th>Error
+            Code</th><th>Error Description</th></tr>
+
+            <tr><td>ERS0001</td><td>Invalid Virtual Card Account Number
+            format</td></tr>
+
+            <tr><td>ERS0002</td><td>Invalid Transaction Type</td></tr>
+
+            <tr><td>ERS0003</td><td>timeZone field is empty or has an invalid
+            UTC offset time zone format</td></tr>
+
+            <tr><td>ERC0004</td><td>Transactions were unable to be returned for
+            the requested data range. Please try again, or contact Citi support
+            if you have any further questions or comments.</td></tr>
+
+            <tr><td>ERS0007</td><td>Invalid Message ID format</td></tr>
+
+            <tr><td>ERS0009</td><td>Client Onboard Configuration setup is
+            missing. Contact Citi support.</td></tr>
+
+            <tr><td>ERS0010</td><td>Invalid Report ID format. Report ID must
+            include numeric values</td></tr>
+
+            <tr><td>ERS0053</td><td>Start Date is Mandatory.</td></tr>
+
+            <tr><td>ERS0054</td><td>End Date is Mandatory.</td></tr>
+
+            <tr><td>ERS0057</td><td>startDate value exceeds requested endDate
+            value</td></tr>
+
+            <tr><td>ERS0060</td><td>Client ID and/or Program Id is missing in
+            Client Onboard Configuration setup. Contact Citi support.</td></tr>
+
+            <tr><td>ERS0061</td><td>VCA ID is not present in our
+            system</td></tr>
+
+            <tr><td>ERS0063</td><td>Requested Time Zone is not
+            supported</td></tr>
+
+            <tr><td>ERS0068</td><td>Program Id is Mandatory.</td></tr>
+
+            <tr><td>ERS0069</td><td>Vca Id is Mandatory.</td></tr>
+
+            <tr><td>ERS0070</td><td>Message Id is Mandatory.</td></tr>
+
+            <tr><td>ERS0071</td><td>Virtual Card Account Number is
+            Mandatory.</td></tr>
+
+            <tr><td>ERS0072</td><td>Requested report date cannot exceed 36
+            months in the past from todays date</td></tr>
+
+            <tr><td>ERS0079</td><td>The requested report ID(s) is for a VCA that
+            is different than the VCA included in the request. Please include
+            the VCA associated to the report ID(s).</td></tr>
+
+            <tr><td>ERS0080</td><td>The requested report ID(s) is for a
+            programId that is different than the programId included in the
+            request. Please include the programId associated to the report
+            ID(s).</td></tr>
+
+            <tr><td>ERS0081</td><td>The requested report ID(s) is for a timeZone
+            that is different than the timeZone included in the request. Please
+            include the timeZone associated to the report ID(s).</td></tr>
+
+            <tr><td>ERS0082</td><td>The requested report IDs are for different
+            VCAs, Please include report IDs that belong to the same
+            VCA.</td></tr>
+
+            <tr><td>ERS0083</td><td>The requested report IDs are for different
+            program IDs, Please include report IDs that belong to the same
+            program ID.</td></tr>
+
+            <tr><td>ERS0084</td><td>The requested report IDs are for different
+            requested time zones, Please include report IDs that belong to the
+            same requested time zone.</td></tr>
+
+            <tr><td>ERS0091</td><td>startDate value must have valid format:
+            YYYY-MM-DD</td></tr>
+
+            <tr><td>ERS0092</td><td>endDate value must have valid format:
+            YYYY-MM-DD</td></tr>
+
+            <tr><td>ERS0093</td><td>The date specified in startDate does not
+            exist</td></tr>
+
+            <tr><td>ERS0094</td><td>The date specified in endDate does not
+            exist</td></tr>
+
+            <tr><td>ERS0095</td><td>Report ID included in your request is not
+            present for the given ClientID/program ID. Please generate a new
+            report ID for this Reports request by calling the Reports API
+            without a report ID</td></tr>
+
+            <tr><td>ERS0097</td><td>startTime value must have valid format:
+            HH:MM</td><td>H (0,1,2) | H (0-9) : M (0-5) | M (0-9)</td></tr>
+
+            <tr><td>ERS0098</td><td>endTime value must have valid format:
+            HH:MM</td><td>H (0,1,2) | H (0-9) : M (0-5) | M (0-9)</td></tr>
+
+            <tr><td>ERS0099</td><td>startTime value cannot exceed the requested
+            endTime value</td></tr>
+
+
+            <tr><td>MS0001</td><td>Invalid Virtual Card Account Number</td></tr>
+
+            <tr><td>MS0002</td><td>From date should be before to date.</td></tr>
+
+            <tr><td>MS0006</td><td>Invalid vcaId value</td></tr>
+
+            <tr><td>MS0008</td><td>Invalid Report ID</td></tr>
+
+
+            <tr><td>GRC0002</td><td>Client ID is missing in the request
+            header</td></tr>
+
+            <tr><td>GRC0003</td><td>Invalid JSON Input</td></tr>
+
+            <tr><td>GRC0004</td><td>Region ID is not available in the
+            request</td></tr>
+
+            <tr><td>GRC0011</td><td>Client ID and/or Country and/or region id is
+            missing in Client Onboard Configuration setup. Contact Citi
+            support.</td></tr>
+
+            <tr><td>GRC0016</td><td>Country code is not available in the
+            request</td></tr>
+
+            </table></td></tr></table>
+          schema:
+            $ref: '#/definitions/ErrorResponseForAuthReport'
+        '500':
+          description: >-
+            <table><tr><td>ServerErrorResponseForAuthReport</td><td><table><tr><th>Error
+            Code</th><th>Error Description</th></tr>
+
+            <tr><td>GRC0001</td><td>We have encountered an error and couldn't
+            receive your request. Please try again, or contact Citi support if
+            you have any further questions or comments.</td></tr>
+
+            <tr><td>GRC0006</td><td>We have encountered an error and couldn't
+            receive your request. Please try again, or contact Citi support if
+            you have any further questions or comments.</td></tr>
+
+            <tr><td>GRC0009</td><td>We have encountered an error and couldn't
+            receive your request. Please try again, or contact Citi support if
+            you have any further questions or comments.</td></tr>
+
+            <tr><td>GRC0014</td><td>We have encountered an error and couldn't
+            receive your request. Please try again, or contact Citi support if
+            you have any further questions or comments</td></tr>
+
+            </table></td></tr></table>
+          schema:
+            $ref: '#/definitions/ServerErrorResponseForAuthReport'
+        '504':
+          description: >-
+            <table><tr><td>ErrorResponseForAuthReport</td><td>Backend
+            Connectivity Error</td></tr></table>
+          schema:
+            $ref: '#/definitions/ErrorResponseForAuthReport'
+  /vca/v2/reports/clearing:
+    post:
+      summary: Obtain Cleared Transaction Details Reporting
+      description: >-
+        Obtain cleared transaction details on a VCA for reporting and payment
+        reconciliation
+      operationId: Clearing Report
+      parameters:
+        - name: client_id
+          in: query
+          required: true
+          description: >-
+            This is your unique identifier shared during your CitiConnect API
+            onboarding. This is the same `client_id` used for oauth token
+            generation
+          type: string
+        - name: Authorization
+          in: header
+          description: The OAuth Token prefixed with "Bearer" and space in between.
+          required: true
+          type: string
+        - name: Content-Type
+          in: header
+          description: Supports application/json.
+          required: true
+          type: string
+        - name: country
+          in: header
+          description: >-
+            Three character length country code used during onboarding into
+            GRACE
+          type: string
+          required: true
+        - name: region
+          in: header
+          description: >-
+            This value will be used by APIm to route to the respective GRACE
+            backend instance
+          type: string
+          required: true
+        - name: req-sys-id
+          in: header
+          description: >-
+            Unique ID of the API message sent. This ID will be provided back in
+            the corresponding response. The ID can be used for investigation and
+            troubleshooting. The ID must be unique per integration.
+          type: string
+          required: false
+        - name: ClearingReportInboundRequest
+          in: body
+          description: ClearingReportInboundRequest
+          required: true
+          schema:
+            $ref: '#/definitions/ClearingReportInboundRequest'
+      responses:
+        '200':
+          description: >-
+            <table><tr><td>Code</td><td>Details</td></tr><tr><tr><td>ClearingReportInboundResponse</td><td>success</td></tr></table>
+          schema:
+            $ref: '#/definitions/ClearingReportInboundResponse'
+        '400':
+          description: >-
+            <table><tr><td>ErrorResponseForClearingReport</td><td><table><tr><th>Error
+            Code</th><th>Error Description</th></tr>
+
+            <tr><td>ERS0001</td><td>Invalid Virtual Card Account Number
+            format</td></tr>
+
+            <tr><td>ERS0002</td><td>Invalid Transaction Type</td></tr>
+
+            <tr><td>ERS0003</td><td>timeZone field is empty or has an invalid
+            UTC offset time zone format</td></tr>
+
+            <tr><td>ERC0004</td><td>Transactions were unable to be returned for
+            the requested data range. Please try again, or contact Citi support
+            if you have any further questions or comments.</td></tr>
+
+            <tr><td>ERS0007</td><td>Invalid Message ID format</td></tr>
+
+            <tr><td>ERS0009</td><td>Client Onboard Configuration setup is
+            missing. Contact Citi support.</td></tr>
+
+            <tr><td>ERS0010</td><td>Invalid Report ID format. Report ID must
+            include numeric values</td></tr>
+
+            <tr><td>ERS0053</td><td>Start Date is Mandatory.</td></tr>
+
+            <tr><td>ERS0054</td><td>End Date is Mandatory.</td></tr>
+
+            <tr><td>ERS0057</td><td>startDate value exceeds requested endDate
+            value</td></tr>
+
+            <tr><td>ERS0060</td><td>Client ID and/or Program Id is missing in
+            Client Onboard Configuration setup. Contact Citi support.</td></tr>
+
+            <tr><td>ERS0061</td><td>VCA ID is not present in our
+            system</td></tr>
+
+            <tr><td>ERS0063</td><td>Requested Time Zone is not
+            supported</td></tr>
+
+            <tr><td>ERS0068</td><td>Program Id is Mandatory.</td></tr>
+
+            <tr><td>ERS0069</td><td>Vca Id is Mandatory.</td></tr>
+
+            <tr><td>ERS0070</td><td>Message Id is Mandatory.</td></tr>
+
+            <tr><td>ERS0071</td><td>Virtual Card Account Number is
+            Mandatory.</td></tr>
+
+            <tr><td>ERS0072</td><td>Requested report date cannot exceed 36
+            months in the past from todays date</td></tr>
+
+            <tr><td>ERS0079</td><td>The requested report ID(s) is for a VCA that
+            is different than the VCA included in the request. Please include
+            the VCA associated to the report ID(s).</td></tr>
+
+            <tr><td>ERS0080</td><td>The requested report ID(s) is for a
+            programId that is different than the programId included in the
+            request. Please include the programId associated to the report
+            ID(s).</td></tr>
+
+            <tr><td>ERS0081</td><td>The requested report ID(s) is for a timeZone
+            that is different than the timeZone included in the request. Please
+            include the timeZone associated to the report ID(s).</td></tr>
+
+            <tr><td>ERS0082</td><td>The requested report IDs are for different
+            VCAs, Please include report IDs that belong to the same
+            VCA.</td></tr>
+
+            <tr><td>ERS0083</td><td>The requested report IDs are for different
+            program IDs, Please include report IDs that belong to the same
+            program ID.</td></tr>
+
+            <tr><td>ERS0084</td><td>The requested report IDs are for different
+            requested time zones, Please include report IDs that belong to the
+            same requested time zone.</td></tr>
+
+            <tr><td>ERS0091</td><td>startDate value must have valid format:
+            YYYY-MM-DD</td></tr>
+
+            <tr><td>ERS0092</td><td>endDate value must have valid format:
+            YYYY-MM-DD</td></tr>
+
+            <tr><td>ERS0093</td><td>The date specified in startDate does not
+            exist</td></tr>
+
+            <tr><td>ERS0094</td><td>The date specified in endDate does not
+            exist</td></tr>
+
+            <tr><td>ERS0095</td><td>Report ID included in your request is not
+            present for the given ClientID/program ID. Please generate a new
+            report ID for this Reports request by calling the Reports API
+            without a report ID</td></tr>
+
+            <tr><td>ERS0097</td><td>startTime value must have valid format:
+            HH:MM</td><td>H (0,1,2) | H (0-9) : M (0-5) | M (0-9)</td></tr>
+
+            <tr><td>ERS0098</td><td>endTime value must have valid format:
+            HH:MM</td><td>H (0,1,2) | H (0-9) : M (0-5) | M (0-9)</td></tr>
+
+            <tr><td>ERS0099</td><td>startTime value cannot exceed the requested
+            endTime value</td></tr>
+
+
+            <tr><td>MS0001</td><td>Invalid Virtual Card Account Number</td></tr>
+
+            <tr><td>MS0002</td><td>From date should be before to date.</td></tr>
+
+            <tr><td>MS0006</td><td>Invalid vcaId value</td></tr>
+
+            <tr><td>MS0008</td><td>Invalid Report ID</td></tr>
+
+
+            <tr><td>GRC0002</td><td>Client ID is missing in the request
+            header</td></tr>
+
+            <tr><td>GRC0003</td><td>Invalid JSON Input</td></tr>
+
+            <tr><td>GRC0004</td><td>Region ID is not available in the
+            request</td></tr>
+
+            <tr><td>GRC0011</td><td>Client ID and/or Country and/or region id is
+            missing in Client Onboard Configuration setup. Contact Citi
+            support.</td></tr>
+
+            <tr><td>GRC0016</td><td>Country code is not available in the
+            request</td></tr>
+
+            </table></td></tr></table>
+          schema:
+            $ref: '#/definitions/ErrorResponseForClearingReport'
+        '500':
+          description: >-
+            <table><tr><td>ServerErrorResponseForClearingReport</td><td><table><tr><th>Error
+            Code</th><th>Error Description</th></tr>
+
+            <tr><td>GRC0001</td><td>We have encountered an error and couldn't
+            receive your request. Please try again, or contact Citi support if
+            you have any further questions or comments.</td></tr>
+
+            <tr><td>GRC0006</td><td>We have encountered an error and couldn't
+            receive your request. Please try again, or contact Citi support if
+            you have any further questions or comments.</td></tr>
+
+            <tr><td>GRC0009</td><td>We have encountered an error and couldn't
+            receive your request. Please try again, or contact Citi support if
+            you have any further questions or comments.</td></tr>
+
+            <tr><td>GRC0014</td><td>We have encountered an error and couldn't
+            receive your request. Please try again, or contact Citi support if
+            you have any further questions or comments</td></tr>
+
+            </table></td></tr></table>
+          schema:
+            $ref: '#/definitions/ServerErrorResponseForClearingReport'
+        '504':
+          description: >-
+            <table><tr><td>ErrorResponseForClearingReport</td><td>Backend
+            Connectivity Error</td></tr></table>
+          schema:
+            $ref: '#/definitions/ErrorResponseForClearingReport'
+definitions:
+  AuthReportInboundRequest:
+    properties:
+      startDate:
+        description: >-
+          Specifies the start date upto when the reports can be
+          retrieved<br><br>Format:YYYY-MM-DD<br><br>Rules:<br><br>Start date
+          should be less than end date.<br><br>Start date should not be earlier
+          than create VCA date<br><br>StartDate and endDate can be up to 180
+          days in the past from the day of report requested and not future date
+        type: string
+        format: alphanumeric
+        example: '2023-01-01'
+        maxLength: 10
+      endDate:
+        description: >-
+          Specifies the end date upto when the reports can be
+          retrieved<br><br>Format:YYYY-MM-DD<br><br>Rules:<br><br>End date
+          should greater than the start date<br>StartDate and endDate can be up
+          to 180 days in the past from the day of report requested and not
+          future date
+        type: string
+        format: alphanumeric
+        example: '2023-03-30'
+        maxLength: 10
+      startTime:
+        description: >-
+          Specifies the start time from when the reports can be
+          retrieved<br><br>Format:HH:MM
+        type: string
+        format: alphanumeric
+        example: '00:00'
+        maxLength: 10
+      endTime:
+        description: >-
+          Specifies the end time upto when the reports can be
+          retrieved<br><br>Format:HH:MM
+        type: string
+        format: alphanumeric
+        example: '23:59'
+        maxLength: 10
+      transactionType:
+        description: >-
+          Specifies the nature of the transaction whether it was authorized or
+          returned etc.<br><br>Possible
+          Values:<br>All<br>Approved<br>Partial-Approved<br>Declined<br>Issuer-Declined<br>Request-Response<br>Advice-Response<br>Reversal-Response
+        type: string
+        format: alphanumeric
+        example: All
+        maxLength: 20
+      vcaId:
+        description: A reference number that uniquely identifies the virtual card account.
+        type: string
+        format: alphanumeric
+        example: '67676781'
+        maxLength: 19
+      programId:
+        description: Unique ID of the company record defined in the virtual cards system.
+        type: string
+        format: alphanumeric
+        example: '233191'
+        maxLength: 25
+      messageId:
+        description: >-
+          Unique ID of the API message sent. The messageId will be provided back
+          in the corresponding response. The ID can be used for investigation
+          and troubleshooting. The ID must be unique per integration.
+        type: string
+        format: alphanumeric
+        example: CITI00000000AuthReport20230825120311
+        maxLength: 36
+        minLength: 28
+      virtualCardAccountNumber:
+        description: >-
+          The virtual card account number to use for
+          transactions.<br><br>Numeric field and no decimals allowed
+        type: string
+        format: alphanumeric
+        example: '5281722601926445'
+        maxLength: 16
+      timeZone:
+        description: >-
+          Defines the time zone applicable for any date or time<br><br>UTC
+          offset
+        type: string
+        format: alphanumeric
+        example: UTC+05:30
+        maxLength: 9
+      reportIds:
+        description: >-
+          An optional reportId array passed by client to fetch the Auth report
+          transactions.
+        type: array
+        items:
+          type: string
+        format: alphanumeric
+        example: '["12345"]'
+    required:
+      - startDate
+      - endDate
+      - vcaId
+      - programId
+      - messageId
+      - virtualCardAccountNumber
+      - timeZone
+  AuthReportInboundResponse:
+    properties:
+      vcaId:
+        description: A reference number that uniquely identifies the virtual card account.
+        type: string
+        format: alphanumeric
+        example: '67676781'
+        maxLength: 19
+      messageId:
+        description: >-
+          Unique ID of the API message sent. The messageId will be provided back
+          in the corresponding response. The ID can be used for investigation
+          and troubleshooting. The ID must be unique per integration.
+        type: string
+        format: alphanumeric
+        example: CITI00000000AuthReport20230825120311
+        maxLength: 36
+        minLength: 28
+      programId:
+        description: Unique ID of the company record defined in the virtual cards system.
+        type: string
+        format: alphanumeric
+        example: '233191'
+        maxLength: 25
+      startDate:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '2023-01-01'
+        maxLength: 10
+      endDate:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '2023-03-30'
+        maxLength: 10
+      startTime:
+        description: >-
+          Specifies the start time from when the reports can be
+          retrieved<br><br>Format:HH:MM
+        type: string
+        format: alphanumeric
+        example: '00:00'
+        maxLength: 10
+      endTime:
+        description: >-
+          Specifies the end time upto when the reports can be
+          retrieved<br><br>Format:HH:MM
+        type: string
+        format: alphanumeric
+        example: '23:59'
+        maxLength: 10
+      reportStatus:
+        description: >-
+          Defines the status of the data that was requested whether the request
+          has been processed or not.
+        type: string
+        format: alphanumeric
+        example: COMPLETED
+        maxLength: 19
+        enum:
+          - COMPLETED
+          - PARTIALLY COMPLETED
+          - FAILED
+          - PENDING
+      warning:
+        description: >-
+          Warning information regarding a non-fatal response condition that may
+          be taken into account, but can be ignored
+        type: string
+        format: alphanumeric
+        example: Warning message
+        maxLength: 200
+      timeZone:
+        description: Defines the time zone applicable for any date or time
+        type: string
+        format: alphanumeric
+        example: UTC+05:30
+        maxLength: 9
+      transactionType:
+        description: >-
+          Specifies the nature of the transaction whether it was authorized or
+          returned etc.
+        type: string
+        format: alphanumeric
+        example: All
+        maxLength: 20
+      virtualCardAccountNumber:
+        description: The virtual card account number to use for transactions.
+        type: string
+        format: alphanumeric
+        example: '5281722601926445'
+        maxLength: 19
+      info:
+        type: array
+        items:
+          $ref: '#/definitions/AuthInfo'
+      authorizationRecords:
+        type: array
+        items:
+          $ref: '#/definitions/AuthorizationRecords'
+    required:
+      - vcaId
+      - messageId
+      - programId
+      - startDate
+      - endDate
+      - reportStatus
+      - timeZone
+      - transactionType
+      - virtualCardAccountNumber
+  AuthInfo:
+    properties:
+      fromDate:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '2023-01-01'
+        maxLength: 10
+      toDate:
+        description: >-
+          Specifies the end date upto when the reports can be
+          retrieved<br><br>Format YYYY-MM-DD
+        type: string
+        format: alphanumeric
+        example: '2023-02-01'
+        maxLength: 10
+      reportId:
+        description: >-
+          Specifies the report Id generated from Master Card for given 30 day
+          range
+        type: string
+        format: alphanumeric
+      errorCode:
+        description: >-
+          The error code if there is any error occurred while retrieving the
+          transaction
+        type: string
+        format: alphanumeric
+        example: ERC0004
+        maxLength: 6
+      errorMessage:
+        description: >-
+          The error description that corresponds to error code when there is any
+          error occurred while retrieving the transaction.
+        type: string
+        format: alphanumeric
+        example: >-
+          Transactions were unable to be returned for the requested data range.
+          Please try again, or contact Citi support if you have any further
+          questions or comments.
+        maxLength: 200
+      status:
+        description: >-
+          Defines the status of the data that was requested whether the request
+          has been processed or not.
+        type: string
+        format: alphanumeric
+        example: PENDING
+        maxLength: 10
+  AuthorizationRecords:
+    properties:
+      expiryDate:
+        description: Expiry Date of the virtual card account.<br><br>Format MMYYYY
+        type: string
+        format: alphanumeric
+        example: '122021'
+        maxLength: 6
+      billingCurrencyAmount:
+        description: >-
+          Specifies the value of transaction amount which is converted to
+          billling currency
+        type: string
+        format: alphanumeric
+        example: '123.00'
+        maxLength: 16
+      billingCurrencyCode:
+        description: >-
+          Specifies the ISO currency code of accounts that was initially set up
+          for billing the transactions.
+        type: string
+        format: alphanumeric
+        example: USD
+        maxLength: 3
+      billingCurrencyCodeDescription:
+        description: >-
+          Specifies the description of currency code of accounts that was
+          initially set up for billing the transactions.
+        type: string
+        format: alphanumeric
+        example: US Dollar
+        maxLength: 70
+      billingAmountInUSD:
+        description: >-
+          Card Holder billing amount converted to USD currency. This field will
+          available for VISA report
+        type: string
+        format: alphanumeric
+        example: '123.00'
+        maxLength: 16
+      transactionCurrencyAmount:
+        description: Specifies the actual transaction amount in transaction currency.
+        type: string
+        format: alphanumeric
+        example: '123.00'
+        maxLength: 16
+      transactionCurrencyCode:
+        description: >-
+          Specifies the ISO currency code on which actual authorization of
+          transaction was done.
+        type: string
+        format: alphanumeric
+        example: USD
+        maxLength: 3
+      transactionCurrencyCodeDescription:
+        description: >-
+          Specifies the currency code description on which actual authorization
+          of transaction was done.
+        type: string
+        format: alphanumeric
+        example: US Dollar
+        maxLength: 70
+      transactionExchangerate:
+        description: Currency exchange in operation during a payment.
+        type: string
+        format: alphanumeric
+        example: '1'
+        maxLength: 7
+      transactionDate:
+        description: The date of the transsation that was initiated and amount debited.
+        type: string
+        format: alphanumeric
+        example: '2023-01-20'
+        maxLength: 10
+      transactionTime:
+        description: The time of the transaction that was initiated and amount debited
+        type: string
+        format: alphanumeric
+        example: '19:52:11'
+        maxLength: 8
+      transactionType:
+        description: >-
+          Specifies the nature of the transaction whether it was authorized or
+          returned etc.
+        type: string
+        format: alphanumeric
+        example: Authorization
+        maxLength: 107
+      preAuthorizationFlag:
+        description: Pre-Authorization request indicator with Yes/No
+        type: string
+        format: alphanumeric
+        example: 'No'
+        maxLength: 3
+      addressVerificationServiceFlag:
+        description: >-
+          Indicates whether merchant requests address verification service.
+          Indicator with Yes/No
+        type: string
+        format: alphanumeric
+        example: 'No'
+        maxLength: 3
+      merchantCategoryCode:
+        description: The category under which the merchant is been assigned by the network
+        type: string
+        format: alphanumeric
+        example: '5812'
+        maxLength: 10
+      mccDescription:
+        description: >-
+          The decsription of the categoryon which merchant has been assigned by
+          the netwrok
+        type: string
+        format: alphanumeric
+        example: EATING PLACES, RESTAURANTS
+        maxLength: 200
+      merchantId:
+        description: The ID created for a specific merchant by the network
+        type: string
+        format: alphanumeric
+        example: 00000R-5411-USA
+        maxLength: 50
+      merchantName:
+        description: >-
+          The merchant name that corresponds to merchant id defined by the
+          netwrok
+        type: string
+        format: alphanumeric
+        example: GROCERY STORES, SUPERM
+        maxLength: 200
+      merchantState:
+        description: The state under which the merchant has been categorised
+        type: string
+        format: alphanumeric
+        example: MO
+        maxLength: 100
+      merchantCity:
+        description: The city under which the merchant has been categorised
+        type: string
+        format: alphanumeric
+        example: OFALLON
+        maxLength: 100
+      merchantCountryCode:
+        description: The conutry code defined under which the merchant has been categorised
+        type: string
+        format: alphanumeric
+        example: USA
+        maxLength: 3
+      merchantCountryName:
+        description: >-
+          The conutry name that corresponds to merchant country code under which
+          the merchant has been categorised
+        type: string
+        format: alphanumeric
+        example: United States (the)
+        maxLength: 50
+      merchantZipCode:
+        description: >-
+          The ZIP code defined under which the merchant city has been
+          categorised
+        type: string
+        format: alphanumeric
+        example: '12345'
+        maxLength: 10
+      acquirerIdentifier:
+        description: The identifier under which the acquirer has been categorised
+        type: string
+        format: alphanumeric
+        example: '00000999080'
+        maxLength: 50
+      terminalId:
+        description: The id under which the terminal has been categorised
+        type: string
+        format: alphanumeric
+        example: '789254'
+        maxLength: 50
+      transactionId:
+        description: Unique identifier of the transaction
+        type: string
+        format: alphanumeric
+        example: '380198318999999'
+        maxLength: 50
+      transactionEnvironment:
+        description: >-
+          The environment where the transaction was initaited either through ATM
+          or POS etc.
+        type: string
+        format: alphanumeric
+        example: POS
+        maxLength: 7
+      partialAuthorizationAmount:
+        description: Partial Authorization Amount
+        type: string
+        format: alphanumeric
+        example: '100.02'
+        maxLength: 16
+      authorizationResponseDetail:
+        description: Authorization Status/Reason Description from Issuer
+        type: string
+        format: alphanumeric
+        example: Refer to card issuer
+        maxLength: 83
+      vcaAuthorizationResponseDetail:
+        description: >-
+          string<br>Authorization status/reason description from Networks
+          Payment Control
+        type: string
+        format: alphanumeric
+        example: Iss/Netwk decline
+        maxLength: 69
+      authorizationResponseCategory:
+        description: Authorization Category Description from VisaNet
+        type: string
+        format: alphanumeric
+        example: ADT - Adult Themed merchants restriction
+        maxLength: 24
+      settled:
+        description: >-
+          Indicates whether the transaction is unsettled, or settled with an
+          associated cleared transaction record.<br><br>Possible values:
+          <br>Settled<br>Unsettled
+        type: string
+        format: alphanumeric
+        example: Unsettled
+        maxLength: 9
+      stipAdviceCode:
+        description: Stand In Processing Advance Code
+        type: string
+        format: alphanumeric
+        example: '5'
+        maxLength: 4
+      stipSwitchReasonCod:
+        description: Stand In Processing Switch Reason Code
+        type: string
+        format: alphanumeric
+        example: '0000'
+        maxLength: 10
+      stipSwitchReasonDescription:
+        description: Stand In Processing Switch Reason Description
+        type: string
+        format: alphanumeric
+        example: NOT APPLICABLE
+        maxLength: 200
+  ErrorResponseForAuthReport:
+    properties:
+      startDate:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '2023-01-01'
+      endDate:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '2023-01-30'
+      startTime:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '00:00'
+      endTime:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '23:59'
+      vcaId:
+        description: A reference number that uniquely identifies the virtual card account.
+        type: string
+        format: alphanumeric
+        example: '123456'
+      programId:
+        description: Unique ID of the company record defined in the virtual cards system.
+        type: string
+        format: alphanumeric
+        example: '429777'
+      messageId:
+        description: >-
+          Unique ID of the API message sent. The messageId will be provided back
+          in the corresponding response. The ID can be used for investigation
+          and troubleshooting. The ID must be unique per integration.
+        type: string
+        format: alphanumeric
+        example: CITI00000000AuthReport20230825120311
+      timeZone:
+        description: Defines the time zone applicable for any date or time
+        type: string
+        format: alphanumeric
+        example: UTC+05:30
+      transactionType:
+        description: >-
+          Specifies the nature of the transaction whether it was authorized or
+          returned etc.
+        type: string
+        format: alphanumeric
+        example: All
+      virtualCardAccountNumber:
+        description: The virtual card account number to use for transactions.
+        type: string
+        format: alphanumeric
+        example: '5281722601926445'
+      reportStatus:
+        description: >-
+          Defines the status of the data that was requested whether the request
+          has been processed or not.
+        type: string
+        format: alphanumeric
+        example: FAILED
+        maxLength: 19
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/AuthErrors'
+  AuthErrors:
+    properties:
+      errorCode:
+        description: >-
+          The error code if there is any error occurred while retrieving the
+          transaction
+        type: string
+        format: alphanumeric
+        example: ERS0001
+      errorDescription:
+        description: >-
+          "The error description that corresponds to error code when there is
+          any error occurred while retrieving the transaction.<br>* `ERS0001` -
+          Invalid Virtual Card Account Number format<br>* `ERS0002` - Invalid
+          Transaction Type<br>* `ERS0003` - timeZone field is empty or has an
+          invalid UTC offset time zone format<br>* `ERC0004` - Transactions were
+          unable to be returned for the requested data range. Please try again,
+          or contact Citi support if you have any further questions or
+          comments.<br>* `ERS0007` - Invalid Message ID format<br>* `ERS0009` -
+          Client Onboard Configuration setup is missing. Contact Citi
+          support.<br>* `ERS0010` - Invalid Report ID format. Report ID must
+          include numeric values<br>* `ERS0053` - Start Date is Mandatory.<br>*
+          `ERS0054` - End Date is Mandatory.<br>* `ERS0057` - startDate value
+          exceeds requested endDate value<br>* `ERS0060` - Client ID and/or
+          Program Id is missing in Client Onboard Configuration setup. Contact
+          Citi support.<br>* `ERS0061` - VCA ID is not present in our
+          system<br>* `ERS0063` - Requested Time Zone is not supported<br>*
+          `ERS0068` - Program Id is Mandatory.<br>* `ERS0069` - Vca Id is
+          Mandatory.<br>* `ERS0070` - Message Id is Mandatory.<br>* `ERS0071` -
+          Virtual Card Account Number is Mandatory.<br>* `ERS0072` - Requested
+          report date cannot exceed 36 months in the past from todays date<br>*
+          `ERS0079` - The requested report ID(s) is for a VCA that is different
+          than the VCA included in the request. Please include the VCA
+          associated to the report ID(s).<br>* `ERS0080` - The requested report
+          ID(s) is for a programId that is different than the programId included
+          in the request. Please include the programId associated to the report
+          ID(s).<br>* `ERS0081` - The requested report ID(s) is for a timeZone
+          that is different than the timeZone included in the request. Please
+          include the timeZone associated to the report ID(s).<br>* `ERS0082` -
+          The requested report IDs are for different VCAs, Please include report
+          IDs that belong to the same VCA.<br>* `ERS0083` - The requested report
+          IDs are for different program IDs, Please include report IDs that
+          belong to the same program ID.<br>* `ERS0084` - The requested report
+          IDs are for different requested time zones, Please include report IDs
+          that belong to the same requested time zone.<br>* `ERS0091` -
+          startDate value must have valid format: YYYY-MM-DD<br>* `ERS0092` -
+          endDate value must have valid format: YYYY-MM-DD<br>* `ERS0093` - The
+          date specified in startDate does not exist<br>* `ERS0094` - The date
+          specified in endDate does not exist<br>* `ERS0095` - Report ID
+          included in your request is not present for the given ClientID/program
+          ID. Please generate a new report ID for this Reports request by
+          calling the Reports API without a report ID<br>* `ERS0097` - startTime
+          value must have valid format: HH:MM` - H (0,1,2) | H (0-9) : M (0-5) |
+          M (0-9)<br>* `ERS0098` - endTime value must have valid format: HH:MM`
+          - H (0,1,2) | H (0-9) : M (0-5) | M (0-9)<br>* `ERS0099` - startTime
+          value cannot exceed the requested endTime value<br><br>* `MS0001` -
+          Invalid Virtual Card Account Number<br>* `MS0002` - From date should
+          be before to date.<br>* `MS0006` - Invalid vcaId value<br>* `MS0008` -
+          Invalid Report ID<br><br>* `GRC0002` - Client ID is missing in the
+          request header<br>* `GRC0003` - Invalid JSON Input<br>* `GRC0004` -
+          Region ID is not available in the request<br>* `GRC0011` - Client ID
+          and/or Country and/or region id is missing in Client Onboard
+          Configuration setup. Contact Citi support.<br>* `GRC0016` - Country
+          code is not available in the request"
+        type: string
+        format: alphanumeric
+        example: Invalid Virtual Card Account Number format
+  ServerErrorResponseForAuthReport:
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/AuthServerErrors'
+  AuthServerErrors:
+    properties:
+      errorCode:
+        description: >-
+          The error code if there is any error occurred while retrieving the
+          transaction
+        type: string
+        format: alphanumeric
+        example: GRC0014
+      errorDescription:
+        description: >-
+          "The error description that corresponds to error code when there is
+          any error occurred while retrieving the transaction.<br>* `GRC0001` -
+          We have encountered an error and couldnt receive your request. Please
+          try again, or contact Citi support if you have any further questions
+          or comments.<br>* `GRC0006` - We have encountered an error and couldnt
+          receive your request. Please try again, or contact Citi support if you
+          have any further questions or comments.<br>* `GRC0009` - We have
+          encountered an error and couldnt receive your request. Please try
+          again, or contact Citi support if you have any further questions or
+          comments.<br>* `GRC0014` - We have encountered an error and couldnt
+          receive your request. Please try again, or contact Citi support if you
+          have any further questions or comments.
+        type: string
+        format: alphanumeric
+        example: >-
+          We have encountered an error and couldn`t receive your request. Please
+          try again, or contact Citi support if you have any further questions
+          or comments
+  ClearingReportInboundRequest:
+    properties:
+      startDate:
+        description: >-
+          Specifies the start date upto when the reports can be
+          retrieved<br><br>Format:YYYY-MM-DD<br><br>Rules:<br><br>Start date
+          should be less than end date.<br><br>Start date should not be earlier
+          than create VCA date<br><br>StartDate and endDate can be up to 180
+          days in the past from the day of report requested and not future date
+        type: string
+        format: alphanumeric
+        example: '2023-01-01'
+        maxLength: 10
+      endDate:
+        description: >-
+          Specifies the end date upto when the reports can be
+          retrieved<br><br>Format:YYYY-MM-DD<br><br>Rules:<br><br>End date
+          should greater than the start date<br>StartDate and endDate can be up
+          to 180 days in the past from the day of report requested and not
+          future date
+        type: string
+        format: alphanumeric
+        example: '2023-01-30'
+        maxLength: 10
+      startTime:
+        description: >-
+          Specifies the start time from when the reports can be
+          retrieved<br><br>Format:HH:MM
+        type: string
+        format: alphanumeric
+        example: '00:00'
+        maxLength: 10
+      endTime:
+        description: >-
+          Specifies the end time upto when the reports can be
+          retrieved<br><br>Format:HH:MM
+        type: string
+        format: alphanumeric
+        example: '23:59'
+        maxLength: 10
+      transactionType:
+        description: >-
+          Specifies the nature of the transaction whether it was authorized or
+          returned etc.<br><br>Possible Values:<br>All<br>Presentment<br>Second
+          Presentment<br>Chargeback<br>Arbitration Chargeback<br>Retrieval
+          Request<br>Fee Collection
+        type: string
+        format: alphanumeric
+        example: All
+        maxLength: 20
+      vcaId:
+        description: A reference number that uniquely identifies the virtual card account.
+        type: string
+        format: alphanumeric
+        example: '67676781'
+        maxLength: 19
+      programId:
+        description: Unique ID of the company record defined in the virtual cards system.
+        type: string
+        format: alphanumeric
+        example: '233191'
+        maxLength: 25
+      messageId:
+        description: >-
+          Unique ID of the API message sent. The messageId will be provided back
+          in the corresponding response. The ID can be used for investigation
+          and troubleshooting. The ID must be unique per integration.
+        type: string
+        format: alphanumeric
+        example: CITI0000000ClearReport20230825120311
+        maxLength: 36
+        minLength: 28
+      virtualCardAccountNumber:
+        description: >-
+          The virtual card account number to use for
+          transactions.<br><br>Numeric field and no decimals allowed
+        type: string
+        format: alphanumeric
+        example: '5281722601926445'
+        maxLength: 16
+      timeZone:
+        description: >-
+          Defines the time zone applicable for any date or time<br><br>UTC
+          offset
+        type: string
+        format: alphanumeric
+        example: UTC+05:30
+        maxLength: 9
+      reportIds:
+        description: >-
+          An optional reportId array passed by client to fetch the Auth report
+          transactions.
+        type: array
+        items:
+          type: string
+        format: alphanumeric
+        example: '["12345"]'
+    required:
+      - startDate
+      - endDate
+      - vcaId
+      - programId
+      - messageId
+      - virtualCardAccountNumber
+      - timeZone
+  ClearingReportInboundResponse:
+    properties:
+      vcaId:
+        description: A reference number that uniquely identifies the virtual card account.
+        type: string
+        format: alphanumeric
+        example: '67676781'
+        maxLength: 19
+      messageId:
+        description: >-
+          Unique ID of the API message sent. The messageId will be provided back
+          in the corresponding response. The ID can be used for investigation
+          and troubleshooting. The ID must be unique per integration.
+        type: string
+        format: alphanumeric
+        example: CITI0000000ClearReport20230825120311
+        maxLength: 36
+        minLength: 28
+      programId:
+        description: Unique ID of the company record defined in the virtual cards system.
+        type: string
+        format: alphanumeric
+        example: '233191'
+        maxLength: 25
+      startDate:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '2023-01-01'
+        maxLength: 10
+      endDate:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '2023-03-30'
+        maxLength: 10
+      startTime:
+        description: >-
+          Specifies the start time from when the reports can be
+          retrieved<br><br>Format:HH:MM
+        type: string
+        format: alphanumeric
+        example: '00:00'
+        maxLength: 10
+      endTime:
+        description: >-
+          Specifies the end time upto when the reports can be
+          retrieved<br><br>Format:HH:MM
+        type: string
+        format: alphanumeric
+        example: '23:59'
+        maxLength: 10
+      reportStatus:
+        description: >-
+          Defines the status of the data that was requested whether the request
+          has been processed or not.
+        type: string
+        format: alphanumeric
+        example: COMPLETED
+        maxLength: 16
+        enum:
+          - COMPLETED
+          - PARTIALLY COMPLETED
+          - FAILED
+          - PENDING
+      warning:
+        description: >-
+          Warning information regarding a non-fatal response condition that may
+          be taken into account, but can be ignored
+        type: string
+        format: alphanumeric
+        example: Warning message
+        maxLength: 200
+      timeZone:
+        description: Defines the time zone applicable for any date or time
+        type: string
+        format: alphanumeric
+        example: UTC+05:30
+        maxLength: 9
+      virtualCardAccountNumber:
+        description: The virtual card account number to use for transactions.
+        type: string
+        format: alphanumeric
+        example: '5281722601926445'
+        maxLength: 19
+      transactionType:
+        description: >-
+          Specifies the nature of the transaction whether it was authorized or
+          returned etc.
+        type: string
+        format: alphanumeric
+        example: All
+      info:
+        type: array
+        items:
+          $ref: '#/definitions/ClearingInfo'
+      clearingRecords:
+        type: array
+        items:
+          $ref: '#/definitions/ClearingRecords'
+    required:
+      - vcaId
+      - messageId
+      - programId
+      - startDate
+      - endDate
+      - reportStatus
+      - timeZone
+      - virtualCardAccountNumber
+      - transactionType
+  ClearingInfo:
+    properties:
+      fromDate:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '2023-01-01'
+        maxLength: 10
+      toDate:
+        description: Specifies the end date upto when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '2023-02-01'
+        maxLength: 10
+      reportId:
+        description: >-
+          Specifies the report Id generated from Master Card for given 30 day
+          range
+        type: string
+        format: alphanumeric
+        example: '12345'
+      errorCode:
+        description: >-
+          The error code if there is any error occurred while retrieving the
+          trsansaction
+        type: string
+        format: alphanumeric
+        example: MS0006
+        maxLength: 6
+      errorMessage:
+        description: >-
+          The error description that corresponds to error code when there is any
+          error occurred while retrieving the transaction.
+        type: string
+        format: alphanumeric
+        example: Invalid vcaId value
+        maxLength: 200
+      status:
+        description: >-
+          Defines the status of the data that was requested whether the request
+          has been processed or not.
+        type: string
+        format: alphanumeric
+        example: COMPLETED
+        maxLength: 10
+  ClearingRecords:
+    properties:
+      clearingType:
+        description: Specifies the type of clearing, Which it is debit or credit
+        type: string
+        format: alphanumeric
+        example: Debit
+        maxLength: 6
+      billingCurrencyAmount:
+        description: >-
+          Specifies the ISO currency code of accounts that was initially set up
+          for billing the transactions
+        type: string
+        format: alphanumeric
+        example: '123.00'
+        maxLength: 16
+      billingCurrencyCode:
+        description: >-
+          Specifies the value of transaction amount which is converted to
+          billling currency
+        type: string
+        format: alphanumeric
+        example: USD
+        maxLength: 3
+      billingCurrencyCodeDescription:
+        description: >-
+          Specifies the description of currency code of accounts that was
+          initially set up for billing the transactions
+        type: string
+        format: alphanumeric
+        example: US Dollar
+        maxLength: 70
+      transactionCurrencyAmount:
+        description: Specifies the actual transaction amount in transaction currency
+        type: string
+        format: alphanumeric
+        example: '123.00'
+        maxLength: 32
+      transactionCurrencyCode:
+        description: >-
+          Specifies the ISO currency code on which actual authorization of
+          transaction was done
+        type: string
+        format: alphanumeric
+        example: USD
+        maxLength: 10
+      transactionCurrencyCodeDescription:
+        description: >-
+          Specifies the currency code description on which actual authorization
+          of transaction was done
+        type: string
+        format: alphanumeric
+        example: US Dollar
+        maxLength: 70
+      transactionExchangerate:
+        description: Currency exchange in operation during a payment.
+        type: string
+        format: alphanumeric
+        example: '1'
+        maxLength: 7
+      transactionDate:
+        description: Specifies card transaction date
+        type: string
+        format: alphanumeric
+        example: '2023-01-20'
+        maxLength: 10
+      transactionTime:
+        description: Specifies card transaction time
+        type: string
+        format: alphanumeric
+        example: '19:52:11'
+        maxLength: 8
+      transactionType:
+        description: Specifies the type of transaction
+        type: string
+        format: alphanumeric
+        example: First Presentment
+        maxLength: 40
+      merchantCategoryCode:
+        description: The category under which the merchant is been assigned by the network
+        type: string
+        format: alphanumeric
+        example: '5812'
+        maxLength: 10
+      mccDescription:
+        description: >-
+          The decsription of the category on which merchant has been assigned by
+          the netwrok
+        type: string
+        format: alphanumeric
+        example: EATING PLACES, RESTAURANTS
+        maxLength: 200
+      merchantId:
+        description: The ID created for a specific merchant by the network
+        type: string
+        format: alphanumeric
+        example: 00000R-5411-USA
+        maxLength: 50
+      merchantName:
+        description: >-
+          The merchant name that corresponds to merchant id defined by the
+          netwrok
+        type: string
+        format: alphanumeric
+        example: GROCERY STORES, SUPERM
+        maxLength: 200
+      merchantState:
+        description: The state under which the merchant has been categorised
+        type: string
+        format: alphanumeric
+        example: MO
+        maxLength: 100
+      merchantCity:
+        description: The city under which the merchant has been categorised
+        type: string
+        format: alphanumeric
+        example: OFALLON
+        maxLength: 100
+      merchantCountryCode:
+        description: The conutry code defined under which the merchant has been categorised
+        type: string
+        format: alphanumeric
+        example: USA
+        maxLength: 3
+      merchantCountryName:
+        description: >-
+          The conutry name that corresponds to merchant country code under which
+          the merchant has been categorised
+        type: string
+        format: alphanumeric
+        example: United States (the)
+        maxLength: 50
+      merchantZip:
+        description: >-
+          The ZIP code defined under which the merchant city has been
+          categorised
+        type: string
+        format: alphanumeric
+        example: '12345'
+        maxLength: 10
+      acquirerIdentifier:
+        description: The identifier under which the acquirer has been categorised
+        type: string
+        format: alphanumeric
+        example: '00000999080'
+        maxLength: 50
+      terminalId:
+        description: The ID under which the terminal has been categorised
+        type: string
+        format: alphanumeric
+        example: '789254'
+        maxLength: 50
+      transactionId:
+        description: Unique identifier of the transaction
+        type: string
+        format: alphanumeric
+        example: '380198318999999'
+        maxLength: 50
+      cardAcceptorId:
+        description: Specifies card transaction acceptor ID
+        type: string
+        format: alphanumeric
+        example: '490050000000053'
+        maxLength: 26
+      transactionSequenceNumber:
+        description: Specifies card transaction sequence number
+        type: string
+        format: alphanumeric
+        example: '4910'
+        maxLength: 24
+      acquirerReferenceData:
+        description: Specifies card transaction acquirer reference number
+        type: string
+        format: alphanumeric
+        example: '25567681110000232050357'
+        maxLength: 23
+      messageType:
+        description: >-
+          Four-digit numeric field describing the type of message being
+          interchanged.<br><br>1240   Presentment<br>1442   Chargeback<br>1644  
+          Administrative<br>1740   Fee Collection
+        type: string
+        format: alphanumeric
+        example: '1240.0'
+        maxLength: 4
+        enum:
+          - 1240
+          - 1442
+          - 1644
+          - 1740
+      messageReasonCode:
+        description: >-
+          Four-digit data element that indicates the reason for sending a
+          message
+        type: string
+        format: alphanumeric
+        example: '1400'
+        maxLength: 4
+      functionCode:
+        description: >-
+          Three-digit data element that indicates the specific purpose of a
+          message in a message class.<br>Uniquely identifies all transaction
+          functions the clearing system performs.
+        type: string
+        format: alphanumeric
+        example: '200'
+        maxLength: 3
+      transactionPostDate:
+        description: Specifies card transaction once its posted / settled from network
+        type: string
+        format: alphanumeric
+        example: '2023-01-20'
+        maxLength: 10
+      settlementAmount:
+        description: Specifies card transaction amount where actual settlement was done
+        type: string
+        format: alphanumeric
+        example: '189.98'
+        maxLength: 32
+      settlementCurrencyCode:
+        description: >-
+          Specifies the currency code on which actual settlement of transaction
+          was done
+        type: string
+        format: alphanumeric
+        example: SGD
+        maxLength: 3
+      settlementCurrencyDescription:
+        description: >-
+          Specifies the currency code description on which actual settlement of
+          transaction was done
+        type: string
+        format: alphanumeric
+        example: Singapore Dollar
+        maxLength: 70
+      approvalCode:
+        description: >-
+          Specifies approval code which can be used for reconciliation, advise
+          supplier/ merchants and trouble shoot declines across network
+        type: string
+        format: alphanumeric
+        example: '802907'
+        maxLength: 50
+  ErrorResponseForClearingReport:
+    properties:
+      startDate:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '2023-01-01'
+      endDate:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '2023-01-30'
+      startTime:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '00:00'
+      endTime:
+        description: Specifies the start date from when the reports can be retrieved
+        type: string
+        format: alphanumeric
+        example: '23:59'
+      vcaId:
+        description: A reference number that uniquely identifies the virtual card account.
+        type: string
+        format: alphanumeric
+        example: '123456'
+      programId:
+        description: Unique ID of the company record defined in the virtual cards system.
+        type: string
+        format: alphanumeric
+        example: '429777'
+      messageId:
+        description: >-
+          Unique ID of the API message sent. The messageId will be provided back
+          in the corresponding response. The ID can be used for investigation
+          and troubleshooting. The ID must be unique per integration.
+        type: string
+        format: alphanumeric
+        example: CITI0000ClearingReport20230825120311
+      timeZone:
+        description: Defines the time zone applicable for any date or time
+        type: string
+        format: alphanumeric
+        example: UTC+05:30
+      transactionType:
+        description: >-
+          Specifies the nature of the transaction whether it was authorized or
+          returned etc.
+        type: string
+        format: alphanumeric
+        example: All
+      virtualCardAccountNumber:
+        description: The virtual card account number to use for transactions.
+        type: string
+        format: alphanumeric
+        example: '5281722601926445'
+      reportStatus:
+        description: >-
+          Defines the status of the data that was requested whether the request
+          has been processed or not.
+        type: string
+        format: alphanumeric
+        example: FAILED
+        maxLength: 16
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/ClearingErrors'
+  ClearingErrors:
+    properties:
+      errorCode:
+        description: >-
+          The error code if there is any error occurred while retrieving the
+          transaction
+        type: string
+        format: alphanumeric
+        example: ERS0001
+      errorDescription:
+        description: >-
+          "The error description that corresponds to error code when there is
+          any error occurred while retrieving the transaction.<br>* `ERS0001` -
+          Invalid Virtual Card Account Number format<br>* `ERS0002` - Invalid
+          Transaction Type<br>* `ERS0003` - timeZone field is empty or has an
+          invalid UTC offset time zone format<br>* `ERC0004` - Transactions were
+          unable to be returned for the requested data range. Please try again,
+          or contact Citi support if you have any further questions or
+          comments.<br>* `ERS0007` - Invalid Message ID format<br>* `ERS0009` -
+          Client Onboard Configuration setup is missing. Contact Citi
+          support.<br>* `ERS0010` - Invalid Report ID format. Report ID must
+          include numeric values<br>* `ERS0053` - Start Date is Mandatory.<br>*
+          `ERS0054` - End Date is Mandatory.<br>* `ERS0057` - startDate value
+          exceeds requested endDate value<br>* `ERS0060` - Client ID and/or
+          Program Id is missing in Client Onboard Configuration setup. Contact
+          Citi support.<br>* `ERS0061` - VCA ID is not present in our
+          system<br>* `ERS0063` - Requested Time Zone is not supported<br>*
+          `ERS0068` - Program Id is Mandatory.<br>* `ERS0069` - Vca Id is
+          Mandatory.<br>* `ERS0070` - Message Id is Mandatory.<br>* `ERS0071` -
+          Virtual Card Account Number is Mandatory.<br>* `ERS0072` - Requested
+          report date cannot exceed 36 months in the past from todays date<br>*
+          `ERS0079` - The requested report ID(s) is for a VCA that is different
+          than the VCA included in the request. Please include the VCA
+          associated to the report ID(s).<br>* `ERS0080` - The requested report
+          ID(s) is for a programId that is different than the programId included
+          in the request. Please include the programId associated to the report
+          ID(s).<br>* `ERS0081` - The requested report ID(s) is for a timeZone
+          that is different than the timeZone included in the request. Please
+          include the timeZone associated to the report ID(s).<br>* `ERS0082` -
+          The requested report IDs are for different VCAs, Please include report
+          IDs that belong to the same VCA.<br>* `ERS0083` - The requested report
+          IDs are for different program IDs, Please include report IDs that
+          belong to the same program ID.<br>* `ERS0084` - The requested report
+          IDs are for different requested time zones, Please include report IDs
+          that belong to the same requested time zone.<br>* `ERS0091` -
+          startDate value must have valid format: YYYY-MM-DD<br>* `ERS0092` -
+          endDate value must have valid format: YYYY-MM-DD<br>* `ERS0093` - The
+          date specified in startDate does not exist<br>* `ERS0094` - The date
+          specified in endDate does not exist<br>* `ERS0095` - Report ID
+          included in your request is not present for the given ClientID/program
+          ID. Please generate a new report ID for this Reports request by
+          calling the Reports API without a report ID<br>* `ERS0097` - startTime
+          value must have valid format: HH:MM` - H (0,1,2) | H (0-9) : M (0-5) |
+          M (0-9)<br>* `ERS0098` - endTime value must have valid format: HH:MM`
+          - H (0,1,2) | H (0-9) : M (0-5) | M (0-9)<br>* `ERS0099` - startTime
+          value cannot exceed the requested endTime value<br><br>* `MS0001` -
+          Invalid Virtual Card Account Number<br>* `MS0002` - From date should
+          be before to date.<br>* `MS0006` - Invalid vcaId value<br>* `MS0008` -
+          Invalid Report ID<br><br>* `GRC0002` - Client ID is missing in the
+          request header<br>* `GRC0003` - Invalid JSON Input<br>* `GRC0004` -
+          Region ID is not available in the request<br>* `GRC0011` - Client ID
+          and/or Country and/or region id is missing in Client Onboard
+          Configuration setup. Contact Citi support.<br>* `GRC0016` - Country
+          code is not available in the request"
+        type: string
+        format: alphanumeric
+        example: Invalid Virtual Card Account Number format
+  ServerErrorResponseForClearingReport:
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/ClearingServerErrors'
+  ClearingServerErrors:
+    properties:
+      errorCode:
+        description: >-
+          The error code if there is any error occurred while retrieving the
+          transaction
+        type: string
+        format: alphanumeric
+        example: GRC0014
+      errorDescription:
+        description: >-
+          "The error description that corresponds to error code when there is
+          any error occurred while retrieving the transaction.<br>* `GRC0001` -
+          We have encountered an error and couldnt receive your request. Please
+          try again, or contact Citi support if you have any further questions
+          or comments.<br>* `GRC0006` - We have encountered an error and couldnt
+          receive your request. Please try again, or contact Citi support if you
+          have any further questions or comments.<br>* `GRC0009` - We have
+          encountered an error and couldnt receive your request. Please try
+          again, or contact Citi support if you have any further questions or
+          comments.<br>* `GRC0014` - We have encountered an error and couldnt
+          receive your request. Please try again, or contact Citi support if you
+          have any further questions or comments.
+        type: string
+        format: alphanumeric
+        example: >-
+          We have encountered an error and couldn`t receive your request. Please
+          try again, or contact Citi support if you have any further questions
+          or comments
+x-ibm-configuration:
+  enforced: true
+  testable: true
+  phase: realized
+  cors:
+    enabled: false
+  properties:
+    hostName:
+      value: >-
+        https://base-b-grace-engine-dev-icg-tts-grace-173707.apps.namicggtd29d.ecs.dyn.nsroot.net/api/tts/cards
+      description: ''
+      encoded: false
+  catalogs:
+    UAT:
+      properties:
+        hostName: >-
+          https://base-b-grace-engine-uat-icg-tts-grace-173707.apps.namicgswd40u.ecs.dyn.nsroot.net/api/tts/cards
+    External:
+      properties:
+        hostName: >-
+          https://base-b-grace-engine-dev-icg-tts-grace-173707.apps.namicggtd29d.ecs.dyn.nsroot.net/api/tts/cards
+  assembly:
+    execute:
+      - gatewayscript:
+          title: gatewayscript
+          version: 1.0.0
+          source: "var hm = require('header-metadata');\r\nvar client_id = apim.getvariable('client.app.id');\r\napim.setvariable('message.headers.x-citiportal-apim-client-id',client_id);\r\nif(apim.getvariable('oauth.miscinfo') !=null){\r\nvar oauthmiscinfo = apim.getvariable('oauth.miscinfo');\r\napim.setvariable(\"message.headers.ssoId\",oauthmiscinfo.substring(2));\r\nconsole.error(\"vminfo API failed with return code=\" + oauthmiscinfo.substring(2) );\r\napim.setvariable('message.headers.x-citiportal-apim-client-id',client_id);\r\napim.setvariable(\"message.headers.x-citiportal-loginid\",oauthmiscinfo.substring(2));  \r\n}"
+      - proxy:
+          title: proxy
+          timeout: 60
+          verb: keep
+          cache-response: protocol
+          cache-ttl: 900
+          version: 1.0.0
+          tls-profile: icg-tts-ic
+          target-url: $(hostName)$(api.operation.path)
+      - activity-log:
+          title: activity-log
+          content: header
+          error-content: header
+          version: 1.0.0
+    catch: []
+securityDefinitions:
+  Client Credentials:
+    description: >+
+      All CitiConnect APIs use the oAuth2 authentication scheme, which requires
+      a bearer token to authenticate your API call. The Token URL includes the
+      version of authentication used by this API. See <a
+      href="../../authentication/authentication-api-reference/"
+      target="_blank">the Citi Authentication API reference</a> for information
+      on requesting a token.
+
+    type: oauth2
+    tokenUrl: https://tts.sandbox.apib2b.citi.com/tts/cards/api/oauth2/token
+    flow: application
+    scopes: null

@@ -1,0 +1,4379 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Currency Solutions Online Trading Platform API",
+    "description": "Currency Solutions Online Trading Platform can be used to book currency online in a simple manner\n\nAll requests to API (except [getToken](#operation/getToken) request) should have `Authorization` header containing valid authorisation JWT token.\n\nIf you are the Service Provider all requests of your API users should have `X-Provider-Hash` header containing valid security hash provided by you (if required).\n\nAPI host for test environment:\n<pre>\nhttps://op-api-demo.currencysolutions.co.uk/\n</pre>\nAPI host for live environment:\n<pre>\nhttps://op-api.currencysolutions.co.uk/\n</pre>\n\n<b>API users</b>:\n\nTo obtain the API JWT token please write to it@currencysolutions.com specifying your details and environment you need the token for.\n\nIf you are the Service Provider please additionaly send us the security hash you would like to use for all of your API users requests.\n\n<b>Online Platform users</b>:\n\nFirst you have to obtain guest JWT token with your session data performing [getToken](#operation/getToken) request.\n\nHaving guest token you can get the valid JWT token by [login](#operation/login) request.",
+    "contact": {
+      "email": "it@currencysolutions.com"
+    },
+    "license": {
+      "name": "Currency Solutions",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.4.1"
+  },
+  "paths": {
+    "/acl": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Access Control List",
+        "description": "Fetch allowed resources",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AclResources"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list-legacy/currency": {
+      "get": {
+        "tags": [
+          "general"
+        ],
+        "summary": "Get list of currencies",
+        "description": "Get full list of all available currencies with additional data",
+        "operationId": "getCurrencyList",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "content": {
+                        "data": {
+                          "EUR": {
+                            "name": "EUR - Euro",
+                            "card": "false",
+                            "sell": "true",
+                            "buy": "true"
+                          },
+                          "GBP": {
+                            "name": "GBP - Pound Sterling",
+                            "card": "true",
+                            "sell": "true",
+                            "buy": "true"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list-legacy/buy-currency": {
+      "get": {
+        "tags": [
+          "buy currency"
+        ],
+        "summary": "Get list of buy currencies",
+        "description": "Get list of currencies available to buy by authorised user",
+        "operationId": "getBuyCurrencyList",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "content": {
+                        "data": {
+                          "USD": "USD - US Dollar",
+                          "GBP": "GBP - Pound Sterling"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      }
+    },
+    "/list-legacy/sell-currency": {
+      "get": {
+        "tags": [
+          "buy currency"
+        ],
+        "summary": "Get list of sell currencies",
+        "description": "Get list of currencies available to sell by authorised user",
+        "operationId": "getSellCurrencyList",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "content": {
+                        "data": {
+                          "USD": "USD - US Dollar",
+                          "GBP": "GBP - Pound Sterling"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      }
+    },
+    "/list-legacy/country": {
+      "get": {
+        "tags": [
+          "general"
+        ],
+        "summary": "Countries list",
+        "description": "Fetch list of countries",
+        "operationId": "getCountryList",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/countriesListContent"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list-legacy/sepa-country": {
+      "get": {
+        "tags": [
+          "general"
+        ],
+        "summary": "SEPA countries list",
+        "description": "Fetch list of SEPA countries",
+        "operationId": "getSepaCountryList",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/sepaCountriesListContent"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      }
+    },
+    "/list-legacy/address-required-country": {
+      "get": {
+        "tags": [
+          "general"
+        ],
+        "summary": "Address required countries list",
+        "description": "List of the countries where address is required",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/requiredCountriesListContent"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      }
+    },
+    "/list-legacy/security-questions": {
+      "get": {
+        "tags": [
+          "general"
+        ],
+        "summary": "Security questions list",
+        "description": "List of security questions",
+        "operationId": "getSequrityQuestionsList",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/securityQuestionsList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list-legacy/reasons-for-transfer": {
+      "get": {
+        "tags": [
+          "general",
+          "buy currency"
+        ],
+        "summary": "Reasons for transfer list",
+        "description": "List of reasons for transfer",
+        "operationId": "getReasonForTransferList",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/reasonsForTransferList"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      }
+    },
+    "/list-legacy/indtypes": {
+      "get": {
+        "tags": [
+          "general"
+        ],
+        "summary": "Industry types list",
+        "description": "List of industry types",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/industryTypesList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/list-legacy/occupations": {
+      "get": {
+        "tags": [
+          "general"
+        ],
+        "summary": "Occupations list",
+        "description": "List of occupations",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/occupationsList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/beneficiary/{beneficiaryId}": {
+      "get": {
+        "tags": [
+          "beneficiary"
+        ],
+        "summary": "Get beneficiary by id",
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "beneficiaryId",
+            "in": "path",
+            "description": "The id of the beneficiary to retrieve",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Beneficiary"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      }
+    },
+    "/beneficiary": {
+      "get": {
+        "tags": [
+          "beneficiary"
+        ],
+        "summary": "Get beneficiaries list",
+        "description": "Get all client beneficiaries",
+        "operationId": "getList",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BeneficiaryListData"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "beneficiary"
+        ],
+        "summary": "Create a beneficiary",
+        "operationId": "create",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Name of beneficiary",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountNumber",
+            "in": "query",
+            "description": "Beneficiary account number",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bankIdentifier",
+            "in": "query",
+            "description": "Bank identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "intermediaryBank",
+            "in": "query",
+            "description": "Intermediary bank",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address1",
+            "in": "query",
+            "description": "Address line 1",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address2",
+            "in": "query",
+            "description": "Address line 2",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "countryId",
+            "in": "query",
+            "description": "Country short code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "destinationCountryId",
+            "in": "query",
+            "description": "Destination country code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "reference",
+            "in": "query",
+            "description": "Beneficiary reference",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transitCode",
+            "in": "query",
+            "description": "Transit code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ifscCode",
+            "in": "query",
+            "description": "IFSC code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bsbCode",
+            "in": "query",
+            "description": "BSB code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Beneficiary"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          },
+          "412": {
+            "$ref": "#/components/responses/ErrorResponse412"
+          }
+        }
+      }
+    },
+    "/beneficiary/{id}": {
+      "put": {
+        "tags": [
+          "beneficiary"
+        ],
+        "summary": "Update beneficiary by id",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Name of beneficiary",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountNumber",
+            "in": "query",
+            "description": "Beneficiary account number",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bankIdentifier",
+            "in": "query",
+            "description": "Bank identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "intermediaryBank",
+            "in": "query",
+            "description": "Intermediary bank",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address1",
+            "in": "query",
+            "description": "Address line 1",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address2",
+            "in": "query",
+            "description": "Address line 2",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "countryId",
+            "in": "query",
+            "description": "Country short code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "destinationCountryId",
+            "in": "query",
+            "description": "Destination country code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "reference",
+            "in": "query",
+            "description": "Beneficiary reference",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transitCode",
+            "in": "query",
+            "description": "Transit code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ifscCode",
+            "in": "query",
+            "description": "IFSC code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bsbCode",
+            "in": "query",
+            "description": "BSB code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Beneficiary"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "beneficiary"
+        ],
+        "summary": "Delete beneficiary by id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of beneficiary to delete",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessDeleted"
+                }
+              },
+              "content": {
+                "examples": {
+                  "response": {
+                    "value": {
+                      "data": {
+                        "success": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      }
+    },
+    "/client/balances": {
+      "get": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Get balance list",
+        "description": "Get all balances",
+        "operationId": "getList",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceListData"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      }
+    },
+    "/client/registration": {
+      "post": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Client registration",
+        "operationId": "registration",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationParams"
+              }
+            }
+          },
+          "description": "Client basic information",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/validate-basic-information": {
+      "post": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Validate basic information",
+        "operationId": "validateBasicInformation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BasicInformation"
+              }
+            }
+          },
+          "description": "Validate client's basic information",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "value": {
+                      "message": "validation success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "412": {
+            "$ref": "#/components/responses/ErrorResponse412"
+          }
+        }
+      }
+    },
+    "/validate-personal-details": {
+      "post": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Validate basic information",
+        "operationId": "validatePersonalDetails",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BasicInformation"
+              }
+            }
+          },
+          "description": "Validate client's personal details",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "value": {
+                      "message": "validation success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "412": {
+            "$ref": "#/components/responses/ErrorResponse412"
+          }
+        }
+      }
+    },
+    "/validate-corporate-details": {
+      "post": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Validate basic information",
+        "operationId": "validateCorporateDetails",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CorporateRegistration"
+              }
+            }
+          },
+          "description": "Validate corporate details",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "value": {
+                      "message": "validation success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "412": {
+            "$ref": "#/components/responses/ErrorResponse412"
+          }
+        }
+      }
+    },
+    "/validate-security-details": {
+      "post": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Validate security details",
+        "operationId": "validateSecurityDetails",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Security"
+              }
+            }
+          },
+          "description": "Validate security details",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "value": {
+                      "message": "validation success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "412": {
+            "$ref": "#/components/responses/ErrorResponse412"
+          }
+        }
+      }
+    },
+    "/client/statements": {
+      "get": {
+        "tags": [
+          "statement"
+        ],
+        "summary": "Get statement list",
+        "description": "Get all statements",
+        "operationId": "getList",
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "path",
+            "description": "Currency for which statements are required",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bankDateFrom",
+            "in": "path",
+            "description": "Statement start date. A month from now by default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bankDateTo",
+            "in": "path",
+            "description": "Statement end date. Current date by default",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementListData"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Request with invalid auth token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notification": {
+      "get": {
+        "tags": [
+          "notification"
+        ],
+        "summary": "Get notifications",
+        "description": "All notifications for a client",
+        "operationId": "getList",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationListData"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Request with invalid auth token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/postcode": {
+      "get": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Postcode lookup",
+        "description": "Get addresses by postcode",
+        "parameters": [
+          {
+            "name": "postcode",
+            "in": "query",
+            "description": "Postcode",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "Country short code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostcodeLookupResponseScheme"
+                }
+              }
+            }
+          },
+          "412": {
+            "$ref": "#/components/responses/ErrorResponse412"
+          }
+        }
+      }
+    },
+    "/trade": {
+      "get": {
+        "tags": [
+          "trade"
+        ],
+        "summary": "Get trade history",
+        "description": "Get all client's trades",
+        "operationId": "getList",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TradeResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      }
+    },
+    "/transfer/make": {
+      "post": {
+        "tags": [
+          "quote",
+          "buy currency"
+        ],
+        "summary": "Book quote",
+        "description": "Before using this method you have to get a quote performing [get quote](#operation/getQuote) request.\n            Book currency exchange quote. All quote data is stored on server and can be retrieved by quoted currencies before quote has\n            been expired.",
+        "operationId": "bookQuote",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "buyCurrency",
+            "in": "query",
+            "description": "Buy Currency which was used on getQuote request",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sellCurrency",
+            "in": "query",
+            "description": "Sell Currency which was used on getQuote request",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessBookQuoteResponse"
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "content": {
+                        "data": {
+                          "currency": "EUR",
+                          "amount": 200,
+                          "sellCurrency": "GBP",
+                          "sellAmount": 179.76,
+                          "payAmount": 189.76,
+                          "rate": 1.1126,
+                          "tradeId": 248213,
+                          "tradeSignedId": "CS248213LV",
+                          "paymentId": 185735
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponseQuoteExpired"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          },
+          "412": {
+            "$ref": "#/components/responses/ErrorResponse412"
+          }
+        }
+      }
+    },
+    "/transfer": {
+      "get": {
+        "tags": [
+          "transfer"
+        ],
+        "summary": "Get transfer list",
+        "description": "Get client all transfers",
+        "operationId": "getList",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "path",
+            "description": "Items count",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "path",
+            "description": "Page number",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": "Transfers count"
+                    },
+                    "per_page": {
+                      "type": "integer",
+                      "example": "20"
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": "3"
+                    }
+                  },
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentInstruction"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Request with invalid auth token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transfer/get/{id}": {
+      "get": {
+        "tags": [
+          "transfer"
+        ],
+        "summary": "Get transfer by ID",
+        "description": "Get transfer by id",
+        "operationId": "getPayment",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentInstruction"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Request with invalid auth token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-quote": {
+      "post": {
+        "tags": [
+          "quote",
+          "buy currency"
+        ],
+        "summary": "Get a currency quote",
+        "description": "Get a quote for currency exchange",
+        "operationId": "getQuote",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "buyCurrency",
+            "in": "query",
+            "description": "Currency that client wants to buy",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "buyAmount",
+            "in": "query",
+            "description": "Amount that client wants to buy. Required unless sellAmount is provided",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sellCurrency",
+            "in": "query",
+            "description": "Currency that client wants to sell",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sellAmount",
+            "in": "query",
+            "description": "Amount that client wants to sell. Required unless buyAmount is provided",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "description": "[Optional] The value date of the exchange (YYYY-MM-DD)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessQuoteResponse"
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "content": {
+                        "data": {
+                          "rate": 1.0722,
+                          "ratePair": "GBP\\/EUR",
+                          "invertedRate": 0.9327,
+                          "invertedRatePair": "EUR\\/GBP",
+                          "sellCurrency": "GBP",
+                          "sellAmount": 145.03,
+                          "buyCurrency": "EUR",
+                          "buyAmount": 155.5,
+                          "gbpValue": 137.77,
+                          "fees": {
+                            "transfer": 10
+                          },
+                          "payAmount": 155.03,
+                          "status": "ACTIVE",
+                          "message": null,
+                          "timeout": 240,
+                          "expectedValueDate": "2017-07-21",
+                          "expectedValueDateBankTransfer": "2017-07-20",
+                          "bookTradeAllowed": true,
+                          "registerAllowed": false,
+                          "paymentMethods": []
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          },
+          "412": {
+            "$ref": "#/components/responses/ErrorResponse412"
+          }
+        }
+      }
+    },
+    "/transfer/send-out": {
+      "post": {
+        "tags": [
+          "transfer",
+          "buy currency"
+        ],
+        "summary": "Send out",
+        "description": "Provide the details of beneficiary for money transfer",
+        "operationId": "sendOut",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID of created transfer template available from Book Quote request",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "beneficiaryId",
+            "in": "query",
+            "description": "ID of existing beneficiary used for transfer",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Transfer currency. Should be equal to buy currency.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "description": "Transfer amount",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "destinationCountryId",
+            "in": "query",
+            "description": "Two letter code of destination country. Required if no beneficiary ID provided.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "The name of beneficiary. Required if no beneficiary ID provided.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountNumber",
+            "in": "query",
+            "description": "Beneficiary account number. Required if no beneficiary ID provided.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bankIdentifier",
+            "in": "query",
+            "description": "Beneficiary bank identifier (Sort Code/SWIFT). Required if no beneficiary ID provided.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "countryId",
+            "in": "query",
+            "description": "Two letter code of beneficiary country. Required for some currencies/countries.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "thirdParty",
+            "in": "query",
+            "description": "Is beneficiary a third party? Required if no beneficiary ID provided.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "reference1",
+            "in": "query",
+            "description": "Transfer reference",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "reason",
+            "in": "query",
+            "description": "Reason for transfer ID. See result of get reasons request",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "otherReason",
+            "in": "query",
+            "description": "Other reason text. Required if other reason choosen.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "intermediaryBank",
+            "in": "query",
+            "description": "Intermediary bank identifier (Sort Code/SWIFT). Required for some currencies/countries.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address1",
+            "in": "query",
+            "description": "First line of beneficiary address. Required for some currencies/countries.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address2",
+            "in": "query",
+            "description": "Second line of beneficiary address. Required for some currencies/countries.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transitCode",
+            "in": "query",
+            "description": "Transit code. Required for some currencies/countries.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ifscCode",
+            "in": "query",
+            "description": "IFSC code. Required for some currencies/countries.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bsbCode",
+            "in": "query",
+            "description": "BSB code. Required for some currencies/countries.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mobileReference",
+            "in": "query",
+            "description": "Mobile phone confirmation reference. Used if user confirmed his mobile phone.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phoneCode",
+            "in": "query",
+            "description": "Mobile phone country code. Used if user confirmed his mobile phone.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mobile",
+            "in": "query",
+            "description": "Mobile phone number without country code. Used if user confirmed his mobile phone.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessSendOutResponse"
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "content": {
+                        "data": {
+                          "result": true,
+                          "message": "Send out successfully created",
+                          "documentsRequired": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          },
+          "412": {
+            "$ref": "#/components/responses/ErrorResponse412"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "user",
+          "buy currency"
+        ],
+        "summary": "Authorization",
+        "description": "Send POST request to authorize user via login and password. Before using this method you have to obtain guest JWT token with your session data performing [getToken](#operation/getToken) request.\n\n<b>Notice:</b> API users can use API JWT token. No additional authorization required.\n",
+        "operationId": "login",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Guest iClaus session JWT Token (if available)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Valid email address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "Password",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "content": {
+                        "data": {
+                          "token": "eyJ0eXAiOiJKV1QiLCJhbGci..."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "content": {
+                        "error": [
+                          {
+                            "code": "AUTHENTICATION",
+                            "message": "Incorrect email or password"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "412": {
+            "$ref": "#/components/responses/ErrorResponse412"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Sign out request",
+        "description": "Request to sign logged user out",
+        "operationId": "logout",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "content": {
+                "examples": {
+                  "response": {
+                    "value": {
+                      "data": {
+                        "status": "success"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getToken": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get auth token",
+        "description": "Request or renew authentication token",
+        "operationId": "getToken",
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "content": {
+                        "data": {
+                          "token": "eyJ0eXAiOiJKV1QiLCJhbGci..."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Registration",
+        "description": "Receive POST data to create new account",
+        "operationId": "signUp",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Valid email address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "Password",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "passwordRepeat",
+            "in": "query",
+            "description": "Password repeat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New user has been successfully created"
+          },
+          "409": {
+            "description": "Data validation fail"
+          }
+        }
+      }
+    },
+    "/user/current": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "User details",
+        "description": "Request current logged user details",
+        "operationId": "current",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Auth Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Provider-Hash",
+            "in": "header",
+            "description": "Security Hash (Service Providers only)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      }
+    },
+    "/user/details": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "User details",
+        "description": "Request current logged user details",
+        "operationId": "personalDetails",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Reset password request",
+        "description": "Reset password request",
+        "operationId": "personalDetails",
+        "parameters": [
+          {
+            "name": "currentPassword",
+            "in": "query",
+            "description": "Current password",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "newPassword",
+            "in": "query",
+            "description": "New password",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "newPasswordRepeat",
+            "in": "query",
+            "description": "New password repeat",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password successfully changed"
+          },
+          "403": {
+            "$ref": "#/components/responses/ErrorResponse403"
+          }
+        }
+      }
+    },
+    "/email-confirmation": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Email confirmation",
+        "description": "Send POST request to confirm user's email",
+        "operationId": "confirmation",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "User ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "description": "Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User's e-mail has been confirmed"
+          },
+          "409": {
+            "description": "Data validation error"
+          }
+        }
+      }
+    },
+    "/terms-and-conditions": {
+      "get": {
+        "tags": [
+          "terms"
+        ],
+        "summary": "Terms and conditions",
+        "description": "Fetch terms and conditions content",
+        "operationId": "termsAndConditions",
+        "parameters": [
+          {
+            "name": "tmpl",
+            "in": "query",
+            "description": "Specify terms and conditions. 1 => personal, 2 => corporate client",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TermsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "buy currency",
+      "description": "List of requests required to buy a currency online:\n * Authorise to the systems with [Authorization](#operation/login) request (or use your API token).\n * Get list of [buy](#operation/getBuyCurrencyList) and [sell](#operation/getSellCurrencyList) currencies.\n * Get currency exchange quote by [Get Quote](#operation/getQuote) request.\n * Book quote whithing expire time by [Book Quote](#operation/bookQuote) request.\n * Get list of [existing beneficiaries](#operation/getBeneficiaries).\n * Get list of [reasons for transfer](#operation/getReasonForTransferList).\n * Send out money by [Send Out](#operation/sendOut) request."
+    },
+    {
+      "name": "beneficiary",
+      "description": "Work with beneficiaries"
+    },
+    {
+      "name": "client",
+      "description": "Clients"
+    },
+    {
+      "name": "trade",
+      "description": "Work with trades"
+    },
+    {
+      "name": "transfer",
+      "description": "Work with transfers"
+    },
+    {
+      "name": "user",
+      "description": "Work with users"
+    },
+    {
+      "name": "terms",
+      "description": "Terms and Conditions"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://op-api.currencysolutions.co.uk"
+    }
+  ],
+  "components": {
+    "responses": {
+      "ErrorResponse403": {
+        "description": "invalid auth token",
+        "content": {
+          "*/*": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          },
+          "application/json": {
+            "examples": {
+              "response": {
+                "value": {
+                  "content": {
+                    "error": [
+                      {
+                        "code": "ACCESS_DENIED",
+                        "message": "Resource is not accessible"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse409": {
+        "description": "Invalid request parameters",
+        "content": {
+          "*/*": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "ErrorResponse412": {
+        "description": "validation error",
+        "content": {
+          "*/*": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          },
+          "application/json": {
+            "examples": {
+              "response": {
+                "value": {
+                  "content": {
+                    "error": [
+                      {
+                        "code": "FORM_VALIDATION",
+                        "message": "Email not valid",
+                        "field": "email"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponseQuoteExpired": {
+        "description": "quote expired",
+        "content": {
+          "*/*": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          },
+          "application/json": {
+            "examples": {
+              "response": {
+                "value": {
+                  "content": {
+                    "error": [
+                      {
+                        "code": "PAYMENT",
+                        "message": "Quote has been expired"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "AclResources": {
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "example": {
+                "data": [
+                  "client.balance.get"
+                ]
+              }
+            }
+          }
+        },
+        "type": "object"
+      },
+      "countriesListContent": {
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "example": {
+                "data": {
+                  "country_list": {
+                    "GB": "United Kingdom",
+                    "NL": "Netherlands"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "type": "object"
+      },
+      "sepaCountriesListContent": {
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "example": {
+                "data": [
+                  "FR",
+                  "NL",
+                  "CZ"
+                ]
+              }
+            }
+          }
+        },
+        "type": "object"
+      },
+      "requiredCountriesListContent": {
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "example": {
+                "data": [
+                  "FR",
+                  "NL",
+                  "CZ"
+                ]
+              }
+            }
+          }
+        },
+        "type": "object"
+      },
+      "securityQuestionsList": {
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "example": {
+                "data": {
+                  "1": "What was your childhood nickname?",
+                  "2": "What is the name of your favourite childhood friend?"
+                }
+              }
+            }
+          }
+        },
+        "type": "object"
+      },
+      "reasonsForTransferList": {
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "example": {
+                "data": {
+                  "206": "Savings",
+                  "207": "Mortgage",
+                  "208": "Send to family"
+                }
+              }
+            }
+          }
+        },
+        "type": "object"
+      },
+      "industryTypesList": {
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "example": {
+                "data": {
+                  "1": "Banking",
+                  "5": "Automotive",
+                  "20": "Aerospace",
+                  "21": "Asset"
+                }
+              }
+            }
+          }
+        },
+        "type": "object"
+      },
+      "occupationsList": {
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "example": {
+                "data": {
+                  "1": "Accountant",
+                  "2": "Administrative",
+                  "3": "Agent",
+                  "4": "Auditor",
+                  "5": "Builder"
+                }
+              }
+            }
+          }
+        },
+        "type": "object"
+      },
+      "ErrorObject": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "description": "Error code",
+            "type": "string",
+            "default": "ERROR",
+            "enum": [
+              "ERROR",
+              "ACCESS_DENIED",
+              "FORM_VALIDATION",
+              "ROUTE_NOT_FOUND",
+              "CAPTCHA_REQUIRED",
+              "PAYMENT"
+            ]
+          },
+          "message": {
+            "description": "Error message",
+            "type": "string"
+          },
+          "userReference": {
+            "description": "Error reference",
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "required": [
+              "error"
+            ],
+            "properties": {
+              "error": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ErrorObject"
+                }
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "SuccessResponse": {
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "required": [
+              "data"
+            ],
+            "properties": {
+              "data": {}
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "BeneficiaryListData": {
+        "required": [
+          "count",
+          "items",
+          "page",
+          "per_page"
+        ],
+        "properties": {
+          "count": {
+            "description": "Total count of client's beneficiaries",
+            "type": "integer",
+            "example": "1"
+          },
+          "items": {
+            "description": "Bla",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Beneficiary"
+            }
+          },
+          "page": {
+            "description": "Current page",
+            "type": "integer",
+            "example": "1"
+          },
+          "per_page": {
+            "description": "Beneficiaries per page",
+            "type": "integer",
+            "example": "10"
+          }
+        },
+        "type": "object"
+      },
+      "SuccessDeleted": {
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "required": [
+              "data"
+            ],
+            "properties": {
+              "data": {
+                "required": [
+                  "success"
+                ],
+                "properties": {
+                  "success": {
+                    "type": "bool"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "Beneficiary": {
+        "required": [
+          "name",
+          "accountNumber",
+          "bankIdentifier",
+          "address1",
+          "address2",
+          "countryId",
+          "currency",
+          "destinationCountryId",
+          "transitCode",
+          "ifscCode",
+          "bsbCode"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "123"
+          },
+          "name": {
+            "description": "Name of beneficiary",
+            "type": "string",
+            "example": "Mr Smith"
+          },
+          "accountNumber": {
+            "description": "Beneficiary account number",
+            "type": "string",
+            "example": "GB19LOYD3096456470709943"
+          },
+          "bankIdentifier": {
+            "description": "Bank identifier",
+            "type": "integer",
+            "example": "RBS"
+          },
+          "intermediaryBank": {
+            "description": "Intermediary bank",
+            "type": "string",
+            "example": "BOFAUS3NXXX"
+          },
+          "address1": {
+            "description": "Address line 1",
+            "type": "string",
+            "example": "SE1 2BG, 35 Hobbs Court"
+          },
+          "address2": {
+            "description": "Address line 2",
+            "type": "string",
+            "example": "2 Jacob Street"
+          },
+          "countryId": {
+            "description": "Country unique code",
+            "type": "string",
+            "example": "GB"
+          },
+          "destinationCountryId": {
+            "description": "Destination country code",
+            "type": "string",
+            "example": "FR"
+          },
+          "reference": {
+            "description": "Beneficiary reference",
+            "type": "string",
+            "example": "For the property"
+          },
+          "confirmed": {
+            "description": "Is beneficiary confirmed.\n     *          0 => Not confirmed\n     *          1 => Confirmed\n     *          2 => OP confirmed\n     *     ",
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2
+            ]
+          },
+          "currency": {
+            "description": "Currency code",
+            "type": "string",
+            "example": "GBP"
+          },
+          "thirdParty": {
+            "description": "Is it third party beneficiary",
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ],
+            "example": "0"
+          },
+          "transitCode": {
+            "description": "Transit code",
+            "type": "string",
+            "example": ""
+          },
+          "ifscCode": {
+            "description": "IFSC code",
+            "type": "string",
+            "example": ""
+          },
+          "bsbCode": {
+            "description": "BSB code",
+            "type": "string",
+            "example": ""
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "Beneficiary"
+        }
+      },
+      "PreauthRequest": {
+        "required": [
+          "telephone",
+          "email",
+          "name",
+          "buyAmount",
+          "sellAmount"
+        ],
+        "properties": {
+          "amount": {
+            "description": "Amount",
+            "type": "number",
+            "example": "100"
+          },
+          "currency": {
+            "description": "Currency",
+            "type": "string",
+            "example": "GBP"
+          },
+          "buyCurrency": {
+            "description": "Buy currency",
+            "type": "string",
+            "example": "GBP"
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "PreauthRequest"
+        }
+      },
+      "BalanceListData": {
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "description": "Currency balances list for a client",
+            "type": "array",
+            "items": {
+              "example": {
+                "future": "0.00",
+                "current": "0.00",
+                "currency": "GBP"
+              }
+            }
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "example": {
+          "result": {
+            "id": "registration id",
+            "clientId": "New created client id",
+            "showAwaitingDocuments": "Whether KYC passed or not"
+          }
+        }
+      },
+      "RegistrationParams": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BasicInformation"
+          },
+          {
+            "$ref": "#/components/schemas/PersonalDetails"
+          },
+          {
+            "$ref": "#/components/schemas/Security"
+          }
+        ]
+      },
+      "StatementListData": {
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "description": "Statement lines for client",
+            "type": "array",
+            "items": {
+              "example": "[transactionId=>2481777,bankDate=>2016-08-18 00:00:00,description=>Fx-trade 196578,debit=>,credit=>45997.4,balance=>45997.4]"
+            }
+          }
+        }
+      },
+      "Address": {
+        "required": [
+          "country",
+          "postCode",
+          "addressLine1",
+          "city"
+        ],
+        "properties": {
+          "country": {
+            "description": "Country code",
+            "type": "string",
+            "example": "UK"
+          },
+          "postCode": {
+            "description": "Post code",
+            "type": "string",
+            "example": "SE1 2BG"
+          },
+          "addressLine1": {
+            "description": "Address line 1",
+            "type": "string",
+            "example": "Currency Solutions Ltd, Unit 35"
+          },
+          "addressLine2": {
+            "description": "Address line 2",
+            "type": "string",
+            "example": "Hobbs Court, 2 Jacob Street"
+          },
+          "city": {
+            "description": "City",
+            "type": "string",
+            "example": "London"
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "Address"
+        }
+      },
+      "BasicInformation": {
+        "required": [
+          "title",
+          "firstName",
+          "lastName",
+          "phoneCode",
+          "mobile",
+          "buyAmount",
+          "buyCurrency"
+        ],
+        "properties": {
+          "title": {
+            "description": "Client's title",
+            "type": "string",
+            "example": "Mr"
+          },
+          "firstName": {
+            "description": "Client's first name",
+            "type": "string",
+            "example": "Alexander"
+          },
+          "lastName": {
+            "description": "Client's last name",
+            "type": "string",
+            "example": "Ivanov"
+          },
+          "phoneCode": {
+            "description": "Client's phone code",
+            "type": "string",
+            "example": "44"
+          },
+          "mobile": {
+            "description": "Client's mobile phone number",
+            "type": "string",
+            "example": "7490223344"
+          },
+          "mobileStatus": {
+            "description": "Client's mobile verification status",
+            "type": "string",
+            "example": ""
+          },
+          "email": {
+            "description": "Client's email",
+            "type": "string",
+            "example": "some@email.com"
+          },
+          "emailConfirmed": {
+            "description": "Is client's email confirmed?",
+            "type": "bool",
+            "enum": [
+              true,
+              false
+            ]
+          },
+          "buyAmount": {
+            "description": "Amount that client wants to buy",
+            "type": "number",
+            "example": "100"
+          },
+          "buyCurrency": {
+            "description": "Currency that client wants to buy",
+            "type": "string",
+            "example": "EUR"
+          },
+          "transferFundsTo": {
+            "description": "Transfer funds to country",
+            "type": "string",
+            "example": "RU"
+          },
+          "reasonForTransfer": {
+            "description": "Reason for transfer",
+            "type": "string",
+            "example": "Want to buy house in Italy"
+          },
+          "enquiryId": {
+            "description": "Enquiry id (if present) or null",
+            "type": "int",
+            "example": "1234"
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "BasicInformation"
+        }
+      },
+      "Company": {
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "description": "Client's company name",
+            "type": "string",
+            "example": "Currency Solutions"
+          },
+          "type": {
+            "description": "Client's company type:\n            <br> 1 => Limited Company,\n            <br> 2 => Public Limited,\n            <br> 3 => Partnership,\n            <br> 4 => Sole Trader,\n            <br> 5 => Registered Charity,\n            <br> 6 => Other",
+            "type": "integer",
+            "example": "1"
+          },
+          "number": {
+            "description": "Client's company number",
+            "type": "string",
+            "example": "123456"
+          },
+          "industrySector": {
+            "description": "Client's company industry sector:\n            <br>20 => Aerospace, defence & security,\n            <br>21 => Asset & wealth management,\n            <br>5 => Automotive,\n            <br>1 => Banking & capital markets,\n            <br>3 => Business services,\n            <br>6 => Capital projects & infrastructure,\n            <br>25 => Charities,\n            <br>26 => Chemicals,\n            <br>8 => Communications,\n            <br>27 => Construction,\n            <br>4 => Consulting,\n            <br>30 => Engineering & construction,\n            <br>29 => Entertainment & media,\n            <br>14 => Financial Services (excluding MSB),\n            <br>39 => Financial Services (registered MSB),\n            <br>31 => Forest, paper & packaging,\n            <br>36 => Gambling,\n            <br>34 => Gaming,\n            <br>13 => Government & public sector,\n            <br>15 => Healthcare,\n            <br>7 => Hospitality & leisure,\n            <br>9 => Insurance,\n            <br>22 => Mailing services,\n            <br>32 => Manufacturing,\n            <br>12 => Marketing,\n            <br>23 => Metals,\n            <br>28 => Mining,\n            <br>17 => Oil & gas,\n            <br>19 => Other,\n            <br>24 => Pharmaceuticals & life sciences,\n            <br>37 => Pornography,\n            <br>16 => Power & utilities,\n            <br>33 => Private equity,\n            <br>35 => Real estate,\n            <br>10 => Retail & consumer,\n            <br>2 => Shipping Services,\n            <br>11 => Technology,\n            <br>18 => Transport & logistics",
+            "type": "integer",
+            "example": ""
+          },
+          "description": {
+            "description": "Client's company description",
+            "type": "string",
+            "example": "Some description about company"
+          },
+          "website": {
+            "description": "Client's website",
+            "type": "string",
+            "example": "www.currencysolutions.co.uk"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "correspondenceAddress": {
+            "$ref": "#/components/schemas/Address"
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "Company"
+        }
+      },
+      "CorporateRegistration": {
+        "required": [],
+        "properties": {
+          "company": {
+            "$ref": "#/components/schemas/Company"
+          },
+          "id": {
+            "description": "Client's registration id",
+            "type": "integer",
+            "example": ""
+          },
+          "clientId": {
+            "description": "Client's id",
+            "type": "integer",
+            "example": ""
+          },
+          "kycStatus": {
+            "description": "Status of KYC check",
+            "type": "string",
+            "example": ""
+          },
+          "sanctions": {
+            "description": "is PEP or has sanctions",
+            "type": "bool"
+          },
+          "basicInformation": {
+            "$ref": "#/components/schemas/BasicInformation"
+          },
+          "personal": {
+            "$ref": "#/components/schemas/PersonalDetails"
+          },
+          "security": {
+            "$ref": "#/components/schemas/Security"
+          },
+          "authFlag": {
+            "description": "Auth flag",
+            "type": "integer",
+            "example": ""
+          },
+          "createClient": {
+            "description": "Create client",
+            "type": "integer",
+            "example": ""
+          },
+          "dealerId": {
+            "description": "Dealer id",
+            "type": "integer",
+            "example": ""
+          },
+          "remoteaddr": {
+            "description": "Remote IP",
+            "type": "string",
+            "example": ""
+          },
+          "status": {
+            "description": "Status",
+            "type": "string",
+            "example": ""
+          },
+          "heardAboutUs": {
+            "description": "Heard about us",
+            "type": "string",
+            "example": ""
+          },
+          "keywords": {
+            "description": "Keywords",
+            "type": "string",
+            "example": ""
+          },
+          "source": {
+            "description": "Source",
+            "type": "string",
+            "example": ""
+          },
+          "httpreferer": {
+            "description": "HTTP Referer",
+            "type": "string",
+            "example": ""
+          },
+          "contact": {
+            "description": "Contact",
+            "type": "string",
+            "example": ""
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "CorporateRegistration"
+        }
+      },
+      "Document": {
+        "required": [
+          "fileName",
+          "fileType",
+          "fileSize",
+          "fileContent"
+        ],
+        "properties": {
+          "fileName": {
+            "description": "File name of document",
+            "type": "string",
+            "example": ""
+          },
+          "fileType": {
+            "description": "Type of document file",
+            "type": "string",
+            "example": ""
+          },
+          "fileSize": {
+            "description": "Size of document file",
+            "type": "string",
+            "example": ""
+          },
+          "fileContent": {
+            "description": "Content of document file",
+            "type": "mixed",
+            "example": ""
+          },
+          "filePath": {
+            "description": "file path",
+            "type": "string",
+            "example": ""
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "Document"
+        }
+      },
+      "Enquiry": {
+        "required": [
+          "telephone",
+          "email",
+          "name",
+          "buyAmount",
+          "sellAmount"
+        ],
+        "properties": {
+          "id": {
+            "description": "Enquiry id",
+            "type": "integer",
+            "example": ""
+          },
+          "firstname": {
+            "description": "Client's first name",
+            "type": "string",
+            "example": "Alexander"
+          },
+          "surname": {
+            "description": "Client's last name",
+            "type": "string",
+            "example": "Ivanov"
+          },
+          "telephone": {
+            "description": "Client's phone number",
+            "type": "string",
+            "example": "7490232425"
+          },
+          "email": {
+            "description": "Client's email",
+            "type": "string",
+            "example": "some@email.com"
+          },
+          "buy": {
+            "description": "Client's buy currency",
+            "type": "string",
+            "example": "EUR"
+          },
+          "sell": {
+            "description": "Client's sell currency",
+            "type": "string",
+            "example": "GBP"
+          },
+          "amount": {
+            "description": "Client's amount",
+            "type": "number",
+            "example": "100"
+          },
+          "nature": {
+            "description": "Client's nature",
+            "type": "string",
+            "example": ""
+          },
+          "newsletter": {
+            "description": "Client's newsletter subscription",
+            "type": "string",
+            "example": ""
+          },
+          "keywords": {
+            "description": "Client's keywords",
+            "type": "string",
+            "example": ""
+          },
+          "source": {
+            "description": "Client's source",
+            "type": "string",
+            "example": ""
+          },
+          "httpreferer": {
+            "description": "Client's HTTP Referer",
+            "type": "string",
+            "example": ""
+          },
+          "remoteaddr": {
+            "description": "Client's remote IP",
+            "type": "string",
+            "example": ""
+          },
+          "transferType": {
+            "description": "Type of transfer",
+            "type": "string",
+            "example": ""
+          },
+          "action": {
+            "description": "Action",
+            "type": "string",
+            "enum": [
+              "buy",
+              "sell"
+            ],
+            "example": "sell"
+          },
+          "contact": {
+            "description": "Client's contact",
+            "type": "string",
+            "example": ""
+          },
+          "clientId": {
+            "description": "Client's id",
+            "type": "integer",
+            "example": "12345"
+          },
+          "page": {
+            "description": "Landing page url",
+            "type": "string",
+            "example": ""
+          },
+          "reason": {
+            "description": "Reason for creating enquiry",
+            "type": "string",
+            "example": ""
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "Enquiry"
+        }
+      },
+      "PersonalDetails": {
+        "required": [
+          "birthDate"
+        ],
+        "properties": {
+          "currentAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "previousAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "birthDate": {
+            "description": "Client's date of birth. Format: YYYY-MM-DD",
+            "type": "string",
+            "example": "1984-12-31"
+          },
+          "birthPlace": {
+            "description": "Client's country code of birth",
+            "type": "string",
+            "example": "UK"
+          },
+          "nationality": {
+            "description": "Client's nationality code",
+            "type": "string",
+            "example": "GB"
+          },
+          "occupation": {
+            "description": "Client's occupation",
+            "type": "string",
+            "example": "Programmer"
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "PersonalDetails"
+        }
+      },
+      "Registration": {
+        "required": [],
+        "properties": {
+          "id": {
+            "description": "Client's registration id",
+            "type": "integer",
+            "example": ""
+          },
+          "clientId": {
+            "description": "Client's id",
+            "type": "integer",
+            "example": ""
+          },
+          "kycStatus": {
+            "description": "Status of KYC check",
+            "type": "string",
+            "example": ""
+          },
+          "sanctions": {
+            "description": "is PEP or has sanctions",
+            "type": "bool"
+          },
+          "basicInformation": {
+            "$ref": "#/components/schemas/BasicInformation"
+          },
+          "personal": {
+            "$ref": "#/components/schemas/PersonalDetails"
+          },
+          "security": {
+            "$ref": "#/components/schemas/Security"
+          },
+          "authFlag": {
+            "description": "Auth flag",
+            "type": "integer",
+            "example": ""
+          },
+          "createClient": {
+            "description": "Create client",
+            "type": "integer",
+            "example": ""
+          },
+          "dealerId": {
+            "description": "Dealer id",
+            "type": "integer",
+            "example": ""
+          },
+          "remoteaddr": {
+            "description": "Remote IP",
+            "type": "string",
+            "example": ""
+          },
+          "status": {
+            "description": "Status",
+            "type": "string",
+            "example": ""
+          },
+          "heardAboutUs": {
+            "description": "Heard about us",
+            "type": "string",
+            "example": ""
+          },
+          "keywords": {
+            "description": "Keywords",
+            "type": "string",
+            "example": ""
+          },
+          "source": {
+            "description": "Source",
+            "type": "string",
+            "example": ""
+          },
+          "httpreferer": {
+            "description": "HTTP Referer",
+            "type": "string",
+            "example": ""
+          },
+          "contact": {
+            "description": "Contact",
+            "type": "string",
+            "example": ""
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "Registration"
+        }
+      },
+      "Security": {
+        "required": [],
+        "properties": {
+          "question1": {
+            "description": "Secret question 1",
+            "type": "string",
+            "example": ""
+          },
+          "answer1": {
+            "description": "Answer for secret question 1",
+            "type": "string",
+            "example": ""
+          },
+          "question2": {
+            "description": "Secret question 2",
+            "type": "string",
+            "example": ""
+          },
+          "answer2": {
+            "description": "Answer for secret question 2",
+            "type": "string",
+            "example": ""
+          },
+          "password": {
+            "description": "Password",
+            "type": "string",
+            "example": ""
+          },
+          "heardAboutUs": {
+            "description": "Heard about us",
+            "type": "string",
+            "example": ""
+          },
+          "heardAboutUsDetails": {
+            "description": "Heard about us details",
+            "type": "string",
+            "example": ""
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "Security"
+        }
+      },
+      "NotificationListData": {
+        "properties": {
+          "data": {
+            "description": "Notifications list",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Notification"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "Notification": {
+        "type": "object",
+        "xml": {
+          "name": "Notification"
+        }
+      },
+      "PostcodeLookupResponseScheme": {
+        "properties": {
+          "addressline1": {
+            "description": "Address line 1",
+            "type": "string",
+            "example": [
+              "Flat 1, Bassi Apartments 30A"
+            ]
+          },
+          "addressline2": {
+            "description": "Address line 2",
+            "type": "string",
+            "example": [
+              "Turner Street"
+            ]
+          },
+          "buildingname": {
+            "description": "Building name",
+            "type": "string",
+            "example": [
+              "Bassi Apartments 30A"
+            ]
+          },
+          "county": {
+            "description": "County",
+            "type": "string",
+            "example": [
+              "Greater London"
+            ]
+          },
+          "postcode": {
+            "description": "Post Code",
+            "type": "string",
+            "example": [
+              "E5 12AS"
+            ]
+          },
+          "posttown": {
+            "description": "Town",
+            "type": "string",
+            "example": [
+              "London"
+            ]
+          },
+          "premise": {
+            "description": "Premise",
+            "type": "string",
+            "example": [
+              "Flat 1, Bassi Apartments 30A"
+            ]
+          },
+          "street": {
+            "description": "Street",
+            "type": "string",
+            "example": [
+              "Turner Street"
+            ]
+          },
+          "subbuildingname": {
+            "description": "Subbuilding Name",
+            "type": "string",
+            "example": [
+              "Flat 1"
+            ]
+          },
+          "summaryline": {
+            "description": "Summary Line",
+            "type": "string",
+            "example": [
+              "Flat 1, Bassi Apartments 30A, Turner Street, London, Greater London, E1 2AS"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "TradeListResponse": {
+        "required": [
+          "count",
+          "items",
+          "page",
+          "per_page"
+        ],
+        "properties": {
+          "count": {
+            "description": "Total count of trades",
+            "type": "integer"
+          },
+          "items": {
+            "description": "Trade list",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade"
+            }
+          },
+          "page": {
+            "description": "Current page",
+            "type": "integer",
+            "example": "1"
+          },
+          "per_page": {
+            "description": "Page size",
+            "type": "integer",
+            "example": "10"
+          }
+        },
+        "type": "object"
+      },
+      "TradeResponse": {
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "required": [
+              "data"
+            ],
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/TradeListResponse"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "Trade": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "signedId": {
+            "description": "Trade singed id",
+            "type": "integer",
+            "example": "CS196323"
+          },
+          "type": {
+            "description": "Trade type",
+            "type": "string",
+            "enum": [
+              "Spot",
+              "Fixed Fwd",
+              "Flexible Fwd",
+              "Regular Payment",
+              "Reversal",
+              "Swap"
+            ],
+            "example": "Spot"
+          },
+          "clientBuyAmount": {
+            "description": "Amount that client wants to buy",
+            "type": "number",
+            "example": 1500
+          },
+          "availableAmount": {
+            "description": "Available amount that client can send out",
+            "type": "number"
+          },
+          "buyCurrency": {
+            "description": "Currency that client wants to buy",
+            "type": "string",
+            "example": "GBP"
+          },
+          "clientSellAmount": {
+            "description": "Amount that client sells",
+            "type": "number",
+            "example": 1000
+          },
+          "sellCurrency": {
+            "description": "Currency that client sells",
+            "type": "string",
+            "example": "USD"
+          },
+          "clientRate": {
+            "description": "Trade rate",
+            "type": "number",
+            "example": 1.2
+          },
+          "currencyPair": {
+            "description": "Sell and buy currencies pair",
+            "type": "string",
+            "example": "GBP-EUR"
+          },
+          "date": {
+            "description": "Trade date",
+            "type": "string",
+            "example": "2016-08-16 00:00:00"
+          },
+          "valueDate": {
+            "description": "Trade value date",
+            "type": "string",
+            "example": "2016-08-18 00:00:00"
+          },
+          "optionDate": {
+            "description": "Trade option date",
+            "type": "string"
+          },
+          "status": {
+            "description": "Trade Status",
+            "type": "string",
+            "enum": [
+              "Settled",
+              "Booked",
+              "Completed"
+            ]
+          },
+          "transferId": {
+            "description": "ID of SendOut Transfer",
+            "type": "integer"
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "Trade"
+        }
+      },
+      "SuccessBookQuoteResponse": {
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "required": [
+              "data"
+            ],
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/BookQuoteResponseData"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "BookQuoteResponseData": {
+        "properties": {
+          "currency": {
+            "description": "Buy Currency of successfully booked trade",
+            "type": "string"
+          },
+          "amount": {
+            "description": "Buy Amount of successfully booked trade",
+            "type": "number"
+          },
+          "sellCurrency": {
+            "description": "Sell Currency of successfully booked trade",
+            "type": "string"
+          },
+          "sellAmount": {
+            "description": "Sell Amount of successfully booked trade",
+            "type": "number"
+          },
+          "payAmount": {
+            "description": "The Amount of successfully booked trade client has to pay",
+            "type": "number"
+          },
+          "rate": {
+            "description": "The client exchange rate of successfully booked trade",
+            "type": "number"
+          },
+          "paymentId": {
+            "description": "ID of a transfer created for that trade. Have to be used for send out.",
+            "type": "integer"
+          },
+          "tradeId": {
+            "description": "ID of booked trade. Can be used as a reference.",
+            "type": "integer"
+          },
+          "tradeSignedId": {
+            "description": "The Signed ID of booked trade. Can be used as a reference.",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "SuccessQuoteResponse": {
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "required": [
+              "data"
+            ],
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/QuoteResponseData"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "QuoteResponseData": {
+        "properties": {
+          "rate": {
+            "description": "Rate for quoted currencies",
+            "type": "number"
+          },
+          "ratePair": {
+            "description": "Rate Currency pair sell/buy",
+            "type": "string"
+          },
+          "invertedRate": {
+            "description": "Inverted Rate for quoted currencies",
+            "type": "number"
+          },
+          "invertedRatePair": {
+            "description": "Inverted Rate Currency pair buy/sell",
+            "type": "string"
+          },
+          "sellCurrency": {
+            "description": "Currency that client sells",
+            "type": "string"
+          },
+          "sellAmount": {
+            "description": "Amount that client sells",
+            "type": "number"
+          },
+          "buyCurrency": {
+            "description": "Currency that client buys",
+            "type": "string"
+          },
+          "buyAmount": {
+            "description": "Amount that client buys (excluding fees)",
+            "type": "number"
+          },
+          "gbpValue": {
+            "description": "Current GBP value of a trade (it can be different on a value date)",
+            "type": "number"
+          },
+          "fees": {
+            "description": "All possible fees for transfer calculated in sell currency.",
+            "type": "object"
+          },
+          "payAmount": {
+            "description": "Expected total pay amount (if all fees are applied)",
+            "type": "number"
+          },
+          "status": {
+            "description": "The status of a quote",
+            "type": "string"
+          },
+          "message": {
+            "description": "The error message if quote is not successfull",
+            "type": "string"
+          },
+          "timeout": {
+            "description": "Timeout during the quote is available for booking (in seconds)",
+            "type": "integer"
+          },
+          "expectedValueDate": {
+            "description": "Expected value date for transfer if client pays by card",
+            "type": "integer"
+          },
+          "expectedValueDateBankTransfer": {
+            "description": "Expected value date for transfer if client pays by bank transfer",
+            "type": "integer"
+          },
+          "bookTradeAllowed": {
+            "description": "Whether booking trade allowed or not for authorised user",
+            "type": "boolean"
+          },
+          "registerAllowed": {
+            "description": "Whether registration is allowed or not (available only for trial users)",
+            "type": "boolean"
+          },
+          "paymentMethods": {
+            "description": "A list of available payment methods",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "SuccessSendOutResponse": {
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "required": [
+              "data"
+            ],
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/SendOutResponseData"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "SendOutResponseData": {
+        "properties": {
+          "result": {
+            "description": "Is send out successfully created?",
+            "type": "boolean"
+          },
+          "message": {
+            "description": "Send out message",
+            "type": "string"
+          },
+          "documentsRequired": {
+            "description": "Should client provide additional documents?",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "BookTradeResponse": {
+        "properties": {
+          "status": {
+            "description": "Response status",
+            "type": "string",
+            "enum": [
+              "OK",
+              "ERROR"
+            ]
+          },
+          "messages": {
+            "description": "Error messages",
+            "type": "array",
+            "items": {}
+          },
+          "tradeId": {
+            "description": "Trade ID",
+            "type": "integer",
+            "example": ""
+          },
+          "tradeSignedId": {
+            "description": "Trade Signed ID",
+            "type": "string",
+            "example": ""
+          },
+          "paymentId": {
+            "description": "Payment Instruction ID",
+            "type": "integer",
+            "example": ""
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "BookTradeResponse"
+        }
+      },
+      "PaymentInstruction": {
+        "required": [
+          "amount",
+          "currency",
+          "reason",
+          "otherReason"
+        ],
+        "properties": {
+          "id": {
+            "description": "Payment ID",
+            "type": "integer"
+          },
+          "amount": {
+            "description": "Payment amount",
+            "type": "number",
+            "example": "5000"
+          },
+          "currency": {
+            "description": "Payment currency",
+            "type": "string",
+            "example": "USD"
+          },
+          "paymentId": {
+            "description": "Bank Payment ID",
+            "type": "integer"
+          },
+          "beneficiaryId": {
+            "description": "Beneficiary ID",
+            "type": "integer"
+          },
+          "date": {
+            "description": "Payment value date",
+            "type": "string"
+          },
+          "countryId": {
+            "description": "Two letter destination country code",
+            "type": "string"
+          },
+          "status": {
+            "description": "$str",
+            "type": "string",
+            "enum": [
+              "New",
+              "Deleted",
+              "Processing",
+              "Sent",
+              "Submitted",
+              "Unusable",
+              "Pending",
+              "Used",
+              "Ready"
+            ],
+            "example": ""
+          },
+          "transferOption": {
+            "description": "Transfer Option",
+            "type": "string",
+            "enum": [
+              "SHA",
+              "STD",
+              "PRI",
+              "OUR"
+            ]
+          },
+          "reference1": {
+            "description": "Payment reference line 1",
+            "type": "string"
+          },
+          "reference2": {
+            "description": "Payment reference line 2",
+            "type": "string"
+          },
+          "reference3": {
+            "description": "Payment reference line 3",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Transfer reason\n     *          100 => Other\n     *          200 => Property\n     *          201 => Living Costs\n     *          202 => Maintenance\n     *          203 => Salary\n     *          204 => Pension\n     *          205 => Vacation/Holiday\n     *          206 => Savings\n     *          207 => Mortgage\n     *          208 => Send to family\n     *          209 => Inheritance\n     *          210 => Education fees\n     *          211 => High value goods\n     *          212 => Emigration\n     *     ",
+            "type": "integer"
+          },
+          "note": {
+            "description": "Transfer notes",
+            "type": "string"
+          },
+          "beneficiary": {
+            "description": "Beneficiary details",
+            "items": {
+              "$ref": "#/components/schemas/Beneficiary"
+            }
+          },
+          "trade": {
+            "description": "Trade details",
+            "items": {
+              "$ref": "#/components/schemas/Trade"
+            }
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "PaymentInstruction"
+        }
+      },
+      "Quote": {
+        "required": [
+          "buyCurrency",
+          "sellCurrency",
+          "buyAmount",
+          "sellAmount"
+        ],
+        "properties": {
+          "buyCurrency": {
+            "description": "Currency that client wants to buy",
+            "type": "string",
+            "example": "USD"
+          },
+          "buyAmount": {
+            "description": "Currency that client wants to buy",
+            "type": "number",
+            "example": "5000"
+          },
+          "sellCurrency": {
+            "description": "Currency that client sells",
+            "type": "number",
+            "example": "GBP"
+          },
+          "sellAmount": {
+            "description": "Amount that client sells",
+            "type": "number",
+            "example": "500"
+          },
+          "rate": {
+            "description": "Quote rate",
+            "type": "number"
+          },
+          "feesRate": {
+            "description": "Quote fees rate",
+            "type": "number",
+            "example": ""
+          },
+          "inverseRate": {
+            "description": "Whether the rate is inverted",
+            "type": "number",
+            "example": ""
+          },
+          "possibleFees": {
+            "description": "Quote possible fees",
+            "type": "array",
+            "items": {}
+          },
+          "fees": {
+            "description": "Quote fees",
+            "type": "array",
+            "items": {}
+          },
+          "gbpValue": {
+            "description": "GBP equivalent amount",
+            "type": "number",
+            "example": "500"
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "Quote"
+        }
+      },
+      "TradingLimits": {
+        "required": [
+          "allowedToBookTrade",
+          "numberOfTradesBookedToday",
+          "tradesAllowedPerDay"
+        ],
+        "properties": {
+          "allowed": {
+            "description": "Shows if a user is allowed to create a new trade",
+            "type": "bool",
+            "example": "false"
+          },
+          "tradesBooked": {
+            "description": "Shows number of trades booked today",
+            "type": "int",
+            "example": "2"
+          },
+          "maxTradesPerDay": {
+            "description": "Shows number of trades per day that are allowed to book",
+            "type": "int",
+            "example": "3"
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "TradingLimits"
+        }
+      },
+      "QuoteFees": {
+        "properties": {
+          "transfer": {
+            "description": "Transfer fee, always applied",
+            "type": "number"
+          },
+          "creditCard": {
+            "description": "Creadit card charge, applied only for credit cards",
+            "type": "number"
+          },
+          "crossBorder": {
+            "description": "Cross border charge, only for USD payments. It is not used at the moment",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "CurrentUserResponse": {
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "description": "Info about current logged user",
+            "required": [
+              "data"
+            ],
+            "properties": {
+              "data": {
+                "description": "Info about current logged user",
+                "required": [
+                  "user",
+                  "cardPaymentAccess"
+                ],
+                "properties": {
+                  "user": {
+                    "description": "Info about current logged user",
+                    "required": [
+                      "id",
+                      "regId",
+                      "clientId",
+                      "name",
+                      "email",
+                      "phoneCode",
+                      "phoneNumber"
+                    ],
+                    "properties": {
+                      "id": {
+                        "description": "User Id",
+                        "type": "integer"
+                      },
+                      "regId": {
+                        "description": "Registration id",
+                        "type": "integer"
+                      },
+                      "clientId": {
+                        "description": "Client id",
+                        "type": "integer"
+                      },
+                      "name": {
+                        "description": "User name",
+                        "type": "string"
+                      },
+                      "email": {
+                        "description": "User email",
+                        "type": "string"
+                      },
+                      "phoneCode": {
+                        "description": "User phone code",
+                        "type": "integer"
+                      },
+                      "phoneNumber": {
+                        "description": "User phone number",
+                        "type": "integer"
+                      },
+                      "profileType": {
+                        "description": "Profile type",
+                        "type": "string"
+                      },
+                      "clientSignedId": {
+                        "description": "Client id with prefix and checksum",
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "cardPaymentAccess": {
+                    "description": "Indicate whether the client is allowed to make card payment",
+                    "type": "bool"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "TermsResponse": {
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "required": [
+              "data"
+            ],
+            "properties": {
+              "data": {
+                "required": [
+                  "snippet"
+                ],
+                "properties": {
+                  "snippet": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

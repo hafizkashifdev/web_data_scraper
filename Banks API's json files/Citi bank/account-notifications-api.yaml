@@ -1,0 +1,343 @@
+swagger: '2.0'
+info:
+  description: >-
+    Account Notifications (webhooks) allow you to subscribe to proactive push
+    notifications for select accounts, eliminating the need to regularly post
+    update requests. 
+
+
+    Once your subscription has been confirmed, notifications will be sent to the
+    endpoint you chose in your subscription request. This allows you to
+    integrate the notifications you receive from Citi into your automated
+    workflow for automated processing. 
+
+
+    You can choose to receive notifications in either XML or JSON format, and in
+    near-real time when updates are available or on a regular schedule.
+
+
+    Download our SDKs:
+
+
+    * [Python
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=python&apiTitle=all&isClientSecReq=true)
+
+    * [Java
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=java&apiTitle=all&isClientSecReq=true)
+
+    * [.Net
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=dotnet&apiTitle=all&isClientSecReq=true)
+
+    * [Ruby
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=ruby&apiTitle=all&isClientSecReq=true)
+
+    * [NodeJS
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=nodejs&apiTitle=all&isClientSecReq=true)
+
+    * [Go
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=go&apiTitle=all&isClientSecReq=true)
+
+    * [CLI Tool
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=ccapi-cli&apiTitle=all&isClientSecReq=true)
+
+
+    NOTE: You must be logged in to download our SDKs. 
+  version: 1.0.0
+  title: Account Notifications
+servers:
+  - url: https://tts.apib2b.citi.com/citiconnect/prod/accountstatementservices/
+    description: production gateway URL
+  - url: >-
+      https://tts.sandbox.apib2b.citi.com/citiconnect/sb/accountstatementservices/
+    description: sandbox URL
+schemes:
+  - https
+security:
+  - Client Credentials: []
+paths:
+  /v1/crdr/subscription:
+    post:
+      summary: Account Notification Subscription Request
+      operationId: Account notification subscription request
+      security:
+        - Client Credentials: []
+      description: >-
+        Using this endpoint you can create, modify, or delete a subscription
+        request and set parameters such as frequency and number of
+        notifications.
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: header
+          name: Content-Type
+          description: Supports \"application/xml\" and \"application/json\".
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          description: The OAuth Token prefixed with "Bearer" and space in between.
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: client_id
+          required: true
+          type: string
+          description: >-
+            Your unique client identifier, assigned as part of your onboarding
+            with your Citi representative.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/SubscriptionReqType'
+          application/xml:
+            schema:
+              $ref: '#/definitions/SubscriptionReqType'
+            example: >-
+              <?xml version="1.0" encoding="UTF-8"?><SubscriptionReq
+              xmlns=http://com.citi.citiconnect/services/types/creditdebit/subscription><ReqTp>CREATE</ReqTp><Fmt>XML</Fmt><CdtDbtInd>BOTH</CdtDbtInd><AcctId>1730173616</AcctId><BrnchId>713</BrnchId><FrAmt>0</FrAmt><ToAmt>99999999999</ToAmt></SubscriptionReq>
+        required: true
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/SubscriptionResponse'
+            application/xml:
+              schema:
+                $ref: '#/definitions/SubscriptionResponse'
+              example: >-
+                <?xml version="1.0"
+                encoding="UTF-8"?><SubscriptionResponseType><clientId>12808007</clientId><serviceId>ACCOUNTS</serviceId><requestType>CREATE</requestType><subscriptionReq>DBIT</subscriptionReq><format>JSON</format><languageCode>en_US</languageCode><accountNumber>1730173616</accountNumber><subscriptionStatus>Y</subscriptionStatus><rejectReason>string</rejectReason></SubscriptionResponseType>
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/XmlError'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/XmlError'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/XmlError'
+        '405':
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/XmlError'
+        '415':
+          description: Unsupported Media Type
+          schema:
+            $ref: '#/definitions/XmlError'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/XmlError'
+securityDefinitions:
+  Client Credentials:
+    description: >+
+      All CitiConnect APIs use the oAuth2 authentication scheme, which requires
+      a bearer token to authenticate your API call. The Token URL includes the
+      version of authentication used by this API. See <a
+      href="../../authentication/authentication-api-reference/"
+      target="_blank">the Citi Authentication API reference</a> for information
+      on requesting a token.
+
+    type: oauth2
+    tokenUrl: >-
+      https://tts.sandbox.apib2b.citi.com/citiconnect/sb/authenticationservices/v1/oauth/token
+    flow: application
+    scopes: null
+definitions:
+  ErrorMessage:
+    type: object
+    properties:
+      httpCode:
+        format: int32
+        type: integer
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    required:
+      - httpCode
+    xml:
+      name: errormessage
+  XmlError:
+    type: object
+    properties:
+      status:
+        type: string
+        description: it will have category code of error
+      message:
+        type: string
+        description: more information about the error
+      correlationId:
+        type: string
+        description: unique identifier which can be used to track the request
+    xml:
+      name: response
+  SubscriptionReqType:
+    type: object
+    required:
+      - AcctId
+      - BrnchId
+      - CdtDbtInd
+      - Fmt
+      - ReqTp
+    properties:
+      requestType:
+        type: string
+        description: >-
+          Specifies the action to perform on the specified subscription. You can
+          create, modify, or delete subscriptions, based on the request type.
+        enum:
+          - CREATE
+          - MODIFY
+          - DELETE
+        example: CREATE
+        xml:
+          name: ReqTp
+          namespace: http://com.citi.citiconnect/services/types/creditdebit/subscription
+      format:
+        type: string
+        description: Specifies the format to use for notifications - XML or JSON.
+        enum:
+          - XML
+          - JSON
+        example: JSON
+        xml:
+          name: Fmt
+          namespace: http://com.citi.citiconnect/services/types/creditdebit/subscription
+      creditDebitIndicator:
+        type: string
+        description: |-
+          The type of transaction for which you want notifications:
+
+          * Credit 
+          * Debit 
+          * Both
+        enum:
+          - DBIT
+          - CRDT
+          - BOTH
+        example: BOTH
+        xml:
+          name: CdtDbtInd
+          namespace: http://com.citi.citiconnect/services/types/creditdebit/subscription
+      accountIdentification:
+        minLength: 1
+        maxLength: 34
+        description: The account number associated with the subscription.
+        xml:
+          name: AcctId
+          example: '1730173616'
+          namespace: http://com.citi.citiconnect/services/types/creditdebit/subscription
+        example: '1730173616'
+      branchIdentification:
+        type: string
+        description: Citi branch ID associated with the account.
+        minLength: 1
+        maxLength: 35
+        xml:
+          name: BrnchId
+          example: '713'
+          namespace: http://com.citi.citiconnect/services/types/creditdebit/subscription
+        example: '713'
+      fromAmount:
+        type: string
+        description: >-
+          The minimum amount of a transaction to trigger a notification.
+          Notifications will not be sent for transaction amounts below this
+          threshold.
+        xml:
+          name: FrAmt
+          namespace: http://com.citi.citiconnect/services/types/creditdebit/subscription
+          example: '0'
+        example: '0'
+      toAmount:
+        type: string
+        description: >-
+          The maximium amount of a transaction to trigger a notification.
+          Notifications will not be sent for transaction amounts above this
+          limit.
+        xml:
+          name: ToAmt
+          namespace: http://com.citi.citiconnect/services/types/creditdebit/subscription
+          example: '99999999999'
+        example: '99999999999'
+  SubscriptionResponseType:
+    properties:
+      clientId:
+        type: string
+        description: >-
+          Your unique client identifier, assigned as part of your onboarding
+          with your Citi representative.
+        xml:
+          name: clientId
+          namespace: http://com.citi.citiconnect/services/types/creditdebit/subscription
+        example: '12808007'
+      serviceId:
+        type: string
+        description: ''
+        example: ACCOUNTS
+      requestType:
+        type: string
+        description: >-
+          Specifies the action to perform on the specified subscription. You can
+          create, modify, or delete subscriptions, based on the request type.
+        enum:
+          - CREATE
+          - MODIFY
+          - DELETE
+        example: CREATE
+      subscriptionReq:
+        type: string
+        description: |-
+          The type of transaction requested:
+
+          * Credit 
+          * Debit 
+          * Both
+        enum:
+          - DBIT
+          - CRDT
+          - BOTH
+        example: DBIT
+      format:
+        type: string
+        description: The format of the notification message.
+        enum:
+          - XML
+          - JSON
+        example: JSON
+      languageCode:
+        type: string
+        description: The language specified for the request.
+        example: en_US
+      accountNumber:
+        type: string
+        minLength: 1
+        maxLength: 34
+        description: The account number associated with the subscription.
+        example: '1730173616'
+      subscriptionStatus:
+        type: string
+        enum:
+          - 'Y'
+          - 'N'
+        example: 'Y'
+      rejectReason:
+        type: string
+        description: >-
+          Provides more information about why the subscription request was
+          rejected.
+  SubscriptionResponse:
+    $ref: '#/definitions/SubscriptionResponseType'

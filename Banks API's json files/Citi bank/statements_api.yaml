@@ -1,0 +1,671 @@
+swagger: '2.0'
+info:
+  description: >-
+    Using the Statements API, you can retrieve account statements in a range of
+    globally-supported file formats. 
+
+
+    Account statements may include:
+
+
+    * your incoming payments
+
+    * any transfers or deposits made
+
+    * cash withdrawals
+
+    * interest accruals and any charges as applicable
+
+    * start and end balances 
+
+
+    ### Retrieving account statements
+
+
+    To retrieve an account statement for one or more of your accounts:
+
+
+    1. Post a request to the
+    ``/accountstatementservices/v1/statement/initiation`` endpoint. This request
+    returns a Statement Identifier.
+
+    2. Post a second request to the
+    ``/accountstatementservices/v1/statement/retrieval`` endpoint using the
+    Statement Identifier. This will return your statement(s).
+
+
+    Download our SDKs:
+
+
+    * [Python
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=python&apiTitle=all&isClientSecReq=true)
+
+    * [Java
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=java&apiTitle=all&isClientSecReq=true)
+
+    * [.Net
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=dotnet&apiTitle=all&isClientSecReq=true)
+
+    * [Ruby
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=ruby&apiTitle=all&isClientSecReq=true)
+
+    * [NodeJS
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=nodejs&apiTitle=all&isClientSecReq=true)
+
+    * [Go
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=go&apiTitle=all&isClientSecReq=true)
+
+    * [CLI Tool
+    SDK](https://developer.citi.com/sandboxApi/admin/v1/downloadZipFile?language=ccapi-cli&apiTitle=all&isClientSecReq=true)
+
+
+    Note: You must be logged in to download the SDKs. 
+  version: 1.0.0
+  title: Statements API
+servers:
+  - url: https://tts.apib2b.citi.com/citiconnect/prod/accountstatementservices/v1
+    description: production gateway URL
+  - url: >-
+      https://tts.sandbox.apib2b.citi.com/citiconnect/sb/accountstatementservices/v1
+    description: sandbox URL
+  - url: >-
+      https://tts.sandbox.apib2b.citi.com/citiconnect/sb/accountstatementservices/v1/mock
+    description: mock sandbox URL for statement retrieval only
+tags: []
+schemes:
+  - https
+security:
+  - Client Credentials: []
+paths:
+  /statement/initiation:
+    post:
+      description: >-
+        The Statement Initiation endpoint follows a custom XML format. The
+        response from this endpoint returns a ``statementId``. This identifier
+        must then be used in the retrieval request.
+
+
+        **Note:** Statement initiation requires some time to be processed to
+        allow successful retrieval. It will depend on the statement size – best
+        practice is to set the retrieval interval every 15 seconds until you
+        receive a 200 successful response. It may take from 15 seconds to a few
+        minutes before the statement is generated.
+      operationId: initiateAccountStatement
+      summary: Statement Initiation Request
+      consumes:
+        - application/xml
+      produces:
+        - application/xml
+      parameters:
+        - name: client_id
+          in: query
+          required: true
+          description: >-
+            This is your unique identifier shared during your CitiConnect API
+            onboarding. This is the same `client_id` used for oauth token
+            generation
+          schema: null
+          type: string
+        - name: Content-Type
+          in: header
+          description: Supports \"application/xml\" and \"application/json\".
+          required: true
+          schema: null
+          type: string
+        - name: Authorization
+          in: header
+          description: The OAuth Token prefixed with "Bearer" and space in between.
+          required: true
+          schema: null
+          type: string
+        - name: StatementInitiationRequest
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/StatementInitiationRequest'
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/definitions/StatementInitiationRequest'
+            example: >-
+              <?xml version="1.0"
+              encoding="UTF-8"?><statementInitiationRequest><accountNumber>12345</accountNumber><formatName>CAMT_053_001_02</formatName><fromDate>2017-04-01</fromDate><toDate>2017-04-03</toDate><templateName>string</templateName></statementInitiationRequest>
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/definitions/StatementInitiationResponse'
+              example: >-
+                <?xml version="1.0"
+                encoding="UTF-8"?><statementInitiationResponse><statementId>86756565</statementId></statementInitiationResponse>
+        '400':
+          description: Bad Request
+          examples:
+            application/xml:
+              httpMessage: BadRequest
+              httpCode: 400
+              moreInformation: Schema Validation Failed.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+        '401':
+          description: Unauthorized
+          examples:
+            application/xml:
+              httpMessage: UNAUTHORIZED
+              httpCode: 401
+              moreInformation: >-
+                You are not authorized to access this API. Please send valid
+                credentials for authorization.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+        '404':
+          description: Not Found
+          examples:
+            application/xml:
+              httpMessage: NOT FOUND
+              httpCode: 404
+              moreInformation: Please check the URL and try again later.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+        '405':
+          description: Method Not Allowed
+          examples:
+            application/xml:
+              httpMessage: METHOD NOT ALLOWED
+              httpCode: 405
+              moreInformation: Please use valid HTTP supported verb only.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          examples:
+            application/xml:
+              httpMessage: UNSUPPORTED MEDIA TYPE
+              httpCode: 415
+              moreInformation: >-
+                Provided content-type is not allowed. Only content-type as
+                application/xml is accepted, please correct the content-type on
+                the header and try again.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          examples:
+            application/xml:
+              httpMessage: Internal Server Error
+              httpCode: 500
+              moreInformation: >-
+                Unable to serve your request at this moment. Please try again
+                later.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /statement/retrieval:
+    post:
+      description: >-
+        When you have completed the statement initiation, use the
+        ``statementId`` returned in the response as the only parameter in the
+        request body to initiate the statement retrieval request.
+
+
+        Limitations include: 
+
+
+        - Multiple requests are not supported.
+
+        - Only one statement generation process may run using a template
+        regardless of which channel initiated the request. Running multiple
+        statement generation processes is not supported. 
+
+
+        Use the statementId, which is received as an output from your Statement
+        Initiatin request, in the Statement Retrieval Request to generate your
+        account statements. The response to your Statement Retrieval request
+        will contain a single file with 1 or more statements, based on your
+        request.
+
+
+        The request follows custom XML format, and the response also follows a
+        custom XML format and contains the Account Statement file in the
+        required format: 
+
+
+        * ISO XML 
+            * camt.053.001.02 
+            * SWIFT MT940 
+        * ISO XML 
+            * camt.052.001.02 
+            * SWIFT MT942
+            
+        If the request is rejected due to validation errors or data issues, the
+        response follows a custom XML format.
+      operationId: getAccountStatement
+      summary: Statement Retrieval Request
+      consumes:
+        - application/xml
+      produces:
+        - application/xml
+      parameters:
+        - name: client_id
+          in: query
+          required: true
+          description: >-
+            This is your unique identifier shared during your CitiConnect API
+            onboarding. This is the same `client_id` used for oauth token
+            generation
+          schema: null
+          type: string
+        - name: Content-Type
+          in: header
+          description: Supports \"application/xml\" and \"application/json\".
+          required: true
+          schema: null
+          type: string
+        - name: Authorization
+          in: header
+          description: The OAuth Token prefixed with "Bearer" and space in between.
+          required: true
+          schema: null
+          type: string
+      requestBody:
+        content:
+          application/xml:
+            schema:
+              $ref: '#/definitions/StatementRetrievalRequest'
+            example: >-
+              <?xml version="1.0"
+              encoding="UTF-8"?><statementRetrievalRequest><statementId>12312312</statementId></statementRetrievalRequest>
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/definitions/StatementRetrievalResponse'
+              example: >-
+                <?xml version="1.0"
+                encoding="UTF-8"?><ns2:statementRetrievalResponse><ns2:statementId>45227678</ns2:statementId><ns2:fileCheckSum>770d285d1505da11034f729484d4d7250b30dde1101730bed129283476715e14fc5835de5d49d3b17c55ba5908bcfb50ab212edc4bb9c7e1ee08a4e03fcc6f4a</ns2:fileCheckSum><ns2:attachmentDecryptionKey>5sBk5UDQgBx7gJUh3m0owRRyQALojfSA</ns2:attachmentDecryptionKey><ns2:statementStream><xop:Include
+                href="cid:337895adcfe006ba4c40fa0bba7ed157076ef9e3455e1e7e@apache.org"></xop:Include></ns2:statementStream></ns2:statementRetrievalResponse>
+        '400':
+          description: Bad Request
+          examples:
+            application/xml:
+              httpMessage: BAD REQUEST
+              httpCode: 400
+              moreInformation: Please check your request and try again.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+        '401':
+          description: Unauthorized
+          examples:
+            application/xml:
+              httpMessage: UNAUTHORIZED
+              httpCode: 401
+              moreInformation: >-
+                You are not authorized to access this API. Please send valid
+                credentials for authorization.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+        '404':
+          description: Not Found
+          examples:
+            application/xml:
+              httpMessage: NOT FOUND
+              httpCode: 404
+              moreInformation: Please check the URL and try again later.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+        '405':
+          description: Method Not Allowed
+          examples:
+            application/xml:
+              httpMessage: METHOD NOT ALLOWED
+              httpCode: 405
+              moreInformation: Please use valid HTTP supported verb only.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+        '415':
+          description: Unsupported Media Type
+          examples:
+            application/xml:
+              httpMessage: UNSUPPORTED MEDIA TYPE
+              httpCode: 415
+              moreInformation: >-
+                Provided content-type is not allowed. Only content-type as
+                application/xml is accepted, please correct the content-type on
+                the header and try again.
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+securityDefinitions:
+  Client Credentials:
+    description: >+
+      All CitiConnect APIs use the oAuth2 authentication scheme, which requires
+      a bearer token to authenticate your API call. The Token URL includes the
+      version of authentication used by this API. See <a
+      href="../../authentication/authentication-api-reference/"
+      target="_blank">the Citi Authentication API reference</a> for information
+      on requesting a token.
+
+    type: oauth2
+    tokenUrl: >-
+      https://tts.sandbox.apib2b.citi.com/citiconnect/sb/authenticationservices/v1/oauth/token
+    flow: application
+    scopes: null
+definitions:
+  StatementRetrievalRequest:
+    required:
+      - statementId
+    properties:
+      statementId:
+        description: >-
+          The unique ID of the statement file generated by your Statement
+          Initiation request.
+        type: string
+        example: 12312312
+    xml:
+      name: statementRetrievalRequest
+  StatementRetrievalResponse:
+    properties:
+      statementId:
+        description: >-
+          The ID of statement file that was passed in the Statement Retrieval
+          request.
+        type: string
+        xml:
+          name: ns2:statementId
+        example: 45227678
+      fileCheckSum:
+        description: >-
+          The sha512 hash value of the statement file. It can be used to verify
+          whether the file is not corrupted.
+        type: string
+        xml:
+          name: ns2:fileCheckSum
+        example: >-
+          770d285d1505da11034f729484d4d7250b30dde1101730bed129283476715e14fc5835de5d49d3b17c55ba5908bcfb50ab212edc4bb9c7e1ee08a4e03fcc6f4a
+      attachmentDecryptionKey:
+        description: The key required to decrypt the attachment content.
+        type: string
+        xml:
+          name: ns2:attachmentDecryptionKey
+        example: 5sBk5UDQgBx7gJUh3m0owRRyQALojfSA
+      statementStream:
+        description: The Statement binary stream.
+        type: object
+        xml:
+          name: ns2:statementStream
+        properties:
+          xop:
+            type: object
+            xml:
+              name: xop:Include
+            properties:
+              href:
+                type: string
+                xml:
+                  attribute: true
+                example: >-
+                  cid:337895adcfe006ba4c40fa0bba7ed157076ef9e3455e1e7e@apache.org
+    required:
+      - statementStream
+    xml:
+      name: ns2:statementRetrievalResponse
+  StatementInitiationRequest:
+    properties:
+      accountNumber:
+        description: >-
+          The account number(s) for which the account statement is to be
+          retrieved. You can specify multiple accounts by using multiple account
+          objects. 
+
+
+          If no value is sent the Statements API will send a reject response
+          with an error message. 
+        type: array
+        example: 12345
+        items:
+          type: string
+        minItems: 1
+      formatName:
+        description: >-
+          Specifies the format of the statement(s) to be generated. Valid values
+          include:
+
+
+          * SWIFT_MT940 
+
+          * CAMT_053_001_02
+
+          * SWIFT MT942
+
+          * CAMT_052_001_02
+
+
+          **Note:** ``formatName`` will be ignored if ``templateName`` is
+          supplied, but ``formatName`` is still required for completeness.
+        type: string
+        example: CAMT_053_001_02
+        enum:
+          - SWIFT_MT940
+          - CAMT_053_001_02
+          - SWIFT MT942
+          - CAMT_052_001_02
+      fromDate:
+        description: ' Specifies the beginning date for the statement request. ``fromDate`` uses  _YYYY-MM-DD_ format.'
+        type: string
+        format: YYYY-MM-DD
+        example: '2017-04-01'
+      toDate:
+        description: ' Specifies the ending date for the statement request. ``fromDate`` uses _YYYY-MM-DD_ format.'
+        type: string
+        format: YYYY-MM-DD
+        example: '2017-04-03'
+      templateName:
+        description: >-
+          The template name, as defined in CitiDirect BE File Services (STR
+          Library Number). 
+
+
+          Before you make your first statement API request, make sure that the
+          correct template (also known as an "export profile") has been set up
+          using CitiDirect BE. 
+
+
+          For help setting up a template contact your Citi representative. 
+
+
+          The template contains the following:
+
+
+          * the format standard
+
+          * the list of transaction codes and descriptions
+
+          * the display of itemized entries for bulk debits
+
+          * the list of the date and time stamps
+
+
+          You can choose between:
+
+
+          * Detailed itemized entries - list all transactions on the statement.
+          If you would like an itemized Statement Retrieval (STR), please
+          contact your Citi representative to perform the setup on your behalf.
+          You must then use the STR library Name in your statement initiation
+          request.
+
+          * A single consolidated debit entry - one debit entry that can contain
+          several smaller transactions. These are also known as bulk debit
+          transactions.
+
+
+          When creating the template, the time zone where the template is
+          initially set up will be used when generating the account statement as
+          well as the frequency and interval specified. 
+        type: string
+    xml:
+      name: statementInitiationRequest
+    required:
+      - accountNumber
+      - formatName
+      - fromDate
+      - toDate
+  StatementInitiationResponse:
+    properties:
+      statementId:
+        description: >-
+          The unique ID for your newly generated statement. Use this ID in your
+          Statement Request to retrieve the statement file generated by your
+          initiation request.
+        type: string
+        example: 86756565
+    required:
+      - statementId
+    xml:
+      name: statementInitiationResponse
+  ErrorMessage:
+    type: object
+    properties:
+      httpCode:
+        format: int32
+        type: integer
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    required:
+      - httpCode
+    xml:
+      name: errormessage
+  XmlError:
+    type: object
+    properties:
+      status:
+        type: string
+        description: it will have category code of error
+      message:
+        type: string
+        description: more information about the error
+      correlationId:
+        type: string
+        description: unique identifier which can be used to track the reques
+    xml:
+      name: response
+  SubscriptionReqType:
+    type: object
+    required:
+      - AcctId
+      - BrnchId
+      - CdtDbtInd
+      - Fmt
+      - ReqTp
+    properties:
+      requestType:
+        type: string
+        description: prefered operation of subscription maintenance create/modify/delete
+        enum:
+          - CREATE
+          - MODIFY
+          - DELETE
+        xml:
+          name: ReqTp
+      format:
+        type: string
+        description: format in which notification message expected
+        enum:
+          - XML
+          - JSON
+        xml:
+          name: Fmt
+      creditDebitIndicator:
+        type: string
+        description: direction of the transaction which needs notification
+        enum:
+          - DBIT
+          - CRDT
+          - BOTH
+        xml:
+          name: CdtDbtInd
+      accountIdentification:
+        minLength: 1
+        maxLength: 34
+        description: account number in which subscription to be maintained
+        xml:
+          name: AcctId
+      branchIdentification:
+        type: string
+        description: CITI branch id where the account is associated
+        minLength: 1
+        maxLength: 35
+        xml:
+          name: BrnchId
+      fromAmount:
+        type: string
+        description: >-
+          lower limit for notification to be send. Notification will not be send
+          if transaction amount lesser than this amount
+        xml:
+          name: FrAmt
+      toAmount:
+        type: string
+        description: >-
+          upper limit for notification to be send. Notification will not be send
+          if transaction amount greater than this amount 
+        xml:
+          name: ToAmt
+  SubscriptionResponseType:
+    properties:
+      clientId:
+        type: string
+        description: client profile id reference where account is associated
+        xml:
+          name: clientId
+      serviceId:
+        type: string
+        description: ''
+      requestType:
+        type: string
+        description: prefered operation of subscription maintenance create/modify/delete
+        enum:
+          - CREATE
+          - MODIFY
+          - DELETE
+      subscriptionReq:
+        type: string
+        description: direction of the transaction which needs notification
+        enum:
+          - DBIT
+          - CRDT
+          - BOTH
+      format:
+        type: string
+        description: format in which notification message expected
+        enum:
+          - XML
+          - JSON
+      languageCode:
+        type: string
+      accountNumber:
+        type: string
+        minLength: 1
+        maxLength: 34
+        description: account number in which subscription to be maintained
+      subscriptionStatus:
+        type: string
+        enum:
+          - 'Y'
+          - 'N'
+      rejectReason:
+        type: string
+        description: information about why subscription rejected
+  SubscriptionResponse:
+    $ref: '#/definitions/SubscriptionResponseType'
