@@ -1,0 +1,118 @@
+<h1>FAQs</h1>
+<h2>General</h2>
+<h3>What is Open Banking?</h3>
+<p>
+  Open Banking is a reform, called for by the Competitions &amp; Market
+  Authority (CMA), which mandates the nine largest current account providers
+  (CMA9) to securely share customer account data and initiate payments with
+  registered third party providers (TPPs) provided the customer has given their
+  consent.
+</p>
+<p>
+  Please find more information at
+  <a href="https://www.openbanking.org.uk/" target="_blank">Open Banking</a>
+</p>
+<h3>What are our Open Banking APIs?</h3>
+<h4>Open Data</h4>
+<p>
+  These Open Data APIs allow API providers (e.g. banks, building societies and
+  ATM providers) to develop API endpoints for products, branches and ATMs data
+  which can then be accessed by anyone.
+</p>
+<h4>Account &amp; Transactions</h4>
+<p>
+  These read/write APIs provide the ability for approved/authorised account
+  information service providers (AISPs) to access a customer’s (payment service
+  user, PSU) account and transaction information for domestic business current
+  accounts (BCAs) and personal current accounts (PCAs), only when the PSU grants
+  consent. This API is developed according to the Open Banking Read/Write API
+  Specifications, see
+  <a href="https://www.openbanking.org.uk/" target="_blank"
+    >https://www.openbanking.org.uk/</a
+  >
+</p>
+<h3>Payment Initiation</h3>
+<p>
+  These read/write APIs provide the ability for authorised payment initiation
+  service providers (PISPs) to initiate domestic payments, setup new domestic
+  scheduled payments &amp; domestic standing orders, only when the PSU grants
+  consent. This API is developed according to the Open Banking Read/Write API
+  Specifications, see
+  <a href="https://www.openbanking.org.uk/" target="_blank"
+    >https://www.openbanking.org.uk/</a
+  >
+</p>
+<h4>Confirmation of Funds</h4>
+<p>
+  This read/write API allow a Card Based Payment Instrument Issuer ('CBPII') to
+  make a request to confirm funds are available. This API is developed according
+  to the Open Banking Read/Write API Specifications, see
+  <a href="https://www.openbanking.org.uk/" target="_blank"
+    >https://www.openbanking.org.uk/</a
+  >
+</p>
+<h3>What are the roles a TPP can perform?</h3>
+<p>
+  A TPP, Third Party Provider, can perform the following roles once they are
+  registered with their National Competent Authority (NCA):
+</p>
+<p>Account Information Service Provider (AISP)</p>
+<p>Payment Initiation Service Provider (PISP)</p>
+<p>Technical Service Provider (TSP)</p>
+<p>Card Based Payment Instrument Issuer (CBPII)</p>
+<h2>Read/Write APIs</h2>
+<h3>How can I access Tide's Read/Write APIs?</h3>
+<p>
+  As a TPP, in order to access our Read/Write APIs, you need to be enrolled with
+  Open Banking (Enrolling Onto Open Banking Guide) and registered with the
+  Financial Conduct Authority (FCA) or a National Competent Authority (NCA), as
+  either an AISP and/or PISP, TSP or CBPII.
+</p>
+<p>
+  This will then enable you to access our APIs through the Tide Developer Portal
+</p>
+<h3>
+  As a Third Party Provider, is there somewhere I can test prototype Open
+  Banking Solutions?
+</h3>
+<p>
+  Yes, Tide have a test facility
+  <a
+    href="/perry/developer/documentation?resource=tide-uk-portal&amp;document=Sandbox"
+    >../40-sandbox.md</a
+  >
+  available through our Developer Portal. This will be made available in March
+  2019.
+</p>
+<p>
+  Check out our [../20-getting-started.md](Get Started) guide for a step by step
+  guide on how to start testing with our Sandbox APIs.
+</p>
+<h3>Where are the specifications you have used to build your current APIs?</h3>
+<p>
+  There are full specifications provided by OBIE available on their [<a
+    href="https://openbanking.atlassian.net/wiki/spaces/DZ/overview%5D"
+    target="_blank"
+    >https://openbanking.atlassian.net/wiki/spaces/DZ/overview]</a
+  >(Developer Zone) from which we’ve built our APIs.
+</p>
+<h2>Response Codes</h2>
+<h3>I am getting a 401 unauthorized response when invoking /token endpoints</h3>
+<p>
+  (1) Make sure you have registered your SSA in Tide Developer Portal and the
+  subscription of the Accounts Service Provider API and/or Payments Service
+  Provider API is approved by Tide
+</p>
+<p>(2) Make sure you are following client_secret_post for the OIDC calls</p>
+<p>
+  (3) Make sure you are sending client_id &amp; client_secret as part of
+  x-www-form-urlencoded body parameter
+</p>
+<h3>
+  I am getting an SSL Handshake Error when trying to invoke /token or resource
+  endpoints.
+</h3>
+<p>
+  Check that you are using the correct network certificate signed by Open
+  Banking to establish the TLS MA connection
+</p>

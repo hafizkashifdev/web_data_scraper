@@ -5,8 +5,6 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 [![web_data_scraper](https://img.shields.io/badge/Repo-web_data_scraper-blue)](https://github.com/hafizkashifdev/web_data_scraper.git)
 
-Welcome to **web_data_scraper**, a robust Node.js tool powered by Puppeteer to scrape clean API documentation from single-page applications (SPAs). Designed for efficiency, it extracts content like code snippets, tables, and headings from sites such as `https://developer.obiebank-sbx.banfico.io`, while removing unwanted navigation menus (e.g., "Home," "Accounts API"). Driven by an Excel file (`links_with_page_names.xlsx`), it uses client-side routing to minimize HTTP requests and saves results as HTML files. Whether you're archiving API docs or building offline references, web_data_scraper is your go-to solution! 🚀
-
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Features](#features)
