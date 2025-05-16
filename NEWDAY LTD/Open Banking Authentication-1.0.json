@@ -1,0 +1,360 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Authentication",
+    "description": "Authenticate the client and users for accessing protected resources in NewDay.",
+    "version": "1.0"
+  },
+  "x-pub-settings": {
+    "pub-ready": true,
+    "team": "",
+    "tags": [
+      "Open Banking",
+      "Issuer Bank"
+    ],
+    "commitDate": 1729594329000
+  },
+  "servers": [
+    {
+      "url": "https://api.newdaycards.com/identity/v1.0",
+      "description": "Production"
+    },
+    {
+      "url": "https://api.newdaycards.com/sandbox/identity/v1.0",
+      "description": "Sandbox"
+    }
+  ],
+  "paths": {
+    "/{brand}/.well-known/openid-configuration": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Well Known Configuration",
+        "description": "Well Known Configuration",
+        "operationId": "wellknown",
+        "parameters": [
+          {
+            "name": "brand",
+            "in": "path",
+            "description": "The brand that should be passed.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/.well-known/openid-configuration"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/.well-known/openid-configuration\");\nvar request = new RestRequest(Method.GET);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"GET\", \"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/.well-known/openid-configuration\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/.well-known/openid-configuration'\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/{brand}/connect/token": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Token",
+        "description": "Token",
+        "operationId": "token",
+        "parameters": [
+          {
+            "name": "brand",
+            "in": "path",
+            "description": "The brand that should be passed.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/token"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/token\");\nvar request = new RestRequest(Method.POST);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"POST\", \"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/token\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'POST',\n  url: 'https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/token'\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/{brand}/connect/introspect": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Introspect",
+        "description": "Introspect",
+        "operationId": "introspect",
+        "parameters": [
+          {
+            "name": "brand",
+            "in": "path",
+            "description": "The brand that should be passed.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/introspect"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/introspect\");\nvar request = new RestRequest(Method.POST);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"POST\", \"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/introspect\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'POST',\n  url: 'https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/introspect'\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/{brand}/connect/revocation": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Revocation",
+        "description": "Revocation",
+        "operationId": "revocation",
+        "parameters": [
+          {
+            "name": "brand",
+            "in": "path",
+            "description": "The brand that should be passed.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/revocation"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/revocation\");\nvar request = new RestRequest(Method.POST);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"POST\", \"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/revocation\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'POST',\n  url: 'https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/revocation'\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/{brand}/.well-known/openid-configuration/jwks": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Jwks",
+        "description": "Jwks",
+        "operationId": "jwks",
+        "parameters": [
+          {
+            "name": "brand",
+            "in": "path",
+            "description": "The brand that should be passed.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/.well-known/openid-configuration/jwks"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/.well-known/openid-configuration/jwks\");\nvar request = new RestRequest(Method.GET);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"GET\", \"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/.well-known/openid-configuration/jwks\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/.well-known/openid-configuration/jwks'\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/{brand}/connect/authorize": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Authorize",
+        "description": "Authorize",
+        "operationId": "authorize",
+        "parameters": [
+          {
+            "name": "brand",
+            "in": "path",
+            "description": "The brand that should be passed.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/authorize"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/authorize\");\nvar request = new RestRequest(Method.GET);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"GET\", \"https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/authorize\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://api.newdaycards.com/identity/v1.0/%7Bbrand%7D/connect/authorize'\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/.well-known/apple-app-site-association.json": {
+      "get": {
+        "tags": [
+          "apple-app-site-association"
+        ],
+        "summary": "apple-app-site-association",
+        "description": "apple-app-site-association",
+        "operationId": "apple-app-site-association",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.newdaycards.com/identity/v1.0/.well-known/apple-app-site-association.json"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/identity/v1.0/.well-known/apple-app-site-association.json\");\nvar request = new RestRequest(Method.GET);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"GET\", \"https://api.newdaycards.com/identity/v1.0/.well-known/apple-app-site-association.json\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://api.newdaycards.com/identity/v1.0/.well-known/apple-app-site-association.json'\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/.well-known/assetlinks.json": {
+      "get": {
+        "tags": [
+          "assetlinks"
+        ],
+        "summary": "assetlinks",
+        "description": "assetlinks",
+        "operationId": "assetlinks",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.newdaycards.com/identity/v1.0/.well-known/assetlinks.json"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/identity/v1.0/.well-known/assetlinks.json\");\nvar request = new RestRequest(Method.GET);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"GET\", \"https://api.newdaycards.com/identity/v1.0/.well-known/assetlinks.json\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://api.newdaycards.com/identity/v1.0/.well-known/assetlinks.json'\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    }
+  },
+  "components": {}
+}

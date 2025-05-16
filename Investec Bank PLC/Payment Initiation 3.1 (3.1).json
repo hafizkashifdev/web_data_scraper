@@ -1,0 +1,3656 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Payment Initiation 3.1",
+    "description": "Initiate payments for Investec UK Private Banking clients who are using your products and services.",
+    "termsOfService": "https://developer.investec.com/terms-of-use",
+    "contact": {
+      "name": "Support",
+      "email": "openapi@investec.co.uk"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "3.1"
+  },
+  "servers": [
+    {
+      "url": "https://apisandbox.investec.com"
+    },
+    {
+      "url": "https://api.investec.com"
+    }
+  ],
+  "paths": {
+    "/open-banking/v3.1/pisp/domestic-payment-consents/{consentId}": {
+      "get": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Get Domestic Payment Consents",
+        "description": "Get a domestic payments consent",
+        "operationId": "GetDomesticPaymentConsent",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "description": "Domestic payment consent id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticConsentResponse2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-payment-consents": {
+      "post": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Create Domestic Payment Consents",
+        "description": "Create a domestic payment consent\r\n            \r\n------\r\n- Debtor account and currency must be in GBP\r\n- Once consent has been successfully created, the consent must be authorised and payment be made within 24 hours (from the CreationDateTime)\r\n------",
+        "operationId": "CreateDomesticPaymentConsents",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticConsent2"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticConsent2"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticConsent2"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticConsent2"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticConsentResponse2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-payment-consents/{consentId}/funds-confirmation": {
+      "get": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Get Domestic Payment Consents Funds Confirmation",
+        "description": "Get the domestic payment consent funds confirmation",
+        "operationId": "GetDomesticPaymentConsentsFundsConfirmation",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "description": "Domestic payment consent id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteFundsConfirmationResponse1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-payments": {
+      "post": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Create Domestic Payment",
+        "description": "Create a domestic payment\r\n            \r\n------\r\n- The submission of the payment must be made within 24-hours of the consent creation\r\n- Debtor account and currency must be in GBP\r\n------",
+        "operationId": "CreateDomesticPayment",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomestic2"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomestic2"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomestic2"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomestic2"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-payments/{domesticPaymentId}": {
+      "get": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Get Domestic Payment",
+        "description": "Get a domestic payment",
+        "operationId": "GetDomesticPayment",
+        "parameters": [
+          {
+            "name": "domesticPaymentId",
+            "in": "path",
+            "description": "Domestic payment id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-scheduled-payment-consents/{consentId}": {
+      "get": {
+        "tags": [
+          "Domestic Scheduled Payments"
+        ],
+        "summary": "Get Domestic Scheduled Payment Consents",
+        "description": "Get a domestic scheduled payment consent",
+        "operationId": "GetDomesticScheduledPaymentConsent",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "description": "Domestic scheduled payment consent id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticScheduledConsentResponse2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-scheduled-payment-consents": {
+      "post": {
+        "tags": [
+          "Domestic Scheduled Payments"
+        ],
+        "summary": "Create Domestic Scheduled Payment Consents",
+        "description": "Create a domestic scheduled payment consent\r\n            \r\n------\r\n- Debtor account and currency must be in GBP\r\n- RequestedExecutionDateTime must be between tomorrow and six months from now\r\n- Once consent has been successfully created, the consent must be authorised and payment be made within 24 hours (from the CreationDateTime)\r\n------",
+        "operationId": "CreateDomesticScheduledPaymentConsent",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticScheduledConsent2"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticScheduledConsent2"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticScheduledConsent2"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticScheduledConsent2"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticScheduledConsentResponse2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-scheduled-payments": {
+      "post": {
+        "tags": [
+          "Domestic Scheduled Payments"
+        ],
+        "summary": "Create Domestic Scheduled Payment",
+        "description": "Create a domestic scheduled payment\r\n            \r\n------\r\n- The submission of the  payment must be made within 24-hours of the consent creation\r\n- Debtor account and currency must be in GBP\r\n- RequestedExecutionDateTime must be between tomorrow and six months from now\r\n------",
+        "operationId": "CreateDomesticScheduledPayment",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticScheduled2"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticScheduled2"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticScheduled2"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticScheduled2"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticScheduledResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-scheduled-payments/{domesticScheduledPaymentId}": {
+      "get": {
+        "tags": [
+          "Domestic Scheduled Payments"
+        ],
+        "summary": "Get Domestic Scheduled Payment",
+        "description": "Get a domestic scheduled payment",
+        "operationId": "GetDomesticScheduledPayment",
+        "parameters": [
+          {
+            "name": "domesticScheduledPaymentId",
+            "in": "path",
+            "description": "Domestic scheduled payment id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticScheduledResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-standing-order-consents": {
+      "post": {
+        "tags": [
+          "Domestic Standing Orders"
+        ],
+        "summary": "Create Domestic Standing Order Consents",
+        "description": "Create a domestic standing order consent\r\n------\r\n- Debtor account and currency must be in GBP\r\n- Once consent has been successfully created, the consent must be authorised\r\n- The first payment amount will also be the recurring and final payment amounts\r\n- FirstPaymentDateTime and FinalPaymentDateTime need not contain a time element. Dates passed with a time element will have time removed before submission.\r\n------",
+        "operationId": "CreateDomesticStandingOrderConsents",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticStandingOrderConsent3"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticStandingOrderConsent3"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticStandingOrderConsent3"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticStandingOrderConsent3"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticStandingOrderConsentResponse3"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-standing-order-consents/{consentId}": {
+      "get": {
+        "tags": [
+          "Domestic Standing Orders"
+        ],
+        "summary": "Get Domestic Standing Order Consents",
+        "description": "Get a domestic standing order consent",
+        "operationId": "GetDomesticStandingOrderConsent",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "description": "Domestic standing order consent id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticStandingOrderConsentResponse3"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-standing-orders": {
+      "post": {
+        "tags": [
+          "Domestic Standing Orders"
+        ],
+        "summary": "Create Domestic Standing Order",
+        "description": "Create a domestic standing order\r\n            \r\n- Debtor account and currency must be \"GBP\"\r\n- FirstPaymentDateTime and FinalPaymentDateTime need not contain a time element. Dates passed with a time element will have time removed before submission.",
+        "operationId": "CreateDomesticStandingOrder",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticStandingOrder3"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticStandingOrder3"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticStandingOrder3"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteDomesticStandingOrder3"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticStandingOrderResponse3"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/open-banking/v3.1/pisp/domestic-standing-orders/{domesticStandingOrderId}": {
+      "get": {
+        "tags": [
+          "Domestic Standing Orders"
+        ],
+        "summary": "Get Domestic Standing Order",
+        "description": "Get a Domestic Standing Order",
+        "operationId": "GetDomesticStandingOrder",
+        "parameters": [
+          {
+            "name": "domesticStandingOrderId",
+            "in": "path",
+            "description": "Domestic Standing Order Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteDomesticStandingOrderResponse3"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/open-banking/v3.1/pisp/international-payment-consents/{consentId}": {
+      "get": {
+        "tags": [
+          "International Payments"
+        ],
+        "summary": "Get International Payment Consents",
+        "description": "Get an international payments consent",
+        "operationId": "GetInternationalPaymentConsent",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "description": "Domestic payment consent id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteInternationalConsentResponse1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/open-banking/v3.1/pisp/international-payment-consents": {
+      "post": {
+        "tags": [
+          "International Payments"
+        ],
+        "summary": "Create International Payment Consents",
+        "description": "Create an international payment consent\r\n            \r\n------\r\n- Debtor account and currency must be one of the following: AUD, CAD, CHF, DKK, EUR, GBP, HKD, ILS, JPY, NOK, SEK, SGD, USD, ZAR\r\n- Expiry datetime of the exchange rate will be 10 minutes from successful consent submission\r\n------",
+        "operationId": "CreateInternationalPaymentConsents",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteInternationalConsent1"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteInternationalConsent1"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteInternationalConsent1"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteInternationalConsent1"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteInternationalConsentResponse1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/open-banking/v3.1/pisp/international-payment-consents/{consentId}/funds-confirmation": {
+      "get": {
+        "tags": [
+          "International Payments"
+        ],
+        "summary": "Get International Payment Consents Funds Confirmation",
+        "description": "Get the international payment consent funds confirmation",
+        "operationId": "GetInternationalPaymentConsentsFundsConfirmation",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "description": "International payment consent id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteFundsConfirmationResponse1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/open-banking/v3.1/pisp/international-payments": {
+      "post": {
+        "tags": [
+          "International Payments"
+        ],
+        "summary": "Create International Payment",
+        "description": "Create an international payment\r\n            \r\n- Debtor account and currency must be one of the following: AUD, CAD, CHF, DKK, EUR, GBP, HKD, ILS, JPY, NOK, SEK, SGD, USD, ZAR\r\n- Expiry datetime of the exchange rate will be 10 minutes from successful consent submission",
+        "operationId": "CreateInternationalPayment",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteInternational1"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteInternational1"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteInternational1"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBWriteInternational1"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteInternationalResponse1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/open-banking/v3.1/pisp/international-payments/{internationalPaymentId}": {
+      "get": {
+        "tags": [
+          "International Payments"
+        ],
+        "summary": "Get International Payment",
+        "description": "Get an international payment",
+        "operationId": "GetInternationalPayment",
+        "parameters": [
+          {
+            "name": "internationalPaymentId",
+            "in": "path",
+            "description": "International payment id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU’s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteInternationalResponse1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OBWriteDomesticConsentResponse2": {
+        "required": [
+          "Data",
+          "Links",
+          "Meta",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticConsentResponse2"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          },
+          "Meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "Links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "OBWriteDataDomesticConsentResponse2": {
+        "required": [
+          "ConsentId",
+          "CreationDateTime",
+          "Initiation",
+          "Status",
+          "StatusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the consent resource."
+          },
+          "CreationDateTime": {
+            "type": "string",
+            "description": "Date and time at which the resource was created.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Status": {
+            "$ref": "#/components/schemas/OBExternalConsentStatus1Code"
+          },
+          "StatusUpdateDateTime": {
+            "type": "string",
+            "description": "Date and time at which the consent resource status was updated.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomestic2"
+          }
+        }
+      },
+      "MetaData": {
+        "type": "object",
+        "properties": {
+          "TotalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FirstAvailableDateTime": {
+            "type": "string",
+            "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone. An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "LastAvailableDateTime": {
+            "type": "string",
+            "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone. An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          }
+        },
+        "description": "Meta Data relevant to the payload"
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "First": {
+            "type": "string"
+          },
+          "Last": {
+            "type": "string"
+          },
+          "Next": {
+            "type": "string"
+          },
+          "Previous": {
+            "type": "string"
+          },
+          "Self": {
+            "type": "string"
+          }
+        },
+        "description": "Links relevant to the payload"
+      },
+      "OBExternalConsentStatus1Code": {
+        "type": "string",
+        "enum": [
+          "Authorised",
+          "AwaitingAuthorisation",
+          "Consumed",
+          "Rejected"
+        ]
+      },
+      "OBDomestic2": {
+        "required": [
+          "CreditorAccount",
+          "EndToEndIdentification",
+          "InstructedAmount",
+          "InstructionIdentification"
+        ],
+        "type": "object",
+        "properties": {
+          "InstructionIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by an instructing party for an instructed party to unambiguously identify the\r\ninstruction.\r\nUsage: the instruction identification is a point to point reference that can be used between the instructing party\r\nand the\r\ninstructed party to refer to the individual instruction.It can be included in several messages related to the\r\ninstruction."
+          },
+          "EndToEndIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification assigned by the initiating party to unambiguously identify the transaction. This\r\nidentification is\r\npassed on, unchanged, throughout the entire end-to-end chain. Usage: The end-to-end identification can be used for\r\nreconciliation or to link tasks relating to the transaction.It can be included in several messages related to the\r\ntransaction.\r\nOB: The Faster Payments Scheme can only access 31 characters for the EndToEndIdentification field."
+          },
+          "InstructedAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "CreditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountCreditor3"
+          },
+          "DebtorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountDebtor4"
+          },
+          "RemittanceInformation": {
+            "$ref": "#/components/schemas/OBRemittanceInformation1"
+          },
+          "SupplementaryData": {
+            "$ref": "#/components/schemas/OBSupplementaryData1"
+          }
+        },
+        "description": "<description>\r\n                    The Initiation payload is sent by the initiating party to the ASPSP.It is used to request movement of funds\r\n                    from\r\n                    the debtor account to a creditor for a single domestic payment.\r\n                </description>"
+      },
+      "OBActiveOrHistoricCurrencyAndAmount": {
+        "required": [
+          "Amount",
+          "Currency"
+        ],
+        "type": "object",
+        "properties": {
+          "Amount": {
+            "pattern": "^\\d{1,13}\\.\\d{1,5}$",
+            "type": "string",
+            "description": "    A number of monetary units specified in an active currency where the unit of currency is explicit and compliant\r\n    with ISO 4217.\r\nAny value greater than 2 decimal places will be rounded to 2 decimal places on submission"
+          },
+          "Currency": {
+            "pattern": "^[A-Z]{3,3}$",
+            "type": "string"
+          }
+        },
+        "description": "<description>\r\n                    Amount of money to be moved between the debtor and creditor, before deduction of charges, expressed in the\r\n                    currency as ordered by the initiating party.\r\n                    Usage: This amount has to be transported unchanged through the transaction chain.\r\n                </description>"
+      },
+      "OBCashAccountCreditor3": {
+        "required": [
+          "Identification",
+          "Name",
+          "SchemeName"
+        ],
+        "type": "object",
+        "properties": {
+          "SchemeName": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string",
+            "description": "Name of the identification scheme, in a coded form as published in an external list.\r\n<example>List [ \"UK.OBIE.BBAN\", \"UK.OBIE.IBAN\", \"UK.OBIE.PAN\", \"UK.OBIE.Paym\", \"UK.OBIE.SortCodeAccountNumber\" ]</example>"
+          },
+          "Identification": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string",
+            "description": "Identification assigned by an institution to identify an account. This identification is known by the account\r\nowner."
+          },
+          "Name": {
+            "maxLength": 70,
+            "minLength": 1,
+            "type": "string",
+            "description": "Name of the account, as assigned by the account servicing institution.\r\nUsage: The account name is the name or names of the account owner(s) represented at an account level. The account name is not the product name or the nickname of the account.\r\nOB: ASPSPs may carry out name validation for Confirmation of Payee, but it is not mandatory."
+          }
+        },
+        "description": "<description>Provides the details to identify the beneficiary account.</description>"
+      },
+      "OBCashAccountDebtor4": {
+        "required": [
+          "Identification",
+          "SchemeName"
+        ],
+        "type": "object",
+        "properties": {
+          "SchemeName": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string",
+            "description": "Name of the identification scheme, in a coded form as published in an external list.\r\nThe supported scheme name is \"UK.OBIE.SortCodeAccountNumber\""
+          },
+          "Identification": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string",
+            "description": "Identification assigned by an institution to identify an account. This identification is known by the account\r\nowner."
+          }
+        },
+        "description": "<description>Provides the details to identify the debtor account.</description>"
+      },
+      "OBRemittanceInformation1": {
+        "type": "object",
+        "properties": {
+          "Reference": {
+            "maxLength": 18,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique reference, as assigned by the creditor, to unambiguously refer to the payment transaction.\r\nUsage: If available, the initiating party should provide this reference in the structured remittance information,\r\nto enable reconciliation by the creditor upon receipt of the amount of money.\r\nIf the business context requires the use of a creditor reference or a payment remit identification, and only one\r\nidentifier can be passed through the end-to-end chain, the creditor's reference or payment remittance\r\nidentification should be quoted in the end-to-end transaction identification.\r\nOB: The Faster Payments Scheme can only accept 18 characters for the ReferenceInformation field - which is where\r\nthis ISO field will be mapped."
+          }
+        },
+        "description": "Information supplied to enable the matching of an entry with the items that the transfer is intended to settle, such as commercial invoices in an accounts' receivable system."
+      },
+      "OBSupplementaryData1": {
+        "type": "object",
+        "properties": {
+          "PayerReference": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string",
+            "description": "The reference shown in the PSU's transaction narratives"
+          }
+        },
+        "description": "Additional information that can not be captured in the structured fields and/or any other specific block."
+      },
+      "Void": {
+        "type": "object"
+      },
+      "OBApiFailureResponse": {
+        "type": "object",
+        "properties": {
+          "Code": {
+            "$ref": "#/components/schemas/OBApiFailureCodes"
+          },
+          "Message": {
+            "type": "string"
+          },
+          "Errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DomainValidationError"
+            }
+          }
+        }
+      },
+      "OBApiFailureCodes": {
+        "type": "string",
+        "enum": [
+          "UK.OBIE.BadRequest",
+          "UK.OBIE.ServiceUnavailable",
+          "UK.OBIE.InternalServerError"
+        ]
+      },
+      "DomainValidationError": {
+        "type": "object",
+        "properties": {
+          "Path": {
+            "type": "string",
+            "readOnly": true
+          },
+          "ErrorCode": {
+            "$ref": "#/components/schemas/DomainValidationErrorCode"
+          },
+          "Message": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "DomainValidationErrorCode": {
+        "type": "string",
+        "enum": [
+          "UK.OBIE.Field.Missing",
+          "UK.OBIE.Field.Invalid",
+          "UK.OBIE.Field.MissingOrInvalid",
+          "UK.Investec.Internal.InvalidState",
+          "UK.Investec.Internal.Duplicated",
+          "UK.OBIE.Header.Missing",
+          "UK.OBIE.Unsupported.Scheme",
+          "\tUK.OBIE.Unsupported.Currency",
+          "UK.OBIE.Resource.InvalidConsentStatus",
+          "UK.OBIE.UnexpectedError"
+        ]
+      },
+      "OBWriteDomesticConsent2": {
+        "required": [
+          "Data",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDomesticConsentData2"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "OBWriteDomesticConsentData2": {
+        "required": [
+          "Initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomestic2"
+          }
+        }
+      },
+      "OBWriteFundsConfirmationResponse1": {
+        "required": [
+          "Data",
+          "Links",
+          "Meta"
+        ],
+        "type": "object",
+        "properties": {
+          "SupplementaryData": {
+            "$ref": "#/components/schemas/OBSupplementaryData1"
+          },
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataFundsConfirmationResponse1"
+          },
+          "Meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "Links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "OBWriteDataFundsConfirmationResponse1": {
+        "type": "object",
+        "properties": {
+          "FundsAvailableResult": {
+            "$ref": "#/components/schemas/OBFundsAvailableResult1"
+          }
+        }
+      },
+      "OBFundsAvailableResult1": {
+        "required": [
+          "FundsAvailable",
+          "FundsAvailableDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "FundsAvailableDateTime": {
+            "type": "string",
+            "description": "Date and time at which the funds availability check was generated.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "FundsAvailable": {
+            "type": "boolean",
+            "description": "Flag to indicate the availability of funds given the Amount in the consent request."
+          }
+        }
+      },
+      "OBWriteDomestic2": {
+        "required": [
+          "Data",
+          "Links",
+          "Meta",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataDomestic2"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          },
+          "Meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "Links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "OBWriteDataDomestic2": {
+        "required": [
+          "ConsentId",
+          "Initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the consent resource."
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomestic2"
+          }
+        }
+      },
+      "OBWriteDomesticResponse": {
+        "required": [
+          "Data",
+          "Links",
+          "Meta"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticResponse2"
+          },
+          "Meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "Links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "OBWriteDataDomesticResponse2": {
+        "required": [
+          "ConsentId",
+          "CreationDateTime",
+          "DomesticPaymentId",
+          "Initiation",
+          "Status",
+          "StatusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "DomesticPaymentId": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the domestic payment resource."
+          },
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the consent resource."
+          },
+          "CreationDateTime": {
+            "type": "string",
+            "description": "Date and time at which the message was created.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone. An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Status": {
+            "$ref": "#/components/schemas/OBTransactionIndividualStatusCode"
+          },
+          "StatusUpdateDateTime": {
+            "type": "string",
+            "description": "Date and time at which the resource status was updated.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone. An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomestic2"
+          }
+        }
+      },
+      "OBTransactionIndividualStatusCode": {
+        "type": "string",
+        "enum": [
+          "AcceptedSettlementCompleted",
+          "AcceptedSettlementInProcess",
+          "Pending",
+          "Rejected"
+        ]
+      },
+      "OBWriteDomesticScheduledConsentResponse2": {
+        "required": [
+          "Data",
+          "Links",
+          "Meta",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticScheduledConsentResponse2"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          },
+          "Meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "Links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "OBWriteDataDomesticScheduledConsentResponse2": {
+        "required": [
+          "ConsentId",
+          "CreationDateTime",
+          "Initiation",
+          "Permission",
+          "Status",
+          "StatusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "CreationDateTime": {
+            "type": "string",
+            "description": "Date and time at which the resource was created.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Status": {
+            "$ref": "#/components/schemas/OBExternalConsentStatus1Code"
+          },
+          "StatusUpdateDateTime": {
+            "type": "string",
+            "description": "Date and time at which the consent resource status was updated.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Permission": {
+            "$ref": "#/components/schemas/OBExternalPermissions2Code"
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomesticScheduled2"
+          }
+        }
+      },
+      "OBExternalPermissions2Code": {
+        "type": "string",
+        "enum": [
+          "Create"
+        ]
+      },
+      "OBDomesticScheduled2": {
+        "required": [
+          "CreditorAccount",
+          "EndToEndIdentification",
+          "InstructedAmount",
+          "InstructionIdentification",
+          "RequestedExecutionDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "InstructionIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by an instructing party for \r\nan instructed party to unambiguously identify the instruction.\r\nUsage: the instruction identification is a point to point \r\nreference that can be used between the instructing party and \r\nthe instructed party to refer to the individual instruction. \r\nIt can be included in several messages related to the instruction."
+          },
+          "EndToEndIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification assigned by the initiating party to \r\nunambiguously identify the transaction. This identification \r\nis passed on, unchanged, throughout the entire end-to-end chain.\r\nUsage: The end-to-end identification can be used for \r\nreconciliation or to link tasks relating to the transaction.\r\nIt can be included in several messages related to the transaction.\r\nThe Faster Payments Scheme can only access 31 characters \r\nfor the EndToEndIdentification field."
+          },
+          "RequestedExecutionDateTime": {
+            "type": "string",
+            "description": "Date at which the initiating party requests the clearing \r\nagent to process the payment.\r\nUsage: This is the date on which the debtor’s account is to \r\nbe debited.\r\nAll dates in the JSON payloads are represented in ISO 8601 \r\ndate-time format.\r\nAll date-time fields in responses must include the timezone.\r\nAn example is below:\r\n2017-04-05T10:43:07+00:00"
+          },
+          "InstructedAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "DebtorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountDebtor4"
+          },
+          "CreditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountCreditor3"
+          },
+          "RemittanceInformation": {
+            "$ref": "#/components/schemas/OBRemittanceInformation1"
+          },
+          "SupplementaryData": {
+            "$ref": "#/components/schemas/OBSupplementaryData1"
+          }
+        },
+        "description": "The Initiation payload is sent by the initiating party to the ASPSP. It is used to request movement of funds from the debtor account to a creditor for a single scheduled domestic payment."
+      },
+      "OBWriteDomesticScheduledConsent2": {
+        "required": [
+          "Data",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticScheduledConsent2"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "OBWriteDataDomesticScheduledConsent2": {
+        "required": [
+          "Initiation",
+          "Permission"
+        ],
+        "type": "object",
+        "properties": {
+          "Permission": {
+            "$ref": "#/components/schemas/OBExternalPermissions2Code"
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomesticScheduled2"
+          }
+        }
+      },
+      "OBWriteDomesticScheduled2": {
+        "required": [
+          "Data",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticScheduled2"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "OBWriteDataDomesticScheduled2": {
+        "required": [
+          "ConsentId",
+          "Initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the consent resource."
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomesticScheduled2"
+          }
+        }
+      },
+      "OBWriteDomesticScheduledResponse": {
+        "required": [
+          "Data",
+          "Links",
+          "Meta"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticScheduledResponse"
+          },
+          "Meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "Links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "OBWriteDataDomesticScheduledResponse": {
+        "required": [
+          "ConsentId",
+          "CreationDateTime",
+          "DomesticScheduledPaymentId",
+          "Initiation",
+          "Status",
+          "StatusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "DomesticScheduledPaymentId": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the domestic schedule payment resource."
+          },
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the consent resource."
+          },
+          "CreationDateTime": {
+            "type": "string",
+            "description": "Date and time at which the message was created.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Status": {
+            "$ref": "#/components/schemas/OBDomesticScheduledStatusCode"
+          },
+          "StatusUpdateDateTime": {
+            "type": "string",
+            "description": "Date and time at which the resource status was updated.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomesticScheduled2"
+          }
+        }
+      },
+      "OBDomesticScheduledStatusCode": {
+        "type": "string",
+        "enum": [
+          "InitiationPending",
+          "InitiationFailed",
+          "InitiationCompleted"
+        ]
+      },
+      "OBWriteDomesticStandingOrderConsent3": {
+        "required": [
+          "Data",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticStandingOrderConsent3"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "OBWriteDataDomesticStandingOrderConsent3": {
+        "required": [
+          "Initiation",
+          "Permission"
+        ],
+        "type": "object",
+        "properties": {
+          "Permission": {
+            "$ref": "#/components/schemas/OBExternalPermissions2Code"
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomesticStandingOrder3"
+          }
+        }
+      },
+      "OBDomesticStandingOrder3": {
+        "required": [
+          "CreditorAccount",
+          "FirstPaymentAmount",
+          "FirstPaymentDateTime",
+          "Frequency"
+        ],
+        "type": "object",
+        "properties": {
+          "Frequency": {
+            "maxLength": 35,
+            "minLength": 1,
+            "pattern": "^(EvryDay)$|^(IntrvlWkDay:01:0[1-7])$|^(IntrvlMnthDay:(01|03|06|12):(0[1-9]|[12][0-9]|3[01]))$",
+            "type": "string",
+            "description": "Individual Definitions:\r\nEvryDay - Every day\r\nIntrvlWkDay - An interval specified in weeks(01 to 09), and the day within the week(01 to 07)\r\nIntrvlMnthDay - An interval specified in months(between 01 to 06, 12, 24), specifying the day within the month(-05\r\nto -01, 1 to 31)\r\nIndividual Patterns:\r\nEvryDay (ScheduleCode)\r\nIntrvlWkDay:IntervalInWeeks:DayInWeek(ScheduleCode + IntervalInWeeks + DayInWeek)\r\nIntrvlMnthDay:IntervalInMonths:DayInMonth(ScheduleCode + IntervalInMonths + DayInMonth)\r\nThe regular expression for this element combines five smaller versions for each permitted pattern.To aid legibility\r\n- the components are presented individually here:\r\nEvryDay\r\nIntrvlWkDay:0[1]:0[1-7]\r\nIntrvlMnthDay:(0[1-9]|[12][0-9]|3[01])"
+          },
+          "FirstPaymentDateTime": {
+            "type": "string",
+            "description": "This value will be used for:\r\n- The date on which the first payment for a Standing Order schedule will be made.\r\n- Calculating the date on which the first recurring payment for a Standing Order schedule will be made.\r\n- Calculating the date on which the final payment for a Standing Order schedule will be made.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00"
+          },
+          "FinalPaymentDateTime": {
+            "type": "string",
+            "description": "This value will be used for:\r\n- The date on which the final payment for a Standing Order schedule will be made.\r\n- Calculating the date on which the first recurring payment for a Standing Order schedule will be made.\r\n- Calculating the date on which the final payment for a Standing Order schedule will be made.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00"
+          },
+          "FirstPaymentAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "DebtorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountDebtor4"
+          },
+          "CreditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountCreditor3"
+          },
+          "SupplementaryData": {
+            "$ref": "#/components/schemas/OBSupplementaryData1"
+          }
+        }
+      },
+      "OBWriteDomesticStandingOrderConsentResponse3": {
+        "required": [
+          "Data",
+          "Links",
+          "Meta",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticStandingOrderConsentResponse3"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          },
+          "Meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "Links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "OBWriteDataDomesticStandingOrderConsentResponse3": {
+        "required": [
+          "ConsentId",
+          "CreationDateTime",
+          "Initiation",
+          "Permission",
+          "Status",
+          "StatusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the consent resource."
+          },
+          "CreationDateTime": {
+            "type": "string",
+            "description": "Date and time at which the resource was created.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Status": {
+            "$ref": "#/components/schemas/OBExternalConsentStatus1Code"
+          },
+          "StatusUpdateDateTime": {
+            "type": "string",
+            "description": "Date and time at which the resource status was updated.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Permission": {
+            "$ref": "#/components/schemas/OBExternalPermissions2Code"
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomesticStandingOrder3"
+          }
+        }
+      },
+      "OBWriteDomesticStandingOrder3": {
+        "required": [
+          "Data",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticStandingOrder3"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {},
+            "description": "<description>\r\n                    The Risk section is sent by the initiating party to the ASPSP.It is used to specify additional details\r\n                    for risk scoring for Payments.\r\n                </description>"
+          }
+        }
+      },
+      "OBWriteDataDomesticStandingOrder3": {
+        "required": [
+          "ConsentId"
+        ],
+        "type": "object",
+        "properties": {
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the consent resource."
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomesticStandingOrder3"
+          }
+        }
+      },
+      "OBWriteDomesticStandingOrderResponse3": {
+        "required": [
+          "Data",
+          "Links",
+          "Meta"
+        ],
+        "type": "object",
+        "properties": {
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          },
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticStandingOrderResponse3"
+          },
+          "Meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "Links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "OBWriteDataDomesticStandingOrderResponse3": {
+        "required": [
+          "ConsentId",
+          "CreationDateTime",
+          "DomesticStandingOrderId",
+          "Initiation",
+          "Status",
+          "StatusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "DomesticStandingOrderId": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the domestic standing order resource."
+          },
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the consent resource."
+          },
+          "CreationDateTime": {
+            "type": "string",
+            "description": "Date and time at which the resource was created.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Status": {
+            "$ref": "#/components/schemas/OBExternalStatus1Code"
+          },
+          "StatusUpdateDateTime": {
+            "type": "string",
+            "description": "Date and time at which the resource status was updated.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBDomesticStandingOrder3"
+          }
+        }
+      },
+      "OBExternalStatus1Code": {
+        "type": "string",
+        "enum": [
+          "InitiationCompleted",
+          "InitiationFailed",
+          "InitiationPending"
+        ]
+      },
+      "OBWriteInternationalConsentResponse1": {
+        "required": [
+          "Data",
+          "Links",
+          "Meta",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataInternationalConsentResponse1"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          },
+          "Meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "Links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "OBWriteDataInternationalConsentResponse1": {
+        "required": [
+          "ConsentId",
+          "CreationDateTime",
+          "Initiation",
+          "Status",
+          "StatusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the consent resource."
+          },
+          "CreationDateTime": {
+            "type": "string",
+            "description": "Date and time at which the resource was created.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Status": {
+            "$ref": "#/components/schemas/OBExternalConsentStatus1Code"
+          },
+          "StatusUpdateDateTime": {
+            "type": "string",
+            "description": "Date and time at which the consent resource status was updated.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "ExchangeRateInformation": {
+            "$ref": "#/components/schemas/OBExchangeRate2"
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBInternational1"
+          }
+        }
+      },
+      "OBExchangeRate2": {
+        "required": [
+          "ExchangeRate",
+          "RateType",
+          "UnitCurrency"
+        ],
+        "type": "object",
+        "properties": {
+          "UnitCurrency": {
+            "pattern": "^[A-Z]{3,3}$",
+            "type": "string",
+            "description": "Currency in which the rate of exchange is expressed in a currency exchange. In the example 1GBP = xxxCUR, the unit currency is GBP.\r\nMust be one of the following: AUD, CAD, CHF, DKK, EUR, GBP, HKD, ILS, JPY, NOK, SEK, SGD, USD, ZAR"
+          },
+          "ExchangeRate": {
+            "type": "number",
+            "description": "The factor used for conversion of an amount from one currency to another.\r\nThis reflects the price at which one currency was bought with another currency.",
+            "format": "double"
+          },
+          "RateType": {
+            "$ref": "#/components/schemas/OBExternalRateType2Code"
+          },
+          "ExpirationDateTime": {
+            "type": "string",
+            "description": "Specified date and time the exchange rate agreement will expire.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone.An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          }
+        },
+        "description": "Further detailed information on the exchange rate that has been used in the payment transaction."
+      },
+      "OBInternational1": {
+        "required": [
+          "CreditorAccount",
+          "CurrencyOfTransfer",
+          "EndToEndIdentification",
+          "InstructedAmount",
+          "InstructionIdentification"
+        ],
+        "type": "object",
+        "properties": {
+          "InstructionIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by an instructing party for an instructed party to unambiguously identify the\r\ninstruction.\r\nUsage: the instruction identification is a point to point reference that can be used between the instructing party\r\nand the\r\ninstructed party to refer to the individual instruction.It can be included in several messages related to the\r\ninstruction."
+          },
+          "EndToEndIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification assigned by the initiating party to unambiguously identify the transaction. This\r\nidentification is\r\npassed on, unchanged, throughout the entire end-to-end chain. Usage: The end-to-end identification can be used for\r\nreconciliation or to link tasks relating to the transaction.It can be included in several messages related to the\r\ntransaction.\r\nOB: The Faster Payments Scheme can only access 31 characters for the EndToEndIdentification field."
+          },
+          "CurrencyOfTransfer": {
+            "pattern": "^[A-Z]{3,3}$",
+            "type": "string",
+            "description": "Specifies the currency of the to be transferred amount, which is different from the currency of the debtor’s account."
+          },
+          "InstructedAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "ExchangeRateInformation": {
+            "$ref": "#/components/schemas/OBExchangeRate1"
+          },
+          "CreditorAgent": {
+            "$ref": "#/components/schemas/OBBranchAndFinancialInstitutionIdentification3"
+          },
+          "CreditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountCreditor3"
+          },
+          "DebtorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountDebtor4"
+          },
+          "RemittanceInformation": {
+            "$ref": "#/components/schemas/OBRemittanceInformation1"
+          },
+          "SupplementaryData": {
+            "$ref": "#/components/schemas/OBSupplementaryData1"
+          }
+        },
+        "description": "The Initiation payload is sent by the initiating party to the ASPSP. \r\nIt is used to request movement of funds from the debtor account to a creditor for a single international payment."
+      },
+      "OBExternalRateType2Code": {
+        "type": "string",
+        "enum": [
+          "Actual"
+        ]
+      },
+      "OBExchangeRate1": {
+        "required": [
+          "RateType",
+          "UnitCurrency"
+        ],
+        "type": "object",
+        "properties": {
+          "UnitCurrency": {
+            "pattern": "^[A-Z]{3,3}$",
+            "type": "string",
+            "description": "Currency in which the rate of exchange is expressed in a currency exchange. In the example 1GBP = xxxCUR, the unit currency is GBP.\r\nMust be one of the following: AUD, CAD, CHF, DKK, EUR, GBP, HKD, ILS, JPY, NOK, SEK, SGD, USD, ZAR"
+          },
+          "RateType": {
+            "$ref": "#/components/schemas/OBExternalRateType2Code"
+          }
+        },
+        "description": "Provides details on the currency exchange rate and contract."
+      },
+      "OBBranchAndFinancialInstitutionIdentification3": {
+        "type": "object",
+        "properties": {
+          "SchemeName": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string",
+            "description": "Name of the identification scheme, in a coded form as published in an external list."
+          },
+          "Identification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique and unambiguous identification of the servicing institution."
+          }
+        },
+        "description": "Party that manages the account on behalf of the account owner, that is manages the registration and booking of entries on the account,\r\ncalculates balances on the account and provides information about the account.\r\nThis is the servicer of the beneficiary account."
+      },
+      "OBWriteInternationalConsent1": {
+        "required": [
+          "Data",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataInternationalConsent1"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "OBWriteDataInternationalConsent1": {
+        "required": [
+          "Initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "Initiation": {
+            "$ref": "#/components/schemas/OBInternational1"
+          }
+        }
+      },
+      "OBWriteInternational1": {
+        "required": [
+          "Data",
+          "Risk"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataInternational1"
+          },
+          "Risk": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "OBWriteDataInternational1": {
+        "required": [
+          "ConsentId",
+          "Initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the consent resource."
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBInternational1"
+          }
+        }
+      },
+      "OBWriteInternationalResponse1": {
+        "required": [
+          "Data",
+          "Links",
+          "Meta"
+        ],
+        "type": "object",
+        "properties": {
+          "Data": {
+            "$ref": "#/components/schemas/OBWriteDataInternationalResponse1"
+          },
+          "Meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "Links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        }
+      },
+      "OBWriteDataInternationalResponse1": {
+        "required": [
+          "ConsentId",
+          "CreationDateTime",
+          "Initiation",
+          "InternationalPaymentId",
+          "Status",
+          "StatusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "InternationalPaymentId": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the international payment resource."
+          },
+          "ConsentId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the consent resource."
+          },
+          "CreationDateTime": {
+            "type": "string",
+            "description": "Date and time at which the message was created.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone. An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "Status": {
+            "$ref": "#/components/schemas/OBTransactionIndividualStatusCode"
+          },
+          "StatusUpdateDateTime": {
+            "type": "string",
+            "description": "Date and time at which the resource status was updated.\r\nAll dates in the JSON payloads are represented in ISO 8601 date-time format.\r\nAll date-time fields in responses must include the timezone. An example is below:\r\n2017-04-05T10:43:07+00:00",
+            "format": "date-time"
+          },
+          "ExchangeRateInformation": {
+            "$ref": "#/components/schemas/OBExchangeRate2"
+          },
+          "Initiation": {
+            "$ref": "#/components/schemas/OBInternational1"
+          }
+        }
+      }
+    }
+  },
+  "x-original-swagger-version": "2.0"
+}

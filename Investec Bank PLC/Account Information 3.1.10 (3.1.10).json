@@ -1,0 +1,2852 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Account Information 3.1.10",
+    "description": "Retrieve account and transactional information for Investec UK Private Banking clients.",
+    "termsOfService": "https://developer.investec.com/terms-of-use",
+    "contact": {
+      "name": "Investec Open API Team",
+      "url": "https://developer.investec.com/contact",
+      "email": "openapi@investec.co.uk"
+    },
+    "version": "3.1.10"
+  },
+  "paths": {
+    "/uk/open-banking/v3.1/aisp/account-access-consents/{consentId}": {
+      "get": {
+        "tags": [
+          "Account Access Consents"
+        ],
+        "summary": "Get Account Access Consent",
+        "description": "Get an account access consent",
+        "operationId": "GetAccountAccessConsent",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "consentId",
+            "description": "Consent id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadConsentResponse1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Account Access Consents"
+        ],
+        "summary": "Delete Account Access Consent",
+        "description": "Delete an account access consent",
+        "operationId": "DeleteAccountAccessConsent",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "consentId",
+            "description": "Consent id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Action performed successfully"
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/account-access-consents": {
+      "post": {
+        "tags": [
+          "Account Access Consents"
+        ],
+        "summary": "Create Account Access Consents",
+        "description": "Create an account access consent",
+        "operationId": "CreateAccountAccessConsents",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBReadConsent1"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBReadConsent1"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBReadConsent1"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBReadConsent1"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadConsentResponse1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/accounts": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Get Accounts",
+        "description": "Get Accounts for a PSU",
+        "operationId": "GetAccounts",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadAccount6"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/accounts/{AccountId}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Get Account",
+        "description": "Get an Account for a PSU",
+        "operationId": "GetAccount",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "path",
+            "description": "Account id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadAccount6"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/accounts/{AccountId}/balances": {
+      "get": {
+        "tags": [
+          "Balances"
+        ],
+        "summary": "Get Balances",
+        "description": "Get Balances for a PSU",
+        "operationId": "GetBalances",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBCashBalance1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/accounts/{AccountId}/beneficiaries": {
+      "get": {
+        "tags": [
+          "Beneficiaries"
+        ],
+        "summary": "Get Beneficiaries",
+        "description": "Get Beneficiaries for a specific account",
+        "operationId": "GetBeneficiariesById",
+        "parameters": [
+          {
+            "name": "AccountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadBeneficiary5"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/accounts/{accountId}/parties": {
+      "get": {
+        "tags": [
+          "Parties"
+        ],
+        "summary": "Get Parties",
+        "description": "Get details of account holder and operators",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadParty2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/accounts/{accountId}/party": {
+      "get": {
+        "tags": [
+          "Parties"
+        ],
+        "summary": "Get Party",
+        "description": "Get details of account holder",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadParty2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/party": {
+      "get": {
+        "tags": [
+          "Parties"
+        ],
+        "summary": "Get Party for a PSU",
+        "description": "Get details on the user that has authorised the account-access-consent",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadParty2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/accounts/{accountId}/statements": {
+      "get": {
+        "tags": [
+          "Statements"
+        ],
+        "summary": "Get Statements",
+        "description": "Get Statements By Account Id",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fromStatementDateTime",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "toStatementDateTime",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadStatement2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/accounts/{accountId}/statements/{statementId}": {
+      "get": {
+        "tags": [
+          "Statements"
+        ],
+        "summary": "Get Statement",
+        "description": "Get Statements by Statement Id",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "statementId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadStatement2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/accounts/{accountId}/statements/{statementId}/transactions": {
+      "get": {
+        "tags": [
+          "Statements"
+        ],
+        "summary": "Get Statements Transactions",
+        "description": "Get Statements Transaction By Statement Id",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "statementId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadStatement2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/aisp/accounts/{accountId}/transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get Transactions",
+        "description": "Get transactions for a specific account",
+        "operationId": "GetTransactions",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "toBookingDateTime",
+            "in": "query",
+            "description": "The UTC ISO 8601 Date Time to filter transactions TO\r\nNB Time component is optional - set to 00:00:00 for just Date.\r\nIf the Date Time contains a timezone, the ASPSP must ignore the timezone component.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fromBookingDateTime",
+            "in": "query",
+            "description": "The UTC ISO 8601 Date Time to filter transactions FROM\r\nNB Time component is optional - set to 00:00:00 for just Date.\r\nIf the Date Time contains a timezone, the ASPSP must ignore the timezone component.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBReadTransaction6"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://apisandbox.investec.com"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "ASP": {
+        "type": "object",
+        "properties": {
+          "gcn": {
+            "type": "string"
+          },
+          "reisids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReisidEntry"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "addressType": {
+            "type": "string"
+          },
+          "streetName": {
+            "type": "string"
+          },
+          "buildingNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "postCode": {
+            "type": "string"
+          },
+          "townName": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthoriseAccountsModel": {
+        "type": "object",
+        "properties": {
+          "externalProviderId": {
+            "type": "string",
+            "nullable": true
+          },
+          "aspAccounts": {
+            "$ref": "#/components/schemas/ASP"
+          },
+          "pbAccounts": {
+            "$ref": "#/components/schemas/PB"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DomainValidationError": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "readOnly": true
+          },
+          "errorCode": {
+            "$ref": "#/components/schemas/DomainValidationErrorCode"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DomainValidationErrorCode": {
+        "enum": [
+          "UK.OBIE.Field.Missing",
+          "UK.OBIE.Field.Invalid",
+          "UK.OBIE.Field.MissingOrInvalid",
+          "UK.Investec.Internal.InvalidState",
+          "UK.OBIE.UnexpectedError"
+        ],
+        "type": "string"
+      },
+      "EligibleAccountsRequest": {
+        "type": "object",
+        "properties": {
+          "gcn": {
+            "type": "string"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Links": {
+        "required": [
+          "self"
+        ],
+        "type": "object",
+        "description": "Links relevant to the payload",
+        "properties": {
+          "first": {
+            "type": "string",
+            "nullable": true
+          },
+          "last": {
+            "type": "string",
+            "nullable": true
+          },
+          "next": {
+            "type": "string",
+            "nullable": true
+          },
+          "prev": {
+            "type": "string",
+            "nullable": true
+          },
+          "self": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MetaData": {
+        "description": "Meta Data relevant to the payload",
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "firstAvailableDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastAvailableDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          },
+          "previousCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBAccount6": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusUpdateDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "accountType": {
+            "type": "string"
+          },
+          "accountSubType": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string",
+            "nullable": true
+          },
+          "openingDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "maturityDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "switchStatus": {
+            "type": "string"
+          },
+          "account": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBCashAccount5"
+            }
+          },
+          "servicer": {
+            "$ref": "#/components/schemas/OBBranchAndFinancialInstitutionIdentification5"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBActiveOrHistoricCurrencyAndAmount": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string"
+          },
+          "currency": {
+            "pattern": "^[A-Z]{3,3}$",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBAddressTypeCode": {
+        "enum": [
+          "Business",
+          "Correspondence",
+          "DeliveryTo",
+          "MailTo",
+          "POBox",
+          "Postal",
+          "Residential",
+          "Statement"
+        ],
+        "type": "string"
+      },
+      "OBApiFailureCodes": {
+        "enum": [
+          "UK.OBIE.BadRequest",
+          "UK.OBIE.ServiceUnavailable",
+          "UK.OBIE.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "OBApiFailureResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/OBApiFailureCodes"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DomainValidationError"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBBankTransactionCodeStructure1": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "subCode": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBBeneficiary5": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "beneficiaryId": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "beneficiaryType": {
+            "$ref": "#/components/schemas/OBBeneficiaryType1Code"
+          },
+          "reference": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "supplementaryData": {
+            "$ref": "#/components/schemas/OBSupplementaryData1"
+          },
+          "creditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccount5"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBBeneficiaryType1Code": {
+        "enum": [
+          "Trusted",
+          "Ordinary"
+        ],
+        "type": "string"
+      },
+      "OBBranchAndFinancialInstitutionIdentification5": {
+        "type": "object",
+        "properties": {
+          "schemeName": {
+            "type": "string"
+          },
+          "identification": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBBranchAndFinancialInstitutionIdentification6": {
+        "type": "object",
+        "properties": {
+          "schemeName": {
+            "type": "string"
+          },
+          "identification": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "postalAddress": {
+            "$ref": "#/components/schemas/OBPostalAddress6"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBCashAccount5": {
+        "type": "object",
+        "properties": {
+          "schemeName": {
+            "type": "string"
+          },
+          "identification": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBCashAccount6": {
+        "type": "object",
+        "properties": {
+          "schemeName": {
+            "$ref": "#/components/schemas/OBExternalAccountIdentification4Code"
+          },
+          "identification": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "secondaryIdentification": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBCashBalance1": {
+        "required": [
+          "amount"
+        ],
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "creditDebitIndicator": {
+            "type": "string"
+          },
+          "dateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "type": "string"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "creditLine": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBCreditLine1"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBCreditLine1": {
+        "type": "object",
+        "properties": {
+          "included": {
+            "type": "boolean"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OBExternalLimitType1Code"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBCurrencyExchange5": {
+        "type": "object",
+        "properties": {
+          "sourceCurrency": {
+            "pattern": "^[A-Z]{3,3}$",
+            "type": "string"
+          },
+          "targetCurrency": {
+            "pattern": "^[A-Z]{3,3}$",
+            "type": "string"
+          },
+          "unitCurrency": {
+            "pattern": "^[A-Z]{3,3}$",
+            "type": "string"
+          },
+          "exchangeRate": {
+            "type": "string"
+          },
+          "contractIdentification": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "quotationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "instructedAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBExternalAccountIdentification4Code": {
+        "enum": [
+          "UK.OBIE.IBAN",
+          "UK.OBIE.SortCodeAccountNumber",
+          "UK.Investec.RoutingCodeAccountNumber"
+        ],
+        "type": "string"
+      },
+      "OBExternalCardAuthorisationType1Code": {
+        "enum": [
+          "ConsumerDevice",
+          "Contactless",
+          "None",
+          "PIN"
+        ],
+        "type": "string"
+      },
+      "OBExternalCardSchemeType1Code": {
+        "enum": [
+          "AmericanExpress",
+          "Diners",
+          "Discover",
+          "MasterCard",
+          "VISA"
+        ],
+        "type": "string"
+      },
+      "OBExternalLimitType1Code": {
+        "enum": [
+          "Available",
+          "Credit",
+          "Emergency",
+          "Pre-Agreed",
+          "Temporary"
+        ],
+        "type": "string"
+      },
+      "OBMerchantDetails1": {
+        "type": "object",
+        "properties": {
+          "merchantName": {
+            "type": "string"
+          },
+          "merchantCategoryCode": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBPostalAddress6": {
+        "type": "object",
+        "properties": {
+          "addressType": {
+            "$ref": "#/components/schemas/OBAddressTypeCode"
+          },
+          "department": {
+            "maxLength": 70,
+            "type": "string",
+            "nullable": true
+          },
+          "subDepartment": {
+            "maxLength": 70,
+            "type": "string",
+            "nullable": true
+          },
+          "streetName": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "buildingNumber": {
+            "maxLength": 16,
+            "type": "string",
+            "nullable": true
+          },
+          "postCode": {
+            "maxLength": 16,
+            "type": "string"
+          },
+          "townName": {
+            "type": "string"
+          },
+          "countrySubDivision": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string"
+          },
+          "addressLine": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadAccount6": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBReadDataAccount5"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Void": {
+        "type": "object"
+      },
+      "OBReadBalance1": {
+        "required": [
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBReadDataBalance1"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadBeneficiary5": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBReadDataBeneficiary5"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadConsent1": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBReadData1"
+          },
+          "risk": {}
+        },
+        "additionalProperties": false
+      },
+      "OBReadConsentResponse1": {
+        "required": [
+          "links",
+          "meta"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBReadDataAccountAccessConsent"
+          },
+          "risk": {
+            "nullable": true
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadData1": {
+        "required": [
+          "permissions"
+        ],
+        "type": "object",
+        "properties": {
+          "permissions": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expirationDateTime": {
+            "type": "string"
+          },
+          "transactionFromDateTime": {
+            "type": "string"
+          },
+          "transactionToDateTime": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadDataAccount5": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBAccount6"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadDataAccountAccessConsent": {
+        "type": "object",
+        "properties": {
+          "consentId": {
+            "type": "string"
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusUpdateDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "expirationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "transactionFromDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "transactionToDateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadDataBalance1": {
+        "required": [
+          "balance"
+        ],
+        "type": "object",
+        "properties": {
+          "balance": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBCashBalance1"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadDataBeneficiary5": {
+        "type": "object",
+        "properties": {
+          "beneficiary": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBBeneficiary5"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadDataParty2": {
+        "type": "object",
+        "properties": {
+          "party": {
+            "$ref": "#/components/schemas/Party"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadDataStatement2": {
+        "type": "object",
+        "properties": {
+          "statement": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBStatement2"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadDataTransaction6": {
+        "type": "object",
+        "properties": {
+          "transaction": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBTransaction6"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadParty2": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBReadDataParty2"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadStatement2": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBReadDataStatement2"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBReadTransaction6": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBReadDataTransaction6"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBStatement2": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string"
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "statementDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "statementId": {
+            "type": "string"
+          },
+          "statementReference": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "statementAmount": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBStatementAmount1"
+            }
+          },
+          "statementBenefit": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBStatementBenefit1"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBStatementAmount1": {
+        "type": "object",
+        "properties": {
+          "creditDebitIndicator": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBStatementBenefit1": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBSupplementaryData1": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "OBTransaction6": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "transactionId": {
+            "maxLength": 210,
+            "type": "string"
+          },
+          "transactionReference": {
+            "maxLength": 210,
+            "type": "string"
+          },
+          "statementReference": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "creditDebitIndicator": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "bookingDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "valueDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "transactionInformation": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "addressLine": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "chargeAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "currencyExchange": {
+            "$ref": "#/components/schemas/OBCurrencyExchange5"
+          },
+          "bankTransactionCode": {
+            "$ref": "#/components/schemas/OBBankTransactionCodeStructure1"
+          },
+          "proprietaryBankTransactionCode": {
+            "$ref": "#/components/schemas/ProprietaryBankTransactionCodeStructure1"
+          },
+          "balance": {
+            "$ref": "#/components/schemas/OBTransactionCashBalance"
+          },
+          "merchantDetails": {
+            "$ref": "#/components/schemas/OBMerchantDetails1"
+          },
+          "creditorAgent": {
+            "$ref": "#/components/schemas/OBBranchAndFinancialInstitutionIdentification6"
+          },
+          "creditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccount6"
+          },
+          "debtorAgent": {
+            "$ref": "#/components/schemas/OBBranchAndFinancialInstitutionIdentification6"
+          },
+          "debtorAccount": {
+            "$ref": "#/components/schemas/OBCashAccount6"
+          },
+          "cardInstrument": {
+            "$ref": "#/components/schemas/OBTransactionCardInstrument1"
+          },
+          "supplementaryData": {
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBTransactionCardInstrument1": {
+        "type": "object",
+        "properties": {
+          "cardSchemeName": {
+            "$ref": "#/components/schemas/OBExternalCardSchemeType1Code"
+          },
+          "authorisationType": {
+            "$ref": "#/components/schemas/OBExternalCardAuthorisationType1Code"
+          },
+          "name": {
+            "type": "string"
+          },
+          "identification": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBTransactionCashBalance": {
+        "type": "object",
+        "properties": {
+          "creditDebitIndicator": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PB": {
+        "type": "object",
+        "properties": {
+          "gcn": {
+            "type": "string"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Party": {
+        "type": "object",
+        "properties": {
+          "partyId": {
+            "type": "string"
+          },
+          "partyType": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "fullLegalName": {
+            "type": "string"
+          },
+          "legalStructure": {
+            "type": "string"
+          },
+          "beneficialOwnership": {
+            "type": "string"
+          },
+          "accountRole": {
+            "type": "string"
+          },
+          "emailAddress": {
+            "type": "string"
+          },
+          "address": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProprietaryBankTransactionCodeStructure1": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "issuer": {
+            "maxLength": 35,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReisidEntry": {
+        "type": "object",
+        "properties": {
+          "reisid": {
+            "type": "string"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RejectAccountConsentModel": {
+        "type": "object",
+        "properties": {
+          "consentId": {
+            "type": "string"
+          },
+          "externalProviderId": {
+            "type": "string"
+          },
+          "gcn": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SCAResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "callback": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

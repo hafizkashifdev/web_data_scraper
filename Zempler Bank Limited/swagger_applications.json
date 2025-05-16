@@ -1,0 +1,2705 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "<br><p>The Zempler application API allows you to create applications to open new bank accounts. To help you start working with our application API as quickly and easily as possible, please have a read of the guide below. If you get stuck at any point, please email [api.support@zemplerbank.com](mailto:api.support@zemplerbank.com).</p><br><h3>Sandbox</h3><br><p>This Sandbox environment provides a means to test integrations prior to going live so it doesn't perform any live identity / company verification.</p><br><p>Please use the ClientID: <i>aps.swagger.client</i> and Secret: <i>secret</i> for sandbox.</p><br><p>You can test different responses by altering the final digit of the mobile number submitted - see the explanation below under the section titled \"TESTING DIFFERENT APPLICATION STATUSES\" for more details.</p><br><h3>Submit An Application For A Current Account</h3><br><p>To submit an application, please complete the following 4 simple steps:<ol><li>Retrieve the two parameters required to submit an application:<ul><li><strong>Industry Id</strong> - select the relevant industry id for the business you're opening the account for from the list of industries found in the /application/industries endpoint.</li><li><strong>Terms and conditions reference number</strong> - The product terms and conditions are available on the /products/products endpoint. It's important you refresh each time to get the latest version.</li></ul>This will provide a {tCsReferenceNumber} and associated URL. Terms and conditions need to be displayed to and approved by the applicant before you submit the application.</li><li>Submit all required data fields specified to the /application/business/limited endpoint. Data descriptions are available by clicking the 'Model' link under 'Data Type' heading in the parameter list.</li><li>The response you receive will contain a message describing the status of the application. If the application is approved immediately, the response will also contain the {sortCode} and {accountNumber} for the account. Otherwise, please store the {referenceNumber} to check the application status later.</li><li>If manual review or documents are required, the status can be checked later via the /application/status endpoint. You can also retrieve the {sortCode} and {accountNumber} from the /application/clearingInfo after the application is approved. Both endpoints require the {referenceNumber} returned in step 3.</li><ol></p><br><h3>Testing Different Application Statuses</h3><br><p>To test different responses to application requests, simply change the last number of the mobile number to:<ul><li>0 = 'Duplicate' application status</li><li>1 = 'InternalReview' status</li><li>2 = 'DocsRequired' status</li><li>3-9 = 'Approved' status</li></ul>(e.g. 07111222333 or 07111222338 would return 'Approved', while 07111222332 would return 'DocsRequired')</p>",
+    "version": "v1",
+    "title": "Zempler API - Applications"
+  },
+  "host": "apisandbox.zempler.tech",
+  "basePath": "/applications/",
+  "schemes": [ "https" ],
+  "paths": {
+    "/application/industries": {
+      "get": {
+        "tags": [ "Operations Applications - Application" ],
+        "summary": "Get the list of Industries.",
+        "operationId": "GETapplication/industries",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of industries",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Domain.ValueObjects.Industry" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "IndustryId": 2,
+                  "Name": "Accommodation and food service"
+                },
+                {
+                  "IndustryId": 3,
+                  "Name": "Administrative and support service"
+                },
+                {
+                  "IndustryId": 4,
+                  "Name": "Agriculture, Forestry and Fishing"
+                },
+                {
+                  "IndustryId": 5,
+                  "Name": "Arts, entertainment and recreation"
+                },
+                {
+                  "IndustryId": 6,
+                  "Name": "Construction"
+                },
+                {
+                  "IndustryId": 7,
+                  "Name": "Education"
+                },
+                {
+                  "IndustryId": 8,
+                  "Name": "Electricity, gas, steam and air conditioning supply"
+                },
+                {
+                  "IndustryId": 9,
+                  "Name": "Household"
+                },
+                {
+                  "IndustryId": 10,
+                  "Name": "Human health and social work"
+                },
+                {
+                  "IndustryId": 11,
+                  "Name": "Information and communication"
+                },
+                {
+                  "IndustryId": 12,
+                  "Name": "Manufacturing"
+                },
+                {
+                  "IndustryId": 13,
+                  "Name": "Mining"
+                },
+                {
+                  "IndustryId": 14,
+                  "Name": "Other service"
+                },
+                {
+                  "IndustryId": 15,
+                  "Name": "Professional, scientific and technical"
+                },
+                {
+                  "IndustryId": 16,
+                  "Name": "Public administration and defence; compulsory social security"
+                },
+                {
+                  "IndustryId": 17,
+                  "Name": "Real estate"
+                },
+                {
+                  "IndustryId": 18,
+                  "Name": "Regulated Financial and insurance"
+                },
+                {
+                  "IndustryId": 19,
+                  "Name": "Repair of motor vehicles and motorcycles"
+                },
+                {
+                  "IndustryId": 20,
+                  "Name": "Transportation and storage"
+                },
+                {
+                  "IndustryId": 21,
+                  "Name": "Unregulated Financial and insurance"
+                },
+                {
+                  "IndustryId": 22,
+                  "Name": "Water supply, sewerage, waste management and remediation"
+                },
+                {
+                  "IndustryId": 23,
+                  "Name": "Wholesale and retail trade"
+                },
+                {
+                  "IndustryId": 24,
+                  "Name": "Contracting & Consulting"
+                }
+              ]
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "aps_profile",
+              "applications",
+              "accounts",
+              "payments",
+              "eligibility"
+            ]
+          }
+        ]
+      }
+    },
+    "/application/occupations": {
+      "get": {
+        "tags": [
+          "Operations Applications - Application"
+        ],
+        "summary": "Get the list of occupations.",
+        "operationId": "GETapplication/occupations",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of occupations",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LEAPS.Applications.Contracts.Domain.ValueObjects.OccupationSOC"
+              }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "SOC": "2439",
+                  "UnitGroupTitle": "Business, research and administrative professionals n.e.c.",
+                  "APSOccupationCodeId": 0
+                },
+                {
+                  "SOC": "4111",
+                  "UnitGroupTitle": "National government administrative occupations",
+                  "APSOccupationCodeId": 0
+                }
+              ]
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "aps_profile",
+              "applications",
+              "accounts",
+              "payments",
+              "eligibility"
+            ]
+          }
+        ]
+      }
+    },
+    "/application/business/limited": {
+      "put": {
+        "tags": [ "Operations Applications - Application" ],
+        "summary": "Create business application for a Limited company.",
+        "operationId": "PUTapplication/business/limited",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "ltdApplicationData",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.LtdApplicationDescriptor" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application is created.",
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.ApplicationResponse" },
+            "examples": {
+              "application/json": {
+                "Message": "Your application has been successful.",
+                "ReferenceNumber": 1000000012,
+                "SortCode": "123456",
+                "AccountNumber": "12345678",
+                "DeliveryAddress_Postcode": "PC1 AAA",
+                "DeliveryAddress_FlatNoHouseName": "11",
+                "DeliveryAddress_HouseNumber": "222",
+                "DeliveryAddress_AddressLine": "XYZ Address Line",
+                "DeliveryAddress_TownOrCity": "London"
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The product is not accesible or not found.",
+            "schema": { "type": "NotAuthorisedException" }
+          },
+          "409": { "description": "Duplicate application request." }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/application/business/soletrader": {
+      "put": {
+        "tags": [ "Operations Applications - Application" ],
+        "summary": "Create business application for a Sole Trader.",
+        "operationId": "PUTapplication/business/soletrader",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "soleTraderApplicationData",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.SoleTraderApplicationDescriptor" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application is created.",
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.ApplicationResponse" },
+            "examples": {
+              "application/json": {
+                "Message": "Your application has been successful.",
+                "ReferenceNumber": 1000000012,
+                "SortCode": "123456",
+                "AccountNumber": "12345678",
+                "DeliveryAddress_Postcode": "PC1 AAA",
+                "DeliveryAddress_FlatNoHouseName": "11",
+                "DeliveryAddress_HouseNumber": "222",
+                "DeliveryAddress_AddressLine": "XYZ Address Line",
+                "DeliveryAddress_TownOrCity": "London"
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The product is not accesible or not found.",
+            "schema": { "type": "NotAuthorisedException" }
+          },
+          "409": { "description": "Duplicate application request." }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/application/business/publicsector": {
+      "put": {
+        "tags": [ "Operations Applications - Application" ],
+        "summary": "Create business application for a Public Sector.",
+        "operationId": "PUTapplication/business/publicsector",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "publicSectorApplicationData",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.PublicSectorApplicationDescriptor" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application is created.",
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.ApplicationResponse" },
+            "examples": {
+              "application/json": {
+                "Message": "Your application has been successful.",
+                "ReferenceNumber": 1000000012,
+                "SortCode": "123456",
+                "AccountNumber": "12345678",
+                "DeliveryAddress_Postcode": "PC1 AAA",
+                "DeliveryAddress_FlatNoHouseName": "11",
+                "DeliveryAddress_HouseNumber": "222",
+                "DeliveryAddress_AddressLine": "XYZ Address Line",
+                "DeliveryAddress_TownOrCity": "London"
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The product is not accesible or not found.",
+            "schema": { "type": "NotAuthorisedException" }
+          },
+          "409": { "description": "Duplicate application request." }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/application/business/charity": {
+      "put": {
+        "tags": [ "Operations Applications - Application" ],
+        "summary": "Create business application for a Charity.",
+        "operationId": "PUTapplication/business/charity",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "charityApplicationData",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.CharityApplicationDescriptor" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application is created.",
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.ApplicationResponse" },
+            "examples": {
+              "application/json": {
+                "Message": "Your application has been successful.",
+                "ReferenceNumber": 1000000012,
+                "SortCode": "123456",
+                "AccountNumber": "12345678",
+                "DeliveryAddress_Postcode": "PC1 AAA",
+                "DeliveryAddress_FlatNoHouseName": "11",
+                "DeliveryAddress_HouseNumber": "222",
+                "DeliveryAddress_AddressLine": "XYZ Address Line",
+                "DeliveryAddress_TownOrCity": "London"
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The product is not accesible or not found.",
+            "schema": { "type": "NotAuthorisedException" }
+          },
+          "409": { "description": "Duplicate application request." }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/application/business/partnership": {
+      "put": {
+        "tags": [ "Operations Applications - Application" ],
+        "summary": "Create business application for a Partnership.",
+        "operationId": "PUTapplication/business/partnership",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "partnershipApplicationData",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.PartnershipApplicationDescriptor" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application is created.",
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.ApplicationResponse" },
+            "examples": {
+              "application/json": {
+                "Message": "Your application has been successful.",
+                "ReferenceNumber": 1000000012,
+                "SortCode": "123456",
+                "AccountNumber": "12345678",
+                "DeliveryAddress_Postcode": "PC1 AAA",
+                "DeliveryAddress_FlatNoHouseName": "11",
+                "DeliveryAddress_HouseNumber": "222",
+                "DeliveryAddress_AddressLine": "XYZ Address Line",
+                "DeliveryAddress_TownOrCity": "London"
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The product is not accesible or not found.",
+            "schema": { "type": "NotAuthorisedException" }
+          },
+          "409": { "description": "Duplicate application request." }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/application/business/limitedliabilitypartnership": {
+      "put": {
+        "tags": [ "Operations Applications - Application" ],
+        "summary": "Create business application for a Limited Liability Partnership.",
+        "operationId": "PUTapplication/business/limitedliabilitypartnership",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "limitedLiabilityPartnershipApplicationData",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.LimitedLiabilityPartnershipApplicationDescriptor" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application is created.",
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.ApplicationResponse" },
+            "examples": {
+              "application/json": {
+                "Message": "Your application has been successful.",
+                "ReferenceNumber": 1000000012,
+                "SortCode": "123456",
+                "AccountNumber": "12345678",
+                "DeliveryAddress_Postcode": "PC1 AAA",
+                "DeliveryAddress_FlatNoHouseName": "11",
+                "DeliveryAddress_HouseNumber": "222",
+                "DeliveryAddress_AddressLine": "XYZ Address Line",
+                "DeliveryAddress_TownOrCity": "London"
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The product is not accesible or not found.",
+            "schema": { "type": "NotAuthorisedException" }
+          },
+          "409": { "description": "Duplicate application request." }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/application/personal": {
+      "put": {
+        "tags": [ "Operations Applications - Application" ],
+        "summary": "Create a personal application.",
+        "operationId": "PUTapplication/personal",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "personalApplicationData",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.PersonalApplicationDescriptor" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Application is created.",
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.ApplicationResponse" },
+            "examples": {
+              "application/json": {
+                "Message": "Your application has been successful.",
+                "ReferenceNumber": 1000000012,
+                "SortCode": "123456",
+                "AccountNumber": "12345678",
+                "DeliveryAddress_Postcode": "PC1 AAA",
+                "DeliveryAddress_FlatNoHouseName": "11",
+                "DeliveryAddress_HouseNumber": "222",
+                "DeliveryAddress_AddressLine": "XYZ Address Line",
+                "DeliveryAddress_TownOrCity": "London"
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The product is not accesible or not found.",
+            "schema": { "type": "NotAuthorisedException" }
+          },
+          "409": { "description": "Duplicate application request." }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/application/clearingInfo": {
+      "get": {
+        "tags": [ "Operations Applications - Application" ],
+        "summary": "Get the clearing information (sort code, account number) of the account the application is created for.",
+        "operationId": "GETapplication/clearingInfo?referenceNumber={referenceNumber}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "referenceNumber",
+            "in": "query",
+            "description": "The reference number of the application.",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Clearing information of the account the application is created for.",
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Domain.ValueObjects.ClearingInfo" },
+            "examples": {
+              "application/json": {
+                "SortCode": "123456",
+                "AccountNumber": "12345678"
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The application is not accessible by the provided Reference Number.",
+            "schema": { "type": "ApplicationNotFoundException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/application/status": {
+      "get": {
+        "tags": [ "Operations Applications - Application" ],
+        "summary": "Get the status of an application by its Reference Number.",
+        "operationId": "GETapplication/status?referenceNumber={referenceNumber}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "referenceNumber",
+            "in": "query",
+            "description": "The reference number of the application.",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status of the application is returned.",
+            "schema": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Domain.ValueObjects.ApplicationStatus" },
+            "examples": {
+              "application/json": {
+                "Status": "DocsRequired",
+                "StatusChangeDateTime": "2020-06-29T15:17:05.8300187+01:00",
+                "ChangeReason": "Awaiting further documentation to process the application."
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The application is not accessible by the provided Reference Number.",
+            "schema": { "type": "ApplicationNotFoundException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/info/version": {
+      "get": {
+        "tags": [ "Operations Applications - Service Information" ],
+        "operationId": "GETinfo/version",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "object" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LEAPS.Applications.Contracts.Domain.ValueObjects.Industry": {
+      "description": "The industry looked up by its Reference Number.",
+      "type": "object",
+      "properties": {
+        "industryId": {
+          "format": "int64",
+          "description": "The unique identifier of the industry.",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Name of the Industry.",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Domain.ValueObjects.OccupationSOC": {
+      "type": "object",
+      "properties": {
+        "soc": {
+          "type": "string"
+        },
+        "unitGroupTitle": {
+          "type": "string"
+        },
+        "apsOccupationCodeId": {
+          "format": "int32",
+          "description": "The Identifier of the records in OccupationCodes, a database table used by ConsumerApplicationFormBizService",
+          "type": "integer"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.LtdApplicationDescriptor": {
+      "description": "The descriptor class used to pass the details of the business application created for Limited company.",
+      "required": [ "companyRegistrationNumber", "registeredBusinessAddress_Postcode", "registeredBusinessAddress_AddressLine", "registeredBusinessAddress_TownOrCity", "businessName", "numberOfEmployees", "businessNameOnCard", "productId", "tCsReferenceNumber", "title", "firstName", "lastName", "dateOfBirth", "emailAddress", "mobileNumber", "workNumber", "homeAddress_Postcode", "homeAddress_AddressLine", "homeAddress_TownOrCity", "fscsAcknowledged" ],
+      "type": "object",
+      "properties": {
+        "companyRegistrationNumber": {
+          "description": "The company registration number of the organisation.",
+          "pattern": "^[a-zA-Z0-9]+$",
+          "maxLength": 8,
+          "type": "string"
+        },
+        "isContractorOrFreelancer": {
+          "description": "If true, the customer is a contractor or freelancer.",
+          "type": "boolean"
+        },
+        "registeredBusinessAddress_Postcode": {
+          "description": "The postcode of the organisation's registered business address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "registeredBusinessAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the organisation's registered business address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_HouseNumber": {
+          "description": "The house number of the organisation's registered business address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_AddressLine": {
+          "description": "The address line of the organisation's registered business address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_TownOrCity": {
+          "description": "The town/city of the organisation's registered business address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "businessName": {
+          "description": "The name of the organisation.",
+          "pattern": "^[a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "numberOfEmployees": {
+          "format": "int32",
+          "description": "Number of employees of the organisation. Please enter default value of “0” if this data is not available.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "businessNameOnCard": {
+          "description": "The business name that appears on the card. Optionally, please default to the first 21 characters of the applicant’s business name, if you do not wish to capture this information.",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 21,
+          "type": "string"
+        },
+        "website": {
+          "description": "The website of the organisation.",
+          "pattern": "(http(s)?://)?([\\w-]+\\.)+[\\w-]+(/[\\w- ;,./?%&=]*)?",
+          "type": "string"
+        },
+        "takeCardPayments": {
+          "description": "If true, the organisation takes card payments.",
+          "type": "boolean"
+        },
+        "selectedIndustry_IndustryId": {
+          "format": "int64",
+          "description": "The unique identifier of the selected industry.",
+          "type": "integer"
+        },
+        "selectedIndustry_SICCode": {
+          "description": "The SIC (Standard Industrial Classification of Economic Activities) code of the selected industry.",
+          "type": "string"
+        },
+        "selectedIndustry_OtherIndustryName": {
+          "description": "The name of the service in case the selected industry refers to \"Other service\"",
+          "pattern": "^[a-zA-Z \\-']+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "productId": {
+          "format": "int64",
+          "description": "The identifier of the product that the customer is applying to.",
+          "type": "integer"
+        },
+        "tCsReferenceNumber": {
+          "format": "int64",
+          "description": "The reference number of the Terms and Conditions that the customer signed off.",
+          "type": "integer"
+        },
+        "doContactOptionChecked": {
+          "description": "If set to true, it means the customer wants to be contacted by email or SMS for marketing purposes.",
+          "type": "boolean"
+        },
+        "doNotContactOptionChecked": {
+          "description": "If set to true, it indicates the customer doesn't want to be contacted by telephone or mail for marketing purposes.",
+          "type": "boolean"
+        },
+        "title": {
+          "description": "Title of the director.\r\nThe title can be one of the following values: Mr, Mrs, Miss, Ms, Dr",
+          "pattern": "^(Mr|Mrs|Miss|Ms|Dr)$",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "First name of the director.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the director.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "description": "Date of birth of the director.\r\nAge &gt;= 18.",
+          "type": "string"
+        },
+        "emailAddress": {
+          "description": "Email address of the director.",
+          "pattern": "^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$",
+          "type": "string"
+        },
+        "mobileNumber": {
+          "description": "Mobile number of the director.",
+          "pattern": "^07[0-9]{9}$",
+          "type": "string"
+        },
+        "workNumber": {
+          "description": "Work number of the director.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeNumber": {
+          "description": "Home Number of the director.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeAddress_Postcode": {
+          "description": "The postcode of the director's home address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "homeAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the director's home address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_HouseNumber": {
+          "description": "The house number of the director's home address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_AddressLine": {
+          "description": "The address line of the director's home address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_TownOrCity": {
+          "description": "The town/city of the director's home address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "trackingCode": {
+          "description": "Tracking code to track different campaigns sent to Zempler via the same client.",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "fscsAcknowledged": {
+          "description": "Acknowledgement of Financial Services Compensation Scheme Information Sheet.",
+          "type": "boolean"
+        },
+        "publicContracts": {
+          "description": "Is your business involved in any public contracts? e.g. government, council or NHS",
+          "type": "boolean"
+        },
+        "politicalConnections": {
+          "description": "Do you or any people within your business have political connections?",
+          "type": "boolean"
+        },
+        "paymentsOutsideUk": {
+          "description": "Does your business receive payments from outside the UK?",
+          "type": "boolean"
+        },
+        "countriesReceivePayments": {
+          "description": "Which countries do you receive payments from?\r\nArray of ISO country code (ISO_3166-1_alpha-2), max 6. Required only if paymentsOutsideUk is true.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "companyPscs": {
+          "description": "Must be provided for all the company PSCs within the company. Persons with significant control. PSCs info need to match the Companies House record.",
+          "items": {
+            "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.CompanyPscDescriptor"
+          },
+          "type": "array"
+        },
+        "individualPscs": {
+          "description": "Must be provided for all the individual PSCs within the company. Persons with significant control. PSCs info need to match the Companies House record.",
+          "items": {
+            "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.IndividualPscDescriptor"
+          },
+          "type": "array"
+        },
+        "annualTurnover": {
+          "format": "decimal",
+          "description": "Expected annual turnover",
+          "type": "number"
+        },
+        "expectCashDeposit": {
+          "description": "Do you expect to deposit cash to this account?",
+          "type": "boolean"
+        },
+        "howMuchCashWillYouDepositEachMonth": {
+          "format": "decimal",
+          "description": "How much cash will you deposit each month? Required if expectCashDeposit is 'True'",
+          "type": "number"
+        },
+        "mainSourceOfYourCashDeposits": {
+          "description": "What is the main source of your cash deposits? Required if expectCashDeposit is 'True'. Possible values: 'Salary', 'Customer payments', 'Savings', 'Another person', 'Another business', 'Other'",
+          "type": "string"
+        },
+        "describeWhereYourCashDepositsWillComeFrom": {
+          "description": "Please describe where your cash deposits will come from. Required if mainSourceOfYourCashDeposits is 'Other'",
+          "maxLength": 250,
+          "minLength": 0,
+          "type": "string"
+        },
+        "registeredBusinessAddress_IsTradingAddress": {
+          "description": "Null, True. False\r\nIf false, then Trading address fields are mandatory.",
+          "type": "boolean"
+        },
+        "tradingAddress_Postcode": {
+          "description": "The postcode of the organisation's trading address.\r\nRequired only if registeredBusinessAddress_IsTradingAddress is false.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "tradingAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the organisation's trading address.\r\nRequired only if tradingAddress_HouseNumber is null or empty and registeredBusinessAddress_IsTradingAddress is false.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "tradingAddress_HouseNumber": {
+          "description": "The house number of the organisation's trading address.\r\nRequired only, if tradingAddress_FlatNoHouseName is null or empty and registeredBusinessAddress_IsTradingAddress is false.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 14,
+          "type": "string"
+        },
+        "tradingAddress_AddressLine": {
+          "description": "The address line of the organisation's trading address.\r\nRequired only if registeredBusinessAddress_IsTradingAddress is false.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 35,
+          "type": "string"
+        },
+        "tradingAddress_TownOrCity": {
+          "description": "The town/city of the organisation's trading address.\r\nRequired only if registeredBusinessAddress_IsTradingAddress is false.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "mainAccount": {
+          "description": "Is this your main account?",
+          "type": "boolean"
+        },
+        "mainPurposeOfTheAccount": {
+          "description": "What do you plan to use your account for? Possible values: 'Get paid', 'Pay suppliers', 'Pay staff', 'Pay taxes', 'Pay bills', 'Save', 'Manage expenses' (user must select at least one and can select as many as apply)",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.IndividualPscDescriptor": {
+      "required": [
+        "title",
+        "firstName",
+        "lastName",
+        "dateOfBirth"
+      ],
+      "type": "object",
+      "properties": {
+        "title": {
+          "description": "Title of the PSC.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "firstName": {
+          "description": "First name of of the PSC.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the PSC.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "description": "Date of birth of the PSC. Age &gt;= 18.",
+          "type": "string"
+        },
+        "ukHomeAddress": {
+          "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.UkHomeAddressDescriptor",
+          "description": "ukHomeAddress OR nonUkHomeAddress is required"
+        },
+        "nonUkHomeAddress": {
+          "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.NonUkHomeAddressDescriptor",
+          "description": "ukHomeAddress OR nonUkHomeAddress is required"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.CompanyPscDescriptor": {
+      "required": [
+        "psc_CompanyId",
+        "companyName"
+      ],
+      "type": "object",
+      "properties": {
+        "psc_CompanyId": {
+          "description": "The company registration number of the organisation.",
+          "maxLength": 8,
+          "minLength": 0,
+          "type": "string"
+        },
+        "companyName": {
+          "description": "The name of the organisation",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.UkHomeAddressDescriptor": {
+      "required": [
+        "homeAddress_Postcode",
+        "homeAddress_HouseNumber",
+        "homeAddress_AddressLine",
+        "homeAddress_TownOrCity"
+      ],
+      "type": "object",
+      "properties": {
+        "homeAddress_Postcode": {
+          "description": "The postcode of the customer's address.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "homeAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the PSC's home address.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "homeAddress_HouseNumber": {
+          "description": "The house number of the PSC's home address.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "homeAddress_AddressLine": {
+          "description": "The address line of the PSC's home address.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "homeAddress_TownOrCity": {
+          "description": "The town/city of the PSC's home address.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.NonUkHomeAddressDescriptor": {
+      "required": [
+        "homeAddress_AddressLine1",
+        "homeAddress_AddressLine2",
+        "homeAddress_CountryId"
+      ],
+      "type": "object",
+      "properties": {
+        "homeAddress_AddressLine1": {
+          "description": "The Address line 1 of the PSC's home address.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "homeAddress_AddressLine2": {
+          "description": "The Address line 2 of the PSC's home address.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "homeAddress_AddressLine3": {
+          "description": "The Address line 3 of the PSC's home address.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "homeAddress_AddressLine4": {
+          "description": "The Address line 4 of the PSC's home address.",
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "homeAddress_CountryId": {
+          "description": "ISO country code of the PSC's home address. (ISO_3166-1_alpha-2.)",
+          "maxLength": 2,
+          "minLength": 2,
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.ApplicationResponse": {
+      "description": "The result of an application creation request",
+      "type": "object",
+      "properties": {
+        "message": {
+          "description": "Details about the outcome of creating an application.\r\nFor example, 'OK'",
+          "type": "string"
+        },
+        "referenceNumber": {
+          "format": "int64",
+          "description": "The reference number of the application.",
+          "type": "integer"
+        },
+        "sortCode": {
+          "description": "The Sort Code of the Account the customer applied for.",
+          "type": "string"
+        },
+        "accountNumber": {
+          "description": "The accountBalance number of the Account the customer applied for.",
+          "type": "string"
+        },
+        "deliveryAddress_Postcode": {
+          "description": "The postcode of the customer's delivery address.",
+          "type": "string"
+        },
+        "deliveryAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the customer's delivery address.",
+          "type": "string"
+        },
+        "deliveryAddress_HouseNumber": {
+          "description": "The house number of the customer's delivery address.",
+          "type": "string"
+        },
+        "deliveryAddress_AddressLine": {
+          "description": "The address line of the customer's delivery address.",
+          "type": "string"
+        },
+        "deliveryAddress_TownOrCity": {
+          "description": "The town/city of the customer's delivery address.",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.SoleTraderApplicationDescriptor": {
+      "description": "The descriptor class used to pass the details of the business application created for Sole Trader.",
+      "required": [ "businessName", "numberOfEmployees", "businessNameOnCard", "productId", "tCsReferenceNumber", "title", "firstName", "lastName", "dateOfBirth", "emailAddress", "mobileNumber", "workNumber", "homeAddress_Postcode", "homeAddress_AddressLine", "homeAddress_TownOrCity", "fscsAcknowledged", "nationality" ],
+      "type": "object",
+      "properties": {
+        "nationality": {
+          "description": "Your nationality. ISO Country code (ISO_3166-1_alpha-2.)",
+          "maxLength": 2,
+          "minLength": 2,
+          "type": "string"
+        },
+        "selectedOccupationSOCCode": {
+          "description": "SOC code",
+          "maxLength": 4,
+          "minLength": 4,
+          "type": "string"
+        },
+        "annualTurnover": {
+          "format": "double",
+          "description": "Expected annual turnover",
+          "type": "number"
+        },
+        "expectCashDeposit": {
+          "description": "Do you expect to deposit cash to this account?",
+          "type": "boolean"
+        },
+        "howMuchCashWillYouDepositEachMonth": {
+          "format": "double",
+          "description": "How much cash will you deposit each month? Required if expectCashDeposit is 'True'",
+          "type": "number"
+        },
+        "mainSourceOfYourCashDeposits": {
+          "description": "What is the main source of your cash deposits? Required if expectCashDeposit is 'True'. Possible values: 'Salary', 'Customer payments', 'Savings', 'Another person', 'Another business', 'Other'",
+          "type": "string"
+        },
+        "describeWhereYourCashDepositsWillComeFrom": {
+          "description": "Please describe where your cash deposits will come from. Required if mainSourceOfYourCashDeposits is 'Other'",
+          "maxLength": 250,
+          "minLength": 0,
+          "type": "string"
+        },
+        "businessName": {
+          "description": "The name of the organisation. Sole Trader businessName cannot include Ltd or Limited.",
+          "pattern": "^[a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "numberOfEmployees": {
+          "format": "int32",
+          "description": "Number of employees of the organisation. Please enter default value of “0” if this data is not available.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "businessNameOnCard": {
+          "description": "The business name that appears on the card. Optionally, please default to the first 21 characters of the applicant’s business name, if you do not wish to capture this information.",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 21,
+          "type": "string"
+        },
+        "website": {
+          "description": "The website of the organisation.",
+          "pattern": "(http(s)?://)?([\\w-]+\\.)+[\\w-]+(/[\\w- ;,./?%&=]*)?",
+          "type": "string"
+        },
+        "takeCardPayments": {
+          "description": "If true, the organisation takes card payments.",
+          "type": "boolean"
+        },
+        "selectedIndustry_IndustryId": {
+          "format": "int64",
+          "description": "The unique identifier of the selected industry.",
+          "type": "integer"
+        },
+        "selectedIndustry_SICCode": {
+          "description": "The SIC (Standard Industrial Classification of Economic Activities) code of the selected industry.",
+          "type": "string"
+        },
+        "selectedIndustry_OtherIndustryName": {
+          "description": "The name of the service in case the selected industry refers to \"Other service\"",
+          "pattern": "^[a-zA-Z \\-']+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "productId": {
+          "format": "int64",
+          "description": "The identifier of the product that the customer is applying to.",
+          "type": "integer"
+        },
+        "tCsReferenceNumber": {
+          "format": "int64",
+          "description": "The reference number of the Terms and Conditions that the customer signed off.",
+          "type": "integer"
+        },
+        "doContactOptionChecked": {
+          "description": "If set to true, it means the customer wants to be contacted by email or SMS for marketing purposes.",
+          "type": "boolean"
+        },
+        "doNotContactOptionChecked": {
+          "description": "If set to true, it indicates the customer doesn't want to be contacted by telephone or mail for marketing purposes.",
+          "type": "boolean"
+        },
+        "title": {
+          "description": "Title of the customer.\r\nThe title can be one of the following values: Mr, Mrs, Miss, Ms, Dr",
+          "pattern": "^(Mr|Mrs|Miss|Ms|Dr)$",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "First name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "description": "Date of birth of the customer.\nAge &gt;= 18.",
+          "type": "string"
+        },
+        "emailAddress": {
+          "description": "Email address of the customer.",
+          "pattern": "^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$",
+          "type": "string"
+        },
+        "mobileNumber": {
+          "description": "Mobile number of the customer.",
+          "pattern": "^07[0-9]{9}$",
+          "type": "string"
+        },
+        "workNumber": {
+          "description": "Work number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeNumber": {
+          "description": "Home Number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeAddress_Postcode": {
+          "description": "The postcode of the customer's home address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "homeAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the customer's home address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_HouseNumber": {
+          "description": "The house number of the customer's home address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_AddressLine": {
+          "description": "The address line of the customer's home address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_TownOrCity": {
+          "description": "The town/city of the customer's home address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "trackingCode": {
+          "description": "Tracking code to track different campaigns sent to Zempler via the same client.",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "fscsAcknowledged": {
+          "description": "Acknowledgement of Financial Services Compensation Scheme Information Sheet.",
+          "type": "boolean"
+        },
+        "mainAccount": {
+          "description": "Is this your main account?",
+          "type": "boolean"
+        },
+        "mainPurposeOfTheAccount": {
+          "description": "What do you plan to use your account for? Possible values: 'Get paid', 'Pay suppliers', 'Pay staff', 'Pay taxes', 'Pay bills', 'Save', 'Manage expenses' (user must select at least one and can select as many as apply)",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "example": {
+        "nationality": "fr",
+        "selectedOccupationSOCCode": "string",
+        "annualTurnover": 0.0,
+        "expectCashDeposit": true,
+        "howMuchCashWillYouDepositEachMonth": 0.0,
+        "mainSourceOfYourCashDeposits": "string",
+        "describeWhereYourCashDepositsWillComeFrom": "string",
+        "businessName": "string",
+        "numberOfEmployees": 0,
+        "businessNameOnCard": "string",
+        "website": "string",
+        "takeCardPayments": true,
+        "selectedIndustry_IndustryId": 0,
+        "selectedIndustry_SICCode": "string",
+        "selectedIndustry_OtherIndustryName": "string",
+        "productId": 0,
+        "tCsReferenceNumber": 0,
+        "doContactOptionChecked": true,
+        "doNotContactOptionChecked": true,
+        "title": "string",
+        "firstName": "string",
+        "lastName": "string",
+        "dateOfBirth": "2019-03-24T00:00:00",
+        "emailAddress": "string",
+        "mobileNumber": "string",
+        "workNumber": "string",
+        "homeNumber": "string",
+        "homeAddress_Postcode": "string",
+        "homeAddress_FlatNoHouseName": "string",
+        "homeAddress_HouseNumber": "string",
+        "homeAddress_AddressLine": "string",
+        "homeAddress_TownOrCity": "string",
+        "trackingCode": "string",
+        "fscsAcknowledged": true,
+        "mainAccount": true,
+        "mainPurposeOfTheAccount": [ "string", "string" ]
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.PublicSectorApplicationDescriptor": {
+      "description": "The descriptor class used to pass the details of the business application created for Public Sector.",
+      "required": [ "registeredBusinessAddress_Postcode", "registeredBusinessAddress_AddressLine", "registeredBusinessAddress_TownOrCity", "businessName", "numberOfEmployees", "businessNameOnCard", "productId", "tCsReferenceNumber", "title", "firstName", "lastName", "dateOfBirth", "emailAddress", "mobileNumber", "workNumber", "homeAddress_Postcode", "homeAddress_AddressLine", "homeAddress_TownOrCity", "fscsAcknowledged" ],
+      "type": "object",
+      "properties": {
+        "registeredBusinessAddress_Postcode": {
+          "description": "The postcode of the organisation's registered business address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "registeredBusinessAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the organisation's registered business address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_HouseNumber": {
+          "description": "The house number of the organisation's registered business address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_AddressLine": {
+          "description": "The address line of the organisation's registered business address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_TownOrCity": {
+          "description": "The town/city of the organisation's registered business address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "businessName": {
+          "description": "The name of the organisation.",
+          "pattern": "^[a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "numberOfEmployees": {
+          "format": "int32",
+          "description": "Number of employees of the organisation. Please enter default value of “0” if this data is not available.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "businessNameOnCard": {
+          "description": "The business name that appears on the card. Optionally, please default to the first 21 characters of the applicant’s business name, if you do not wish to capture this information.",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 21,
+          "type": "string"
+        },
+        "website": {
+          "description": "The website of the organisation.",
+          "pattern": "(http(s)?://)?([\\w-]+\\.)+[\\w-]+(/[\\w- ;,./?%&=]*)?",
+          "type": "string"
+        },
+        "takeCardPayments": {
+          "description": "If true, the organisation takes card payments.",
+          "type": "boolean"
+        },
+        "expectedMonthlySpend": {
+          "format": "int64",
+          "description": "The amount of the organisation expects to spend as average each month.",
+          "maximum": 9999999999,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "selectedIndustry_IndustryId": {
+          "format": "int64",
+          "description": "The unique identifier of the selected industry.",
+          "type": "integer"
+        },
+        "selectedIndustry_SICCode": {
+          "description": "The SIC (Standard Industrial Classification of Economic Activities) code of the selected industry.",
+          "type": "string"
+        },
+        "selectedIndustry_OtherIndustryName": {
+          "description": "The name of the service in case the selected industry refers to \"Other service\"",
+          "pattern": "^[a-zA-Z \\-']+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "productId": {
+          "format": "int64",
+          "description": "The identifier of the product that the customer is applying to.",
+          "type": "integer"
+        },
+        "tCsReferenceNumber": {
+          "format": "int64",
+          "description": "The reference number of the Terms and Conditions that the customer signed off.",
+          "type": "integer"
+        },
+        "doContactOptionChecked": {
+          "description": "If set to true, it means the customer wants to be contacted by email or SMS for marketing purposes.",
+          "type": "boolean"
+        },
+        "doNotContactOptionChecked": {
+          "description": "If set to true, it indicates the customer doesn't want to be contacted by telephone or mail for marketing purposes.",
+          "type": "boolean"
+        },
+        "title": {
+          "description": "Title of the customer.\r\nThe title can be one of the following values: Mr, Mrs, Miss, Ms, Dr",
+          "pattern": "^(Mr|Mrs|Miss|Ms|Dr)$",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "First name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "description": "Date of birth of the customer.\nAge &gt;= 18.",
+          "type": "string"
+        },
+        "emailAddress": {
+          "description": "Email address of the customer.",
+          "pattern": "^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$",
+          "type": "string"
+        },
+        "mobileNumber": {
+          "description": "Mobile number of the customer.",
+          "pattern": "^07[0-9]{9}$",
+          "type": "string"
+        },
+        "workNumber": {
+          "description": "Work number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeNumber": {
+          "description": "Home Number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeAddress_Postcode": {
+          "description": "The postcode of the customer's home address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "homeAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the customer's home address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_HouseNumber": {
+          "description": "The house number of the customer's home address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_AddressLine": {
+          "description": "The address line of the customer's home address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_TownOrCity": {
+          "description": "The town/city of the customer's home address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "trackingCode": {
+          "description": "Tracking code to track different campaigns sent to Zempler via the same client.",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "fscsAcknowledged": {
+          "description": "Acknowledgement of Financial Services Compensation Scheme Information Sheet.",
+          "type": "boolean"
+        },
+        "publicContracts": {
+          "description": "Is your business involved in any public contracts? e.g. government, council or NHS",
+          "type": "boolean"
+        },
+        "politicalConnections": {
+          "description": "Do you or any people within your business have political connections?",
+          "type": "boolean"
+        },
+        "paymentsOutsideUk": {
+          "description": "Does your business receive payments from outside the UK?",
+          "type": "boolean"
+        },
+        "countriesReceivePayments": {
+          "description": "Which countries do you receive payments from?\r\nArray of ISO country code (ISO_3166-1_alpha-2), max 6.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "annualTurnover": {
+          "format": "double",
+          "description": "Expected annual turnover",
+          "type": "number"
+        },
+        "expectCashDeposit": {
+          "description": "Do you expect to deposit cash to this account?",
+          "type": "boolean"
+        },
+        "howMuchCashWillYouDepositEachMonth": {
+          "format": "double",
+          "description": "How much cash will you deposit each month? Required if expectCashDeposit is 'True'",
+          "type": "number"
+        },
+        "mainSourceOfYourCashDeposits": {
+          "description": "What is the main source of your cash deposits? Required if expectCashDeposit is 'True'. Possible values: 'Salary', 'Customer payments', 'Savings', 'Another person', 'Another business', 'Other'",
+          "maxLength": 30,
+          "minLength": 0,
+          "type": "string"
+        },
+        "describeWhereYourCashDepositsWillComeFrom": {
+          "description": "Please describe where your cash deposits will come from. Required if mainSourceOfYourCashDeposits is 'Other'",
+          "maxLength": 250,
+          "minLength": 0,
+          "type": "string"
+        },
+        "mainAccount": {
+          "description": "Is this your main account?",
+          "type": "boolean"
+        },
+        "mainPurposeOfTheAccount": {
+          "description": "What do you plan to use your account for? Possible values: 'Get paid', 'Pay suppliers', 'Pay staff', 'Pay taxes', 'Pay bills', 'Save', 'Manage expenses' (user must select at least one and can select as many as apply)",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.CharityApplicationDescriptor": {
+      "description": "The descriptor class used to pass the details of the business application created for a Charity.",
+      "required": [ "companyRegistrationNumber", "registeredBusinessAddress_Postcode", "registeredBusinessAddress_AddressLine", "registeredBusinessAddress_TownOrCity", "businessName", "numberOfEmployees", "businessNameOnCard", "productId", "tCsReferenceNumber", "title", "firstName", "lastName", "dateOfBirth", "emailAddress", "mobileNumber", "workNumber", "homeAddress_Postcode", "homeAddress_AddressLine", "homeAddress_TownOrCity", "fscsAcknowledged" ],
+      "type": "object",
+      "properties": {
+        "companyRegistrationNumber": {
+          "description": "The company registration number of the organisation.",
+          "pattern": "^[a-zA-Z0-9]+$",
+          "maxLength": 8,
+          "type": "string"
+        },
+        "registeredBusinessAddress_Postcode": {
+          "description": "The postcode of the organisation's registered business address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "registeredBusinessAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the organisation's registered business address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_HouseNumber": {
+          "description": "The house number of the organisation's registered business address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_AddressLine": {
+          "description": "The address line of the organisation's registered business address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_TownOrCity": {
+          "description": "The town/city of the organisation's registered business address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "businessName": {
+          "description": "The name of the organisation.",
+          "pattern": "^[a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "numberOfEmployees": {
+          "format": "int32",
+          "description": "Number of employees of the organisation. Please enter default value of “0” if this data is not available.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "businessNameOnCard": {
+          "description": "The business name that appears on the card. Optionally, please default to the first 21 characters of the applicant’s business name, if you do not wish to capture this information.",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 21,
+          "type": "string"
+        },
+        "website": {
+          "description": "The website of the organisation.",
+          "pattern": "(http(s)?://)?([\\w-]+\\.)+[\\w-]+(/[\\w- ;,./?%&=]*)?",
+          "type": "string"
+        },
+        "takeCardPayments": {
+          "description": "If true, the organisation takes card payments.",
+          "type": "boolean"
+        },
+        "expectedMonthlySpend": {
+          "format": "int64",
+          "description": "The amount of the organisation expects to spend as average each month.",
+          "maximum": 9999999999,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "selectedIndustry_IndustryId": {
+          "format": "int64",
+          "description": "The unique identifier of the selected industry.",
+          "type": "integer"
+        },
+        "selectedIndustry_SICCode": {
+          "description": "The SIC (Standard Industrial Classification of Economic Activities) code of the selected industry.",
+          "type": "string"
+        },
+        "selectedIndustry_OtherIndustryName": {
+          "description": "The name of the service in case the selected industry refers to \"Other service\"",
+          "pattern": "^[a-zA-Z \\-']+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "productId": {
+          "format": "int64",
+          "description": "The identifier of the product that the customer is applying to.",
+          "type": "integer"
+        },
+        "tCsReferenceNumber": {
+          "format": "int64",
+          "description": "The reference number of the Terms and Conditions that the customer signed off.",
+          "type": "integer"
+        },
+        "doContactOptionChecked": {
+          "description": "If set to true, it means the customer wants to be contacted by email or SMS for marketing purposes.",
+          "type": "boolean"
+        },
+        "doNotContactOptionChecked": {
+          "description": "If set to true, it indicates the customer doesn't want to be contacted by telephone or mail for marketing purposes.",
+          "type": "boolean"
+        },
+        "title": {
+          "description": "Title of the customer.\r\nThe title can be one of the following values: Mr, Mrs, Miss, Ms, Dr",
+          "pattern": "^(Mr|Mrs|Miss|Ms|Dr)$",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "First name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "description": "Date of birth of the customer.\nAge &gt;= 18.",
+          "type": "string"
+        },
+        "emailAddress": {
+          "description": "Email address of the customer.",
+          "pattern": "^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$\n",
+          "type": "string"
+        },
+        "mobileNumber": {
+          "description": "Mobile number of the customer.",
+          "pattern": "^07[0-9]{9}$",
+          "type": "string"
+        },
+        "workNumber": {
+          "description": "Work number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeNumber": {
+          "description": "Home Number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeAddress_Postcode": {
+          "description": "The postcode of the customer's home address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "homeAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the customer's home address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_HouseNumber": {
+          "description": "The house number of the customer's home address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_AddressLine": {
+          "description": "The address line of the customer's home address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_TownOrCity": {
+          "description": "The town/city of the customer's home address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "trackingCode": {
+          "description": "Tracking code to track different campaigns sent to Zempler via the same client.",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "fscsAcknowledged": {
+          "description": "Acknowledgement of Financial Services Compensation Scheme Information Sheet.",
+          "type": "boolean"
+        },
+        "publicContracts": {
+          "description": "Is your business involved in any public contracts? e.g. government, council or NHS",
+          "type": "boolean"
+        },
+        "politicalConnections": {
+          "description": "Do you or any people within your business have political connections?",
+          "type": "boolean"
+        },
+        "paymentsOutsideUk": {
+          "description": "Does your business receive payments from outside the UK?",
+          "type": "boolean"
+        },
+        "countriesReceivePayments": {
+          "description": "Which countries do you receive payments from?\r\nArray of ISO country code (ISO_3166-1_alpha-2), max 6.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "annualTurnover": {
+          "format": "double",
+          "description": "Expected annual turnover",
+          "type": "number"
+        },
+        "expectCashDeposit": {
+          "description": "Do you expect to deposit cash to this account?",
+          "type": "boolean"
+        },
+        "howMuchCashWillYouDepositEachMonth": {
+          "format": "double",
+          "description": "How much cash will you deposit each month? Required if expectCashDeposit is 'True'",
+          "type": "number"
+        },
+        "mainSourceOfYourCashDeposits": {
+          "description": "What is the main source of your cash deposits? Required if expectCashDeposit is 'True'. Possible values: 'Salary', 'Customer payments', 'Savings', 'Another person', 'Another business', 'Other'",
+          "maxLength": 30,
+          "minLength": 0,
+          "type": "string"
+        },
+        "describeWhereYourCashDepositsWillComeFrom": {
+          "description": "Please describe where your cash deposits will come from. Required if mainSourceOfYourCashDeposits is 'Other'",
+          "maxLength": 250,
+          "minLength": 0,
+          "type": "string"
+        },
+        "mainAccount": {
+          "description": "Is this your main account?",
+          "type": "boolean"
+        },
+        "mainPurposeOfTheAccount": {
+          "description": "What do you plan to use your account for? Possible values: 'Get paid', 'Pay suppliers', 'Pay staff', 'Pay taxes', 'Pay bills', 'Save', 'Manage expenses' (user must select at least one and can select as many as apply)",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.PartnershipApplicationDescriptor": {
+      "description": "The descriptor class used to pass the details of the business application created for a Partnership.",
+      "required": [ "partners", "registeredBusinessAddress_Postcode", "registeredBusinessAddress_AddressLine", "registeredBusinessAddress_TownOrCity", "businessName", "numberOfEmployees", "businessNameOnCard", "productId", "tCsReferenceNumber", "title", "firstName", "lastName", "dateOfBirth", "emailAddress", "mobileNumber", "workNumber", "homeAddress_Postcode", "homeAddress_AddressLine", "homeAddress_TownOrCity", "fscsAcknowledged" ],
+      "type": "object",
+      "properties": {
+        "partners": {
+          "description": "The list of Partners.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.PartnershipPartnerDescriptor" }
+        },
+        "registeredBusinessAddress_Postcode": {
+          "description": "The postcode of the organisation's registered business address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "registeredBusinessAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the organisation's registered business address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_HouseNumber": {
+          "description": "The house number of the organisation's registered business address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_AddressLine": {
+          "description": "The address line of the organisation's registered business address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_TownOrCity": {
+          "description": "The town/city of the organisation's registered business address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "businessName": {
+          "description": "The name of the organisation.",
+          "pattern": "^[a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "numberOfEmployees": {
+          "format": "int32",
+          "description": "Number of employees of the organisation. Please enter default value of “0” if this data is not available.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "businessNameOnCard": {
+          "description": "The business name that appears on the card. Optionally, please default to the first 21 characters of the applicant’s business name, if you do not wish to capture this information.",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 21,
+          "type": "string"
+        },
+        "website": {
+          "description": "The website of the organisation.",
+          "pattern": "(http(s)?://)?([\\w-]+\\.)+[\\w-]+(/[\\w- ;,./?%&=]*)?",
+          "type": "string"
+        },
+        "takeCardPayments": {
+          "description": "If true, the organisation takes card payments.",
+          "type": "boolean"
+        },
+        "expectedMonthlySpend": {
+          "format": "int64",
+          "description": "The amount of the organisation expects to spend as average each month.",
+          "maximum": 9999999999,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "selectedIndustry_IndustryId": {
+          "format": "int64",
+          "description": "The unique identifier of the selected industry.",
+          "type": "integer"
+        },
+        "selectedIndustry_SICCode": {
+          "description": "The SIC (Standard Industrial Classification of Economic Activities) code of the selected industry.",
+          "type": "string"
+        },
+        "selectedIndustry_OtherIndustryName": {
+          "description": "The name of the service in case the selected industry refers to \"Other service\"",
+          "pattern": "^[a-zA-Z \\-']+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "productId": {
+          "format": "int64",
+          "description": "The identifier of the product that the customer is applying to.",
+          "type": "integer"
+        },
+        "tCsReferenceNumber": {
+          "format": "int64",
+          "description": "The reference number of the Terms and Conditions that the customer signed off.",
+          "type": "integer"
+        },
+        "doContactOptionChecked": {
+          "description": "If set to true, it means the customer wants to be contacted by email or SMS for marketing purposes.",
+          "type": "boolean"
+        },
+        "doNotContactOptionChecked": {
+          "description": "If set to true, it indicates the customer doesn't want to be contacted by telephone or mail for marketing purposes.",
+          "type": "boolean"
+        },
+        "title": {
+          "description": "Title of the customer.\r\nThe title can be one of the following values: Mr, Mrs, Miss, Ms, Dr",
+          "pattern": "^(Mr|Mrs|Miss|Ms|Dr)$",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "First name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "description": "Date of birth of the customer.\nAge &gt;= 18.",
+          "type": "string"
+        },
+        "emailAddress": {
+          "description": "Email address of the customer.",
+          "pattern": "^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$",
+          "type": "string"
+        },
+        "mobileNumber": {
+          "description": "Mobile number of the customer.",
+          "pattern": "^07[0-9]{9}$",
+          "type": "string"
+        },
+        "workNumber": {
+          "description": "Work number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeNumber": {
+          "description": "Home Number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeAddress_Postcode": {
+          "description": "The postcode of the customer's home address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "homeAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the customer's home address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_HouseNumber": {
+          "description": "The house number of the customer's home address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_AddressLine": {
+          "description": "The address line of the customer's home address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_TownOrCity": {
+          "description": "The town/city of the customer's home address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "trackingCode": {
+          "description": "Tracking code to track different campaigns sent to Zempler via the same client.",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "fscsAcknowledged": {
+          "description": "Acknowledgement of Financial Services Compensation Scheme Information Sheet.",
+          "type": "boolean"
+        },
+        "publicContracts": {
+          "description": "Is your business involved in any public contracts? e.g. government, council or NHS",
+          "type": "boolean"
+        },
+        "politicalConnections": {
+          "description": "Do you or any people within your business have political connections?",
+          "type": "boolean"
+        },
+        "paymentsOutsideUk": {
+          "description": "Does your business receive payments from outside the UK?",
+          "type": "boolean"
+        },
+        "countriesReceivePayments": {
+          "description": "Which countries do you receive payments from?\r\nArray of ISO country code (ISO_3166-1_alpha-2), max 6.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "annualTurnover": {
+          "format": "double",
+          "description": "Expected annual turnover",
+          "type": "number"
+        },
+        "expectCashDeposit": {
+          "description": "Do you expect to deposit cash to this account?",
+          "type": "boolean"
+        },
+        "howMuchCashWillYouDepositEachMonth": {
+          "format": "double",
+          "description": "How much cash will you deposit each month? Required if expectCashDeposit is 'True'",
+          "type": "number"
+        },
+        "mainSourceOfYourCashDeposits": {
+          "description": "What is the main source of your cash deposits? Required if expectCashDeposit is 'True'. Possible values: 'Salary', 'Customer payments', 'Savings', 'Another person', 'Another business', 'Other'",
+          "maxLength": 30,
+          "minLength": 0,
+          "type": "string"
+        },
+        "describeWhereYourCashDepositsWillComeFrom": {
+          "description": "Please describe where your cash deposits will come from. Required if mainSourceOfYourCashDeposits is 'Other'",
+          "maxLength": 250,
+          "minLength": 0,
+          "type": "string"
+        },
+        "mainAccount": {
+          "description": "Is this your main account?",
+          "type": "boolean"
+        },
+        "mainPurposeOfTheAccount": {
+          "description": "What do you plan to use your account for? Possible values: 'Get paid', 'Pay suppliers', 'Pay staff', 'Pay taxes', 'Pay bills', 'Save', 'Manage expenses' (user must select at least one and can select as many as apply)",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.PartnershipPartnerDescriptor": {
+      "description": "The descriptor of a Partner.\r\nAt least 1 PartnershipPartner must be provided",
+      "required": [ "firstName", "lastName" ],
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "description": "The first name of the Partner.",
+          "pattern" : "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "lastName": {
+          "description": "The last name of the Partner.",
+          "pattern" : "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.LimitedLiabilityPartnershipApplicationDescriptor": {
+      "description": "The descriptor class used to pass the details of the business application created for a Limited Liability Partnership.",
+      "required": [ "partners", "registeredBusinessAddress_Postcode", "registeredBusinessAddress_AddressLine", "registeredBusinessAddress_TownOrCity", "businessName", "numberOfEmployees", "businessNameOnCard", "productId", "tCsReferenceNumber", "title", "firstName", "lastName", "dateOfBirth", "emailAddress", "mobileNumber", "workNumber", "homeAddress_Postcode", "homeAddress_AddressLine", "homeAddress_TownOrCity", "fscsAcknowledged" ],
+      "type": "object",
+      "properties": {
+        "partners": {
+          "description": "The list of Partners.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/LEAPS.Applications.Contracts.Descriptors.LimitedLiabilityPartnershipPartnerDescriptor" }
+        },
+        "registeredBusinessAddress_Postcode": {
+          "description": "The postcode of the organisation's registered business address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "registeredBusinessAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the organisation's registered business address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_HouseNumber": {
+          "description": "The house number of the organisation's registered business address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_AddressLine": {
+          "description": "The address line of the organisation's registered business address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "registeredBusinessAddress_TownOrCity": {
+          "description": "The town/city of the organisation's registered business address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "businessName": {
+          "description": "The name of the organisation.",
+          "pattern": "^[a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "numberOfEmployees": {
+          "format": "int32",
+          "description": "Number of employees of the organisation. Please enter default value of “0” if this data is not available.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "businessNameOnCard": {
+          "description": "The business name that appears on the card. Optionally, please default to the first 21 characters of the applicant’s business name, if you do not wish to capture this information.",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9 /\\-&.,'()]+$",
+          "maxLength": 21,
+          "type": "string"
+        },
+        "website": {
+          "description": "The website of the organisation.",
+          "pattern": "(http(s)?://)?([\\w-]+\\.)+[\\w-]+(/[\\w- ;,./?%&=]*)?",
+          "type": "string"
+        },
+        "takeCardPayments": {
+          "description": "If true, the organisation takes card payments.",
+          "type": "boolean"
+        },
+        "expectedMonthlySpend": {
+          "format": "int64",
+          "description": "The amount of the organisation expects to spend as average each month.",
+          "maximum": 9999999999,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "selectedIndustry_IndustryId": {
+          "format": "int64",
+          "description": "The unique identifier of the selected industry.",
+          "type": "integer"
+        },
+        "selectedIndustry_SICCode": {
+          "description": "The SIC (Standard Industrial Classification of Economic Activities) code of the selected industry.",
+          "type": "string"
+        },
+        "selectedIndustry_OtherIndustryName": {
+          "description": "The name of the service in case the selected industry refers to \"Other service\"",
+          "pattern": "^[a-zA-Z \\-']+$",
+          "maxLength": 50,
+          "minLength": 3,
+          "type": "string"
+        },
+        "productId": {
+          "format": "int64",
+          "description": "The identifier of the product that the customer is applying to.",
+          "type": "integer"
+        },
+        "tCsReferenceNumber": {
+          "format": "int64",
+          "description": "The reference number of the Terms and Conditions that the customer signed off.",
+          "type": "integer"
+        },
+        "doContactOptionChecked": {
+          "description": "If set to true, it means the customer wants to be contacted by email or SMS for marketing purposes.",
+          "type": "boolean"
+        },
+        "doNotContactOptionChecked": {
+          "description": "If set to true, it indicates the customer doesn't want to be contacted by telephone or mail for marketing purposes.",
+          "type": "boolean"
+        },
+        "title": {
+          "description": "Title of the customer.\r\nThe title can be one of the following values: Mr, Mrs, Miss, Ms, Dr",
+          "pattern": "^(Mr|Mrs|Miss|Ms|Dr)$",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "First name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "description": "Date of birth of the customer.\nAge &gt;= 18.",
+          "type": "string"
+        },
+        "emailAddress": {
+          "description": "Email address of the customer.",
+          "pattern": "^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$",
+          "type": "string"
+        },
+        "mobileNumber": {
+          "description": "Mobile number of the customer.",
+          "pattern": "^07[0-9]{9}$",
+          "type": "string"
+        },
+        "workNumber": {
+          "description": "Work number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeNumber": {
+          "description": "Home Number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeAddress_Postcode": {
+          "description": "The postcode of the customer's home address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "homeAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the customer's home address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_HouseNumber": {
+          "description": "The house number of the customer's home address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_AddressLine": {
+          "description": "The address line of the customer's home address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_TownOrCity": {
+          "description": "The town/city of the customer's home address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "trackingCode": {
+          "description": "Tracking code to track different campaigns sent to Zempler via the same client.",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "fscsAcknowledged": {
+          "description": "Acknowledgement of Financial Services Compensation Scheme Information Sheet.",
+          "type": "boolean"
+        },
+        "publicContracts": {
+          "description": "Is your business involved in any public contracts? e.g. government, council or NHS",
+          "type": "boolean"
+        },
+        "politicalConnections": {
+          "description": "Do you or any people within your business have political connections?",
+          "type": "boolean"
+        },
+        "paymentsOutsideUk": {
+          "description": "Does your business receive payments from outside the UK?",
+          "type": "boolean"
+        },
+        "countriesReceivePayments": {
+          "description": "Which countries do you receive payments from?\r\nArray of ISO country code (ISO_3166-1_alpha-2), max 6.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "companyRegistrationNumber": {
+          "description": "The company registration number of the organisation.",
+          "pattern": "^[a-zA-Z0-9]+$",
+          "minLength": 8,
+          "maxLength": 8,
+          "type": "string"
+        },
+        "annualTurnover": {
+          "format": "double",
+          "description": "Expected annual turnover",
+          "type": "number"
+        },
+        "expectCashDeposit": {
+          "description": "Do you expect to deposit cash to this account?",
+          "type": "boolean"
+        },
+        "howMuchCashWillYouDepositEachMonth": {
+          "format": "double",
+          "description": "How much cash will you deposit each month? Required if expectCashDeposit is 'True'",
+          "type": "number"
+        },
+        "mainSourceOfYourCashDeposits": {
+          "description": "What is the main source of your cash deposits? Required if expectCashDeposit is 'True'. Possible values: 'Salary', 'Customer payments', 'Savings', 'Another person', 'Another business', 'Other'",
+          "maxLength": 30,
+          "minLength": 0,
+          "type": "string"
+        },
+        "describeWhereYourCashDepositsWillComeFrom": {
+          "description": "Please describe where your cash deposits will come from. Required if mainSourceOfYourCashDeposits is 'Other'",
+          "maxLength": 250,
+          "minLength": 0,
+          "type": "string"
+        },
+        "mainAccount": {
+          "description": "Is this your main account?",
+          "type": "boolean"
+        },
+        "mainPurposeOfTheAccount": {
+          "description": "What do you plan to use your account for? Possible values: 'Get paid', 'Pay suppliers', 'Pay staff', 'Pay taxes', 'Pay bills', 'Save', 'Manage expenses' (user must select at least one and can select as many as apply)",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.LimitedLiabilityPartnershipPartnerDescriptor": {
+      "description": "The descriptor of a Partner.\r\nAt least 1 PartnershipPartner must be provided",
+      "required": [ "firstName", "lastName" ],
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "description": "The first name of the Partner.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "lastName": {
+          "description": "The last name of the Partner.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Descriptors.PersonalApplicationDescriptor": {
+      "description": "The descriptor class used to pass the details of the personal application.",
+      "required": [ "productId", "tCsReferenceNumber", "title", "firstName", "lastName", "dateOfBirth", "emailAddress", "mobileNumber", "workNumber", "homeAddress_Postcode", "homeAddress_AddressLine", "homeAddress_TownOrCity", "fscsAcknowledged", "nationality" ],
+      "type": "object",
+      "properties": {
+        "isInterestedInCreditBuilder": {
+          "description": "Register the consumer's interest in Creditbuilder.",
+          "type": "boolean"
+        },
+        "additionalCardholder_Title": {
+          "description": "Title of the additional cardholder.\r\nThe title can be one of the following values: Mr, Mrs, Miss, Ms, Dr",
+          "pattern": "^(Mr|Mrs|Miss|Ms|Dr)$",
+          "type": "string"
+        },
+        "additionalCardholder_FirstName": {
+          "description": "First name of the additional cardholder",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "additionalCardholder_LastName": {
+          "description": "Last name of the additional cardholder",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "maxLength": 50,
+          "minLength": 2,
+          "type": "string"
+        },
+        "additionalCardholder_DateOfBirth": {
+          "format": "date-time",
+          "description": "Date of birth of the additional cardholder\r\nAge &gt;= 13.",
+          "type": "string"
+        },
+        "additionalCardholder_EmailAddress": {
+          "description": "Email address of the additional cardholder",
+          "pattern": "^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$",
+          "type": "string"
+        },
+        "additionalCardholder_MobileNumber": {
+          "description": "Mobile number of the additional cardholder",
+          "pattern": "^07[0-9]{9}$",
+          "type": "string"
+        },
+        "hasAdditionalCardHolder": {
+          "description": "Return true if any of the additional cardholder data is populated",
+          "type": "boolean",
+          "readOnly": true
+        },
+        "nationality": {
+          "description": "Your nationality. ISO Country code (ISO_3166-1_alpha-2.)",
+          "maxLength": 2,
+          "minLength": 2,
+          "type": "string"
+        },
+        "selectedEmploymentStatus": {
+          "description": "Your employment status; valid values: 'Full Time Employed', 'Part Time Employed', 'Self Employed', 'Not Employed', 'Student', 'Homemaker', 'Retired'",
+          "type": "string",
+          "maxLength": 30
+        },
+        "selectedIndustry_IndustryId": {
+          "format": "int64",
+          "description": "The identifier of the industry the customer is applying to",
+          "type": "integer"
+        },
+        "selectedIndustry_OtherIndustryName": {
+          "description": "The name of any other industry.\r\nThis is required when IndustryId is 14.",
+          "type": "string",
+          "maxLength": 50
+        },
+        "selectedOccupationSOCCode": {
+          "description": "SOC code",
+          "maxLength": 4,
+          "minLength": 4,
+          "type": "string"
+        },
+        "annualIncome": {
+          "format": "double",
+          "description": "Annual income",
+          "type": "number"
+        },
+        "willYouDepositCash": {
+          "description": "The flag is to specify if you plan to deposit cash.\r\nNullable for a period of time to allow gradual integration.",
+          "type": "boolean"
+        },
+        "howMuchCashDoYouExpectToDepositPerMonth": {
+          "format": "double",
+          "description": "Indicates how much cash you expect to deposit per month",
+          "type": "number"
+        },
+        "productId": {
+          "format": "int64",
+          "description": "The identifier of the product that the customer is applying to.",
+          "type": "integer"
+        },
+        "tCsReferenceNumber": {
+          "format": "int64",
+          "description": "The reference number of the Terms and Conditions that the customer signed off.",
+          "type": "integer"
+        },
+        "doContactOptionChecked": {
+          "description": "If set to true, it means the customer wants to be contacted by email or SMS for marketing purposes.",
+          "type": "boolean"
+        },
+        "doNotContactOptionChecked": {
+          "description": "If set to true, it indicates the customer doesn't want to be contacted by telephone or mail for marketing purposes.",
+          "type": "boolean"
+        },
+        "title": {
+          "description": "Title of the customer.\r\nThe title can be one of the following values: Mr, Mrs, Miss, Ms, Dr",
+          "pattern": "^(Mr|Mrs|Miss|Ms|Dr)$",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "First name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the customer.",
+          "pattern": "^[a-zA-Z]([a-zA-Z0-9 '-]*)$",
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "description": "Date of birth of the customer.",
+          "type": "string"
+        },
+        "emailAddress": {
+          "description": "Email address of the customer.",
+          "pattern": "^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$",
+          "type": "string"
+        },
+        "mobileNumber": {
+          "description": "Mobile number of the customer.",
+          "pattern": "^07[0-9]{9}$",
+          "type": "string"
+        },
+        "workNumber": {
+          "description": "Work number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeNumber": {
+          "description": "Home Number of the customer.",
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "homeAddress_Postcode": {
+          "description": "The postcode of the customer's home address.",
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "homeAddress_FlatNoHouseName": {
+          "description": "The flat number of house name of the customer's home address.",
+          "pattern": "^[\\w\\s\\.,\\\\/&'\\\"#\\-()]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_HouseNumber": {
+          "description": "The house number of the customer's home address. Required only, if FlatNoHouseName is null or empty.",
+          "pattern": "^[a-zA-Z0-9 '-]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_AddressLine": {
+          "description": "The address line of the customer's home address.",
+          "pattern": "^[a-zA-Z0-9 '\\-,.]+$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "homeAddress_TownOrCity": {
+          "description": "The town/city of the customer's home address.",
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "trackingCode": {
+          "description": "Tracking code to track different campaigns sent to Zempler via the same client.",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "fscsAcknowledged": {
+          "description": "Acknowledgement of Financial Services Compensation Scheme Information Sheet.",
+          "type": "boolean"
+        }
+      },
+      "example": {
+        "isInterestedInCreditBuilder": true,
+        "additionalCardholder_Title": "string",
+        "additionalCardholder_FirstName": "string",
+        "additionalCardholder_LastName": "string",
+        "additionalCardholder_DateOfBirth": "1993-09-30T00:00:00",
+        "additionalCardholder_EmailAddress": "string",
+        "additionalCardholder_MobileNumber": "string",
+        "nationality": "fr",
+        "selectedEmploymentStatus": "string",
+        "selectedIndustry_IndustryId": 0,
+        "selectedIndustry_OtherIndustryName": "string",
+        "selectedOccupationSOCCode": "string",
+        "annualIncome": 0.0,
+        "willYouDepositCash": true,
+        "howMuchCashDoYouExpectToDepositPerMonth": 0.0,
+        "productId": 0,
+        "tCsReferenceNumber": 0,
+        "doContactOptionChecked": true,
+        "doNotContactOptionChecked": true,
+        "title": "string",
+        "firstName": "string",
+        "lastName": "string",
+        "dateOfBirth": "1993-09-30T00:00:00",
+        "emailAddress": "string",
+        "mobileNumber": "string",
+        "workNumber": "string",
+        "homeNumber": "string",
+        "homeAddress_Postcode": "string",
+        "homeAddress_FlatNoHouseName": "string",
+        "homeAddress_HouseNumber": "string",
+        "homeAddress_AddressLine": "string",
+        "homeAddress_TownOrCity": "string",
+        "trackingCode": "string",
+        "fscsAcknowledged": true
+      }
+    },
+    "LEAPS.Applications.Contracts.Domain.ValueObjects.ClearingInfo": {
+      "description": "The clearing information (sort code, account number) of the account created for the application.",
+      "type": "object",
+      "properties": {
+        "sortCode": {
+          "description": "The Sort Code of the account created for the application.",
+          "type": "string"
+        },
+        "accountNumber": {
+          "description": "The Account Number of the account created for the application.",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Applications.Contracts.Domain.ValueObjects.ApplicationStatus": {
+      "description": "The application's current status and the date and time of the last status change.",
+      "type": "object",
+      "properties": {
+        "status": {
+          "description": "The status of the application.",
+          "enum": [ "Submitted", "Duplicate", "InternalReview", "DocsRequired", "Cancelled", "Expired", "Approved", "SaleCompleted" ],
+          "type": "string"
+        },
+        "statusChangeDateTime": {
+          "format": "date-time",
+          "description": "Date and time of the last application status change.",
+          "type": "string"
+        },
+        "changeReason": {
+          "description": "The textual reason of the application status change.",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "description": "OAuth2 Client Credentials flow",
+      "flow": "application",
+      "authorizationUrl": "https://apisandbox.zempler.tech/identity/auth/connect/authorize",
+      "tokenUrl": "https://apisandbox.zempler.tech/identity/auth/connect/token",
+      "scopes": {
+        "aps_profile": "APS profile data.",
+        "applications": "Allow access to application API.",
+        "accounts": "Allow access to account and transaction data on behalf of the client.",
+        "payments": "Allow access to payments and payment submissions data.",
+        "eligibility": "Allow access to eligibility API."
+      }
+    }
+  }
+}

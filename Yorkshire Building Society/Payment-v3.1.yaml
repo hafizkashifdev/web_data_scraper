@@ -1,0 +1,2328 @@
+swagger: '2.0'
+info:
+  title: Payment Initiation API
+  description: Swagger Specification for Payment Initiation API. Please refer postman collection for sample request and response.
+  x-postman-collection-id: b1a060bc58d630536d04
+  version: v3.1.2
+host: hostname
+basePath: /open-banking/v3.1/pisp
+schemes:
+  - https
+produces:
+      - application/json
+paths:
+  '/domestic-payment-consents':
+    post:
+      tags:
+        - Domestic Payments
+      summary: Create Domestic Payment Consents
+      operationId: CreateDomesticPaymentConsents
+      parameters:
+        - name: OBWriteDomesticConsent1Param
+          in: body
+          description: Default
+          required: true
+          schema:
+            $ref: '#/definitions/OBWriteDomesticConsent1'
+        - in: header
+          name: Authorization
+          type: string
+          required: true
+          default: "Bearer "
+          description: 'Standard HTTP Header; Bearer Authentication Scheme.'
+        - in: header
+          name: Accept
+          type: string
+          required: false
+          default: ""
+          description: >- 
+                   Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON. The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json
+        - in: header
+          name: Content-Type
+          type: string
+          required: true
+          default: application/json
+          description: >-
+                  Standard HTTP Header; Represents the format of the payload being provided in the request.This must be set to application/json. The TPP may provide additional information (e.g. a 'q' value and charset). If set to any other value, we will respond with a 415 Unsupported Media Type.
+        - in: header
+          name: x-fapi-auth-date
+          type: string
+          required: false
+          default: ""
+          description: |-
+            The time when the PSU last logged in with the TPP. 
+            All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: 
+            Sun, 10 Sep 2017 19:43:31 UTC
+          pattern: '^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$'
+        - in: header
+          name: x-fapi-customer-ip-address
+          type: string
+          required: true
+          default: ""
+          description: The PSU's IP address if the PSU is currently logged in with the TPP.
+        - in: header
+          name: x-fapi-interaction-id
+          type: string
+          required: false
+          default: ""
+          description: An RFC4122 UID used as a correlation id.
+        
+        - name: x-idempotency-key
+          in: header
+          description: Every request will be processed only once per x-idempotency-key.  The Idempotency Key will be valid for 24 hours.
+          required: true
+          default: ""
+          type: string
+          pattern: ^(?!\s)(.*)(\S)$
+          maxLength: 40
+        - in: header
+          name: x-jws-signature
+          type: string
+          required: true
+          default: ""
+          description: A detached JWS signature of the body of the payload.
+       
+      responses:
+        '201':
+          $ref: '#/responses/201DomesticPaymentConsentsCreated'
+        '400':
+          description: 'Bad request'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '405':
+          description: Method Not Allowed
+        '406':
+          description: Not Acceptable
+        
+        '415':
+          description: Unsupported Media Type
+        
+        '500':
+          description: Internal Server Error
+        '503':
+              description: Service Unavailable
+     
+  '/domestic-payment-consents/{ConsentId}':
+    get:
+      tags:
+        - Domestic Payments
+      summary: Get Domestic Payment Consents
+      operationId: GetDomesticPaymentConsentsConsentId
+      parameters:
+        - in: path
+          name: ConsentId
+          description: ConsentId
+          required: true
+          type: string
+        - in: header
+          name: Accept
+          type: string
+          required: false
+          default: ""
+          description: >- 
+                   Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON. The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json
+        - in: header
+          name: Authorization
+          type: string
+          required: true
+          default: "Bearer "
+          description: 'Standard HTTP Header; Bearer Authentication Scheme.'
+        - in: header
+          name: x-fapi-auth-date
+          type: string
+          required: false
+          default: ""
+          description: >-
+            'The time when the PSU last logged in with the TPP. All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC'
+        - in: header
+          name: x-fapi-customer-ip-address
+          type: string
+          required: false
+          default: ""
+          description: The PSU's IP address if the PSU is currently logged in with the TPP.
+        - in: header
+          name: x-fapi-interaction-id
+          type: string
+          required: false
+          default: ""
+          description: An RFC4122 UID used as a correlation id.
+     
+      responses:
+        '200':
+          $ref: '#/responses/200DomesticPaymentConsentsConsentIdRead'
+        '400':
+          description: Bad request
+         
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+         description: Not found
+        '405':
+          description: Method Not Allowed
+        '406':
+              description: Not Acceptable
+        '429':
+           description: Too Many Requests
+           headers:
+              Retry-After:
+                description: Number in seconds to wait
+                type: integer
+        '500':
+          description: Internal Server Error
+        '503':
+              description: Service Unavailable
+     
+  '/domestic-payments':
+    post:
+      tags:
+        - Domestic Payments
+      summary: Create Domestic Payments
+      operationId: CreateDomesticPayments
+      parameters:
+        - name: OBWriteDomestic1Param
+          in: body
+          description: Default
+          required: true
+          schema:
+            $ref: '#/definitions/OBWriteDomestic1'
+        - in: header
+          name: Authorization
+          type: string
+          required: true
+          default: "Bearer "
+          description: 'Standard HTTP Header; Bearer Authentication Scheme.'
+        - in: header
+          name: Accept
+          type: string
+          required: false
+          default: ""
+          description: >- 
+                   Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON. The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json
+        - in: header
+          name: Content-Type
+          type: string
+          required: true
+          default: application/json
+          description: >-
+                  Standard HTTP Header; Represents the format of the payload being provided in the request.This must be set to application/json. The TPP may provide additional information (e.g. a 'q' value and charset). If set to any other value, we will respond with a 415 Unsupported Media Type.
+        - in: header
+          name: x-fapi-auth-date
+          type: string
+          required: false
+          default: ""
+          description: |-
+            The time when the PSU last logged in with the TPP. 
+            All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: 
+            Sun, 10 Sep 2017 19:43:31 UTC
+          pattern: '^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$'
+        - in: header
+          name: x-fapi-customer-ip-address
+          type: string
+          required: true
+          default: ""
+          description: The PSU's IP address if the PSU is currently logged in with the TPP.
+        - in: header
+          name: x-fapi-interaction-id
+          type: string
+          required: false
+          default: ""
+          description: An RFC4122 UID used as a correlation id.
+        
+        - name: x-idempotency-key
+          in: header
+          description: Every request will be processed only once per x-idempotency-key.  The Idempotency Key will be valid for 24 hours.
+          required: true
+          default: ""
+          type: string
+          pattern: ^(?!\s)(.*)(\S)$
+          maxLength: 40
+        - in: header
+          name: x-jws-signature
+          type: string
+          required: true
+          default: ""
+          description: A detached JWS signature of the body of the payload.
+      responses:
+        '201':
+          $ref: '#/responses/201DomesticPaymentsCreated'
+        '400':
+          description: Bad request
+         
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '415':
+          description:  Unsupported Media Type
+        '404':
+         description: Not found
+        '405':
+          description: Method Not Allowed
+        '406':
+         description: Not Acceptable
+        
+        '500':
+          description: Internal Server Error
+        '503':
+              description: Service Unavailable
+        
+     
+  '/domestic-payments/{DomesticPaymentId}':
+    get:
+      tags:
+        - Domestic Payments
+      summary: Get Domestic Payments
+      operationId: GetDomesticPaymentsDomesticPaymentId
+      parameters:
+        - name: DomesticPaymentId
+          in: path
+          description: DomesticPaymentId
+          required: true
+          type: string
+        - in: header
+          name: Accept
+          type: string
+          required: false
+          default: ""
+          description: >- 
+                   Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON. The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json
+        - in: header
+          name: Authorization
+          type: string
+          required: true
+          default: "Bearer "
+          description: 'Standard HTTP Header; Bearer Authentication Scheme.'
+        - in: header
+          name: x-fapi-auth-date
+          type: string
+          required: false
+          default: ""
+          description: |-
+            The time when the PSU last logged in with the TPP. 
+            All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: 
+            Sun, 10 Sep 2017 19:43:31 UTC
+          pattern: '^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$'
+        - in: header
+          name: x-fapi-customer-ip-address
+          type: string
+          required: false
+          default: ""
+          description: The PSU's IP address if the PSU is currently logged in with the TPP.
+        - in: header
+          name: x-fapi-interaction-id
+          type: string
+          required: false
+          default: ""
+          description: An RFC4122 UID used as a correlation id.
+        
+       
+      responses:
+        '200':
+          $ref: '#/responses/200DomesticPaymentsDomesticPaymentIdRead'
+        '400':
+          description: Bad request
+        
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+         description: Not found
+       
+        '405':
+          description: Method Not Allowed
+        
+        '406':
+              description: Not Acceptable
+        '429':
+           description: Too Many Requests
+           headers:
+              Retry-After:
+                description: Number in seconds to wait
+                type: integer
+        '500':
+          description: Internal Server Error
+        '503':
+              description: Service Unavailable
+      
+  
+  '/domestic-standing-order-consents':
+    post:
+      tags:
+        - Domestic Standing Orders
+      summary: Create Domestic Standing Order Consents
+      operationId: CreateDomesticStandingOrderConsents
+      parameters:
+        - name: OBWriteDomesticStandingOrderConsent1Param
+          in: body
+          description: Default
+          required: true
+          schema:
+            $ref: '#/definitions/OBWriteDomesticStandingOrderConsent1'
+        - in: header
+          name: Authorization
+          type: string
+          required: true
+          default: "Bearer "
+          description: 'Standard HTTP Header; Bearer Authentication Scheme.'
+        - in: header
+          name: Accept
+          type: string
+          required: false
+          default: ""
+          description: >- 
+                   Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON. The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json
+        - in: header
+          name: Content-Type
+          type: string
+          required: true
+          default: application/json
+          description: >-
+                  Standard HTTP Header; Represents the format of the payload being provided in the request.This must be set to application/json. The TPP may provide additional information (e.g. a 'q' value and charset). If set to any other value, we will respond with a 415 Unsupported Media Type.
+        - in: header
+          name: x-fapi-auth-date
+          type: string
+          required: false
+          default: ""
+          description: |-
+            The time when the PSU last logged in with the TPP. 
+            All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: 
+            Sun, 10 Sep 2017 19:43:31 UTC
+          pattern: '^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$'
+        - in: header
+          name: x-fapi-customer-ip-address
+          type: string
+          required: false
+          default: ""
+          description: The PSU's IP address if the PSU is currently logged in with the TPP.
+        - in: header
+          name: x-fapi-interaction-id
+          type: string
+          required: false
+          default: ""
+          description: An RFC4122 UID used as a correlation id.
+        
+        - name: x-idempotency-key
+          in: header
+          description: Every request will be processed only once per x-idempotency-key.  The Idempotency Key will be valid for 24 hours.
+          required: true
+          default: ""
+          type: string
+          pattern: ^(?!\s)(.*)(\S)$
+          maxLength: 40
+        - in: header
+          name: x-jws-signature
+          type: string
+          required: true
+          default: ""
+          description: A detached JWS signature of the body of the payload.
+       
+      responses:
+        '201':
+          $ref: '#/responses/201DomesticStandingOrderConsentsCreated'
+          
+        '400':
+          description: Bad request
+         
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+         description: Not found
+        '405':
+          description: Method Not Allowed
+        '406':
+         description: Not Acceptable
+        
+        '500':
+          description: Internal Server Error
+        '415':
+          description: Unsupported Media Type
+        '503':
+              description: Service Unavailable
+          
+        
+      
+  '/domestic-standing-order-consents/{ConsentId}':
+    get:
+      tags:
+        - Domestic Standing Orders
+      summary: Get Domestic Standing Order Consents
+      operationId: GetDomesticStandingOrderConsents
+      parameters:
+        - in: path
+          name: ConsentId
+          description: ConsentId
+          required: true
+          type: string
+        - in: header
+          name: Accept
+          type: string
+          required: false
+          default: ""
+          description: >- 
+                   Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON. The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json
+        - in: header
+          name: Authorization
+          type: string
+          required: true
+          default: "Bearer "
+          description: 'Standard HTTP Header; Bearer Authentication Scheme.'
+        - in: header
+          name: x-fapi-auth-date
+          type: string
+          required: false
+          default: ""
+          description: |-
+            The time when the PSU last logged in with the TPP. 
+            All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: 
+            Sun, 10 Sep 2017 19:43:31 UTC
+          pattern: '^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$'
+        - in: header
+          name: x-fapi-customer-ip-address
+          type: string
+          required: false
+          default: ""
+          description: The PSU's IP address if the PSU is currently logged in with the TPP.
+        - in: header
+          name: x-fapi-interaction-id
+          type: string
+          required: false
+          default: ""
+          description: An RFC4122 UID used as a correlation id.
+      
+      responses:
+        '200':
+          $ref: '#/responses/200DomesticStandingOrderConsentsConsentIdRead'
+        '400':
+          description: Bad request
+         
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+         description: Not found
+        '405':
+          description: Method Not Allowed
+        '406':
+              description: Not Acceptable
+        '429':
+           description: Too Many Requests
+           headers:
+              Retry-After:
+                description: Number in seconds to wait
+                type: integer
+        '500':
+          description: Internal Server Error
+        '503':
+              description: Service Unavailable
+        
+      
+  '/domestic-standing-orders':
+    post:
+      tags:
+        - Domestic Standing Orders
+      summary: Create Domestic Standing Orders
+      operationId: CreateDomesticStandingOrders
+      parameters:
+        - name: OBWriteDomesticStandingOrder1Param
+          in: body
+          description: Default
+          required: true
+          schema:
+            $ref: '#/definitions/OBWriteDomesticStandingOrder1'
+        - in: header
+          name: Authorization
+          type: string
+          required: true
+          default: "Bearer "
+          description: 'Standard HTTP Header; Bearer Authentication Scheme.'
+        - in: header
+          name: Accept
+          type: string
+          required: false
+          default: ""
+          description: >- 
+                   Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON. The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json
+        - in: header
+          name: Content-Type
+          type: string
+          required: true
+          default: application/json
+          description: >-
+                  Standard HTTP Header; Represents the format of the payload being provided in the request.This must be set to application/json. The TPP may provide additional information (e.g. a 'q' value and charset). If set to any other value, we will respond with a 415 Unsupported Media Type.
+        - in: header
+          name: x-fapi-auth-date
+          type: string
+          required: false
+          default: ""
+          description: |-
+            The time when the PSU last logged in with the TPP. 
+            All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: 
+            Sun, 10 Sep 2017 19:43:31 UTC
+          pattern: '^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$'
+        - in: header
+          name: x-fapi-customer-ip-address
+          type: string
+          required: false
+          default: ""
+          description: The PSU's IP address if the PSU is currently logged in with the TPP.
+        - in: header
+          name: x-fapi-interaction-id
+          type: string
+          required: false
+          default: ""
+          description: An RFC4122 UID used as a correlation id.
+        
+        - name: x-idempotency-key
+          in: header
+          description: Every request will be processed only once per x-idempotency-key.  The Idempotency Key will be valid for 24 hours.
+          required: true
+          default: ""
+          type: string
+          pattern: ^(?!\s)(.*)(\S)$
+          maxLength: 40
+        - in: header
+          name: x-jws-signature
+          type: string
+          required: true
+          default: ""
+          description: A detached JWS signature of the body of the payload.
+        
+      responses:
+        '201':
+          $ref: '#/responses/201DomesticStandingOrdersCreated'
+        '400':
+          description: Bad request
+         
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+         description: Not found
+        '405':
+          description: Method Not Allowed
+        '406':
+         description: Not Acceptable
+        
+        '500':
+          description: Internal Server Error
+        '415':
+          description: Unsupported Media Type
+        '503':
+              description: Service Unavailable
+     
+  '/domestic-standing-orders/{DomesticStandingOrderId}':
+    get:
+      tags:
+        - Domestic Standing Orders
+      summary: Get Domestic Standing Orders
+      operationId: GetDomesticStandingOrders
+      parameters:
+        -  name: DomesticStandingOrderId
+           in: path
+           description: DomesticStandingOrderId
+           required: true
+           type: string
+        - in: header
+          name: Accept
+          type: string
+          required: false
+          default: ""
+          description: >- 
+                   Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON. The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json
+        - in: header
+          name: Authorization
+          type: string
+          required: true
+          default: "Bearer "
+          description: 'Standard HTTP Header; Bearer Authentication Scheme.'
+        - in: header
+          name: x-fapi-auth-date
+          type: string
+          required: false
+          default: ""
+          description: |-
+            The time when the PSU last logged in with the TPP. 
+            All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: 
+            Sun, 10 Sep 2017 19:43:31 UTC
+          pattern: '^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$'
+        - in: header
+          name: x-fapi-customer-ip-address
+          type: string
+          required: false
+          default: ""
+          description: The PSU's IP address if the PSU is currently logged in with the TPP.
+        - in: header
+          name: x-fapi-interaction-id
+          type: string
+          required: false
+          default: ""
+          description: An RFC4122 UID used as a correlation id.
+        
+        
+       
+      responses:
+        '200':
+          $ref: '#/responses/200DomesticStandingOrdersDomesticStandingOrderIdRead'
+        '400':
+          description: Bad request
+         
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+         description: Not found
+        '405':
+          description: Method Not Allowed
+        '406':
+              description: Not Acceptable
+        '429':
+           description: Too Many Requests
+           headers:
+              Retry-After:
+                description: Number in seconds to wait
+                type: integer
+        '500':
+          description: Internal Server Error
+        '503':
+              description: Service Unavailable
+  '/domestic-payment-consents/{ConsentId}/funds-confirmation':
+    get:
+      tags:
+        - Domestic Payments Funds Confirmation
+      summary: Get Domestic Payment Funds Confirmation Consents
+      operationId: GetPaymentFundsConfirmation
+      parameters:
+        -  name: ConsentId
+           in: path
+           description: ConsentId
+           required: true
+           type: string
+        - in: header
+          name: Accept
+          type: string
+          required: false
+          default: ""
+          description: >- 
+                   Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON. The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json
+        - in: header
+          name: Authorization
+          type: string
+          required: true
+          default: "Bearer "
+          description: 'Standard HTTP Header; Bearer Authentication Scheme.'
+        - in: header
+          name: x-fapi-auth-date
+          type: string
+          required: false
+          default: ""
+          description: |-
+            The time when the PSU last logged in with the TPP. 
+            All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: 
+            Sun, 10 Sep 2017 19:43:31 UTC
+          pattern: '^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$'
+        - in: header
+          name: x-fapi-customer-ip-address
+          type: string
+          required: false
+          default: ""
+          description: The PSU's IP address if the PSU is currently logged in with the TPP.
+        - in: header
+          name: x-fapi-interaction-id
+          type: string
+          required: false
+          default: ""
+          description: An RFC4122 UID used as a correlation id.
+        
+        
+       
+      responses:
+        '200':
+          $ref: '#/responses/200DomesticGetPaymentFundConfirmationRead'
+        '400':
+          description: Bad request
+         
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+         description: Not found
+        '405':
+          description: Method Not Allowed
+        '406':
+              description: Not Acceptable
+        '429':
+           description: Too Many Requests
+           headers:
+              Retry-After:
+                description: Number in seconds to wait
+                type: integer
+        '500':
+          description: Internal Server Error
+        '503':
+              description: Service Unavailable
+responses:
+  200DomesticPaymentsDomesticPaymentIdRead:
+    description: Domestic Payments Read
+    headers:
+      x-fapi-interaction-id:
+        type: string
+        description: An RFC4122 UID used as a correlation id.
+      x-jws-signature:
+        type: string
+        description: Header containing a detached JWS signature of the body of the payload.
+    schema:
+      $ref: '#/definitions/OBWriteDomesticResponse1'
+  200DomesticGetPaymentFundConfirmationRead:
+    description: Domestic Payment Funds Confirmation
+    headers:
+      x-fapi-interaction-id:
+        type: string
+        description: An RFC4122 UID used as a correlation id.
+      x-jws-signature:
+        type: string
+        description: Header containing a detached JWS signature of the body of the payload.
+    schema:
+      $ref: '#/definitions/OBWritePaymentFundConfermationReadResponse1'
+  201DomesticStandingOrderConsentsCreated:
+    description: Domestic Standing Order Consents Created
+    headers:
+      x-fapi-interaction-id:
+        type: string
+        description: An RFC4122 UID used as a correlation id.
+      x-jws-signature:
+        type: string
+        description: Header containing a detached JWS signature of the body of the payload.
+    schema:
+      $ref: '#/definitions/OBWriteDomesticStandingOrderConsentResponse1'
+  200DomesticStandingOrderConsentsConsentIdRead:
+    description: Domestic Standing Order Consents Read
+    headers:
+      x-fapi-interaction-id:
+        type: string
+        description: An RFC4122 UID used as a correlation id.
+      x-jws-signature:
+        type: string
+        description: Header containing a detached JWS signature of the body of the payload.
+    schema:
+      $ref: '#/definitions/OBWriteDomesticStandingOrderConsentResponse1'
+  201DomesticStandingOrdersCreated:
+    description: Domestic Standing Orders Created
+    headers:
+      x-fapi-interaction-id:
+        type: string
+        description: An RFC4122 UID used as a correlation id.
+      x-jws-signature:
+        type: string
+        description: Header containing a detached JWS signature of the body of the payload.
+    schema:
+      $ref: '#/definitions/OBWriteDomesticStandingOrderResponse1'
+  200DomesticStandingOrdersDomesticStandingOrderIdRead:
+    description: Domestic Standing Orders Read
+    headers:
+      x-fapi-interaction-id:
+        type: string
+        description: An RFC4122 UID used as a correlation id.
+      x-jws-signature:
+        type: string
+        description: Header containing a detached JWS signature of the body of the payload.
+    schema:
+      $ref: '#/definitions/OBWriteDomesticStandingOrderResponse1'
+  201DomesticPaymentConsentsCreated:
+    description: Domestic Payment Consents Created
+    headers:
+      x-fapi-interaction-id:
+        type: string
+        description: An RFC4122 UID used as a correlation id.
+      x-jws-signature:
+        type: string
+        description: Header containing a detached JWS signature of the body of the payload.
+    schema:
+      $ref: '#/definitions/OBWriteDomesticConsentResponse1'
+  200DomesticPaymentConsentsConsentIdRead:
+    description: Domestic Payment Consents Read
+    headers:
+      x-fapi-interaction-id:
+        type: string
+        description: An RFC4122 UID used as a correlation id.
+      x-jws-signature:
+        type: string
+        description: Header containing a detached JWS signature of the body of the payload.
+    schema:
+      $ref: '#/definitions/OBWriteDomesticConsentResponse1'
+  201DomesticPaymentsCreated:
+    description: Domestic Payments Created
+    headers:
+      x-fapi-interaction-id:
+        type: string
+        description: An RFC4122 UID used as a correlation id.
+      x-jws-signature:
+        type: string
+        description: Header containing a detached JWS signature of the body of the payload.
+    schema:
+      $ref: '#/definitions/OBWriteDomesticResponse1'
+ 
+definitions:
+  OBActiveCurrencyAndAmount_SimpleType:
+    description: >-
+      A number of monetary units specified in an active currency where the unit
+      of currency is explicit and compliant with ISO 4217.Minimum allowed amount value is 1.Maximum allowed amount value is 250000.
+    type: string
+    pattern: '^\d{1,13}\.\d{1,5}$'
+ 
+  OBAddressTypeCode:
+    description: Identifies the nature of the postal address.
+    type: string
+    enum:
+      - Business
+      - Correspondence
+      - DeliveryTo
+      - MailTo
+      - POBox
+      - Postal
+      - Residential
+      - Statement
+  OBAuthorisation1:
+    description:  NOT SUPPORTED IN YBS. The authorisation type request from the TPP.
+    type: object
+    properties:
+      AuthorisationType:
+        $ref: '#/definitions/OBExternalAuthorisation1Code'
+      CompletionDateTime:
+        description: >-
+          Date and time at which the requested authorisation flow must be
+          completed.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+    required:
+      - AuthorisationType
+    additionalProperties: false
+  OBBranchAndFinancialInstitutionIdentification3:
+    description: >-
+      Party that manages the account on behalf of the account owner, that is
+      manages the registration and booking of entries on the account, calculates
+      balances on the account and provides information about the account.
+      This is the servicer of the beneficiary account.
+    type: object
+    properties:
+      SchemeName:
+        description: >-
+          Name of the identification scheme, in a coded form as published in an external list.example:UK.OBIE.IBAN,SortCodeAccountNumber
+        type: string
+        
+        maxLength: 40
+      Identification:
+        description: Unique and unambiguous identification of the servicing institution.
+        type: string
+        
+        maxLength: 35
+      Name:
+        description: >-
+          Name by which an agent is known and which is usually used to identify
+          that agent.
+        type: string
+        
+        maxLength: 140
+      PostalAddress:
+        $ref: '#/definitions/OBPostalAddress6'
+    additionalProperties: false
+  OBCashAccountCreditor2:
+    description: Provides the details to identify the beneficiary account.
+    type: object
+    properties:
+      SchemeName:
+        description: >-
+          Name of the identification scheme, in a coded form as published in an external list.example:UK.OBIE.IBAN,SortCodeAccountNumber
+        type: string
+        
+        maxLength: 40
+      Identification:
+        description: >-
+          Identification assigned by an institution to identify an account. This
+          identification is known by the account owner.
+        type: string
+        
+        maxLength: 256
+      Name:
+        description: >-
+          Name of the account, as assigned by the account servicing institution.
+          Usage: The account name is the name or names of the account owner(s)
+          represented at an account level. The account name is not the product
+          name or the nickname of the account.
+          OB: ASPSPs may carry out name validation for Confirmation of Payee,
+          but it is not mandatory.
+        type: string
+        
+        maxLength: 70
+      SecondaryIdentification:
+        description: >-
+          This is secondary identification of the account, as assigned by the
+          account servicing institution. 
+          This can be used by building societies to additionally identify
+          accounts with a roll number (in addition to a sort code and account
+          number combination).
+        type: string
+        
+        maxLength: 34
+    required:
+      - SchemeName
+      - Identification
+      - Name
+    additionalProperties: false
+  OBCashAccountDebtor3:
+    description: Provides the details to identify the debtor account.
+    type: object
+    properties:
+      SchemeName:
+        description: >-
+         Name of the identification scheme, in a coded form as published in an external list.example:UK.OBIE.IBAN,SortCodeAccountNumber
+        type: string
+        
+        maxLength: 40
+      Identification:
+        description: >-
+          Identification assigned by an institution to identify an account. This
+          identification is known by the account owner.When providing the identification data (Sort Code and Account Number) we expect the Debtor Account number to be supplied as the 10 digit Roll Number.
+        type: string
+        
+        maxLength: 256
+      Name:
+        description: >-
+          Name of the account, as assigned by the account servicing institution.
+          Usage: The account name is the name or names of the account owner(s)
+          represented at an account level. The account name is not the product
+          name or the nickname of the account.
+        type: string
+        
+        maxLength: 70
+      SecondaryIdentification:
+        description: >-
+          This is secondary identification of the account, as assigned by the
+          account servicing institution. 
+          This can be used by building societies to additionally identify
+          accounts with a roll number (in addition to a sort code and account
+          number combination).
+        type: string
+        
+        maxLength: 34
+    required:
+      - SchemeName
+      - Identification
+    additionalProperties: false
+  OBCharge1:
+    description: >-
+       NOT SUPPORTED IN YBS. Set of elements used to provide details of a charge for the payment initiation.
+    type: object
+    properties:
+      ChargeBearer:
+        $ref: '#/definitions/OBChargeBearerType1Code'
+      Type:
+        description: 'Charge type, in a coded form.'
+        type: string
+        
+        maxLength: 40
+      Amount:
+        type: object
+        properties:
+          Amount:
+            $ref: '#/definitions/OBActiveCurrencyAndAmount_SimpleType'
+          Currency:
+                      description: >-
+                        A code allocated to a currency by a Maintenance Agency under
+                        an international identification scheme, as described in the
+                        latest edition of the international standard ISO 4217 'Codes
+                        for the representation of currencies and funds'
+                      type: string
+                      pattern: '^[A-Z]{3}$'
+                      additionalProperties: false
+        required:
+          - Amount
+          - Currency
+        additionalProperties: false
+        description: Amount of money associated with the charge type.
+    required:
+      - ChargeBearer
+      - Type
+      - Amount
+    additionalProperties: false
+  OBChargeBearerType1Code:
+    description: >-
+      Specifies which party/parties will bear the charges associated with the
+      processing of the payment transaction.
+    type: string
+    enum:
+      - BorneByCreditor
+      - BorneByDebtor
+      - FollowingServiceLevel
+      - Shared
+  OBDomestic1:
+    description: >-
+      The Initiation payload is sent by the initiating party to the ASPSP. It is
+      used to request movement of funds from the debtor account to a creditor
+      for a single domestic payment.
+    type: object
+    properties:
+      InstructionIdentification:
+        description: >-
+          Unique identification as assigned by an instructing party for an
+          instructed party to unambiguously identify the instruction.
+          Usage: the  instruction identification is a point to point reference
+          that can be used between the instructing party and the instructed
+          party to refer to the individual instruction. It can be included in
+          several messages related to the instruction.
+        type: string
+        
+        maxLength: 35
+      EndToEndIdentification:
+        description: >-
+          Unique identification assigned by the initiating party to
+          unambiguously identify the transaction. This identification is passed
+          on, unchanged, throughout the entire end-to-end chain.
+          Usage: The end-to-end identification can be used for reconciliation or
+          to link tasks relating to the transaction. It can be included in
+          several messages related to the transaction.
+          OB: The Faster Payments Scheme can only access 31 characters for the
+          EndToEndIdentification field.
+        type: string
+        
+        maxLength: 35
+      LocalInstrument:
+        description: 'User community specific instrument.YBS supports only UK.OBIE.FPS for the API Channel
+          Usage: This element is used to specify a local instrument, local
+          clearing option and/or further qualify the service or service level.'
+        type: string
+        
+        maxLength: 35
+      InstructedAmount:
+        type: object
+        properties:
+          Amount:
+            $ref: '#/definitions/OBActiveCurrencyAndAmount_SimpleType'
+          Currency:
+                      description: >-
+                        A code allocated to a currency by a Maintenance Agency under
+                        an international identification scheme, as described in the
+                        latest edition of the international standard ISO 4217 'Codes
+                        for the representation of currencies and funds'
+                      type: string
+                      pattern: '^[A-Z]{3}$'
+                      additionalProperties: false
+        required:
+          - Amount
+          - Currency
+        additionalProperties: false
+        description: >-
+          Amount of money to be moved between the debtor and creditor, before
+          deduction of charges, expressed in the currency as ordered by the
+          initiating party.
+          Usage: This amount has to be transported unchanged through the
+          transaction chain.
+      DebtorAccount:
+        $ref: '#/definitions/OBCashAccountDebtor3'
+      CreditorAccount:
+        $ref: '#/definitions/OBCashAccountCreditor2'
+      CreditorPostalAddress:
+        $ref: '#/definitions/OBPostalAddress6'
+      RemittanceInformation:
+        $ref: '#/definitions/OBRemittanceInformation1'
+    required:
+      - InstructionIdentification
+      - EndToEndIdentification
+      - InstructedAmount
+      - CreditorAccount
+    additionalProperties: false
+  OBDomesticScheduled1:
+    description: >-
+      The Initiation payload is sent by the initiating party to the ASPSP. It is
+      used to request movement of funds from the debtor account to a creditor
+      for a single scheduled domestic payment.
+    type: object
+    properties:
+      InstructionIdentification:
+        description: >-
+          Unique identification as assigned by an instructing party for an
+          instructed party to unambiguously identify the instruction.
+          Usage: the  instruction identification is a point to point reference
+          that can be used between the instructing party and the instructed
+          party to refer to the individual instruction. It can be included in
+          several messages related to the instruction.
+        type: string
+        
+        maxLength: 35
+      EndToEndIdentification:
+        description: >-
+          Unique identification assigned by the initiating party to
+          unambiguously identify the transaction. This identification is passed
+          on, unchanged, throughout the entire end-to-end chain.
+          Usage: The end-to-end identification can be used for reconciliation or
+          to link tasks relating to the transaction. It can be included in
+          several messages related to the transaction.
+          OB: The Faster Payments Scheme can only access 31 characters for the
+          EndToEndIdentification field.
+        type: string
+        
+        maxLength: 35
+      LocalInstrument:
+        description: >-
+          User community specific instrument.YBS supports only UK.OBIE.FPS for the API Channel
+          Usage: This element is used to specify a local instrument, local
+          clearing option and/or further qualify the service or service level.
+        type: string
+        
+        maxLength: 35
+      RequestedExecutionDateTime:
+        description: >-
+          Date at which the initiating party requests the clearing agent to
+          process the payment. 
+          Usage: This is the date on which the debtor's account is to be
+          debited.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      InstructedAmount:
+        type: object
+        properties:
+          Amount:
+            $ref: '#/definitions/OBActiveCurrencyAndAmount_SimpleType'
+          Currency:
+                      description: >-
+                        A code allocated to a currency by a Maintenance Agency under
+                        an international identification scheme, as described in the
+                        latest edition of the international standard ISO 4217 'Codes
+                        for the representation of currencies and funds'
+                      type: string
+                      pattern: '^[A-Z]{3}$'
+                      additionalProperties: false
+        required:
+          - Amount
+          - Currency
+        additionalProperties: false
+        description: >-
+          Amount of money to be moved between the debtor and creditor, before
+          deduction of charges, expressed in the currency as ordered by the
+          initiating party.
+          Usage: This amount has to be transported unchanged through the
+          transaction chain.
+      DebtorAccount:
+        $ref: '#/definitions/OBCashAccountDebtor3'
+      CreditorAccount:
+        $ref: '#/definitions/OBCashAccountCreditor2'
+      CreditorPostalAddress:
+        $ref: '#/definitions/OBPostalAddress6'
+      RemittanceInformation:
+        $ref: '#/definitions/OBRemittanceInformation1'
+    required:
+      - InstructionIdentification
+      - RequestedExecutionDateTime
+      - InstructedAmount
+      - CreditorAccount
+    additionalProperties: false
+  OBDomesticStandingOrder1:
+    description: >-
+      The Initiation payload is sent by the initiating party to the ASPSP. It is
+      used to request movement of funds from the debtor account to a creditor
+      for a domestic standing order.
+    type: object
+    properties:
+      Frequency:
+        description: >-
+          Individual Definitions:
+          EvryDay - Every day
+          EvryWorkgDay - Every working day
+          IntrvlWkDay - An interval specified in weeks (01 to 09), and the day
+          within the week (01 to 07)
+          WkInMnthDay - A monthly interval, specifying the week of the month (01
+          to 05) and day within the week (01 to 07)
+          IntrvlMnthDay - An interval specified in months (between 01 to 06, 12,
+          24), specifying the day within the month (-5 to -1, 1 to 31)
+          QtrDay - Quarterly (either ENGLISH, SCOTTISH, or RECEIVED). 
+          ENGLISH = Paid on the 25th March, 24th June, 29th September and 25th
+          December. 
+          SCOTTISH = Paid on the 2nd February, 15th May, 1st August and 11th
+          November.
+          RECEIVED = Paid on the 20th March, 19th June, 24th September and 20th
+          December. 
+          Individual Patterns:
+          EvryDay (ScheduleCode)
+          EvryWorkgDay (ScheduleCode)
+          IntrvlWkDay:IntervalInWeeks:DayInWeek (ScheduleCode + IntervalInWeeks
+          + DayInWeek)
+          WkInMnthDay:WeekInMonth:DayInWeek (ScheduleCode + WeekInMonth +
+          DayInWeek)
+          IntrvlMnthDay:IntervalInMonths:DayInMonth (ScheduleCode +
+          IntervalInMonths + DayInMonth)
+          QtrDay: + either (ENGLISH, SCOTTISH or RECEIVED) ScheduleCode +
+          QuarterDay
+          The regular expression for this element combines five smaller versions
+          for each permitted pattern. To aid legibility - the components are
+          presented individually here:
+          EvryDay
+          EvryWorkgDay
+          IntrvlWkDay:0[1-9]:0[1-7]
+          WkInMnthDay:0[1-5]:0[1-7]
+          IntrvlMnthDay:(0[1-6]|12|24):(-0[1-5]|0[1-9]|[12][0-9]|3[01])
+          QtrDay:(ENGLISH|SCOTTISH|RECEIVED)
+          Full Regular Expression:
+          ^(EvryDay)$|^(EvryWorkgDay)$|^(IntrvlWkDay:0[1-9]:0[1-7])$|^(WkInMnthDay:0[1-5]:0[1-7])$|^(IntrvlMnthDay:(0[1-6]|12|24):(-0[1-5]|0[1-9]|[12][0-9]|3[01]))$|^(QtrDay:(ENGLISH|SCOTTISH|RECEIVED))$
+        type: string
+        
+        maxLength: 35
+        pattern: >-
+          ^(EvryDay)$|^(EvryWorkgDay)$|^(IntrvlWkDay:0[1-9]:0[1-7])$|^(WkInMnthDay:0[1-5]:0[1-7])$|^(IntrvlMnthDay:(0[1-6]|12|24):(-0[1-5]|0[1-9]|[12][0-9]|3[01]))$|^(QtrDay:(ENGLISH|SCOTTISH|RECEIVED))$
+      Reference:
+        description: >-
+          Unique reference, as assigned by the creditor, to unambiguously refer
+          to the payment transaction.
+          Usage: If available, the initiating party should provide this
+          reference in the structured remittance information, to enable
+          reconciliation by the creditor upon receipt of the amount of money.
+          If the business context requires the use of a creditor reference or a
+          payment remit identification, and only one identifier can be passed
+          through the end-to-end chain, the creditor's reference or payment
+          remittance identification should be quoted in the end-to-end
+          transaction identification.
+        type: string
+        
+        maxLength: 35
+      NumberOfPayments:
+        description: >-
+           NOT SUPPORTED IN YBS. Number of the payments that will be made in completing this frequency sequence including any executed since the sequence start date. 
+        type: string
+        
+        maxLength: 35
+      FirstPaymentDateTime:
+        description: >-
+          The date on which the first payment for a Standing Order schedule will
+          be made.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      RecurringPaymentDateTime:
+        description: >-
+          NOT SUPPORTED IN YBS.The date on which the first recurring payment for a Standing Order
+          schedule will be made. 
+          Usage: This must be populated only if the first recurring date is
+          different to the first payment date.
+          All dates in the JSON payloads are represented in ISO 8601 date-time format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      FinalPaymentDateTime:
+        description: >-
+          The date on which the final payment for a Standing Order schedule will
+          be made.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      FirstPaymentAmount:
+        type: object
+        properties:
+          Amount:
+            $ref: '#/definitions/OBActiveCurrencyAndAmount_SimpleType'
+          Currency:
+                      description: >-
+                        A code allocated to a currency by a Maintenance Agency under
+                        an international identification scheme, as described in the
+                        latest edition of the international standard ISO 4217 'Codes
+                        for the representation of currencies and funds'
+                      type: string
+                      pattern: '^[A-Z]{3}$'
+                      additionalProperties: false
+        required:
+          - Amount
+          - Currency
+        additionalProperties: false
+        description: The amount of the first Standing Order
+      RecurringPaymentAmount:
+        type: object
+        properties:
+          Amount:
+            $ref: '#/definitions/OBActiveCurrencyAndAmount_SimpleType'
+          Currency:
+                      description: >-
+                        A code allocated to a currency by a Maintenance Agency under
+                        an international identification scheme, as described in the
+                        latest edition of the international standard ISO 4217 'Codes
+                        for the representation of currencies and funds'
+                      type: string
+                      pattern: '^[A-Z]{3}$'
+                      additionalProperties: false
+        required:
+          - Amount
+          - Currency
+        additionalProperties: false
+        description: NOT SUPPORTED IN YBS. The amount of the recurring Standing Order
+      FinalPaymentAmount:
+        type: object
+        properties:
+          Amount:
+            $ref: '#/definitions/OBActiveCurrencyAndAmount_SimpleType'
+          Currency:
+                      description: >-
+                        A code allocated to a currency by a Maintenance Agency under
+                        an international identification scheme, as described in the
+                        latest edition of the international standard ISO 4217 'Codes
+                        for the representation of currencies and funds'
+                      type: string
+                      pattern: '^[A-Z]{3}$'
+                      additionalProperties: false
+        required:
+          - Amount
+          - Currency
+        additionalProperties: false
+        description: NOT SUPPORTED IN YBS. The amount of the final Standing Order
+      DebtorAccount:
+        $ref: '#/definitions/OBCashAccountDebtor3'
+      CreditorAccount:
+        $ref: '#/definitions/OBCashAccountCreditor2'
+    required:
+      - Frequency
+      - FirstPaymentDateTime
+      - FirstPaymentAmount
+      - CreditorAccount
+    additionalProperties: false
+  OBExchangeRate1:
+    description: Provides details on the currency exchange rate and contract.
+    type: object
+    properties:
+      UnitCurrency:
+        description: >-
+          Currency in which the rate of exchange is expressed in a currency
+          exchange. In the example 1GBP = xxxCUR, the unit currency is GBP.
+        type: string
+        pattern: '^[A-Z]{3,3}$'
+      ExchangeRate:
+        description: >-
+          The factor used for conversion of an amount from one currency to
+          another. This reflects the price at which one currency was bought with
+          another currency.
+        type: number
+      RateType:
+        $ref: '#/definitions/OBExchangeRateType2Code'
+      ContractIdentification:
+        description: >-
+          Unique and unambiguous reference to the foreign exchange contract
+          agreed between the initiating party/creditor and the debtor agent.
+        type: string
+        
+        maxLength: 256
+    required:
+      - UnitCurrency
+      - RateType
+    additionalProperties: false
+  OBExchangeRate2:
+    description: >-
+      Further detailed information on the exchange rate that has been used in
+      the payment transaction.
+    type: object
+    properties:
+      UnitCurrency:
+        description: >-
+          Currency in which the rate of exchange is expressed in a currency
+          exchange. In the example 1GBP = xxxCUR, the unit currency is GBP.
+        type: string
+        pattern: '^[A-Z]{3,3}$'
+      ExchangeRate:
+        description: >-
+          The factor used for conversion of an amount from one currency to
+          another. This reflects the price at which one currency was bought with
+          another currency.
+        type: number
+      RateType:
+        $ref: '#/definitions/OBExchangeRateType2Code'
+      ContractIdentification:
+        description: >-
+          Unique and unambiguous reference to the foreign exchange contract
+          agreed between the initiating party/creditor and the debtor agent.
+        type: string
+        
+        maxLength: 256
+      ExpirationDateTime:
+        description: >-
+          Specified date and time the exchange rate agreement will expire.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+    required:
+      - UnitCurrency
+      - ExchangeRate
+      - RateType
+    additionalProperties: false
+  OBExchangeRateType2Code:
+    description: Specifies the type used to complete the currency exchange.
+    type: string
+    enum:
+      - Actual
+      - Agreed
+      - Indicative
+  OBExternalAuthorisation1Code:
+    description: Type of authorisation flow requested.
+    type: string
+    enum:
+      - Any
+      - Single
+  OBExternalConsentStatus1Code:
+    description: Specifies the status of resource in code form.
+    type: string
+    enum:
+      - Authorised
+      - AwaitingAuthorisation
+      - Consumed
+      - Rejected
+ 
+  OBExternalPaymentContext1Code:
+    description: Specifies the payment context
+    type: string
+    enum:
+      - BillPayment
+      - EcommerceGoods
+      - EcommerceServices
+      - Other
+      - PartyToParty
+  OBExternalPermissions2Code:
+    description: 'Specifies the Open Banking service request types. '
+    type: string
+    enum:
+      - Create
+  OBExternalStatus1Code:
+    description: Specifies the status of resource in code form.
+    type: string
+    enum:
+      - InitiationCompleted
+      - InitiationFailed
+      - InitiationPending
+  OBExternalStatus2Code:
+    description: Specifies the status of the authorisation flow in code form.
+    type: string
+    enum:
+      - Authorised
+      - AwaitingFurtherAuthorisation
+      - Rejected
+ 
+  OBMultiAuthorisation1:
+    description: NOT SUPPORTED IN YBS. The multiple authorisation flow response from the ASPSP.
+    type: object
+    properties:
+      Status:
+        $ref: '#/definitions/OBExternalStatus2Code'
+      NumberRequired:
+        description: >-
+          Number of authorisations required for payment order (total required at
+          the start of the multi authorisation journey).
+        type: integer
+        format: int32
+      NumberReceived:
+        description: >-
+          Number of authorisations required for payment order (total required at
+          the start of the multi authorisation journey).
+        type: integer
+        format: int32
+      LastUpdateDateTime:
+        description: >-
+          Last date and time at the authorisation flow was updated.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      ExpirationDateTime:
+        description: >-
+          Date and time at which the requested authorisation flow must be
+          completed.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+    required:
+      - Status
+    additionalProperties: false
+    
+    
+  OBFundsAvailableResult:
+    description: Specifies the status of the FundsAvailableResult flow in code form.
+    
+    properties:
+      FundsAvailableDateTime:
+        description: >-
+          Date and time at which the requested authorisation flow must be completed.
+          All dates in the JSON payloads are represented in ISO 860 date-time format. 
+          All date-time fields in responses must include the timezone
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      FundsAvailable:
+          type: string
+          enum:
+            - True
+            - False
+          description: >-
+            Specifies the status of fund availability.
+    required: 
+      - FundsAvailableDateTime
+      - FundsAvailable
+ 
+  OBPartyIdentification43:
+    description: Party to which an amount of money is due.
+    type: object
+    properties:
+      Name:
+        description: >-
+          Name by which a party is known and which is usually used to identify
+          that party.
+        type: string
+        
+        maxLength: 140
+      PostalAddress:
+        $ref: '#/definitions/OBPostalAddress6'
+    additionalProperties: false
+  OBPostalAddress6:
+    description: >-
+      Information that locates and identifies a specific address, as defined by
+      postal services.
+    type: object
+    properties:
+      AddressType:
+        $ref: '#/definitions/OBAddressTypeCode'
+      Department:
+        description: Identification of a division of a large organisation or building.
+        type: string
+        
+        maxLength: 70
+      SubDepartment:
+        description: Identification of a sub-division of a large organisation or building.
+        type: string
+        
+        maxLength: 70
+      StreetName:
+        description: Name of a street or thoroughfare.
+        type: string
+        
+        maxLength: 70
+      BuildingNumber:
+        description: Number that identifies the position of a building on a street.
+        type: string
+        
+        maxLength: 16
+      PostCode:
+        description: >-
+          Identifier consisting of a group of letters and/or numbers that is
+          added to a postal address to assist the sorting of mail.
+        type: string
+        
+        maxLength: 16
+      TownName:
+        description: >-
+          Name of a built-up area, with defined boundaries, and a local
+          government.
+        type: string
+        
+        maxLength: 35
+      CountrySubDivision:
+        description: 'Identifies a subdivision of a country such as state, region, county.'
+        type: string
+        
+        maxLength: 35
+      Country:
+        description: Nation with its own government.
+        type: string
+        pattern: '^[A-Z]{2,2}$'
+      AddressLine:
+        items:
+          type: string
+          
+          maxLength: 70
+        type: array
+        description: >-
+          Information that locates and identifies a specific address, as defined
+          by postal services, presented in free format text.
+        minItems: 0
+        maxItems: 7
+    required:
+          - TownName
+          - Country
+    additionalProperties: false
+  OBPriority2Code:
+    description: >-
+      Indicator of the urgency or order of importance that the instructing party
+      would like the instructed party to apply to the processing of the
+      instruction.
+    type: string
+    enum:
+      - Normal
+      - Urgent
+  OBRemittanceInformation1:
+    description: >-
+      Information supplied to enable the matching of an entry with the items
+      that the transfer is intended to settle, such as commercial invoices in an
+      accounts' receivable system.
+    type: object
+    properties:
+      Unstructured:
+        description: >-
+          Information supplied to enable the matching/reconciliation of an entry
+          with the items that the payment is intended to settle, such as
+          commercial invoices in an accounts' receivable system, in an
+          unstructured form.
+        type: string
+        
+        maxLength: 140
+      Reference:
+        description: >-
+          Unique reference, as assigned by the creditor, to unambiguously refer
+          to the payment transaction.
+          Usage: If available, the initiating party should provide this
+          reference in the structured remittance information, to enable
+          reconciliation by the creditor upon receipt of the amount of money.
+          If the business context requires the use of a creditor reference or a
+          payment remit identification, and only one identifier can be passed
+          through the end-to-end chain, the creditor's reference or payment
+          remittance identification should be quoted in the end-to-end
+          transaction identification.
+          OB: The Faster Payments Scheme can only accept 18 characters for the
+          ReferenceInformation field - which is where this ISO field will be
+          mapped.
+        type: string
+        
+        maxLength: 35
+    additionalProperties: false
+  OBRisk1:
+    description: >-
+      The Risk section is sent by the initiating party to the ASPSP. It is used
+      to specify additional details for risk scoring for Payments.
+    type: object
+    properties:
+      PaymentContextCode:
+        $ref: '#/definitions/OBExternalPaymentContext1Code'
+      MerchantCategoryCode:
+        description: >-
+          Category code conform to ISO 18245, related to the type of services or
+          goods the merchant provides for the transaction.
+        type: string
+        
+        maxLength: 4
+      MerchantCustomerIdentification:
+        description: The unique customer identifier of the PSU with the merchant.
+        type: string
+        
+        maxLength: 70
+      DeliveryAddress:
+        description: >-
+          Information that locates and identifies a specific address, as defined
+          by postal services or in free format text.
+        type: object
+        properties:
+          AddressLine:
+            items:
+              type: string
+              
+              maxLength: 70
+            type: array
+            description: >-
+              Information that locates and identifies a specific address, as
+              defined by postal services, that is presented in free format text.
+            minItems: 0
+            maxItems: 2
+          StreetName:
+            description: Name of a street or thoroughfare.
+            type: string
+            
+            maxLength: 70
+          BuildingNumber:
+            description: Number that identifies the position of a building on a street.
+            type: string
+            
+            maxLength: 16
+          PostCode:
+            description: >-
+              Identifier consisting of a group of letters and/or numbers that is
+              added to a postal address to assist the sorting of mail.
+            type: string
+            
+            maxLength: 16
+          TownName:
+            description: >-
+              Name of a built-up area, with defined boundaries, and a local
+              government.
+            type: string
+            
+            maxLength: 35
+          CountrySubDivision:
+            description: >-
+              Identifies a subdivision of a country, for instance state, region,
+              county.
+            type: string
+            
+            maxLength: 35
+          Country:
+            description: 'Nation with its own government, occupying a particular territory.'
+            type: string
+            pattern: '^[A-Z]{2,2}$'
+        required:
+          - TownName
+          - Country
+        additionalProperties: false
+    additionalProperties: false
+  OBTransactionIndividualStatus1Code:
+    description: Specifies the status of the payment information group.
+    type: string
+    enum:
+      - AcceptedSettlementCompleted
+      - AcceptedSettlementInProcess
+      - Pending
+      - Rejected
+  OBWriteDataDomestic1:
+    type: object
+    properties:
+      ConsentId:
+        description: >-
+          OB: Unique identification as assigned by the ASPSP to uniquely
+          identify the consent resource.
+        type: string
+        
+        maxLength: 128
+      Initiation:
+        $ref: '#/definitions/OBDomestic1'
+    required:
+      - ConsentId
+      - Initiation
+    additionalProperties: false
+  OBWriteDataDomesticConsent1:
+    type: object
+    properties:
+      Initiation:
+        $ref: '#/definitions/OBDomestic1'
+      Authorisation:
+        $ref: '#/definitions/OBAuthorisation1'
+    required:
+      - Initiation
+    additionalProperties: false
+  OBWriteDataDomesticConsentResponse1:
+    type: object
+    properties:
+      ConsentId:
+        description: >-
+          OB: Unique identification as assigned by the ASPSP to uniquely
+          identify the consent resource.
+        type: string
+        
+        maxLength: 128
+      CreationDateTime:
+        description: >-
+          Date and time at which the resource was created.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      Status:
+        $ref: '#/definitions/OBExternalConsentStatus1Code'
+      StatusUpdateDateTime:
+        description: >-
+          Date and time at which the resource status was updated.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      CutOffDateTime:
+        description: >-
+          NOT SUPPORTED IN YBS. Specified cut-off date and time for the payment consent.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      
+      ExpectedExecutionDateTime:
+        description: >-
+          NOT SUPPORTED IN YBS. Expected execution date and time for the payment resource.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      ExpectedSettlementDateTime:
+        description: >-
+          NOT SUPPORTED IN YBS .Expected settlement date and time for the payment resource.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      Charges:
+       
+        items:
+          $ref: '#/definitions/OBCharge1'
+        type: array
+        description: >-
+          NOT SUPPORTED IN YBS. Set of elements used to provide details of a charge for the payment
+          initiation.
+      Initiation:
+        $ref: '#/definitions/OBDomestic1'
+      Authorisation:
+        $ref: '#/definitions/OBAuthorisation1'
+    required:
+      - ConsentId
+      - CreationDateTime
+      - Status
+      - StatusUpdateDateTime
+      - Initiation
+    additionalProperties: false
+  OBWriteDataDomesticResponse1:
+    type: object
+    properties:
+      DomesticPaymentId:
+        description: >-
+          OB: Unique identification as assigned by the ASPSP to uniquely
+          identify the domestic payment resource.
+        type: string
+        
+        maxLength: 40
+      ConsentId:
+        description: >-
+          OB: Unique identification as assigned by the ASPSP to uniquely
+          identify the consent resource.
+        type: string
+        
+        maxLength: 128
+      CreationDateTime:
+        description: >-
+          Date and time at which the message was created.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      Status:
+        $ref: '#/definitions/OBTransactionIndividualStatus1Code'
+      StatusUpdateDateTime:
+        description: >-
+          Date and time at which the resource status was updated.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      ExpectedExecutionDateTime:
+        description: >-
+          NOT SUPPORTED IN YBS. Expected execution date and time for the payment resource.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      ExpectedSettlementDateTime:
+        description: >-
+          NOT SUPPORTED IN YBS. Expected settlement date and time for the payment resource.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      Charges:
+        items:
+          $ref: '#/definitions/OBCharge1'
+        type: array
+        description: >-
+          Set of elements used to provide details of a charge for the payment
+          initiation.
+      Initiation:
+        $ref: '#/definitions/OBDomestic1'
+      MultiAuthorisation:
+        $ref: '#/definitions/OBMultiAuthorisation1'
+    required:
+      - DomesticPaymentId
+      - ConsentId
+      - CreationDateTime
+      - Status
+      - StatusUpdateDateTime
+      - Initiation
+    additionalProperties: false
+  
+ 
+  OBWriteDataDomesticStandingOrderConsentResponse1:
+    type: object
+    properties:
+      ConsentId:
+        description: >-
+          OB: Unique identification as assigned by the ASPSP to uniquely
+          identify the consent resource.
+        type: string
+        
+        maxLength: 128
+      CreationDateTime:
+        description: >-
+          Date and time at which the resource was created.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      Status:
+        $ref: '#/definitions/OBExternalConsentStatus1Code'
+      StatusUpdateDateTime:
+        description: >-
+          Date and time at which the resource status was updated.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      Permission:
+        $ref: '#/definitions/OBExternalPermissions2Code'
+      CutOffDateTime:
+        description: >-
+          NOT SUPPORTED IN YBS. Specified cut-off date and time for the payment consent.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      Charges:
+        items:
+          $ref: '#/definitions/OBCharge1'
+        type: array
+        description: >-
+          Set of elements used to provide details of a charge for the payment
+          initiation.
+      Initiation:
+        $ref: '#/definitions/OBDomesticStandingOrder1'
+      Authorisation:
+        $ref: '#/definitions/OBAuthorisation1'
+    required:
+      - ConsentId
+      - CreationDateTime
+      - Status
+      - StatusUpdateDateTime
+      - Permission
+      - Initiation
+    additionalProperties: false
+  OBWriteDataDomesticStandingOrderResponse1:
+    type: object
+    properties:
+      DomesticStandingOrderId:
+        description: >-
+          OB: Unique identification as assigned by the ASPSP to uniquely
+          identify the domestic standing order resource.
+        type: string
+        
+        maxLength: 40
+      ConsentId:
+        description: >-
+          OB: Unique identification as assigned by the ASPSP to uniquely
+          identify the consent resource.
+        type: string
+        
+        maxLength: 128
+      CreationDateTime:
+        description: >-
+          Date and time at which the resource was created.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      Status:
+        $ref: '#/definitions/OBExternalStatus1Code'
+      StatusUpdateDateTime:
+        description: >-
+          Date and time at which the resource status was updated.
+          All dates in the JSON payloads are represented in ISO 8601 date-time
+          format. 
+          All date-time fields in responses must include the timezone. An
+          example is below:
+          2017-04-05T10:43:07+00:00
+        type: string
+        format: date-time
+      Charges:
+        items:
+          $ref: '#/definitions/OBCharge1'
+        type: array
+        description: >-
+          Set of elements used to provide details of a charge for the payment
+          initiation.
+      Initiation:
+        $ref: '#/definitions/OBDomesticStandingOrder1'
+      MultiAuthorisation:
+        $ref: '#/definitions/OBMultiAuthorisation1'
+    required:
+      - DomesticStandingOrderId
+      - ConsentId
+      - CreationDateTime
+      - Status
+      - StatusUpdateDateTime
+      - Initiation
+    additionalProperties: false
+  OBWriteDataPaymentFundConfermationResponse1:
+    type: object
+    properties:
+      FundsAvailableResult:
+        $ref: '#/definitions/OBFundsAvailableResult'
+    additionalProperties: false
+ 
+  OBWriteDomestic1:
+    type: object
+    properties:
+      Data:
+        $ref: '#/definitions/OBWriteDataDomestic1'
+      Risk:
+        $ref: '#/definitions/OBRisk1'
+    required:
+      - Data
+      - Risk
+    additionalProperties: false
+  OBWriteDomesticConsent1:
+    type: object
+    properties:
+      Data:
+        $ref: '#/definitions/OBWriteDataDomesticConsent1'
+      Risk:
+        $ref: '#/definitions/OBRisk1'
+    required:
+      - Data
+      - Risk
+    additionalProperties: false
+  OBWriteDomesticConsentResponse1:
+    type: object
+    properties:
+      Data:
+        $ref: '#/definitions/OBWriteDataDomesticConsentResponse1'
+      Risk:
+        $ref: '#/definitions/OBRisk1'
+      Links:
+        $ref: '#/definitions/Links'
+      Meta:
+        $ref: '#/definitions/Meta'
+    required:
+      - Data
+      - Risk
+      - Links
+      - Meta
+    additionalProperties: false
+  OBWriteDomesticResponse1:
+    type: object
+    properties:
+      Data:
+        $ref: '#/definitions/OBWriteDataDomesticResponse1'
+      Links:
+        $ref: '#/definitions/Links'
+      Meta:
+        $ref: '#/definitions/Meta'
+    required:
+      - Data
+      - Links
+      - Meta
+    additionalProperties: false
+  OBWriteDataDomesticStandingOrder1:
+    type: object
+    properties:
+      ConsentId:
+        description: >-
+          OB: Unique identification as assigned by the ASPSP to uniquely
+          identify the consent resource.
+        type: string
+        
+        maxLength: 128
+      Initiation:
+        $ref: '#/definitions/OBDomesticStandingOrder1'
+    required:
+      - ConsentId
+      - Initiation
+    additionalProperties: false
+  
+ 
+ 
+  OBWriteDomesticStandingOrder1:
+    type: object
+    properties:
+      Data:
+        $ref: '#/definitions/OBWriteDataDomesticStandingOrder1'
+      Risk:
+        $ref: '#/definitions/OBRisk1'
+    required:
+      - Data
+      - Risk
+    additionalProperties: false
+  OBWriteDataDomesticStandingOrderConsent1:
+    type: object
+    properties:
+      Permission:
+        $ref: '#/definitions/OBExternalPermissions2Code'
+      Initiation:
+        $ref: '#/definitions/OBDomesticStandingOrder1'
+      Authorisation:
+        $ref: '#/definitions/OBAuthorisation1'
+    required:
+      - Permission
+      - Initiation
+    additionalProperties: false
+  OBWriteDomesticStandingOrderConsent1:
+    type: object
+    properties:
+      Data:
+        $ref: '#/definitions/OBWriteDataDomesticStandingOrderConsent1'
+      Risk:
+        $ref: '#/definitions/OBRisk1'
+    required:
+      - Data
+      - Risk
+    additionalProperties: false
+  OBWriteDomesticStandingOrderConsentResponse1:
+    type: object
+    properties:
+      Data:
+        $ref: '#/definitions/OBWriteDataDomesticStandingOrderConsentResponse1'
+      Risk:
+        $ref: '#/definitions/OBRisk1'
+      Links:
+        $ref: '#/definitions/Links'
+      Meta:
+        $ref: '#/definitions/Meta'
+    required:
+      - Data
+      - Risk
+      - Links
+      - Meta
+    additionalProperties: false
+    
+  OBWriteDomesticStandingOrderResponse1:
+    type: object
+    properties:
+      Data:
+        $ref: '#/definitions/OBWriteDataDomesticStandingOrderResponse1'
+      Links:
+        $ref: '#/definitions/Links'
+      Meta:
+        $ref: '#/definitions/Meta'
+    required:
+      - Data
+      - Links
+      - Meta
+    additionalProperties: false
+    
+  OBWritePaymentFundConfermationReadResponse1:
+    type: object
+    properties:
+      Data:
+        $ref: '#/definitions/OBWriteDataPaymentFundConfermationResponse1'
+      Links:
+        $ref: '#/definitions/Links'
+      Meta:
+        $ref: '#/definitions/Meta'
+    required:
+      - Data
+      - Links
+      - Meta
+    additionalProperties: false
+ 
+  ISODateTime:
+    description: >-
+      All dates in the JSON payloads are represented in ISO 8601 date-time
+      format. 
+      All date-time fields in responses must include the timezone. An example is
+      below:
+      2017-04-05T10:43:07+00:00
+    type: string
+    format: date-time
+  Links:
+    type: object
+    description: Links relevant to the payload
+    properties:
+      Self:
+        type: string
+        format: uri
+      First:
+        type: string
+        format: uri
+      Prev:
+        type: string
+        format: uri
+      Next:
+        type: string
+        format: uri
+      Last:
+        type: string
+        format: uri
+    additionalProperties: false
+    required:
+      - Self
+  Meta:
+    title: MetaData
+    type: object
+    description: Meta Data relevant to the payload
+    properties:
+      TotalPages:
+        type: integer
+        format: int32
+      FirstAvailableDateTime:
+        $ref: '#/definitions/ISODateTime'
+      LastAvailableDateTime:
+        $ref: '#/definitions/ISODateTime'
+    additionalProperties: false

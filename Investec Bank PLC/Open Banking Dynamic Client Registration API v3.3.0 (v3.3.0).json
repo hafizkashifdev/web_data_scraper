@@ -1,0 +1,504 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Open Banking Dynamic Client Registration API v3.3.0",
+    "description": "Submit a Software Statement Assertion to Investec PLC for the purpose of creating  OAuth clients that are registered with Investec PLC without the needs to onboard  to the Investec Developer Portal.\n",
+    "termsOfService": "https://developer.investec.com/terms-of-use",
+    "contact": {
+      "name": "Investec Open API Team",
+      "email": "openapi@investec.co.uk"
+    },
+    "version": "v3.3.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.investec.com/open-banking/v3.3/dcr"
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "Register Client"
+        ],
+        "summary": "Register a client by way of a Software Statement Assertion",
+        "description": "Endpoint will be secured by way of Mutual Authentication over TLS",
+        "requestBody": {
+          "description": "A request to register a Software Statement Assertion with an ASPSP",
+          "content": {
+            "application/jose": {
+              "schema": {
+                "type": "string",
+                "format": "OBClientRegistration1"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Client registration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/OBRegistrationProperties1"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request failed due to client error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationError"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "requestBody"
+      }
+    },
+    "/register/{ClientId}": {
+      "get": {
+        "tags": [
+          "Get Client"
+        ],
+        "summary": "Get a client by way of Client ID",
+        "parameters": [
+          {
+            "name": "ClientId",
+            "in": "path",
+            "description": "The client ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client registration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/OBRegistrationProperties1"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Request failed due to unknown or invalid Client or invalid access token",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Update Client"
+        ],
+        "summary": "Update a client by way of Client ID",
+        "parameters": [
+          {
+            "name": "ClientId",
+            "in": "path",
+            "description": "The client ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A request to register a Software Statement Assertion with an ASPSP",
+          "content": {
+            "application/jose": {
+              "schema": {
+                "type": "string",
+                "format": "OBClientRegistration1"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Client registration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/OBRegistrationProperties1"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request failed due to client error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Request failed due to unknown or invalid Client or invalid access token",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "requestBody"
+      },
+      "delete": {
+        "tags": [
+          "Delete Client"
+        ],
+        "summary": "Delete a client by way of Client ID",
+        "parameters": [
+          {
+            "name": "ClientId",
+            "in": "path",
+            "description": "The client ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Client deleted",
+            "content": {}
+          },
+          "401": {
+            "description": "Request failed due to unknown or invalid Client or invalid access token",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SupportedAlgorithms": {
+        "type": "string",
+        "enum": [
+          "PS256"
+        ]
+      },
+      "OBRegistrationProperties1": {
+        "type": "object",
+        "properties": {
+          "client_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "type": "string",
+            "description": "OAuth 2.0 client identifier string"
+          },
+          "client_secret": {
+            "maxLength": 36,
+            "minLength": 1,
+            "type": "string",
+            "description": "OAuth 2.0 client secret string"
+          },
+          "redirect_uris": {
+            "type": "array",
+            "items": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "token_endpoint_auth_method": {
+            "type": "string",
+            "enum": [
+              "private_key_jwt"
+            ]
+          },
+          "grant_types": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "client_credentials"
+              ]
+            }
+          },
+          "scope": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string"
+          },
+          "software_statement": {
+            "type": "string",
+            "format": "JWT"
+          },
+          "jwks_uri": {
+            "type": "string"
+          },
+          "client_name": {
+            "type": "string"
+          },
+          "application_type": {
+            "type": "string",
+            "enum": [
+              "web",
+              "mobile"
+            ]
+          },
+          "id_token_signed_response_alg": {
+            "$ref": "#/components/schemas/SupportedAlgorithms"
+          },
+          "request_object_signing_alg": {
+            "$ref": "#/components/schemas/SupportedAlgorithms"
+          },
+          "token_endpoint_auth_signing_alg": {
+            "$ref": "#/components/schemas/SupportedAlgorithms"
+          }
+        }
+      },
+      "OBClientRegistration1": {
+        "allOf": [
+          {
+            "required": [
+              "application_type",
+              "aud",
+              "exp",
+              "iat",
+              "iss",
+              "jti",
+              "redirect_uris",
+              "response_types",
+              "scope",
+              "software_id",
+              "software_statement"
+            ],
+            "type": "object",
+            "properties": {
+              "iss": {
+                "maxLength": 22,
+                "minLength": 1,
+                "pattern": "^[0-9a-zA-Z]{1,22}$",
+                "type": "string",
+                "description": "Unique identifier for the TPP. Implemented as Base62 encoded GUID"
+              },
+              "iat": {
+                "type": "integer",
+                "description": "The time at which the request was issued by the TPP  expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+                "format": "int32"
+              },
+              "exp": {
+                "type": "integer",
+                "description": "The time at which the request expires expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+                "format": "int32"
+              },
+              "aud": {
+                "maxLength": 18,
+                "minLength": 1,
+                "pattern": "^[0-9a-zA-Z]{1,18}$",
+                "type": "string",
+                "description": "The audience for the request. This should be the unique identifier\nfor the ASPSP issued by the issuer of the software statement.\nImplemented as Base62 encoded GUID\n"
+              },
+              "jti": {
+                "maxLength": 36,
+                "minLength": 36,
+                "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                "type": "string",
+                "description": "Unique identifier for the JWT implemented as UUID v4"
+              },
+              "redirect_uris": {
+                "type": "array",
+                "items": {
+                  "maxLength": 256,
+                  "minLength": 1,
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "grant_types": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "client_credentials",
+                    "authorization_code"
+                  ]
+                }
+              },
+              "scope": {
+                "maxLength": 256,
+                "minLength": 1,
+                "type": "string"
+              },
+              "software_statement": {
+                "type": "string",
+                "format": "JWT"
+              },
+              "software_id": {
+                "type": "string"
+              },
+              "application_type": {
+                "type": "string",
+                "enum": [
+                  "web",
+                  "mobile"
+                ]
+              },
+              "request_object_signing_alg": {
+                "$ref": "#/components/schemas/SupportedAlgorithms"
+              },
+              "response_types": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "code id_token"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RegistrationError": {
+        "required": [
+          "error"
+        ],
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "invalid_request_object"
+            ]
+          },
+          "error_description": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "OBClientRegistration1": {
+        "description": "Client registration",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/OBRegistrationProperties1"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "400Error": {
+        "description": "Request failed due to client error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RegistrationError"
+            }
+          }
+        }
+      },
+      "401Error": {
+        "description": "Request failed due to unknown or invalid Client or invalid access token",
+        "content": {}
+      }
+    },
+    "parameters": {
+      "Authorization": {
+        "name": "Authorization",
+        "in": "header",
+        "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ClientId": {
+        "name": "ClientId",
+        "in": "path",
+        "description": "The client ID",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "requestBodies": {
+      "ClientRegistration": {
+        "description": "A request to register a Software Statement Assertion with an ASPSP",
+        "content": {
+          "application/jose": {
+            "schema": {
+              "type": "string",
+              "format": "OBClientRegistration1"
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "x-original-swagger-version": "2.0"
+}

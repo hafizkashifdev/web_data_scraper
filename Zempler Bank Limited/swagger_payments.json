@@ -1,0 +1,1619 @@
+﻿{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "description": "<br><p>The Zempler Payment API allows you to initiate single immediate, as well as batch domestic payments in GBP currency.</p><br><p>The guide below helps you in using the Payment API endpoints to initiate, approve or reject, and submit payments.</p><br><h3>Sandbox</h3><br><p>This Sandbox environment provides a means to test integrations prior to going live.</p><br><p>Please use the ClientID: <i>aps.swagger.client</i> and Secret: <i>secret</i> for sandbox.</p><br><p>Please do not provide any identifiable personal information in the sandbox as this is a shared resource and it's using shared credentials.</p><br><h3>Character Encoding</h3><br><p>The API requests and responses must use a UTF-8 character encoding. Only characters that can be stored on 1 byte (i.e. US-ASCII characters) are accepted, i.e. First code point = U+0020 and Last code point = U+007E. See also the character list for UTF-8.</p><br><p>In case the encoding is UTF-8 but the message contains a UTF-8 character out of the defined range (e.g. emoji characters, like \"Happy Birthday \uD83C\uDF82\uD83C\uDF82!\" as a reference),<ul><li>response with an HTTP 400 (Bad Request) status code is returned</li><li>error message is 'Unsupported characters'</li</ul></p><br><h3>Idempotency</h3><br><p>Idempotency ensures requests can be called multiple times, whilst the action only occurs once. If idempotency is implemented for an API endpoint:<ul><li>The x-idempotency-key provided in the header must be at most 40 characters in size. If a larger x-idempotency-key length is provided, it will be rejected with a status code of 400 (Bad Request).</li><li>You must not change the request body while using the same x-idempotency-key.</li><li>A request will be treated as idempotent if it had received the first request with the same x-idempotency-key from the same user in the preceding 24 hours.</li><li>We will respond to the request with the status of the resource and a HTTP status code of 201 (Created).</li><li>You must not use the idempotent behaviour to poll the status of resources.</li></ul></p><br><h3>Create a Single Payment</h3><br><p>To create a payment, please follow these steps<ul><li>Submit all required data fields to the \"/payments\" endpoint. Data descriptions are available by clicking the 'Model' link under 'Data Type' heading in the parameter list.</li><li>The response you receive will contain a message describing the status of the payment along with its <i>PaymentId</i>, creation date and a link to the created payment resource.</li></ul></p><p>Debtor account details used for testing are:<br/><table><thead><tr><td><strong>Account Number</strong><td><strong>Sort Code</td></tr></thead><tbody><tr><td>12345674</td><td>123456</td></tr><tr><td>12345682</td><td>123456</td></tr><tr><td>12345697</td><td>123456</td></tr></tbody></table></p><br><h3>Create a Batch Payment</h3><br><p>Payments are created by submitting a json array in body to \"/payments/batch\". The system will automatically assign a batchPaymentId to the batch which is returned in the response.<br><br>The field data passed in the request is the same as for the single payment, except passed as an array.</p><br/><p>Debtor account details used for testing are:<br/><table><thead><tr><td><strong>Account Number</strong><td><strong>Sort Code</td></tr></thead><tbody><tr><td>12345674</td><td>123456</td></tr><tr><td>12345682</td><td>123456</td></tr><tr><td>12345697</td><td>123456</td></tr></tbody></table></p><br><h3>Approve or reject a payment</h3><br><p>The approval or rejection of a payment cannot be done via the API.</p><br><p>It is only available in the production Partner Portal where user log-in is required.</p><br><p>Please note that this functionality is not available in the Sandbox.</p><br><h3>Submit a payment</h3><br><p>The ability to submit a payment is not available in the Payment API for the Sandbox. However, the  functionality is available in the Payment API for the Production environment.</p>",
+    "title": "Zempler API - Payments"
+  },
+  "host": "apisandbox.zempler.tech",
+  "basePath": "/payments/",
+  "schemes": [ "https" ],
+  "paths": {
+    "/payments": {
+      "post": {
+        "tags": [ "Operations Payments - Zempler Payment" ],
+        "summary": "Create a single immediate payment",
+        "operationId": "POSTpayments",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "x-idempotency-key",
+            "in": "header",
+            "description": "Every request will be processed only once per x-idempotency-key.  The Idempotency Key will be valid for 24 hours.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Setup a single immediate payment",
+            "required": true,
+            "schema": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequest" }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Payment is created.",
+            "schema": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponse" },
+            "examples": {
+              "application/json": {
+                "Data": {
+                  "PaymentId": "12345678-1234-1234-1234-123456789012",
+                  "Status": "AcceptedTechnicalValidation",
+                  "CreationDateTime": "2020-06-29T15:18:05.5250486+01:00",
+                  "Initiation": {
+                    "InstructionIdentification": "InstId_1",
+                    "EndToEndIdentification": "E2E_Id",
+                    "InstructedAmount": {
+                      "Amount": "150.00",
+                      "Currency": "GBP"
+                    },
+                    "DebtorAccount": {
+                      "SchemeName": "SortCodeAccountNumber",
+                      "Identification": "08728311223344"
+                    },
+                    "CreditorAccount": {
+                      "SchemeName": "SortCodeAccountNumber",
+                      "Identification": "08992288776656",
+                      "Name": "Test Payee Name",
+                      "SecondaryIdentification": "ABC123"
+                    },
+                    "RemittanceInformation": {
+                      "Unstructured": "Internal ops code 5120101",
+                      "Reference": "REF-101"
+                    }
+                  }
+                },
+                "Risk": {
+                  "PaymentContextCode": "PersonToPerson",
+                  "MerchantCategoryCode": "0783",
+                  "MerchantCustomerIdentification": "MRCHNT_1",
+                  "DeliveryAddress": {
+                    "AddressLine": [ "Flat 7", "Acacia Lodge" ],
+                    "StreetName": "Acacia Avenue",
+                    "BuildingNumber": "27",
+                    "PostCode": "GU31 2ZZ",
+                    "TownName": "Sparsholt",
+                    "CountrySubDivision": [ "Wessex" ],
+                    "Country": "GB"
+                  }
+                },
+                "Links": { "Self": "https://api.zempler.tech/payments/payments/12345678-1234-1234-1234-123456789012" },
+                "Meta": {}
+              }
+            }
+          },
+          "210": { "description": "Payment created, SCA required for submission." },
+          "400": { "description": "Invalid request." },
+          "401": { "description": "Authentication required." },
+          "403": { "description": "Not authorised to make the call." }
+        },
+"security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/payments/{paymentId}": {
+      "get": {
+        "tags": [ "Operations Payments - Zempler Payment" ],
+        "summary": "Get a single immediate payment",
+        "operationId": "GETpayments/{paymentId}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "paymentId",
+            "in": "path",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the payment setup resource.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single immediate payment details returned",
+            "schema": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupGETResponse" },
+            "examples": {
+              "application/json": {
+                "Data": {
+                  "PaymentId": "12345678-1234-1234-1234-123456789012",
+                  "Status": "AcceptedTechnicalValidation",
+                  "CreationDateTime": "2020-06-29T15:18:05.5290485+01:00",
+                  "Initiation": {
+                    "InstructionIdentification": "InstId_1",
+                    "EndToEndIdentification": "E2E_Id",
+                    "InstructedAmount": {
+                      "Amount": "150.00",
+                      "Currency": "GBP"
+                    },
+                    "DebtorAccount": {
+                      "SchemeName": "SortCodeAccountNumber",
+                      "Identification": "08728311223344"
+                    },
+                    "CreditorAccount": {
+                      "SchemeName": "SortCodeAccountNumber",
+                      "Identification": "08992288776656",
+                      "Name": "Test Payee Name",
+                      "SecondaryIdentification": "ABC123"
+                    },
+                    "RemittanceInformation": {
+                      "Unstructured": "Internal ops code 5120101",
+                      "Reference": "REF-101"
+                    }
+                  }
+                },
+                "Risk": {
+                  "PaymentContextCode": "PersonToPerson",
+                  "MerchantCategoryCode": "0783",
+                  "MerchantCustomerIdentification": "MRCHNT_1",
+                  "DeliveryAddress": {
+                    "AddressLine": [ "Flat 7", "Acacia Lodge" ],
+                    "StreetName": "Acacia Avenue",
+                    "BuildingNumber": "27",
+                    "PostCode": "GU31 2ZZ",
+                    "TownName": "Sparsholt",
+                    "CountrySubDivision": [ "Wessex" ],
+                    "Country": "GB"
+                  }
+                },
+                "Links": { "Self": "https://api.zempler.tech/payments/payments/12345678-1234-1234-1234-123456789012" },
+                "Meta": {}
+              }
+            }
+          },
+          "400": { "description": "Invalid request." },
+          "401": { "description": "Authentication required." },
+          "403": { "description": "Not authorised to make the call." }
+        },
+"security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/payments/list": {
+      "get": {
+        "tags": [ "Operations Payments - Zempler Payment" ],
+        "summary": "Returns the details of the payments consent request, or the payment order.",
+        "operationId": "GETpayments/list?portalStatuses[0]={portalStatuses[0]}&portalStatuses[1]={portalStatuses[1]}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "portalStatuses",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [ "Created", "AwaitingApproval", "Rejected", "AwaitingSubmission", "Submitted", "Processed", "Failed", "Expired" ]
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of payments created by the client, filtered by statues.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.AggregatedPaymentListReponse" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "Data": {
+                    "PaymentId": "45678901-3456-3456-3456-456789012345",
+                    "Status": "AcceptedCustomerProfile",
+                    "CreationDateTime": "2020-06-29T15:18:05.5440484+01:00",
+                    "InstructedAmount": {
+                      "Amount": 12.50,
+                      "CurrencyCode": "GBP"
+                    }
+                  },
+                  "Links": { "Self": "https://api.zempler.tech/payments/payments/45678901-3456-3456-3456-456789012345" },
+                  "Meta": {}
+                },
+                {
+                  "Data": {
+                    "PaymentSubmissionId": "23456789-2345-2345-2345-234567890123",
+                    "PaymentId": "12345678-1234-1234-1234-123456789012",
+                    "Status": "AcceptedSettlementCompleted",
+                    "CreationDateTime": "2020-06-29T15:18:05.5450506+01:00",
+                    "InstructedAmount": {
+                      "Amount": 150.00,
+                      "CurrencyCode": "GBP"
+                    }
+                  },
+                  "Links": { "Self": "https://api.zempler.tech/payments/payment-submissions/23456789-2345-2345-2345-234567890123" },
+                  "Meta": {}
+                }
+              ]
+            }
+          },
+          "204": { "description": "No payments found for client." },
+          "401": { "description": "Authentication required." },
+          "403": { "description": "Not authorised to make the call." }
+        },
+"security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/payments/{paymentId}/status": {
+      "get": {
+        "tags": [ "Operations Payments - Zempler Payment" ],
+        "summary": "Get the status of a single immediate payment",
+        "operationId": "GETpayments/{paymentId}/status",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "paymentId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "object" }
+          }
+        },
+"security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/payments/batch": {
+      "post": {
+        "tags": [ "Operations Payments - Zempler Payment" ],
+        "summary": "Post single payments in a batch",
+        "operationId": "POSTpayments/batch",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "x-idempotency-key",
+            "in": "header",
+            "description": "The idempotency key for idempotency check",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "payments",
+            "in": "body",
+            "description": "List of single payments to post in a batch.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequest" }
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Payments are posted.",
+            "schema": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentCreationResponse" },
+            "examples": {
+              "application/json": {
+                "Data": { "BatchPaymentId": "730446d5-2dff-4fa1-811e-29d2534fb824" },
+                "Links": { "Self": "https://api.zempler.tech/payments/payments/batch/730446d5-2dff-4fa1-811e-29d2534fb824" },
+                "Meta": {}
+              }
+            }
+          },
+          "400": { "description": "Invalid request." },
+          "401": { "description": "Authentication required." },
+          "403": { "description": "Not authorised to make the call." }
+        },
+"security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/payments/batch/{batchPaymentId}": {
+      "get": {
+        "tags": [ "Operations Payments - Zempler Payment" ],
+        "summary": "Get batch payment details by batch payment id",
+        "operationId": "GETpayments/batch/{batchPaymentId}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "batchPaymentId",
+            "in": "path",
+            "description": "Unique identification to uniquely identify the batch payment resource.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Batch payment details returned.",
+            "schema": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentGetReponse" },
+            "examples": {
+              "application/json": {
+                "Data": {
+                  "BatchId": "83058a94-8faf-40f6-8707-4ed304ea1fe1",
+                  "Status": "Accepted",
+                  "CreationDateTime": "2020-06-29T15:18:05.5860528+01:00",
+                  "Payments": [
+                    {
+                      "Data": {
+                        "PaymentId": "00345678-1234-1234-1234-123456789012",
+                        "Status": "AcceptedTechnicalValidation",
+                        "CreationDateTime": "2020-06-29T15:18:05.5860528+01:00",
+                        "Initiation": {
+                          "InstructionIdentification": "InstId_0",
+                          "EndToEndIdentification": "E2E_Id_0",
+                          "InstructedAmount": {
+                            "Amount": "100.00",
+                            "Currency": "GBP"
+                          },
+                          "DebtorAccount": {
+                            "SchemeName": "SortCodeAccountNumber",
+                            "Identification": "08728311223340"
+                          },
+                          "CreditorAccount": {
+                            "SchemeName": "SortCodeAccountNumber",
+                            "Identification": "08992288776650",
+                            "Name": "Test Payee Name",
+                            "SecondaryIdentification": "ABC120"
+                          },
+                          "RemittanceInformation": {
+                            "Unstructured": "Internal ops code 5120100",
+                            "Reference": "REF-100"
+                          }
+                        }
+                      },
+                      "Risk": {
+                        "PaymentContextCode": "PersonToPerson",
+                        "MerchantCategoryCode": "0783",
+                        "MerchantCustomerIdentification": "MRCHNT_1",
+                        "DeliveryAddress": {
+                          "AddressLine": [ "Flat 7", "Acacia Lodge" ],
+                          "StreetName": "Acacia Avenue",
+                          "BuildingNumber": "27",
+                          "PostCode": "GU31 2ZZ",
+                          "TownName": "Sparsholt",
+                          "CountrySubDivision": [ "Wessex" ],
+                          "Country": "GB"
+                        }
+                      },
+                      "Links": { "Self": "https://api.zempler.tech/payments/payments/00345678-1234-1234-1234-123456789012" },
+                      "Meta": {}
+                    },
+                    {
+                      "Data": {
+                        "PaymentId": "11345678-1234-1234-1234-123456789012",
+                        "Status": "AcceptedTechnicalValidation",
+                        "CreationDateTime": "2020-06-29T15:18:05.5860528+01:00",
+                        "Initiation": {
+                          "InstructionIdentification": "InstId_1",
+                          "EndToEndIdentification": "E2E_Id_1",
+                          "InstructedAmount": {
+                            "Amount": "101.00",
+                            "Currency": "GBP"
+                          },
+                          "DebtorAccount": {
+                            "SchemeName": "SortCodeAccountNumber",
+                            "Identification": "08728311223341"
+                          },
+                          "CreditorAccount": {
+                            "SchemeName": "SortCodeAccountNumber",
+                            "Identification": "08992288776651",
+                            "Name": "Test Payee Name",
+                            "SecondaryIdentification": "ABC121"
+                          },
+                          "RemittanceInformation": {
+                            "Unstructured": "Internal ops code 5120101",
+                            "Reference": "REF-101"
+                          }
+                        }
+                      },
+                      "Risk": {
+                        "PaymentContextCode": "PersonToPerson",
+                        "MerchantCategoryCode": "0783",
+                        "MerchantCustomerIdentification": "MRCHNT_1",
+                        "DeliveryAddress": {
+                          "AddressLine": [ "Flat 7", "Acacia Lodge" ],
+                          "StreetName": "Acacia Avenue",
+                          "BuildingNumber": "27",
+                          "PostCode": "GU31 2ZZ",
+                          "TownName": "Sparsholt",
+                          "CountrySubDivision": [ "Wessex" ],
+                          "Country": "GB"
+                        }
+                      },
+                      "Links": { "Self": "https://api.zempler.tech/payments/payments/11345678-1234-1234-1234-123456789012" },
+                      "Meta": {}
+                    }
+                  ]
+                },
+                "Links": { "Self": "https://api.zempler.tech/payments/payments/83058a94-8faf-40f6-8707-4ed304ea1fe1" },
+                "Meta": {}
+              }
+            }
+          },
+          "400": { "description": "Invalid request." },
+          "401": { "description": "Authentication required." },
+          "403": { "description": "Not authorised to make the call." }
+        },
+"security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/payments/batch/list": {
+      "get": {
+        "tags": [ "Operations Payments - Zempler Payment" ],
+        "summary": "Returns the batch-payments initiated by the client",
+        "operationId": "GETpayments/batch/list?statuses[0]={statuses[0]}&statuses[1]={statuses[1]}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "statuses",
+            "in": "query",
+            "description": "List of batch payment statuses for filtering",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [ "Created", "WaitingForApproval", "Accepted", "Rejected", "InProgress", "Submitted", "Expired", "Failed" ]
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of batch payments created by the client, filtered by statues.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentListResponse" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "Data": {
+                    "BatchPaymentId": "83058a94-8faf-40f6-8707-4ed304ea1fe1",
+                    "Status": "WaitingForApproval",
+                    "CreationDateTime": "2020-06-26T15:18:05.6080547+01:00",
+                    "TotalAmount": {
+                      "Amount": 5500.00,
+                      "CurrencyCode": "GBP"
+                    }
+                  },
+                  "Links": { "Self": "https://api.zempler.tech/payments/batch/83058a94-8faf-40f6-8707-4ed304ea1fe1" },
+                  "Meta": {}
+                },
+                {
+                  "Data": {
+                    "BatchPaymentId": "345678-1234-1234-1234-123456789012",
+                    "Status": "Accepted",
+                    "CreationDateTime": "2020-06-27T15:18:05.6080547+01:00",
+                    "TotalAmount": {
+                      "Amount": 149.50,
+                      "CurrencyCode": "GBP"
+                    }
+                  },
+                  "Links": { "Self": "https://api.zempler.tech/payments/batch/345678-1234-1234-1234-123456789012" },
+                  "Meta": {}
+                },
+                {
+                  "Data": {
+                    "BatchPaymentId": "12345678-1234-1234-1234-123456789012",
+                    "Status": "Submitted",
+                    "CreationDateTime": "2020-06-28T15:18:05.6080547+01:00",
+                    "TotalAmount": {
+                      "Amount": 2300.00,
+                      "CurrencyCode": "GBP"
+                    }
+                  },
+                  "Links": { "Self": "https://api.zempler.tech/payments/batch/12345678-1234-1234-1234-123456789012" },
+                  "Meta": {}
+                }
+              ]
+            }
+          },
+          "204": { "description": "No batch payments found for client." },
+          "401": { "description": "Authentication required." },
+          "403": { "description": "Not authorised to make the call." }
+        },
+"security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/payments/batch/search": {
+      "get": {
+        "tags": [
+          "Operations Payments - Zempler Payment"
+        ],
+        "summary": "Returns the batch-payments filtered by search criteria.",
+        "operationId": "0#GETpayments/batch/search",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of batch payments created by the client, filtered search criteria.",
+            "schema": {
+              "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentSearchResponse"
+            }
+          },
+          "204": {
+            "description": "No batch payments found for client."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Not authorised to make the call."
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "aps_profile",
+              "applications",
+              "accounts",
+              "payments",
+              "eligibility"
+            ]
+          }
+        ]
+      }
+    },
+    "/payments/search": {
+      "get": {
+        "tags": [
+          "Operations Payments - Zempler Payment"
+        ],
+        "summary": "Returns the payments filtered by search criteria.",
+        "operationId": "0#GETpayments/search",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "aps_profile",
+              "applications",
+              "accounts",
+              "payments",
+              "eligibility"
+            ]
+          }
+        ]
+      }
+    },
+    "/payments/batch/duplicate-verification": {
+      "post": {
+        "tags": [
+          "Operations Payments - Zempler Payment"
+        ],
+        "summary": "Check if batch is potential duplicate",
+        "operationId": "0#POSTpayments/batch/duplicate-verification",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "description": "The request parameter with required data.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentPotentialDuplicateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verification passed.",
+            "schema": {
+              "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentApprovalResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid request."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Not authorised to make the call."
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "aps_profile",
+              "applications",
+              "accounts",
+              "payments",
+              "eligibility"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequest": {
+      "required": [ "data", "risk" ],
+      "type": "object",
+      "properties": {
+        "data": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestData" },
+        "risk": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestRisk" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestData": {
+      "required": [ "initiation" ],
+      "type": "object",
+      "properties": { "initiation": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestInitiation" } }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestRisk": {
+      "type": "object",
+      "properties": {
+        "paymentContextCode": {
+          "description": "Specifies the payment context",
+          "enum": [ "BillPayment", "EcommerceGoods", "EcommerceServices", "Other", "PersonToPerson" ],
+          "type": "string"
+        },
+        "merchantCategoryCode": {
+          "description": "Category code conforms to ISO 18245, related to the type of services or goods the merchant provides for the transaction",
+          "maxLength": 4,
+          "minLength": 3,
+          "type": "string"
+        },
+        "merchantCustomerIdentification": {
+          "description": "The unique customer identifier of the PSU with the merchant.",
+          "maxLength": 70,
+          "minLength": 1,
+          "type": "string"
+        },
+        "deliveryAddress": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestDeliveryAddress",
+          "description": "Information that locates and identifies a specific address, as defined by postal services or in free format text."
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestInitiation": {
+      "required": [ "instructionIdentification", "endToEndIdentification", "instructedAmount", "debtorAccount", "creditorAccount", "remittanceInformation" ],
+      "type": "object",
+      "properties": {
+        "requestedExecutionDateTime": {
+          "format": "date-time",
+          "type": "string",
+          "description": "Scheduled date and time for payment. Payments are normally processed within two hours of requested of scheduled date and time, within normal payment operating hours only. Payments submitted without a time will be processed on the date at start of the processing window. Scheduled date cannot be in the past or more than 35 days in the future."
+        },
+        "instructionIdentification": {
+          "description": "Unique identification as assigned by an instructing party for an instructed party to unambiguously identify the instruction. Usage: the  instruction identification is a point to point reference that can be used between the instructing party and the instructed party to refer to the individual instruction. It can be included in several messages related to the instruction.",
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string"
+        },
+        "endToEndIdentification": {
+          "description": "Unique identification assigned by the initiating party to unambiguously identify the transaction. This identification is passed on, unchanged, throughout the entire end-to-end chain. Usage: The end-to-end identification can be used for reconciliation or to link tasks relating to the transaction. It can be included in several messages related to the transaction. OB: The Faster Payments Scheme can only access 31 characters for the EndToEndIdentification field.",
+          "maxLength": 31,
+          "minLength": 1,
+          "type": "string"
+        },
+        "instructedAmount": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestInstructedAmount",
+          "description": "Amount of money to be moved between the debtor and creditor, before deduction of charges, expressed in the currency as ordered by the initiating party. Usage: This amount has to be transported unchanged through the transaction chain. Value must be greater than zero."
+        },
+        "debtorAccount": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestDebtorAccount",
+          "description": "Unambiguous identification of the account of the debtor to which a debit entry will be made as a result of the transaction."
+        },
+        "creditorAccount": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestCreditorAccount",
+          "description": "Unambiguous identification of the account of the creditor to which a credit entry will be posted as a result of the payment transaction."
+        },
+        "remittanceInformation": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestRemittanceInformation",
+          "description": "Information supplied to enable the matching of an entry with the items that the transfer is intended to settle, such as commercial invoices in an accounts' receivable system."
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestDeliveryAddress": {
+      "type": "object",
+      "properties": {
+        "addressLine": {
+          "description": "Information that locates and identifies a specific address, as defined by postal services, that is presented in free format text.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "streetName": {
+          "description": "Name of a street or thoroughfare",
+          "maxLength": 70,
+          "minLength": 1,
+          "type": "string"
+        },
+        "buildingNumber": {
+          "description": "Number that identifies the position of a building on a street.",
+          "maxLength": 16,
+          "minLength": 1,
+          "type": "string"
+        },
+        "postCode": {
+          "description": "Identifier consisting of a group of letters and/or numbers that is added to a postal address to assist the sorting of mail",
+          "maxLength": 16,
+          "minLength": 1,
+          "type": "string"
+        },
+        "townName": {
+          "description": "Name of a built-up area, with defined boundaries, and a local government.",
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string"
+        },
+        "countrySubDivision": {
+          "description": "Identifies a subdivision of a country, for instance state, region, county.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "country": {
+          "description": "Nation with its own government, occupying a particular territory.",
+          "pattern": "^[A-Z]{2,2}$",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestInstructedAmount": {
+      "required": [ "amount", "currency" ],
+      "type": "object",
+      "properties": {
+        "amount": {
+          "pattern": "^\\d{1,13}\\.\\d{1,5}$",
+          "type": "string",
+          "description": "Payment amount, must be greater than zero."
+        },
+        "currency": {
+          "description": "A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 - Codes for the representation of currencies and funds.",
+          "pattern": "^[A-Z]{3,3}$",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestDebtorAccount": {
+      "required": [ "schemeName", "identification" ],
+      "type": "object",
+      "properties": {
+        "schemeName": {
+          "description": "Name of the identification scheme, in a coded form as published in an external list. SortCodeAccountNumber must be used in all cases.",
+          "enum": [ "IBAN", "SortCodeAccountNumber" ],
+          "type": "string"
+        },
+        "identification": {
+          "description": "Identification assigned by an institution to identify an account. This identification is known by the account owner.",
+          "maxLength": 34,
+          "minLength": 1,
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestCreditorAccount": {
+      "required": [ "schemeName", "identification", "name" ],
+      "type": "object",
+      "properties": {
+        "schemeName": {
+          "description": "Name of the identification scheme, in a coded form as published in an external list. SortCodeAccountNumber must be selected.",
+          "enum": [ "IBAN", "SortCodeAccountNumber" ],
+          "type": "string"
+        },
+        "identification": {
+          "description": "Identification assigned by an institution to identify an account. This identification is known by the account owner.",
+          "maxLength": 34,
+          "minLength": 1,
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the account, as assigned by the account servicing institution, in agreement with the account owner in order to provide an additional means of identification of the account. Usage: The account name is different from the account owner name. The account name is used in certain user communities to provide a means of identifying the account, in addition to the account owner's identity and the account number. ASPSPs may carry out name validation for Confirmation of Payee, but it is not mandatory.",
+          "maxLength": 70,
+          "minLength": 1,
+          "type": "string"
+        },
+        "secondaryIdentification": {
+          "description": "This is secondary identification of the account, as assigned by the account servicing institution. This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination).",
+          "maxLength": 34,
+          "minLength": 1,
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestRemittanceInformation": {
+      "required": [ "unstructured", "reference" ],
+      "type": "object",
+      "properties": {
+        "unstructured": {
+          "description": "Information supplied to enable the matching/reconciliation of an entry with the items that the payment is intended to settle, such as commercial invoices in an accounts' receivable system, in an unstructured form.",
+          "maxLength": 50,
+          "minLength": 1,
+          "type": "string"
+        },
+        "reference": {
+          "description": "Unique reference, as assigned by the creditor, to unambiguously refer to the payment transaction.  Usage: If available, the initiating party should provide this reference in the structured remittance information, to enable reconciliation by the creditor upon receipt of the amount of money. If the business context requires the use of a creditor reference or a payment remit identification, and only one identifier can be passed through the end-to-end chain, the creditor's reference or payment remittance identification should be quoted in the end-to-end transaction identification. OB: The Faster Payments Scheme can only accept 18 characters for the ReferenceInformation field - which is where this ISO field will be mapped.",
+          "maxLength": 18,
+          "minLength": 1,
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ResponseExamples.PostPaymentResponseExample": {
+      "type": "object",
+      "properties": {}
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponse": {
+      "required": [ "data", "risk", "links", "meta" ],
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseData",
+          "description": "Reflection of The Main Data Payload, with Created Resource ID, Status and Timestamp"
+        },
+        "risk": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseRisk",
+          "description": "Reflection of POSTed Risk profile"
+        },
+        "links": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseLinks",
+          "description": "Link URIs relevant to the payload"
+        },
+        "meta": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseMeta",
+          "description": "Meta Data Relevant to the payload"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseData": {
+      "required": [ "paymentId", "creationDateTime", "initiation" ],
+      "type": "object",
+      "properties": {
+        "paymentId": {
+          "description": "OB: Unique identification as assigned by the ASPSP to uniquely identify the payment setup resource.",
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "status": {
+          "description": "Specifies the status of the payment resource.",
+          "enum": [ "AcceptedCustomerProfile", "AcceptedTechnicalValidation", "Pending", "Rejected", "Expired" ],
+          "type": "string"
+        },
+        "creationDateTime": {
+          "format": "date-time",
+          "description": "Date and time at which the resource was created. \r\n            All dates in the JSON payloads are represented in ISO 8601 date-time format. \r\n            All date-time fields in responses must include the timezone. An example is below:\r\n            2017-04-05T10:43:07+00:00",
+          "type": "string"
+        },
+        "initiation": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSubmissionPOSTRequestInitiation",
+          "description": "The Initiation payload is sent by the initiating party to the ASPSP. It is used to request movement of funds from the debtor account to a creditor."
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseRisk": {
+      "type": "object",
+      "properties": {
+        "paymentContextCode": {
+          "description": "Specifies the payment context",
+          "enum": [ "BillPayment", "EcommerceGoods", "EcommerceServices", "Other", "PersonToPerson" ],
+          "type": "string"
+        },
+        "merchantCategoryCode": {
+          "description": "Category code conforms to ISO 18245, related to the type of services or goods the merchant provides for the transaction",
+          "maxLength": 4,
+          "minLength": 3,
+          "type": "string"
+        },
+        "merchantCustomerIdentification": {
+          "description": "The unique customer identifier of the PSU with the merchant.",
+          "maxLength": 70,
+          "minLength": 1,
+          "type": "string"
+        },
+        "deliveryAddress": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestDeliveryAddress",
+          "description": "Information that locates and identifies a specific address, as defined by postal services or in free format text."
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseLinks": {
+      "required": [ "self" ],
+      "type": "object",
+      "properties": {
+        "self": { "type": "string" },
+        "first": { "type": "string" },
+        "prev": { "type": "string" },
+        "next": { "type": "string" },
+        "last": { "type": "string" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseMeta": {
+      "type": "object",
+      "properties": {
+        "totalPages": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSubmissionPOSTRequestInitiation": {
+      "required": [ "instructionIdentification", "endToEndIdentification", "instructedAmount", "creditorAccount", "remittanceInformation" ],
+      "type": "object",
+      "properties": {
+        "instructionIdentification": {
+          "description": "Unique identification as assigned by an instructing party for an instructed party to unambiguously identify the instruction. Usage: the  instruction identification is a point to point reference that can be used between the instructing party and the instructed party to refer to the individual instruction. It can be included in several messages related to the instruction.",
+          "maxLength": 35,
+          "minLength": 1,
+          "type": "string"
+        },
+        "endToEndIdentification": {
+          "description": "Unique identification assigned by the initiating party to unambiguously identify the transaction. This identification is passed on, unchanged, throughout the entire end-to-end chain. Usage: The end-to-end identification can be used for reconciliation or to link tasks relating to the transaction. It can be included in several messages related to the transaction. OB: The Faster Payments Scheme can only access 31 characters for the EndToEndIdentification field.",
+          "maxLength": 31,
+          "minLength": 1,
+          "type": "string"
+        },
+        "instructedAmount": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestInstructedAmount",
+          "description": "Amount of money to be moved between the debtor and creditor, before deduction of charges, expressed in the currency as ordered by the initiating party. Usage: This amount has to be transported unchanged through the transaction chain. Value must be greater than zero."
+        },
+        "debtorAccount": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestDebtorAccount",
+          "description": "Unambiguous identification of the account of the debtor to which a debit entry will be made as a result of the transaction."
+        },
+        "creditorAccount": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestCreditorAccount",
+          "description": "Unambiguous identification of the account of the creditor to which a credit entry will be posted as a result of the payment transaction."
+        },
+        "remittanceInformation": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestRemittanceInformation",
+          "description": "Information supplied to enable the matching of an entry with the items that the transfer is intended to settle, such as commercial invoices in an accounts' receivable system."
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSetupGETResponse": {
+      "required": [ "data", "risk", "links", "meta" ],
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseData",
+          "description": "Reflection of The Main Data Payload, with Created Resource ID, Status and Timestamp"
+        },
+        "risk": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseRisk",
+          "description": "Reflection of POSTed Risk profile"
+        },
+        "links": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseLinks",
+          "description": "Link URIs relevant to the payload"
+        },
+        "meta": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseMeta",
+          "description": "Meta Data Relevant to the payload"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.AggregatedPaymentListReponse": {
+      "required": [ "data", "links", "meta" ],
+      "type": "object",
+      "properties": {
+        "data": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.AggregatedPaymentListResponseData" },
+        "links": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentResponseLinks",
+          "description": "Link URIs relevant to the payload"
+        },
+        "meta": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentResponseMeta",
+          "description": "Meta Data Relevant to the payload"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.AggregatedPaymentListResponseData": {
+      "required": [ "paymentId", "status", "creationDateTime", "instructedAmount" ],
+      "type": "object",
+      "properties": {
+        "paymentSubmissionId": {
+          "format": "uuid",
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "paymentId": {
+          "format": "uuid",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "status": { "type": "string" },
+        "creationDateTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "instructedAmount": { "$ref": "#/definitions/LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentResponseLinks": {
+      "required": [ "self" ],
+      "type": "object",
+      "properties": { "self": { "type": "string" } }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentResponseMeta": {
+      "type": "object",
+      "properties": {
+        "totalPages": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "format": "double",
+          "type": "number"
+        },
+        "currencyCode": { "type": "string" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSubmissionPOSTRequest": {
+      "required": [ "data", "risk" ],
+      "type": "object",
+      "properties": {
+        "data": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSubmissionPOSTRequestData" },
+        "risk": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTRequestRisk" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSubmissionPOSTRequestData": {
+      "required": [ "paymentId", "initiation" ],
+      "type": "object",
+      "properties": {
+        "paymentId": {
+          "description": "OB: Unique identification as assigned by the ASPSP to uniquely identify the payment setup resource.",
+          "pattern": "^[{(]?[0-9a-fA-F]{8}[-]?([0-9a-fA-F]{4}[-]?){3}[0-9a-fA-F]{12}[)}]?$",
+          "type": "string"
+        },
+        "verificationCode": {
+          "description": "The verification code sent by the ASPSP for authentication.",
+          "maxLength": 4,
+          "minLength": 1,
+          "pattern": "^[0-9]{1,4}$",
+          "type": "string"
+        },
+        "initiation": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSubmissionPOSTRequestInitiation",
+          "description": "The Initiation payload is sent by the initiating party to the ASPSP. It is used to request movement of funds from the debtor account to a creditor."
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSubmitPOST201Response": {
+      "required": [ "data", "links", "meta" ],
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSubmitPOST201ResponseData",
+          "description": "Reflection of The Main Data Payload, with Created Resource ID, Status and Timestamp"
+        },
+        "links": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseLinks",
+          "description": "Link URIs relevant to the payload"
+        },
+        "meta": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseMeta",
+          "description": "Meta Data Relevant to the payload"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSubmitPOST201ResponseData": {
+      "required": [ "paymentSubmissionId", "paymentId", "creationDateTime" ],
+      "type": "object",
+      "properties": {
+        "paymentSubmissionId": {
+          "description": "OB: Unique identification as assigned by the ASPSP to uniquely identify the payment submission resource.",
+          "maxLength": 40,
+          "minLength": 1,
+          "type": "string"
+        },
+        "paymentId": {
+          "description": "OB: Unique identification as assigned by the ASPSP to uniquely identify the payment setup resource.",
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "status": {
+          "description": "Specifies the status of the payment resource.",
+          "enum": [ "AcceptedSettlementCompleted", "AcceptedSettlementInProcess", "Pending", "Rejected" ],
+          "type": "string"
+        },
+        "creationDateTime": {
+          "format": "date-time",
+          "description": "Date and time at which the resource was created. \r\n            All dates in the JSON payloads are represented in ISO 8601 date-time format. \r\n            All date-time fields in responses must include the timezone. An example is below:\r\n            2017-04-05T10:43:07+00:00",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentSubmitGETResponse": {
+      "required": [ "data", "links", "meta" ],
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSubmitPOST201ResponseData",
+          "description": "Reflection of The Main Data Payload, with Created Resource ID, Status and Timestamp"
+        },
+        "links": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseLinks",
+          "description": "Link URIs relevant to the payload"
+        },
+        "meta": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseMeta",
+          "description": "Meta Data Relevant to the payload"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentApprovalResponse": {
+      "required": [ "data", "links", "meta" ],
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentApprovalResponseData",
+          "description": "Reflection of The Main Data Payload, with Created Resource ID, Status and Timestamp"
+        },
+        "links": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentResponseLinks",
+          "description": "Link URIs relevant to the payload"
+        },
+        "meta": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentResponseMeta",
+          "description": "Meta Data Relevant to the payload"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.PaymentApprovalResponseData": {
+      "required": [ "paymentId", "status", "approvalDateTime", "message" ],
+      "type": "object",
+      "properties": {
+        "paymentId": {
+          "description": "OB: Unique identification as assigned by the ASPSP to uniquely identify the payment setup resource.",
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "status": {
+          "description": "Specifies the status of the payment resource.",
+          "enum": [ "AcceptedCustomerProfile", "AcceptedTechnicalValidation", "Pending", "Rejected", "Expired" ],
+          "type": "string"
+        },
+        "approvalDateTime": {
+          "format": "date-time",
+          "description": "Date and time at which the resource was approved. \r\n            All dates in the JSON payloads are represented in ISO 8601 date-time format. \r\n            All date-time fields in responses must include the timezone. An example is below:\r\n            2017-04-05T10:43:07+00:00",
+          "type": "string"
+        },
+        "message": { "type": "string" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentCreationResponse": {
+      "required": [ "data", "links" ],
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentCreationResponseData",
+          "description": "Reflection of The Main Data Payload, with Created Resource ID, Status and Timestamp"
+        },
+        "links": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentResponseLinks",
+          "description": "Link URIs relevant to the payload"
+        },
+        "meta": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentResponseMeta",
+          "description": "Meta Data Relevant to the payload"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentCreationResponseData": {
+      "required": [ "batchPaymentId" ],
+      "type": "object",
+      "properties": {
+        "batchPaymentId": {
+          "format": "uuid",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "status": {
+          "enum": [ "Created", "WaitingForApproval", "Accepted", "Rejected", "InProgress", "Submitted", "Expired", "Failed" ],
+          "type": "string"
+        },
+        "statusChangeDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentGetReponse": {
+      "required": [ "data", "links", "meta" ],
+      "type": "object",
+      "properties": {
+        "data": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentSetupGetResponseData" },
+        "links": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseLinks",
+          "description": "Link URIs relevant to the payload"
+        },
+        "meta": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupPOSTResponseMeta",
+          "description": "Meta Data Relevant to the payload"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentSetupGetResponseData": {
+      "required": [ "batchId", "creationDateTime", "payments" ],
+      "type": "object",
+      "properties": {
+        "batchId": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "status": {
+          "description": "Specifies the status of the payment resource.",
+          "enum": [ "Created", "WaitingForApproval", "Accepted", "Rejected", "InProgress", "Submitted", "Expired", "Failed" ],
+          "type": "string"
+        },
+        "creationDateTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "payments": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.PaymentSetupGETResponse" }
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentSubmissionResponse": {
+      "required": [ "data", "links", "meta" ],
+      "type": "object",
+      "properties": {
+        "data": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentSubmissionResponseData" },
+        "links": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentResponseLinks" },
+        "meta": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentResponseMeta" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentSubmissionResponseData": {
+      "required": [ "batchPaymentId", "status" ],
+      "type": "object",
+      "properties": {
+        "batchPaymentId": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "status": {
+          "enum": [ "Created", "WaitingForApproval", "Accepted", "Rejected", "InProgress", "Submitted", "Expired", "Failed" ],
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentResponseLinks": {
+      "required": [ "self" ],
+      "type": "object",
+      "properties": { "self": { "type": "string" } }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentResponseMeta": {
+      "type": "object",
+      "properties": {
+        "totalPages": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentGetSubmissionsResponse": {
+      "required": [ "data", "links", "meta" ],
+      "type": "object",
+      "properties": {
+        "data": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentGetSubmissionsResponseData" },
+        "links": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentResponseLinks" },
+        "meta": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentResponseMeta" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentGetSubmissionsResponseData": {
+      "required": [ "batchPaymentId", "status", "approvalDateTime", "paymentSubmissionIds" ],
+      "type": "object",
+      "properties": {
+        "batchPaymentId": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "status": {
+          "enum": [ "Created", "WaitingForApproval", "Accepted", "Rejected", "InProgress", "Submitted", "Expired", "Failed" ],
+          "type": "string"
+        },
+        "approvalDateTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "paymentSubmissionIds": {
+          "type": "array",
+          "items": {
+            "format": "uuid",
+            "type": "string",
+            "example": "00000000-0000-0000-0000-000000000000"
+          }
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentListResponse": {
+      "required": [ "data", "links", "meta" ],
+      "type": "object",
+      "properties": {
+        "data": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentListResponseData" },
+        "links": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentResponseLinks",
+          "description": "Link URIs relevant to the payload"
+        },
+        "meta": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentResponseMeta",
+          "description": "Meta Data Relevant to the payload"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentListResponseData": {
+      "required": [ "batchPaymentId", "status", "creationDateTime", "totalAmount" ],
+      "type": "object",
+      "properties": {
+        "batchPaymentId": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "status": {
+          "enum": [ "Created", "WaitingForApproval", "Accepted", "Rejected", "InProgress", "Submitted", "Expired", "Failed" ],
+          "type": "string"
+        },
+        "creationDateTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "totalAmount": { "$ref": "#/definitions/LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentApprovalResponse": {
+      "required": [ "data", "links", "meta" ],
+      "type": "object",
+      "properties": {
+        "data": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentApprovalResponseData" },
+        "links": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentResponseLinks" },
+        "meta": { "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentResponseMeta" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentApprovalResponseData": {
+      "required": [ "batchPaymentId", "status", "approvalDateTime" ],
+      "type": "object",
+      "properties": {
+        "batchPaymentId": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "status": {
+          "enum": [ "Created", "WaitingForApproval", "Accepted", "Rejected", "InProgress", "Submitted", "Expired", "Failed" ],
+          "type": "string"
+        },
+        "approvalDateTime": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "statusMessage": { "type": "string" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.VerifyScaViewModel": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" },
+        "verificationCode": { "type": "string" }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentSearchResponse": {
+      "type": "object",
+      "properties": {
+        "totalNumbers": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentSearchTotalNumbers"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentSearchResponseData"
+          }
+        },
+        "meta": {
+          "$ref": "#/definitions/LEAPS.Payments.Web.ViewModels.SearchResponseMeta"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentSearchTotalNumbers": {
+      "type": "object",
+      "properties": {
+        "numberOfPayments": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "totalAmount": {
+          "format": "double",
+          "type": "number"
+        },
+        "totalCount": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentSearchResponseData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "totalAmount": {
+          "format": "double",
+          "type": "number"
+        },
+        "numberOfPayments": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "Created",
+            "AwaitingApproval",
+            "AwaitingSubmission",
+            "Rejected",
+            "Submitted",
+            "Expired",
+            "AwaitingFurtherAuthorisation"
+          ],
+          "type": "string"
+        },
+        "fileReference": {
+          "type": "string"
+        },
+        "expiryDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.SearchResponseMeta": {
+      "type": "object",
+      "properties": {
+        "skip": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "top": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "orderBy": {
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Payments.Web.ViewModels.Batch.BatchPaymentPotentialDuplicateRequest": {
+      "type": "object",
+      "properties": {
+        "fromDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "toDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "amount": {
+          "$ref": "#/definitions/LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue"
+        },
+        "numberOfPayments": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "description": "OAuth2 Client Credentials flow",
+      "flow": "application",
+      "authorizationUrl": "https://apisandbox.zempler.tech/identity/auth/connect/authorize",
+      "tokenUrl": "https://apisandbox.zempler.tech/identity/auth/connect/token",
+      "scopes": {
+        "aps_profile": "APS profile data.",
+        "applications": "Allow access to application API.",
+        "accounts": "Allow access to account and transaction data on behalf of the client.",
+        "payments": "Allow access to payments and payment submissions data.",
+        "eligibility": "Allow access to eligibility API."
+      }
+    }
+  }
+}

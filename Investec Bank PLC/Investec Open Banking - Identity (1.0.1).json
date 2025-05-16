@@ -1,0 +1,337 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "You can find more about the Open API Spec here (https://openapis.org/)",
+    "version": "1.0.1",
+    "title": "Investec Open Banking - Identity",
+    "termsOfService": "https://developer.investec.com/terms-of-use",
+    "contact": {
+      "name": "Investec Open API Team",
+      "url": "https://developer.investec.com/contact",
+      "email": "openapi@investec.co.uk"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://apisandbox.investec.com/openbanking/identity/v1"
+    },
+    {
+      "url": "https://api.investec.com/openbanking/identity/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Bearer Token Generation for TPP Identification",
+      "description": "Generates Bearer Tokens"
+    },
+    {
+      "name": "Initiate Authorisation",
+      "description": "Initiate the 302 redirect to the Investec Authorisation Journey"
+    }
+  ],
+  "paths": {
+    "/token      (client_credentials)": {
+      "post": {
+        "tags": [
+          "Bearer Token Generation"
+        ],
+        "summary": "Generate a Bearer Token using the Client Assertion flow (JWT verification of token issued by TPP).",
+        "operationId": "Access Bearer Token - Grant Type client_credentials",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "grant_type": {
+                    "description": "Identify the grant_type requested of the OAuth Server. 'client_credentials' provided for client bearer token generation.",
+                    "type": "string"
+                  },
+                  "scope": {
+                    "description": "Scope of the issued bearer token in which the requester may make subsequent requests.",
+                    "type": "string"
+                  },
+                  "client_assertion_type": {
+                    "description": "Defines the assertion type for the issued assertion token (client_assertion parameter - urn:ietf:params:oauth:client-assertion-type:jwt-bearer)",
+                    "type": "string"
+                  },
+                  "client_assertion": {
+                    "description": "TPP's assertion token used in order to identify themselves to the OAuth server. This will be validated against the TPPs keystore.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "grant_type",
+                  "scope",
+                  "client_assertion_type",
+                  "client_assertion"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BearerTokenGenerated"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, unable to identify you with the credential(s) provided."
+          }
+        }
+      }
+    },
+    "/token      (authorization_code)": {
+      "post": {
+        "tags": [
+          "Bearer Token Generation"
+        ],
+        "summary": "Generate a Bearer Token using the Client Assertion flow (JWT verification of token issued by TPP).",
+        "operationId": "Access Bearer Token - Grant Type authorization_code",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "grant_type": {
+                    "description": "Identify the grant_type requested of the OAuth Server. 'authorization_code' provided for Authorization Code Bearer Token generation, using the Authorization Code returned in the redirect_uri request parameter at the end of the authorisation journey.",
+                    "type": "string"
+                  },
+                  "code": {
+                    "description": "Returned to you as 'code' request parameter on redirect_uri at end of authorisation journey.",
+                    "type": "string"
+                  },
+                  "redirect_uri": {
+                    "description": "redirect_uri that was used as a part of the authorisation redirect configuration.",
+                    "type": "string"
+                  },
+                  "client_assertion_type": {
+                    "description": "Defines the assertion type for the issued assertion token (client_assertion parameter - urn:ietf:params:oauth:client-assertion-type:jwt-bearer)",
+                    "type": "string"
+                  },
+                  "client_assertion": {
+                    "description": "TPP's assertion token used in order to identify themselves to the OAuth server. This will be validated against the TPPs keystore.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "grant_type",
+                  "code",
+                  "redirect_uri",
+                  "client_assertion_type",
+                  "client_assertion"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BearerTokenGenerated"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, unable to identify you with the credential(s) provided."
+          }
+        }
+      }
+    },
+    "/token      (refresh_token)": {
+      "post": {
+        "tags": [
+          "Bearer Token Generation"
+        ],
+        "summary": "Generate a Bearer Token using the Refresh Token and Client Assertion flow (JWT verification of token issued by TPP).",
+        "operationId": "Access Bearer Token - Grant Type refresh_token",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "grant_type": {
+                    "description": "Identify the grant_type requested of the OAuth Server. 'refresh_token' provided for Authorization Code Bearer Token generation from refresh token, using the refresh token returned in the Authorization Code grant type access token",
+                    "type": "string"
+                  },
+                  "refresh_token": {
+                    "description": "Refresh token generated from Authorization token grant type.",
+                    "type": "string"
+                  },
+                  "client_assertion_type": {
+                    "description": "Defines the assertion type for the issued assertion token (client_assertion parameter - urn:ietf:params:oauth:client-assertion-type:jwt-bearer)",
+                    "type": "string"
+                  },
+                  "client_assertion": {
+                    "description": "TPP's assertion token used in order to identify themselves to the OAuth server. This will be validated against the TPPs keystore.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "grant_type",
+                  "refresh_token",
+                  "client_assertion_type",
+                  "client_assertion"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BearerTokenGenerated"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, unable to identify you with the credential(s) provided."
+          }
+        }
+      }
+    },
+    "/authorize": {
+      "get": {
+        "tags": [
+          "Initiate Authorisation"
+        ],
+        "summary": "Responds with a 302 redirect to a target page which should be loaded to complete the authorization journey. NOTE - 302 automatically followed by Swagger.",
+        "operationId": "Initiate Authorisation Redirect",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "description": "JWT assertion token generated by the TPP to identify themselves and the consent they would like authorised.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "description": "Must be of type 'openid [additional_scope]'. 'additional_scope' must reflect a supported scope type for the TPP.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "response_type",
+            "in": "query",
+            "description": "code id_token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client_id",
+            "in": "query",
+            "description": "client_id value issued for identification purposes of the application accessing the APIs. Refer to application details.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "The parameter may be of any format.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "nonce",
+            "in": "query",
+            "description": "Used to help mitigate against replay attacks.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "redirect_uri",
+            "in": "query",
+            "description": "The URI to which the Authorization code will be sent after consent authorization.  Absolute URL that was registered during Client Registration.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect",
+            "headers": {
+              "Location": {
+                "description": "The target location the TPP should load in order to go through the process of Authorising the requested Consent.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, unable to identify you with the credential(s) provided."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BearerTokenGenerated": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "minLength": 1
+          },
+          "refresh_token": {
+            "type": "string",
+            "minLength": 1
+          },
+          "token_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expires_in": {
+            "type": "number"
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "access_token",
+          "token_type",
+          "expires_in",
+          "scope"
+        ]
+      }
+    }
+  }
+}

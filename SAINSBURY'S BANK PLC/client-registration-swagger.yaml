@@ -1,0 +1,443 @@
+openapi: 3.0.0
+info:
+  title: Sainsburys Bank Dynamic Client Registration API
+  description: |
+    Implementation of [OAuth 2.0](https://tools.ietf.org/html/rfc6749  "Docs") with Authorization Code Grant type
+  version: 1.0.0
+servers:
+  - url: https://tsob.sainsburysbank.co.uk:443/sso/oauth2/realms/root/realms/general
+  - url: https://ob.sainsburysbank.co.uk:443/sso/oauth2/realms/root/realms/general
+
+paths:
+  /register:
+    post:
+      summary: Register a client by way of a Software Statement Assertion
+      description: Endpoint will be secured by way of Mutual Authentication over TLS
+      tags:
+        - Client Registration
+      parameters:
+        - $ref: "#/components/parameters/Content-Type"
+      requestBody:
+        required: true
+        description: >-
+          The request body must contain the signed `dynamic_registration_request` jwt.
+          Details on the JWT header and body can be found in `schemas`
+        content:
+          application/jwt:
+            schema:
+              type: string
+              example: eyJhbGciOiJQUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ijw8c2lnbmF0dXJlIHNpZ25pbmcgaWQ-PiJ9.eyJhcHBsaWNhdGlvbl90eXBlIjoid2ViIiwiYXVkIjoiPDxpc3N1ZXIgdXJsIGZyb20gd2VsbGtub3duIGVuZHBvaW50IHJlc3BvbnNlPj4iLCJleHAiOjE1NzY3NTc1NTQsImdyYW50X3R5cGVzIjpbImNsaWVudF9jcmVkZW50aWFscyIsImF1dGhvcml6YXRpb25fY29kZSIsInJlZnJlc2hfdG9rZW4iXSwiaWF0IjoxNTc2NzUzOTU0LCJpZF90b2tlbl9zaWduZWRfcmVzcG9uc2VfYWxnIjoiUFMyNTYiLCJpc3MiOiI8PFNvZnR3YXJlIHN0YXRlbWVudCBJRCAoc29mdHdhcmVfaWQpIG9mIHRoZSBzb2Z0d2FyZSBzdGF0ZW1lbnQ-PiIsImp0aSI6IjEwM2YwOGFhLTkxMmMtNDVjYy05NTRkLWE1MWNiZjBkYzI5NyIsInJlZGlyZWN0X3VyaXMiOlsiaHR0cHM6Ly8xMjcuMC4wLjE6ODQ0My9jb25mb3JtYW5jZXN1aXRlL2NhbGxiYWNrIiwiaHR0cHM6Ly9hcHAuZ2V0cG9zdG1hbi5jb20vb2F1dGgyL2NhbGxiYWNrIl0sInJlcXVlc3Rfb2JqZWN0X2VuY3J5cHRpb25fYWxnIjoiUlNBLTBBRVAtMjU2IiwicmVxdWVzdF9vYmplY3RfZW5jcnlwdGlvbl9lbmMiOiJBMTI4Q0JDLUhTMjU2IiwicmVxdWVzdF9vYmplY3Rfc2lnbmluZ19hbGciOiJQUzI1NiIsInJlc3BvbnNlX3R5cGVzIjpbImNvZGUgaWRfdG9rZW4iXSwic2NvcGUiOiJvcGVuaWQgYWNjb3VudHMgZnVuZHNjb25maXJtYXRpb24iLCJzb2Z0d2FyZV9zdGF0ZW1lbnQiOiI8PFNTQSBpbiBKV1QgZm9ybSBmcm9tIE9CIERpcmVjdG9yeT4-Iiwic3ViamVjdF90eXBlIjoicHVibGljIiwidG9rZW5fZW5kcG9pbnRfYXV0aF9tZXRob2QiOiJwcml2YXRlX2tleV9qd3QiLCJ0b2tlbl9lbmRwb2ludF9hdXRoX3NpZ25pbmdfYWxnIjoiUFMyNTYifQ.TBvX1dLhRPqDtfFUDsivsqeUp5d3a9I73UrtqmQz4OIjq8_yVy5BF90cQ1yfO-RiwcMPBMmdp-JMmgvh3TWh3VZSRDk0J_Hz9hzpxMKVtxyVq6wDvAz_ApOObaFSCcfw4mClcySQCs_zEj3cEzm449f5q1bZl3yK1kdGuKU5clsgr_oSM4P904ywpJ_4B1boXWjKwKa9rmzrfcoIZUlCUWZAuups7WavTQSlHB8XaY1Z0vpIyR5CWc6D86be3hhXBSoShthlxV_xJARCjNVfcEv7t-6izY9m2NyiaeU20jrWHfaB-fzC9FzbRVw-YMSYEiM0GTVihCMXKyyOu3YfLw
+      responses:
+        "201":
+          $ref: "#/components/responses/OBClientRegistration1"
+        "400":
+          $ref: "#/components/responses/400Error"
+  "/register/{ClientId}":
+    get:
+      summary: Get a client by way of Client ID
+      tags:
+        - Client Registration
+      parameters:
+        - $ref: "#/components/parameters/ClientId"
+        - $ref: "#/components/parameters/Authorization"
+      responses:
+        "200":
+          $ref: "#/components/responses/OBClientRegistration1"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "403":
+          $ref: "#/components/responses/403Error"
+      security:
+        - TPPOAuth2Security: []
+    delete:
+      summary: Delete a client by way of Client ID
+      tags:
+        - Client Registration
+      parameters:
+        - $ref: "#/components/parameters/ClientId"
+        - $ref: "#/components/parameters/Authorization"
+      responses:
+        "204":
+          description: Client deleted
+        "401":
+          $ref: "#/components/responses/401Error"
+        "403":
+          $ref: "#/components/responses/403Error"
+        "405":
+          $ref: "#/components/responses/403Error"
+      security:
+        - TPPOAuth2Security: []
+components:
+  parameters:
+    Authorization:
+      in: header
+      name: Authorization
+      required: true
+      description: "An Authorisation Token as per https://tools.ietf.org/html/rfc6750"
+      schema:
+        type: string
+    ClientId:
+      name: ClientId
+      description: The client ID
+      in: path
+      required: true
+      schema:
+        type: string
+    Content-Type:
+      name: Content-Type
+      description: content type of the request (application/jwt)
+      in: header
+      required: true
+      schema:
+        type: string
+  requestBodies:
+    ClientRegistration:
+      description: A request to register a Software Statement Assertion with an ASPSP
+      content:
+        application/json:
+          schema:
+            type: string
+            format: OBClientRegistration1
+      required: true
+  responses:
+    OBClientRegistration1:
+      description: Client registration
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/OBRegistrationProperties1"
+              - required:
+                  - client_id
+    400Error:
+      description: Request failed due to client error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RegistrationError"
+    401Error:
+      description: Request failed due to unknown or invalid Client or invalid access token
+      headers:
+        WWW-Authenticate:
+          description: >-
+            Response header field specified in
+            https://tools.ietf.org/html/rfc6750
+          schema:
+            type: string
+            pattern: ^Bearer .*
+    403Error:
+      description: "The client does not have permission to read, update or delete the Client"
+    405Error:
+      description: Method Not Allowed
+  schemas:
+    SupportedAlgorithms:
+      type: string
+      enum:
+        - PS256
+    OBRegistrationProperties1:
+      type: object
+      required:
+        - redirect_uris
+        - token_endpoint_auth_method
+        - grant_types
+        - scope
+        - software_statement
+        - application_type
+        - id_token_signed_response_alg
+        - request_object_signing_alg
+        - tls_client_auth_subject_dn
+      properties:
+        client_id:
+          description: OAuth 2.0 client identifier string
+          type: string
+          minLength: 1
+          maxLength: 36
+        client_secret:
+          description: OAuth 2.0 client secret string
+          type: string
+          minLength: 1
+          maxLength: 36
+        client_id_issued_at:
+          description: >-
+            Time at which the client identifier was issued expressed as seconds
+            since 1970-01-01T00:00:00Z as measured in UTC
+          type: integer
+          format: int32
+          minimum: 0
+        client_secret_expires_at:
+          description: >-
+            Time at which the client secret will expire expressed as seconds
+            since 1970-01-01T00:00:00Z as measured in UTC. Set to 0 if does not
+            expire
+          type: integer
+          format: int32
+          minimum: 0
+        redirect_uris:
+          type: array
+          items:
+            type: string
+            format: uri
+            minLength: 1
+            maxLength: 256
+        token_endpoint_auth_method:
+          type: string
+          enum:
+            - private_key_jwt
+        grant_types:
+          $ref: "#/components/schemas/grant_types"
+        response_types:
+          $ref: "#/components/schemas/response_types"
+        software_id:
+          type: string
+          minLength: 1
+          maxLength: 22
+          pattern: "^[0-9a-zA-Z]{1,22}$"
+        scope:
+          $ref: "#/components/schemas/scope"
+        software_statement:
+          type: string
+          format: JWT
+        application_type:
+          type: string
+          enum:
+            - web
+            - mobile
+        id_token_signed_response_alg:
+          $ref: "#/components/schemas/SupportedAlgorithms"
+        request_object_signing_alg:
+          $ref: "#/components/schemas/SupportedAlgorithms"
+        token_endpoint_auth_signing_alg:
+          $ref: "#/components/schemas/SupportedAlgorithms"
+    OBClientRegistration1:
+      allOf:
+        - type: object
+          required:
+            - iss
+            - iat
+            - exp
+            - aud
+            - jti
+          properties:
+            iss:
+              $ref: "#/components/schemas/iss"
+            iat:
+              $ref: "#/components/schemas/iat"
+            exp:
+              $ref: "#/components/schemas/exp"
+            aud:
+              $ref: "#/components/schemas/aud"
+            jti:
+              $ref: "#/components/schemas/jti"
+        - $ref: "#/components/schemas/OBRegistrationProperties1"
+    RegistrationError:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          enum:
+            - invalid_redirect_uri
+            - invalid_client_metadata
+            - invalid_software_statement
+            - unapproved_software_statement
+        error_description:
+          type: string
+          minLength: 1
+          maxLength: 500
+    OBClientRegistrationRequest:
+      type: object
+      properties:
+        application_type:
+          type: string
+          enum:
+            - web
+            - mobile
+        aud:
+          $ref: "#/components/schemas/aud"
+        exp:
+          $ref: "#/components/schemas/exp"
+        grant_types:
+          $ref: "#/components/schemas/grant_types"
+        iat:
+          $ref: "#/components/schemas/iat"
+        id_token_signed_response_alg:
+          $ref: "#/components/schemas/SupportedAlgorithms"
+        iss:
+          $ref: "#/components/schemas/iss"
+        jti:
+          $ref: "#/components/schemas/jti"
+        redirect_uris:
+          type: array
+          items:
+            type: string
+            format: uri
+            minLength: 1
+            maxLength: 256
+        request_object_encryption_alg:
+          type: string
+          description: >-
+            encryption algorithm used
+        request_object_encryption_enc:
+          type: string
+          description: >-
+            encryption encodin format
+        request_object_signin_alg:
+          $ref: "#/components/schemas/SupportedAlgorithms"
+        response_types:
+          $ref: "#/components/schemas/response_types"
+        scope:
+          $ref: "#/components/schemas/scope"
+        software_statement:
+          type: string
+          format: JWT
+        subject_type:
+          type: string
+          enum:
+            - public
+        token_endpoint_auth_method:
+          type: string
+          enum:
+            - private_key_jwt
+    JWTHeader:
+      type: object
+      properties:
+        alg:
+          type: string
+          example: PS256
+          description: the algorithm used to sign the jwt
+        kid:
+          type: string
+          example: <<Signing Key Id>>
+          description: the key id used to associate with the signing key
+        typ:
+          type: string
+          example: JWT
+    JWTBody:
+      type: object
+      properties:
+        application_type:
+          type: string
+          example: web
+        aud:
+          $ref: "#/components/schemas/aud"
+        exp:
+          $ref: "#/components/schemas/exp"
+        grant_types:
+          $ref: "#/components/schemas/grant_types"
+        iat:
+          $ref: "#/components/schemas/iat"
+        id_token_signed_response_alg:
+          type: string
+          example: PS256
+        iss:
+          $ref: "#/components/schemas/iss"
+        jti:
+          $ref: "#/components/schemas/jti"
+        redirect_uris:
+          type: array
+          description: Redirect Uris for the TPP. Must match `redirect_uris` from the SSA
+          items:
+            type: string
+          example:
+            - <<TPP Redirect uri from SSA>>
+        request_object_encryption_alg:
+          type: string
+          example: RSA-0AEP-256
+        request_object_encryption_enc:
+          type: string
+          example: A128CBC-HS256
+        request_object_signing_alg:
+          type: string
+          example: PS256
+        response_types:
+          $ref: "#/components/schemas/response_types"
+        scope:
+          $ref: "#/components/schemas/scope"
+        software_statement:
+          example: <<SSA in JWT form from OB Directory>>
+        subject_type:
+          type: string
+          example: "public"
+        token_endpoint_auth_method:
+          type: string
+          example: private_key_jwt
+        token_endpoint_auth_signing_alg:
+          type: string
+          example: "PS256"
+    iss:
+      description: >-
+        Unique identifier for the TPP. Implemented as Base62 encoded
+        GUID
+      type: string
+      pattern: "^[0-9a-zA-Z]{1,22}$"
+      minLength: 1
+      maxLength: 22
+      example: <<Software statement ID (software_id) of the software statement>>
+    iat:
+      description: >-
+        The time at which the request was issued by the TPP  expressed
+        as seconds since 1970-01-01T00:00:00Z as measured in UTC
+      type: integer
+      format: int32
+      example: 1576753954
+    exp:
+      description: >-
+        The time at which the request expires expressed as seconds since
+        1970-01-01T00:00:00Z as measured in UTC. up to 1 hr
+      type: integer
+      format: int32
+      example: 1576757554
+    aud:
+      description: >
+        The audience for the request. This should be the token endpoint.
+      type: string
+      example: <<issuer url from wellknown endpoint response>>
+    jti:
+      description: Unique identifier for the JWT implemented as UUID v4
+      type: string
+      pattern: >-
+        ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+      minLength: 36
+      maxLength: 36
+      example: 103f08aa-912c-45cc-954d-a51cbf0dc297
+    grant_types:
+      type: array
+      items:
+        type: string
+        enum:
+          - client_credentials
+          - authorization_code
+          - refresh_token
+      example:
+        - client_credentials
+        - authorization_code
+        - refresh_token
+      minItems: 1
+    response_types:
+      type: array
+      items:
+        type: string
+        enum:
+          - code
+          - code id_token
+      example: [code id_token]
+    scope:
+      type: string
+      minLength: 1
+      maxLength: 256
+      example: "openid accounts fundsconfirmation"
+      description: "Minimum scope should be `openid` + appropriate scope for PSD2 role. Please check the .well-known/openid-configuration `scopes_supported` for the list of supported scopes"
+  securitySchemes:
+    TPPOAuth2Security:
+      type: oauth2
+      description: >-
+        TPP client credential authorisation flow with the ASPSP. No scopes
+        defined as per specification
+      flows:
+        clientCredentials:
+          tokenUrl: "https://tsob.sainsburysbank.co.uk/sso/oauth2/realms/root/realms/general/access_token"
+          scopes:
+            openid: openid
+            accounts: account information
+            fundsconfirmation: funds confirmation

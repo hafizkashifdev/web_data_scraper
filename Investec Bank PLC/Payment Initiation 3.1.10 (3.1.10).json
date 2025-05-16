@@ -1,0 +1,3544 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Payment Initiation 3.1.10",
+    "description": "Initiate payments for Investec UK Private Banking clients who are using your products and services.",
+    "termsOfService": "https://developer.investec.com/terms-of-use",
+    "contact": {
+      "name": "Support",
+      "email": "openapi@investec.co.uk"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "3.1.10"
+  },
+  "paths": {
+    "/uk/open-banking/v3.1/pisp/domestic-payment-consents": {
+      "post": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Create Domestic Payment Consents",
+        "description": "Create a domestic payment consent\r\n            \r\n------\r\n- Debtor account and currency must be in GBP\r\n- Once consent has been successfully created, the consent must be authorised and payment be made within 24 hours (from the CreationDateTime)\r\n------",
+        "operationId": "CreateDomesticPaymentConsents",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticPaymentConsentCreate"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticPaymentConsentCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticPaymentConsentCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticPaymentConsentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBDomesticPaymentConsentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/domestic-payment-consents/{consentId}": {
+      "get": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Get Domestic Payment Consents",
+        "description": "Get a domestic payments consent",
+        "operationId": "GetDomesticPaymentConsentsConsentId",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBDomesticPaymentConsentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/domestic-payment-consents/{consentId}/funds-confirmation": {
+      "get": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Get Domestic Payment Consents Funds Confirmation",
+        "description": "Get Domestic Payment Consents Funds Confirmation",
+        "operationId": "GetDomesticPaymentConsentsConsentIdFundsConfirmation",
+        "parameters": [
+          {
+            "name": "consentId",
+            "description": "Domestic payment consent id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBWriteFundsConfirmationResponse1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/domestic-payments": {
+      "post": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Create Domestic Payments",
+        "description": "Create a domestic payment\r\n            \r\n------\r\n- The submission of the payment must be made within 24-hours of the consent creation\r\n- Debtor account and currency must be in GBP\r\n- Some payments may require Multiple Authorisations and this will be indicated by the MultiAuthorisation object.\r\n------",
+        "operationId": "CreateDomesticPayments",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticPaymentCreate"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticPaymentCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticPaymentCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticPaymentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBDomesticPaymentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/domestic-payments/{domesticPaymentId}": {
+      "get": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Get Domestic Payment",
+        "description": "Get a domestic payment \r\n- Some payments may require Multiple Authorisations and this will be indicated by the MultiAuthorisation object.\r\n------",
+        "operationId": "GetDomesticPaymentsDomesticPaymentIdPaymentDetails",
+        "parameters": [
+          {
+            "name": "domesticPaymentId",
+            "in": "path",
+            "description": "Domestic payment id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBDomesticPaymentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/domestic-scheduled-payment-consents": {
+      "post": {
+        "tags": [
+          "Domestic Scheduled Payments"
+        ],
+        "summary": "Create Domestic Scheduled Payment",
+        "description": "Create a domestic scheduled payment consent\r\n            \r\n------\r\n- Debtor account and currency must be in GBP\r\n- Once consent has been successfully created.\r\n------",
+        "operationId": "CreateDomesticScheduledPaymentConsents",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticScheduledPaymentConsentCreate"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticScheduledPaymentConsentCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticScheduledPaymentConsentCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticScheduledPaymentConsentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBDomesticScheduledPaymentConsentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/domestic-scheduled-payments-consents/{domesticScheduledConsentId}": {
+      "get": {
+        "tags": [
+          "Domestic Scheduled Payments"
+        ],
+        "summary": "Get Domestic Scheduled Payment Consents",
+        "description": "Get Domestic Scheduled Payment\r\n- Some payments may require Multiple Authorisations and this will be indicated by the MultiAuthorisation object.\r\n------",
+        "operationId": "GetDomesticScheduledPayment",
+        "parameters": [
+          {
+            "name": "domesticScheduledConsentId",
+            "in": "path",
+            "description": "Domestic scheduled consent id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBDomesticScheduledPaymentConsentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/domestic-scheduled-payments": {
+      "post": {
+        "tags": [
+          "Domestic Scheduled Payments"
+        ],
+        "summary": "Create Domestic Scheduled Payment",
+        "description": "Create Domestic Scheduled Payment\r\n- Some payments may require Multiple Authorisations and this will be indicated by the MultiAuthorisation object.\r\n------",
+        "operationId": "DomesticScheduledPayment",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticScheduledPaymentCreate"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticScheduledPaymentCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticScheduledPaymentCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBDomesticScheduledPaymentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBDomesticScheduledPaymentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/domestic-scheduled-payments/{domesticScheduledPaymentId}": {
+      "get": {
+        "tags": [
+          "Domestic Scheduled Payments"
+        ],
+        "summary": "Get Domestic schedule Payment Status",
+        "description": "Get Domestic schedule Payment Status\r\n- Some payments may require Multiple Authorisations and this will be indicated by the MultiAuthorisation object.\r\n------",
+        "operationId": "GetDomesticSchedulePaymentStatus",
+        "parameters": [
+          {
+            "name": "domesticScheduledPaymentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBDomesticScheduledPaymentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been   found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/international-payment-consents": {
+      "post": {
+        "tags": [
+          "International Payments"
+        ],
+        "summary": "Create International payments consent",
+        "description": "Create International payments consent",
+        "operationId": "InternationalPaymentsConsents",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalPaymentConsentCreate"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalPaymentConsentCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalPaymentConsentCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalPaymentConsentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBInternationalPaymentConsentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/international-payment-consents/{consentId}": {
+      "get": {
+        "tags": [
+          "International Payments"
+        ],
+        "summary": "Get International Payments Consent Status",
+        "description": "Get International Payments Consent Status",
+        "operationId": "GetInternationalPaymentsConsentStatus",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "description": "Consent id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBInternationalPaymentConsentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/international-payments": {
+      "post": {
+        "tags": [
+          "International Payments"
+        ],
+        "summary": "Create International Payments",
+        "description": "Create an international payment\r\n            \r\n------\r\n- The submission of the payment must be made within 24-hours of the consent creation\r\n- Debtor account and currency must be in GBP\r\n- Some payments may require Multiple Authorisations and this will be indicated by the MultiAuthorisation object.\r\n------",
+        "operationId": "InternationalPayments",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalPaymentCreate"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalPaymentCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalPaymentCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalPaymentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBInternationalPaymentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/international-payments/{internationalPaymentId}": {
+      "get": {
+        "tags": [
+          "International Payments"
+        ],
+        "summary": "Get International payments status",
+        "description": "Get International payments status",
+        "operationId": "GetInternationalPaymentsStatus",
+        "parameters": [
+          {
+            "name": "internationalPaymentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBInternationalPaymentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been   found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/international-scheduled-payment-consents": {
+      "post": {
+        "tags": [
+          "International Scheduled Payments"
+        ],
+        "summary": "Create International schedule payment consent",
+        "description": "Create International schedule payment consent",
+        "operationId": "CreateInternationalSchedulePaymentconsent",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalScheduledPaymentConsentCreate"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalScheduledPaymentConsentCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalScheduledPaymentConsentCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalScheduledPaymentConsentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBInternationalScheduledPaymentConsentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been   found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/international-scheduled-payment-consents/{consentId}": {
+      "get": {
+        "tags": [
+          "International Scheduled Payments"
+        ],
+        "summary": "Get International Schedule Payment Consent Status",
+        "description": "Get International Schedule Payment Consent Status",
+        "operationId": "GetInternationalSchedulePaymentConsentStatus",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "description": "consent id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource has been retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBInternationalScheduledPaymentConsentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been   found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/pisp/international-scheduled-payments": {
+      "post": {
+        "tags": [
+          "International Scheduled Payments"
+        ],
+        "summary": "Create International Scheduled Payments",
+        "description": "Create an international scheduled payment\r\n            \r\n------\r\n- The submission of the payment must be made within 24-hours of the consent creation\r\n- Debtor account and currency must be in GBP\r\n- Some payments may require Multiple Authorisations and this will be indicated by the MultiAuthorisation object.\r\n------",
+        "operationId": "InternationalScheduledPayments",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-financial-id",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-last-logged-time",
+            "description": "The time when the PSU last logged in with the TPP.All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU�s IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalScheduledPaymentCreate"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalScheduledPaymentCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalScheduledPaymentCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OBInternationalScheduledPaymentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBInternationalScheduledPaymentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uk/open-banking/v3.1/international-scheduled-payments/{internationalScheduledPaymentId}": {
+      "get": {
+        "tags": [
+          "International Scheduled Payments"
+        ],
+        "summary": "Get International Schedule Payment Status",
+        "description": "Get International Schedule Payment Status\r\n- Some payments may require Multiple Authorisations and this will be indicated by the MultiAuthorisation object.\r\n------",
+        "operationId": "GetInternationalScheduledPaymentsStatus",
+        "parameters": [
+          {
+            "name": "internationalScheduledPaymentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Resource has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBInternationalScheduledPaymentCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A validation exception has occurred or the resource has not been   found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OBApiFailureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identity unknown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not permitted to make this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some kind of unhandled issue ...",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://apisandbox.investec.com"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "ASP": {
+        "type": "object",
+        "properties": {
+          "reisid": {
+            "type": "string"
+          },
+          "account": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Void": {
+        "type": "object"
+      },
+      "AuthorisePaymentModel": {
+        "type": "object",
+        "properties": {
+          "externalProviderId": {
+            "type": "string"
+          },
+          "gcn": {
+            "type": "string"
+          },
+          "aspAccount": {
+            "$ref": "#/components/schemas/ASP"
+          },
+          "pbAccount": {
+            "$ref": "#/components/schemas/PB"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeliveryAddress": {
+        "type": "object",
+        "properties": {
+          "addressLine": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "streetName": {
+            "type": "string"
+          },
+          "buildingNumber": {
+            "type": "string"
+          },
+          "postCode": {
+            "type": "string"
+          },
+          "townName": {
+            "type": "string"
+          },
+          "countrySubDivision": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DomainValidationError": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "readOnly": true
+          },
+          "errorCode": {
+            "$ref": "#/components/schemas/DomainValidationErrorCode"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DomainValidationErrorCode": {
+        "enum": [
+          "UK.OBIE.Field.Missing",
+          "UK.OBIE.Field.Invalid",
+          "UK.OBIE.Field.MissingOrInvalid",
+          "UK.Investec.Internal.InvalidState",
+          "UK.Investec.Internal.Duplicated",
+          "UK.OBIE.Header.Missing",
+          "UK.OBIE.Unsupported.Scheme",
+          "\tUK.OBIE.Unsupported.Currency",
+          "UK.OBIE.Resource.InvalidConsentStatus",
+          "UK.OBIE.UnexpectedError"
+        ],
+        "type": "string"
+      },
+      "EligibleAccountsRequest": {
+        "type": "object",
+        "properties": {
+          "gcn": {
+            "type": "string"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Links": {
+        "required": [
+          "self"
+        ],
+        "type": "object",
+        "properties": {
+          "first": {
+            "type": "string"
+          },
+          "last": {
+            "type": "string"
+          },
+          "next": {
+            "type": "string"
+          },
+          "prev": {
+            "type": "string"
+          },
+          "self": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MetaData": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstAvailableDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastAvailableDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "nextCursor": {
+            "type": "string"
+          },
+          "previousCursor": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBActiveOrHistoricCurrencyAndAmount": {
+        "required": [
+          "amount",
+          "currency"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "currency": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBApiFailureCodes": {
+        "enum": [
+          "UK.OBIE.BadRequest",
+          "UK.OBIE.ServiceUnavailable",
+          "UK.OBIE.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "OBApiFailureResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/OBApiFailureCodes"
+          },
+          "message": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DomainValidationError"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBCashAccountCreditor3": {
+        "required": [
+          "identification",
+          "name",
+          "schemeName"
+        ],
+        "type": "object",
+        "properties": {
+          "schemeName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "identification": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 350,
+            "minLength": 1,
+            "type": "string"
+          },
+          "secondaryIdentification": {
+            "maxLength": 34,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBCashAccountDebtor4": {
+        "type": "object",
+        "properties": {
+          "schemeName": {
+            "type": "string"
+          },
+          "identification": {
+            "maxLength": 256,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 350,
+            "type": "string"
+          },
+          "secondaryIdentification": {
+            "maxLength": 34,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBDomestic2": {
+        "required": [
+          "creditorAccount",
+          "endToEndIdentification",
+          "instructedAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "instructionIdentification": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "endToEndIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string"
+          },
+          "localInstrument": {
+            "type": "string"
+          },
+          "instructedAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "debtorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountDebtor4"
+          },
+          "creditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountCreditor3"
+          },
+          "creditorPostalAddress": {
+            "$ref": "#/components/schemas/OBPostalAddress6"
+          },
+          "remittanceInformation": {
+            "$ref": "#/components/schemas/OBRemittanceInformation1"
+          },
+          "supplementaryData": {
+            "$ref": "#/components/schemas/OBSupplementaryData1"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBFundsAvailableResult1": {
+        "required": [
+          "fundsAvailable",
+          "fundsAvailableDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "fundsAvailable": {
+            "type": "boolean"
+          },
+          "fundsAvailableDateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBPostalAddress6": {
+        "type": "object",
+        "properties": {
+          "addressType": {
+            "type": "string"
+          },
+          "department": {
+            "maxLength": 70,
+            "type": "string"
+          },
+          "subDepartment": {
+            "maxLength": 70,
+            "type": "string",
+            "nullable": true
+          },
+          "streetName": {
+            "maxLength": 70,
+            "type": "string",
+            "nullable": true
+          },
+          "buildingNumber": {
+            "maxLength": 16,
+            "type": "string",
+            "nullable": true
+          },
+          "postCode": {
+            "maxLength": 16,
+            "type": "string"
+          },
+          "townName": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "countrySubDivision": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "addressLine": {
+            "maxLength": 70,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBRemittanceInformation1": {
+        "type": "object",
+        "properties": {
+          "unstructured": {
+            "maxLength": 140,
+            "type": "string"
+          },
+          "reference": {
+            "maxLength": 35,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBRisk1": {
+        "type": "object",
+        "properties": {
+          "beneficiaryAccountType": {
+            "type": "string"
+          },
+          "beneficiaryPaymentDetailsPrepopulatedIndicator": {
+            "type": "boolean"
+          },
+          "contractPresentInidicator": {
+            "type": "boolean"
+          },
+          "merchantCategoryCode": {
+            "type": "string"
+          },
+          "merchantCustomerIdentification": {
+            "type": "string"
+          },
+          "paymentContextCode": {
+            "type": "string"
+          },
+          "paymentPurposeCode": {
+            "type": "string"
+          },
+          "deliveryAddress": {
+            "$ref": "#/components/schemas/DeliveryAddress"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBRiskResponse5": {
+        "type": "object",
+        "properties": {
+          "paymentContextCode": {
+            "type": "string"
+          },
+          "contractPresentInidicator": {
+            "type": "boolean"
+          },
+          "paymentPurposeCode": {
+            "type": "string"
+          },
+          "beneficiaryPaymentDetailsPrepopulatedIndicator": {
+            "type": "boolean"
+          },
+          "beneficiaryAccountType": {
+            "type": "string"
+          },
+          "merchantCustomerIdentification": {
+            "type": "string"
+          },
+          "deliveryAddress": {
+            "$ref": "#/components/schemas/DeliveryAddress"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBSupplementaryData1": {
+        "type": "object",
+        "properties": {
+          "PayerReference": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBExchangeRateInformationData1": {
+        "type": "object",
+        "properties": {
+          "UnitCurrency": {
+            "type": "string"
+          },
+          "RateType": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBWriteDataDomesticDebtor": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBWriteDataFundsConfirmationResponse1": {
+        "type": "object",
+        "properties": {
+          "fundsAvailableResult": {
+            "$ref": "#/components/schemas/OBFundsAvailableResult1"
+          },
+          "supplementaryData": {
+            "$ref": "#/components/schemas/OBSupplementaryData1"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBWriteFundsConfirmationResponse1": {
+        "required": [
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBWriteDataFundsConfirmationResponse1"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PB": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RejectPaymentConsentModel": {
+        "type": "object",
+        "properties": {
+          "externalProviderId": {
+            "type": "string"
+          },
+          "gcn": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SCAResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "callback": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBDomestic5": {
+        "required": [
+          "creditorAccount",
+          "endToEndIdentification",
+          "instructedAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "instructionIdentification": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "endToEndIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string"
+          },
+          "requestedExecutionDateTime": {
+            "type": "string"
+          },
+          "instructedAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "debtorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountDebtor4"
+          },
+          "creditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountCreditor3"
+          },
+          "remittanceInformation": {
+            "$ref": "#/components/schemas/OBRemittanceInformation1"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBDomesticInitiation": {
+        "required": [
+          "creditorAccount",
+          "endToEndIdentification",
+          "instructedAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "instructionIdentification": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "endToEndIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string"
+          },
+          "requestedExecutionDateTime": {
+            "type": "string"
+          },
+          "instructedAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "creditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountCreditor3"
+          },
+          "remittanceInformation": {
+            "$ref": "#/components/schemas/OBRemittanceInformation1"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBDebtor": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 350,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBWriteInternationalStatus3": {
+        "required": [
+          "creditorAccount",
+          "endToEndIdentification",
+          "instructedAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "instructionIdentification": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "endToEndIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string"
+          },
+          "requestedExecutionDateTime": {
+            "type": "string"
+          },
+          "instructedAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "creditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountCreditor3"
+          },
+          "remittanceInformation": {
+            "$ref": "#/components/schemas/OBRemittanceInformation1"
+          },
+          "exchangeRateInformation": {
+            "$ref": "#/components/schemas/OBExchangeRateInformationData1"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBWriteDomesticStatusResponse": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticStatus"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBWriteDataDomesticStatus": {
+        "required": [
+          "initiation",
+          "multiAuthorisation"
+        ],
+        "type": "object",
+        "properties": {
+          "domesticScheduledPaymentId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "debtor": {
+            "$ref": "#/components/schemas/OBDebtor"
+          },
+          "consentId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "statusUpdateDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBWriteDomesticStatus3"
+          },
+          "multiAuthorisation": {
+            "$ref": "#/components/schemas/OBMultiAuthorisation"
+          }
+        }
+      },
+      "OBWriteDomesticStatus3": {
+        "required": [
+          "creditorAccount",
+          "endToEndIdentification",
+          "instructedAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "instructionIdentification": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "endToEndIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string"
+          },
+          "requestedExecutionDateTime": {
+            "type": "string"
+          },
+          "instructedAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "creditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountCreditor3"
+          },
+          "remittanceInformation": {
+            "$ref": "#/components/schemas/OBRemittanceInformation1"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBMultiAuthorisation": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/OBMultiAuthorisationEnum"
+          }
+        }
+      },
+      "OBMultiAuthorisationEnum": {
+        "enum": [
+          "AwaitingFurtherAuthorisation",
+          "Rejected",
+          "Authorised"
+        ],
+        "type": "string"
+      },
+      "OBDomesticPaymentConsentCreate": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBDomesticPaymentConsentCreateData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBDomesticPaymentConsentCreateData": {
+        "required": [
+          "initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "readRefundAccount": {
+            "type": "string"
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          }
+        }
+      },
+      "OBDomesticPaymentConsentCreateResponse": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBDomesticPaymentConsentCreateResponseData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBDomesticPaymentConsentCreateResponseData": {
+        "required": [
+          "consentId",
+          "creationDateTime",
+          "initiation",
+          "status",
+          "statusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "consentId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "cutOffDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "statusUpdateDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "readRefundAccount": {
+            "type": "string",
+            "nullable": true
+          },
+          "permission": {
+            "type": "string",
+            "nullable": true
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBDomesticInitiation"
+          }
+        }
+      },
+      "OBDomesticPaymentCreate": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBDomesticPaymentCreateData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBDomesticPaymentCreateData": {
+        "required": [
+          "initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "consentId": {
+            "type": "string"
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBDomesticPaymentCreateResponse": {
+        "required": [
+          "data",
+          "links",
+          "meta"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBDomesticPaymentCreateResponseData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBDomesticPaymentCreateResponseData": {
+        "required": [
+          "consentId",
+          "creationDateTime",
+          "domesticPaymentId",
+          "initiation",
+          "status",
+          "statusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "domesticPaymentId": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "consentId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "cutOffDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "readRefundAccount": {
+            "type": "string"
+          },
+          "status": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "statusUpdateDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "multiAuthorisation": {
+            "$ref": "#/components/schemas/OBMultiAuthorisation"
+          },
+          "charges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBCharge"
+            }
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          },
+          "debtor": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticDebtor"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBDomesticScheduledPaymentConsentCreate": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBDomesticScheduledPaymentConsentCreateData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBDomesticScheduledPaymentConsentCreateData": {
+        "required": [
+          "initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "readRefundAccount": {
+            "type": "string"
+          },
+          "permission": {
+            "type": "string",
+            "nullable": true
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          }
+        }
+      },
+      "OBDomesticScheduledPaymentConsentCreateResponse": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBDomesticScheduledPaymentConsentCreateResponseData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBDomesticScheduledPaymentConsentCreateResponseData": {
+        "required": [
+          "consentId",
+          "creationDateTime",
+          "initiation",
+          "status",
+          "statusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "consentId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "cutOffDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "statusUpdateDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "readRefundAccount": {
+            "type": "string",
+            "nullable": true
+          },
+          "permission": {
+            "type": "string",
+            "nullable": true
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBDomesticInitiation"
+          }
+        }
+      },
+      "OBDomesticScheduledPaymentCreate": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBDomesticScheduledPaymentCreateData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBDomesticScheduledPaymentCreateData": {
+        "required": [
+          "initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "consentId": {
+            "type": "string"
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBDomesticScheduledPaymentCreateResponse": {
+        "required": [
+          "data",
+          "links",
+          "meta"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBDomesticScheduledPaymentCreateResponseData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBDomesticScheduledPaymentCreateResponseData": {
+        "required": [
+          "consentId",
+          "creationDateTime",
+          "domesticScheduledPaymentId",
+          "initiation",
+          "status",
+          "statusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "domesticScheduledPaymentId": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "consentId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "cutOffDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "readRefundAccount": {
+            "type": "string"
+          },
+          "status": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "statusUpdateDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "multiAuthorisation": {
+            "$ref": "#/components/schemas/OBMultiAuthorisation"
+          },
+          "charges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBCharge"
+            }
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          },
+          "debtor": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticDebtor"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBInternationalPaymentConsentCreate": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBInternationalPaymentConsentCreateData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBInternationalPaymentConsentCreateData": {
+        "required": [
+          "initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "readRefundAccount": {
+            "type": "string"
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          }
+        }
+      },
+      "OBInternationalPaymentConsentCreateResponse": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBInternationalPaymentConsentCreateResponseData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBInternationalPaymentConsentCreateResponseData": {
+        "required": [
+          "consentId",
+          "creationDateTime",
+          "initiation",
+          "status",
+          "statusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "consentId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "cutOffDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "statusUpdateDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "readRefundAccount": {
+            "type": "string",
+            "nullable": true
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          }
+        }
+      },
+      "OBInternationalPaymentCreate": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBInternationalPaymentCreateData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBInternationalPaymentCreateData": {
+        "required": [
+          "initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "consentId": {
+            "type": "string"
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBInternationalPaymentCreateResponse": {
+        "required": [
+          "data",
+          "links",
+          "meta"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBInternationalPaymentCreateResponseData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBInternationalPaymentCreateResponseData": {
+        "required": [
+          "consentId",
+          "creationDateTime",
+          "internationalPaymentId",
+          "initiation",
+          "status",
+          "statusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "internationalPaymentId": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "consentId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "cutOffDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "readRefundAccount": {
+            "type": "string"
+          },
+          "status": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "statusUpdateDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "multiAuthorisation": {
+            "$ref": "#/components/schemas/OBMultiAuthorisation"
+          },
+          "charges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBCharge"
+            }
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          },
+          "debtor": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticDebtor"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBInternationalScheduledPaymentConsentCreate": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBInternationalScheduledPaymentConsentCreateData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBInternationalScheduledPaymentConsentCreateData": {
+        "required": [
+          "initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "readRefundAccount": {
+            "type": "string"
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          }
+        }
+      },
+      "OBInternationalScheduledPaymentConsentCreateResponse": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBInternationalScheduledPaymentConsentCreateResponseData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBInternationalScheduledPaymentConsentCreateResponseData": {
+        "required": [
+          "consentId",
+          "creationDateTime",
+          "initiation",
+          "status",
+          "statusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "consentId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "cutOffDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "statusUpdateDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "readRefundAccount": {
+            "type": "string",
+            "nullable": true
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          }
+        }
+      },
+      "OBInternationalScheduledPaymentCreate": {
+        "required": [
+          "data",
+          "risk"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBInternationalScheduledPaymentCreateData"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/OBRisk1"
+          }
+        }
+      },
+      "OBInternationalScheduledPaymentCreateData": {
+        "required": [
+          "initiation"
+        ],
+        "type": "object",
+        "properties": {
+          "consentId": {
+            "type": "string"
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBInternationalScheduledPaymentCreateResponse": {
+        "required": [
+          "data",
+          "links",
+          "meta"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OBInternationalScheduledPaymentCreateResponseData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBInternationalScheduledPaymentCreateResponseData": {
+        "required": [
+          "consentId",
+          "creationDateTime",
+          "internationalScheduledPaymentId",
+          "initiation",
+          "status",
+          "statusUpdateDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "internationalScheduledPaymentId": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "consentId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "cutOffDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "readRefundAccount": {
+            "type": "string"
+          },
+          "status": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "statusUpdateDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "multiAuthorisation": {
+            "$ref": "#/components/schemas/OBMultiAuthorisation"
+          },
+          "charges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OBCharge"
+            }
+          },
+          "initiation": {
+            "$ref": "#/components/schemas/OBInitiation"
+          },
+          "debtor": {
+            "$ref": "#/components/schemas/OBWriteDataDomesticDebtor"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBInitiation": {
+        "required": [
+          "creditorAccount",
+          "endToEndIdentification",
+          "instructedAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "instructionIdentification": {
+            "maxLength": 35,
+            "type": "string"
+          },
+          "endToEndIdentification": {
+            "maxLength": 35,
+            "minLength": 1,
+            "type": "string"
+          },
+          "requestedExecutionDateTime": {
+            "type": "string"
+          },
+          "instructedAmount": {
+            "$ref": "#/components/schemas/OBActiveOrHistoricCurrencyAndAmount"
+          },
+          "debtorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountDebtor4"
+          },
+          "creditorAccount": {
+            "$ref": "#/components/schemas/OBCashAccountCreditor3"
+          },
+          "remittanceInformation": {
+            "$ref": "#/components/schemas/OBRemittanceInformation1"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OBCharge": {
+        "required": [
+          "chargeBearer",
+          "type",
+          "amount"
+        ],
+        "type": "object",
+        "properties": {
+          "chargeBearer": {
+            "$ref": "#/components/schemas/OBChargeBearerEnum"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OBChargeTypeEnum"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/OBChargeAmount"
+          }
+        }
+      },
+      "OBChargeBearerEnum": {
+        "enum": [
+          "BorneByDebtor",
+          "Shared",
+          "BorneByCreditor",
+          "FollowingServiceLevel"
+        ],
+        "type": "string"
+      },
+      "OBChargeTypeEnum": {
+        "enum": [
+          "UK.OBIE.MoneyTransferOut",
+          "UK.OBIE.BalanceTransferOut",
+          "UK.OBIE.CHAPSOut"
+        ],
+        "type": "string"
+      },
+      "OBChargeAmount": {
+        "required": [
+          "amount",
+          "currency"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "minLength": 1,
+            "type": "number"
+          },
+          "currency": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

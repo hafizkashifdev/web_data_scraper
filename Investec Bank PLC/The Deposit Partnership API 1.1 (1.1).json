@@ -1,0 +1,1594 @@
+{
+  "x-generator": "NSwag v13.11.3.0 (NJsonSchema v10.4.4.0 (Newtonsoft.Json v12.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "The Deposit Partnership API 1.1",
+    "description": "This document describes how to use the Investec Deposit Partnership API\n\n# Authentication\n\n<!-- ReDoc-Inject: <security-definitions> -->",
+    "version": "1.1"
+  },
+  "servers": [
+    {
+      "url": "https://openapisandbox.investec.com/"
+    },
+    {
+      "url": "https://openapi.investec.com/"
+    }
+  ],
+  "paths": {
+    "/uk/bb/v1/accounts": {
+      "get": {
+        "tags": [
+          "Call and Notice Accounts"
+        ],
+        "operationId": "Get Accounts",
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfListOfAccountModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/accounts/{accountId}": {
+      "get": {
+        "tags": [
+          "Call and Notice Accounts"
+        ],
+        "operationId": "Get Account",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The account Id parameter",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfAccountModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseNotFound"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/accounts/{accountId}/valid-payment-dates": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Get Account Payment Dates",
+        "operationId": "Get Account Payment Dates",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The account Id parameter",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfIEnumerableOfDateTime"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseNotFound"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/balances": {
+      "get": {
+        "tags": [
+          "Call and Notice Accounts"
+        ],
+        "summary": "Get Balances",
+        "operationId": "Get Balances",
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfListOfBalanceModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/accounts/{accountId}/balance": {
+      "get": {
+        "tags": [
+          "Call and Notice Accounts"
+        ],
+        "summary": "Get Account Balance",
+        "operationId": "Get Account Balance",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The account Id parameter",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfListOfBalanceModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseNotFound"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/accounts/{accountId}/transactions": {
+      "get": {
+        "tags": [
+          "Call and Notice Accounts"
+        ],
+        "summary": "Get Transactions",
+        "operationId": "Get Transactions",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The account Id parameter",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "description": "The From BookingDateTime  parameter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "description": "The To BookingDateTime  parameter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfListOfTransactionModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseNotFound"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/accounts/{accountId}/transactions/pending": {
+      "get": {
+        "tags": [
+          "Call and Notice Accounts"
+        ],
+        "summary": "Get Pending Transactions",
+        "operationId": "Get Pending Transactions",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The account Id parameter",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfListOfPendingTransactionsModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseNotFound"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/beneficiaries": {
+      "get": {
+        "tags": [
+          "Call and Notice Accounts"
+        ],
+        "summary": "Get Beneficiaries",
+        "operationId": "Get Beneficiaries",
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfListOfBeneficiaryModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/accounts/{accountId}/beneficiaries": {
+      "get": {
+        "tags": [
+          "Call and Notice Accounts"
+        ],
+        "summary": "Get Account Beneficiaries",
+        "operationId": "Get Account Beneficiaries",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The account Id parameter",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JsonApiResponseOfListOfBeneficiaryModel"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseNotFound"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/uk/bb/payments/v2": {
+      "post": {
+        "description": "Submit a payment request on call or notice accounts. This call requires you to include an Idempotency Key(x-idempotency-key) in the header when making this request. <br/> <b>NB! fullBalanceWithdrawalCalc property can only be true with notice accounts. Setting this property to true with call accounts will generate an error. </b> <br/> <br/> The following values are not allowed in the Idempotency Key <ul> <li>The forward slash (/) character</li> <li>The backslash (\\) character</li> <li>The number sign (#) character</li> <li>The question mark (?) character</li> <li>Control characters from U+0000 to U+001F, including <ul> <li>The horizontal tab (\\t) character</li> <li>The linefeed (\\n) character</li> <li>The carriage return (\\r) character</li> <li>Control characters from U+007F to U+009F</li> </ul> </li> </ul>",
+        "tags": [
+          "Payments"
+        ],
+        "operationId": "Make Payment",
+        "parameters": [
+          {
+            "name": "x-idempotency-key",
+            "in": "header",
+            "required": true,
+            "description": "Idempotency Key to prevent duplicate payments.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "paymentInstructions",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentInstructions"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseNotFound"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - duplicate idempotency key used."
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "499": {
+            "description": "System Maintenance - request cannot be processed"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get Available Products",
+        "operationId": "Get Available Products",
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfListOfProductModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/products/{productId}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get Product By Id",
+        "operationId": "Get Product By Id",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "The product Id parameter",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfProductModelAndObject"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/fixedtermdeposits": {
+      "post": {
+        "tags": [
+          "Fixed Term Deposit"
+        ],
+        "operationId": "Create FTD",
+        "requestBody": {
+          "x-name": "paymentInstructions",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFTD"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfGetFTD"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Fixed Term Deposit"
+        ],
+        "summary": "Get Fixed Term Deposits",
+        "operationId": "GetFixedTermDeposits",
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfListOfGetFTDModelAndObject"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/uk/bb/v1/fixedtermdeposits/{id}": {
+      "get": {
+        "tags": [
+          "Fixed Term Deposit"
+        ],
+        "summary": "Get Fixed Term Deposit by id",
+        "operationId": "Get Fixed Term Deposit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id from the list of FTDs",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiResponseOfGetFTD"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Oauth2": {
+        "description": "The authentication flow complies to standard Oauth2 protocol but also requires an.<br>  **x-api-key** as an additional header. <br>Also remember to include **grant_type: client_credentials** (x-www-form-urlencoded) in the body of the request",
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://openapi.investec.com/identity/v2/oauth2/token",
+            "x-api-key": "dWJHTHUxY1MzUnRjV3NzN29pWkpjNUZEbjhQaHhYUUw6N0YwRkNEQzgzQUE5MzdDQkNDMzhCMkU4ODQ2OUI1NzQ2MTQ1NTlENzgzQjRCMDhFRDBGMTY5NzQ5ODQzQjk1Qg==",
+            "scopes": {
+              "accounts": "Accounts",
+              "payments": "Payments"
+            }
+          }
+        }
+      },
+      "BearerToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "JsonApiResponseOfListOfBalanceModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiResponseOfListOfBalanceModelAndObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "JsonApiResponseOfListOfBalanceModelAndObject": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BalanceModel"
+            }
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "BalanceModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "actualAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "availableAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "creditDebitIndicator": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreditDebitIndicator": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Credit",
+          "Debit"
+        ],
+        "enum": [
+          "Credit",
+          "Debit"
+        ]
+      },
+      "BalanceType": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "ClosingAvailable",
+          "ClosingBooked",
+          "ClosingCleared",
+          "Expected",
+          "ForwardAvailable",
+          "Information",
+          "InterimAvailable",
+          "InterimBooked",
+          "InterimCleared",
+          "OpeningAvailable",
+          "OpeningBooked",
+          "OpeningCleared",
+          "PreviouslyClosedBooked"
+        ],
+        "enum": [
+          "ClosingAvailable",
+          "ClosingBooked",
+          "ClosingCleared",
+          "Expected",
+          "ForwardAvailable",
+          "Information",
+          "InterimAvailable",
+          "InterimBooked",
+          "InterimCleared",
+          "OpeningAvailable",
+          "OpeningBooked",
+          "OpeningCleared",
+          "PreviouslyClosedBooked"
+        ]
+      },
+      "JsonApiError": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "additionalProperties": {
+          "nullable": true
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "extensions": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {}
+          }
+        }
+      },
+      "JsonApiResponseOfListOfAccountModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiResponseOfListOfAccountModelAndObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "JsonApiResponseOfListOfAccountModelAndObject": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/AccountModel"
+            }
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "AccountModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "account": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "sortCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "iban": {
+            "type": "string",
+            "nullable": true
+          },
+          "nickname": {
+            "type": "string",
+            "nullable": true
+          },
+          "product": {
+            "type": "string",
+            "nullable": true
+          },
+          "interestRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/AccountStatus"
+          },
+          "accountType": {
+            "$ref": "#/components/schemas/AccountType"
+          },
+          "accountSubType": {
+            "$ref": "#/components/schemas/AccountSubType"
+          }
+        }
+      },
+      "AccountStatus": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Enabled",
+          "Disabled",
+          "Deleted",
+          "ProForma",
+          "Pending"
+        ],
+        "enum": [
+          "Enabled",
+          "Disabled",
+          "Deleted",
+          "ProForma",
+          "Pending"
+        ]
+      },
+      "AccountType": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Business",
+          "Personal"
+        ],
+        "enum": [
+          "Business",
+          "Personal"
+        ]
+      },
+      "AccountSubType": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Savings",
+          "CreditCard",
+          "CurrentAccount",
+          "EMoney",
+          "Loan",
+          "Mortgage",
+          "PrePaidCard",
+          "ChargeCard"
+        ],
+        "enum": [
+          "Savings",
+          "CreditCard",
+          "CurrentAccount",
+          "EMoney",
+          "Loan",
+          "Mortgage",
+          "PrePaidCard",
+          "ChargeCard"
+        ]
+      },
+      "JsonApiResponseOfAccountModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiResponseOfAccountModelAndObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "JsonApiResponseOfAccountModelAndObject": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AccountModel"
+              }
+            ]
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "JsonApiResponseOfIEnumerableOfDateTime": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiResponseOfIEnumerableOfDateTimeAndObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "JsonApiResponseOfIEnumerableOfDateTimeAndObject": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "JsonApiResponseOfListOfTransactionModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiResponseOfListOfTransactionModelAndObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "JsonApiResponseOfListOfTransactionModelAndObject": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TransactionModel"
+            }
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "TransactionModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "transactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "transactionRef": {
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "balanceAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "creditDebitIndicator": {
+            "$ref": "#/components/schemas/CreditDebitIndicator"
+          },
+          "bookingDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "valueDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "settleDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "transactionInformation": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "JsonApiResponseOfListOfPendingTransactionsModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiResponseOfListOfPendingTransactionsModelAndObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "JsonApiResponseOfListOfPendingTransactionsModelAndObject": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PendingTransactionsModel"
+            }
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "PendingTransactionsModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "transactionRef": {
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "creditDebitIndicator": {
+            "$ref": "#/components/schemas/CreditDebitIndicator"
+          },
+          "tradeDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "valueDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "transactionInformation": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "JsonApiResponseOfListOfBeneficiaryModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiResponseOfListOfBeneficiaryModelAndObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "JsonApiResponseOfListOfBeneficiaryModelAndObject": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BeneficiaryModel"
+            }
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "BeneficiaryModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "beneficiaryId": {
+            "type": "string",
+            "nullable": true
+          },
+          "beneficiaryName": {
+            "type": "string",
+            "nullable": true
+          },
+          "reference": {
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "bankName": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountName": {
+            "type": "string",
+            "nullable": true
+          },
+          "swiftCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "iban": {
+            "type": "string",
+            "nullable": true
+          },
+          "bankCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "JsonApiResponseOfStatusResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiResponseOfStatusResponseAndObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "JsonApiResponseNotFound": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/JsonApiError"
+            }
+          }
+        }
+      },
+      "JsonApiResponseOfStatusResponseAndObject": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StatusResponse"
+              }
+            ]
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "StatusResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "PaymentInstructions": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "accountId",
+          "beneficiaryId",
+          "amount",
+          "date",
+          "reference"
+        ],
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "beneficiaryId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "minLength": 1
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fullBalanceWithdrawalCalc": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "JsonApiResponseOfListOfProductModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiResponseOfListOfProductModelAndObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "JsonApiResponseOfListOfProductModelAndObject": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ProductModel"
+            }
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "JsonApiResponseOfProductModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiResponseOfProductModelAndObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "JsonApiResponseOfProductModelAndObject": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ProductModel"
+              }
+            ]
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "ProductModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "aer": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grossRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "term": {
+            "type": "string",
+            "nullable": true
+          },
+          "startdate": {
+            "type": "string",
+            "nullable": true
+          },
+          "endDate": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateFTD": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "productId",
+          "amount",
+          "externalreference"
+        ],
+        "properties": {
+          "productId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "externalreference": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "JsonApiResponseListOfGetFTD": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiResponseOfListOfGetFTDModelAndObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "JsonApiResponseOfListOfGetFTDModelAndObject": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/GetFTDModel"
+            }
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "JsonApiResponseOfGetFTDModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "allOf": null,
+              "$ref": "#/components/schemas/JsonApiResponseOfGetFTD"
+            }
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "JsonApiResponseOfGetFTD": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GetFTDModel"
+              }
+            ]
+          },
+          "meta": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "GetFTDModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false
+          },
+          "startDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "endDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "productType": {
+            "type": "string",
+            "nullable": true
+          },
+          "interestRatePercent": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": false
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": false
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "externalReference": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}

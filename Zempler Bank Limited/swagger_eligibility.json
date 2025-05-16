@@ -1,0 +1,417 @@
+﻿{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "Zempler API - Eligibility",
+    "description": "## Testing\r\n\r\nThere is no sandbox for the Eligibility API. You will first receive test credentials which work in production environment but they are returning mock responses only.\r\n\r\nUse the below values for testing:\r\n\r\nfirstName = 'Eligible' and lastName = 'Eligible' to receive score 90.\r\n\r\nAny other values will return score 0."
+  },
+  "host": "api.zempler.tech",
+  "basePath": "/eligibility/",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/eligibility/personal/creditcard": {
+      "post": {
+        "tags": [
+          "Operations Eligibility - Eligibility"
+        ],
+        "summary": "Checks that client is eligible.",
+        "operationId": "POSTeligibility/personal/creditcard",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "eligibilityRequestModel",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LEAPS.Eligibility.Web.Models.EligibilityRequestModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of card validation",
+            "schema": {
+              "$ref": "#/definitions/LEAPS.Eligibility.Contracts.Descriptors.EligibilityResponseDescriptor"
+            },
+            "examples": {
+              "application/json": {
+                "ReferenceId": "b2e696a1-10a7-494c-8980-09979794a751",
+                "RedirectUrl": "https://servicing.zemplerbank.com/forms/CreditApplication/eligibilityCheckSuccess?pid=b2e696a1-10a7-494c-8980-09979794a751",
+                "Score": 80,
+                "ProductId": "B2KNOAMFV2",
+                "RepresentativeAPR": 69.9400,
+                "RepresentativeExample": "Representative 69.94% APR. Based on assumed borrowing of £1200. Purchase rate 13.23% p.a.",
+                "CreditLimit": 1200,
+                "PurchaseAPR": 13.2300,
+                "PartnerUniqueID":"3ddbb8bfdf5240e6a02899e734d0"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request."
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "Not authorised to make the call."
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "aps_profile",
+              "applications",
+              "accounts",
+              "payments",
+              "eligibility"
+            ]
+          }
+        ]
+      }
+    },
+    "/internal/query/{queryGroupTypeName}/{queryName}": {
+      "post": {
+        "tags": [
+          "Operations Eligibility - Queries"
+        ],
+        "operationId": "POSTinternal/query/{queryGroupTypeName}/{queryName}",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "queryGroupTypeName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "queryName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "args",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/info/version": {
+      "get": {
+        "tags": [
+          "Operations Eligibility - Service Information"
+        ],
+        "operationId": "GETinfo/version",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LEAPS.Eligibility.Web.Models.EligibilityRequestModel": {
+      "required": [
+        "title",
+        "firstName",
+        "lastName",
+        "dateOfBirth",
+        "yearsAtCurrentAddress",
+        "postCode",
+        "buildingNumber",
+        "street",
+        "townOrCity",
+        "annualPersonalIncome",
+        "employmentStatus",
+        "residentialStatus",
+        "monthlyShareOfRentOrMortgagePayments",
+        "numberOfDependants"
+      ],
+      "type": "object",
+      "properties": {
+        "title": {
+          "description": "String with possible values: 'Mr', 'Mrs', 'Miss', 'Ms', 'Dr'.",
+          "type": "string"
+        },
+        "firstName": {
+          "maxLength": 24,
+          "minLength": 0,
+          "type": "string"
+        },
+        "lastName": {
+          "maxLength": 24,
+          "minLength": 0,
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "description": "String in 'yyyy-mm-dd'.\r\nAge &gt;= 18.",
+          "type": "string"
+        },
+        "emailAddress": {
+          "maxLength": 50,
+          "minLength": 0,
+          "pattern": "^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$",
+          "type": "string"
+        },
+        "mobilePhone": {
+          "maxLength": 20,
+          "minLength": 0,
+          "pattern": "^(\\+44|0044)?07[0-9]{9}$",
+          "type": "string"
+        },
+        "homePhone": {
+          "maxLength": 20,
+          "minLength": 0,
+          "pattern": "^0[0-9]{10}$",
+          "type": "string"
+        },
+        "monthsAtCurrentAddress": {
+          "format": "int32",
+          "description": "Must be provided and must be higher than 0 if YearsAtCurrentAddress == 0.",
+          "maximum": 11,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "yearsAtCurrentAddress": {
+          "format": "int32",
+          "maximum": 2147483647,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "postCode": {
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "buildingNumber": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "buildingName": {
+          "maxLength": 50,
+          "minLength": 0,
+          "pattern": "^([a-zA-Z0-9 '-]+)$",
+          "type": "string"
+        },
+        "street": {
+          "maxLength": 50,
+          "minLength": 0,
+          "pattern": "^([a-zA-Z0-9 '\\-,.]+)$",
+          "type": "string"
+        },
+        "townOrCity": {
+          "maxLength": 50,
+          "minLength": 0,
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "type": "string"
+        },
+        "monthsAtPreviousAddress": {
+          "format": "int32",
+          "maximum": 11,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "yearsAtPreviousAddress": {
+          "format": "int32",
+          "maximum": 2147483647,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "previousPostCode": {
+          "pattern": "^[a-zA-Z][a-zA-Z]?[0-9]([a-zA-Z]|[0-9])? ?[0-9][a-zA-Z]{2}$",
+          "type": "string"
+        },
+        "previousBuildingNumber": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "previousBuildingName": {
+          "maxLength": 50,
+          "minLength": 0,
+          "pattern": "^([a-zA-Z0-9 '-]+)$",
+          "type": "string"
+        },
+        "previousStreet": {
+          "maxLength": 50,
+          "minLength": 0,
+          "pattern": "^([a-zA-Z0-9 '\\-,.]+)$",
+          "type": "string"
+        },
+        "previousTownOrCity": {
+          "maxLength": 50,
+          "minLength": 0,
+          "pattern": "^([a-zA-Z0-9 -.]+)$",
+          "type": "string"
+        },
+        "annualPersonalIncome": {
+          "format": "double",
+          "minimum": 0,
+          "pattern": "^\\d{0,10}(\\.\\d{0,2})?$",
+          "type": "number"
+        },
+        "employmentStatus": {
+          "description": "String with possible values: 'Full Time Employed', 'Part Time Employed', 'Self Employed', 'Not Employed', 'Student', 'Homemaker', 'Retired'.",
+          "type": "string"
+        },
+        "residentialStatus": {
+          "description": "String with possible values: 'Owner', 'Tenant Unfurnished', 'Tenant Furnished', 'Council Tenant', 'House Share', 'Living with Parents', 'Other Tenant'.",
+          "type": "string"
+        },
+        "expectedIncomeDecreaseInNext1m": {
+          "type": "boolean"
+        },
+        "immediateCashWithdrawal": {
+          "type": "boolean"
+        },
+        "monthlyShareOfRentOrMortgagePayments": {
+          "format": "double",
+          "minimum": 0,
+          "pattern": "^\\d{0,7}(\\.\\d{0,2})?$",
+          "type": "number"
+        },
+        "numberOfDependants": {
+          "format": "int32",
+          "maximum": 2147483647,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "monthlyShareOfChildCareCost": {
+          "format": "double",
+          "description": "Mandatory if NumberOfDependants &gt; 0.",
+          "minimum": 0,
+          "pattern": "^\\d{0,7}(\\.\\d{0,2})?$",
+          "type": "number"
+        },
+        "industry": {
+          "maxLength": 50,
+          "minLength": 0,
+          "type": "string"
+        },
+        "occupation": {
+          "maxLength": 60,
+          "minLength": 0,
+          "type": "string"
+        },
+        "partnerUniqueID": {
+          "maxLength": 60,
+          "minLength": 0,
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Eligibility.Contracts.Descriptors.EligibilityResponseDescriptor": {
+      "required": [
+        "referenceId",
+        "redirectUrl",
+        "score",
+        "representativeAPR",
+        "representativeExample"
+      ],
+      "type": "object",
+      "properties": {
+        "referenceId": {
+          "format": "uuid",
+          "description": "GUID (36)",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "redirectUrl": {
+          "description": "empty \"\" if score = 0",
+          "type": "string"
+        },
+        "score": {
+          "format": "int32",
+          "description": "Number (0-100)",
+          "type": "integer"
+        },
+        "productId": {
+          "description": "not provided if score = 0",
+          "type": "string"
+        },
+        "productName": {
+          "type": "string"
+        },
+        "representativeAPR": {
+          "format": "double",
+          "description": "Decimal (6,4)",
+          "type": "number"
+        },
+        "representativeExample": {
+          "type": "string"
+        },
+        "creditLimit": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "purchaseAPR": {
+          "format": "double",
+          "type": "number"
+        },
+        "partnerUniqueID": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "description": "OAuth2 Client Credentials flow",
+      "flow": "application",
+      "authorizationUrl": "https://api.zempler.tech/identity/auth/connect/authorize",
+      "tokenUrl": "https://api.zempler.tech/identity/auth/connect/token",
+      "scopes": {
+        "aps_profile": "APS profile data.",
+        "applications": "Allow access to application API.",
+        "accounts": "Allow access to account and transaction data on behalf of the client.",
+        "payments": "Allow access to payments and payment submissions data.",
+        "eligibility": "Allow access to eligibility API."
+      }
+    }
+  }
+}

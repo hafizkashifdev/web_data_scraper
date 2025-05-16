@@ -1,0 +1,1686 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Payment Initiation Service (PIS)",
+    "description": "Initiate direct payments from NewDay customers’ personal accounts.",
+    "version": "1.0"
+  },
+  "x-pub-settings": {
+    "pub-ready": true,
+    "team": "",
+    "tags": [
+      "Open Banking",
+      "Issuer Bank"
+    ],
+    "commitDate": 1739207354000
+  },
+  "servers": [
+    {
+      "url": "https://api.newdaycards.com/open-banking/v3.1/pisp",
+      "description": "Production"
+    },
+    {
+      "url": "https://api.newdaycards.com/sandbox/open-banking/v3.1/pisp",
+      "description": "Sandbox"
+    }
+  ],
+  "paths": {
+    "/domestic-payment-consents/{consentId}": {
+      "get": {
+        "tags": [
+          "Domestic Payments Consents"
+        ],
+        "summary": "Get Domestic Payments Consent By ConsentId",
+        "description": "Get a Domestic Payments Consent",
+        "operationId": "GetDomesticPaymentsConsent",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Domestic Payments Consent Read",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Data": {
+                    "ConsentId": "58923",
+                    "Status": "Authorised",
+                    "CreationDateTime": "2017-06-05T15:15:13.0000000+00:00",
+                    "StatusUpdateDateTime": "2017-06-05T15:15:22.0000000+00:00",
+                    "Initiation": {
+                      "InstructionIdentification": "ACME412",
+                      "EndToEndIdentification": "FRESCO.21302.GFX.20",
+                      "InstructedAmount": {
+                        "Amount": "165.88",
+                        "Currency": "GBP"
+                      },
+                      "CreditorAccount": {
+                        "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                        "Identification": "08080021325698",
+                        "Name": "ACME Inc",
+                        "SecondaryIdentification": "0002"
+                      },
+                      "RemittanceInformation": {
+                        "Reference": "FRESCO-101",
+                        "Unstructured": "Internal ops code 5120101"
+                      }
+                    }
+                  },
+                  "Risk": {
+                    "PaymentContextCode": "EcommerceGoods",
+                    "MerchantCategoryCode": "5967",
+                    "MerchantCustomerIdentification": "053598653254",
+                    "DeliveryAddress": {
+                      "AddressLine": [
+                        "Flat 7",
+                        "Acacia Lodge"
+                      ],
+                      "StreetName": "Acacia Avenue",
+                      "BuildingNumber": "27",
+                      "PostCode": "GU31 2ZZ",
+                      "TownName": "Sparsholt",
+                      "CountySubDivision": [
+                        "Wessex"
+                      ],
+                      "Country": "UK"
+                    }
+                  },
+                  "Links": {
+                    "Self": "https://azuweudevopenbanking.azure-api.net/open-banking/v3.1/pisp/domestic-payment-consents/58923"
+                  },
+                  "Meta": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "403 Forbidden",
+                  "Message": "Missing header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Missing",
+                      "Message": "x-fapi-financial-id Header is Missing.",
+                      "Path": "x-fapi-financial-id"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "404 Not Found",
+                  "Errors": [
+                    {
+                      "ErrorCode": "404 Not Found",
+                      "Message": "Not Found"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "406 Not Acceptable",
+                  "Message": "Invalid header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Invalid",
+                      "Message": "Accept Header is invalid.",
+                      "Path": "Accept"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents/%7BconsentId%7D \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'x-customer-user-agent: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-ip-address: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-last-logged-time: SOME_STRING_VALUE' \\\n  --header 'x-fapi-financial-id: SOME_STRING_VALUE' \\\n  --header 'x-fapi-interaction-id: SOME_STRING_VALUE'"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents/%7BconsentId%7D\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"GET\", \"https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents/%7BconsentId%7D\");\nxhr.setRequestHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"Authorization\", \"SOME_STRING_VALUE\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents/%7BconsentId%7D',\n  headers: {\n    'x-fapi-financial-id': 'SOME_STRING_VALUE',\n    'x-fapi-customer-last-logged-time': 'SOME_STRING_VALUE',\n    'x-fapi-customer-ip-address': 'SOME_STRING_VALUE',\n    'x-fapi-interaction-id': 'SOME_STRING_VALUE',\n    'x-customer-user-agent': 'SOME_STRING_VALUE',\n    Authorization: 'SOME_STRING_VALUE'\n  }\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/domestic-payment-consents/{consentId}/funds-confirmation": {
+      "get": {
+        "tags": [
+          "Domestic Payments Consents Funds Confirmation"
+        ],
+        "summary": "Get Domestic Payments Consent Funds Confirmation By ConsentId",
+        "description": "Get a Domestic Payments Consent Funds Confirmation by ConsentId",
+        "operationId": "GetDomesticPaymentsConsentFundsConfirmation",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Domestic Payments Consent Funds Confirmation Read",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Data": {
+                    "FundsAvailableResult": {
+                      "FundsAvailableDateTime": "2017-06-05T15:15:23.0000000+00:00",
+                      "FundsAvailable": true
+                    }
+                  },
+                  "Links": {
+                    "Self": "https://azuweudevopenbanking.azure-api.net/open-banking/v3.1/pisp/domestic-payment-consents/58923/funds-confirmation"
+                  },
+                  "Meta": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "403 Forbidden",
+                  "Message": "Missing header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Missing",
+                      "Message": "x-fapi-financial-id Header is Missing.",
+                      "Path": "x-fapi-financial-id"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "404 Not Found",
+                  "Errors": [
+                    {
+                      "ErrorCode": "404 Not Found",
+                      "Message": "Not Found"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "406 Not Acceptable",
+                  "Message": "Invalid header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Invalid",
+                      "Message": "Accept Header is invalid.",
+                      "Path": "Accept"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents/%7BconsentId%7D/funds-confirmation \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'x-customer-user-agent: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-ip-address: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-last-logged-time: SOME_STRING_VALUE' \\\n  --header 'x-fapi-financial-id: SOME_STRING_VALUE' \\\n  --header 'x-fapi-interaction-id: SOME_STRING_VALUE'"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents/%7BconsentId%7D/funds-confirmation\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"GET\", \"https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents/%7BconsentId%7D/funds-confirmation\");\nxhr.setRequestHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"Authorization\", \"SOME_STRING_VALUE\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents/%7BconsentId%7D/funds-confirmation',\n  headers: {\n    'x-fapi-financial-id': 'SOME_STRING_VALUE',\n    'x-fapi-customer-last-logged-time': 'SOME_STRING_VALUE',\n    'x-fapi-customer-ip-address': 'SOME_STRING_VALUE',\n    'x-fapi-interaction-id': 'SOME_STRING_VALUE',\n    'x-customer-user-agent': 'SOME_STRING_VALUE',\n    Authorization: 'SOME_STRING_VALUE'\n  }\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/domestic-payments/{domesticPaymentId}": {
+      "get": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Get Domestic Payments By DomesticPaymentId",
+        "description": "Get a Domestic Payment",
+        "operationId": "GetDomesticPayments",
+        "parameters": [
+          {
+            "name": "domesticPaymentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Domestic Payments Read",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Data": {
+                    "DomesticPaymentId": "58923-001",
+                    "ConsentId": "58923",
+                    "Status": "AcceptedSettlementInProcess",
+                    "CreationDateTime": "2017-06-05T15:15:13.0000000+00:00",
+                    "StatusUpdateDateTime": "2017-06-05T15:15:22.0000000+00:00",
+                    "Initiation": {
+                      "InstructionIdentification": "ACME412",
+                      "EndToEndIdentification": "FRESCO.21302.GFX.20",
+                      "InstructedAmount": {
+                        "Amount": "165.88",
+                        "Currency": "GBP"
+                      },
+                      "CreditorAccount": {
+                        "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                        "Identification": "08080021325698",
+                        "Name": "ACME Inc",
+                        "SecondaryIdentification": "0002"
+                      },
+                      "RemittanceInformation": {
+                        "Reference": "FRESCO-101",
+                        "Unstructured": "Internal ops code 5120101"
+                      }
+                    }
+                  },
+                  "Links": {
+                    "Self": "https://azuweudevopenbanking.azure-api.net/open-banking/v3.1/pisp/domestic-payment/58923-001"
+                  },
+                  "Meta": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "403 Forbidden",
+                  "Message": "Missing header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Missing",
+                      "Message": "x-fapi-financial-id Header is Missing.",
+                      "Path": "x-fapi-financial-id"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "404 Not Found",
+                  "Errors": [
+                    {
+                      "ErrorCode": "404 Not Found",
+                      "Message": "Not Found"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "406 Not Acceptable",
+                  "Message": "Invalid header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Invalid",
+                      "Message": "Accept Header is invalid.",
+                      "Path": "Accept"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payments/%7BdomesticPaymentId%7D \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'x-customer-user-agent: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-ip-address: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-last-logged-time: SOME_STRING_VALUE' \\\n  --header 'x-fapi-financial-id: SOME_STRING_VALUE' \\\n  --header 'x-fapi-interaction-id: SOME_STRING_VALUE'"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payments/%7BdomesticPaymentId%7D\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"GET\", \"https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payments/%7BdomesticPaymentId%7D\");\nxhr.setRequestHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"Authorization\", \"SOME_STRING_VALUE\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payments/%7BdomesticPaymentId%7D',\n  headers: {\n    'x-fapi-financial-id': 'SOME_STRING_VALUE',\n    'x-fapi-customer-last-logged-time': 'SOME_STRING_VALUE',\n    'x-fapi-customer-ip-address': 'SOME_STRING_VALUE',\n    'x-fapi-interaction-id': 'SOME_STRING_VALUE',\n    'x-customer-user-agent': 'SOME_STRING_VALUE',\n    Authorization: 'SOME_STRING_VALUE'\n  }\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/domestic-payments": {
+      "post": {
+        "tags": [
+          "Domestic Payments"
+        ],
+        "summary": "Create Domestic Payments",
+        "description": "Creates a domestic payments resource and responds with a unique DomesticPaymentId to refer to the resource",
+        "operationId": "CreateDomesticPayments",
+        "parameters": [
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-idempotency-key",
+            "in": "header",
+            "description": "Unique request identifier to support idempotency.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-jws-signature",
+            "in": "header",
+            "description": "A detached JWS signature of the body of the payload.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Domestic payment object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DomesticPayments"
+              },
+              "example": {
+                "Data": {
+                  "ConsentId": "58923",
+                  "Initiation": {
+                    "InstructionIdentification": "ACME412",
+                    "EndToEndIdentification": "FRESCO.21302.GFX.20",
+                    "InstructedAmount": {
+                      "Amount": "165.88",
+                      "Currency": "GBP"
+                    },
+                    "CreditorAccount": {
+                      "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                      "Identification": "08080021325698",
+                      "Name": "ACME Inc",
+                      "SecondaryIdentification": "0002"
+                    },
+                    "RemittanceInformation": {
+                      "Reference": "FRESCO-101",
+                      "Unstructured": "Internal ops code 5120101"
+                    }
+                  }
+                },
+                "Risk": {
+                  "PaymentContextCode": "EcommerceGoods",
+                  "MerchantCategoryCode": "5967",
+                  "MerchantCustomerIdentification": "053598653254",
+                  "DeliveryAddress": {
+                    "AddressLine": [
+                      "Flat 7",
+                      "Acacia Lodge"
+                    ],
+                    "StreetName": "Acacia Avenue",
+                    "BuildingNumber": "27",
+                    "PostCode": "GU31 2ZZ",
+                    "TownName": "Sparsholt",
+                    "CountySubDivision": [
+                      "Wessex"
+                    ],
+                    "Country": "UK"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Domestic Payment Created",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Data": {
+                    "ConsentId": "58923",
+                    "Status": "AwaitingAuthorisation",
+                    "CreationDateTime": "2017-06-05T15:15:13.0000000+00:00",
+                    "StatusUpdateDateTime": "2017-06-05T15:15:13.0000000+00:00",
+                    "Initiation": {
+                      "InstructionIdentification": "ACME412",
+                      "EndToEndIdentification": "FRESCO.21302.GFX.20",
+                      "InstructedAmount": {
+                        "Amount": "165.88",
+                        "Currency": "GBP"
+                      },
+                      "CreditorAccount": {
+                        "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                        "Identification": "08080021325698",
+                        "Name": "ACME Inc",
+                        "SecondaryIdentification": "0002"
+                      },
+                      "RemittanceInformation": {
+                        "Reference": "FRESCO-101",
+                        "Unstructured": "Internal ops code 5120101"
+                      }
+                    }
+                  },
+                  "Risk": {
+                    "PaymentContextCode": "EcommerceGoods",
+                    "MerchantCategoryCode": "5967",
+                    "MerchantCustomerIdentification": "053598653254",
+                    "DeliveryAddress": {
+                      "AddressLine": [
+                        "Flat 7",
+                        "Acacia Lodge"
+                      ],
+                      "StreetName": "Acacia Avenue",
+                      "BuildingNumber": "27",
+                      "PostCode": "GU31 2ZZ",
+                      "TownName": "Sparsholt",
+                      "CountySubDivision": [
+                        "Wessex"
+                      ],
+                      "Country": "UK"
+                    }
+                  },
+                  "Links": {
+                    "Self": "https://azuweudevopenbanking.azure-api.net/open-banking/v3.1/pisp/domestic-payment/58923"
+                  },
+                  "Meta": {
+                    "TotalPages": 1
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "400 Bad Request",
+                  "Message": "Validation failed.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Field.Missing",
+                      "Message": "Data Field is missing."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "403 Forbidden",
+                  "Message": "Missing header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Missing",
+                      "Message": "x-fapi-financial-id Header is Missing.",
+                      "Path": "x-fapi-financial-id"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "406 Not Acceptable",
+                  "Message": "Invalid header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Invalid",
+                      "Message": "Accept Header is invalid.",
+                      "Path": "Accept"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "415 Unsupported Media Type",
+                  "Message": "Invalid header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Missing",
+                      "Message": "Content-Type Header is missing.",
+                      "Path": "Content-Type"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "500 Internal Server Error",
+                  "Errors": [
+                    {
+                      "ErrorCode": "500 Internal Server Error",
+                      "Message": "Value cannot be null.\r\nParameter name: instance"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payments \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-customer-user-agent: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-ip-address: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-last-logged-time: SOME_STRING_VALUE' \\\n  --header 'x-fapi-financial-id: SOME_STRING_VALUE' \\\n  --header 'x-fapi-interaction-id: SOME_STRING_VALUE' \\\n  --header 'x-idempotency-key: SOME_STRING_VALUE' \\\n  --header 'x-jws-signature: SOME_STRING_VALUE' \\\n  --data '{\"Data\":{\"ConsentId\":\"58923\",\"Initiation\":{\"InstructionIdentification\":\"ACME412\",\"EndToEndIdentification\":\"FRESCO.21302.GFX.20\",\"InstructedAmount\":{\"Amount\":\"165.88\",\"Currency\":\"GBP\"},\"CreditorAccount\":{\"SchemeName\":\"UK.OBIE.SortCodeAccountNumber\",\"Identification\":\"08080021325698\",\"Name\":\"ACME Inc\",\"SecondaryIdentification\":\"0002\"},\"RemittanceInformation\":{\"Reference\":\"FRESCO-101\",\"Unstructured\":\"Internal ops code 5120101\"}}},\"Risk\":{\"PaymentContextCode\":\"EcommerceGoods\",\"MerchantCategoryCode\":\"5967\",\"MerchantCustomerIdentification\":\"053598653254\",\"DeliveryAddress\":{\"AddressLine\":[\"Flat 7\",\"Acacia Lodge\"],\"StreetName\":\"Acacia Avenue\",\"BuildingNumber\":\"27\",\"PostCode\":\"GU31 2ZZ\",\"TownName\":\"Sparsholt\",\"CountySubDivision\":[\"Wessex\"],\"Country\":\"UK\"}}}'"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payments\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-idempotency-key\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-jws-signature\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddParameter(\"application/json\", \"{\\\"Data\\\":{\\\"ConsentId\\\":\\\"58923\\\",\\\"Initiation\\\":{\\\"InstructionIdentification\\\":\\\"ACME412\\\",\\\"EndToEndIdentification\\\":\\\"FRESCO.21302.GFX.20\\\",\\\"InstructedAmount\\\":{\\\"Amount\\\":\\\"165.88\\\",\\\"Currency\\\":\\\"GBP\\\"},\\\"CreditorAccount\\\":{\\\"SchemeName\\\":\\\"UK.OBIE.SortCodeAccountNumber\\\",\\\"Identification\\\":\\\"08080021325698\\\",\\\"Name\\\":\\\"ACME Inc\\\",\\\"SecondaryIdentification\\\":\\\"0002\\\"},\\\"RemittanceInformation\\\":{\\\"Reference\\\":\\\"FRESCO-101\\\",\\\"Unstructured\\\":\\\"Internal ops code 5120101\\\"}}},\\\"Risk\\\":{\\\"PaymentContextCode\\\":\\\"EcommerceGoods\\\",\\\"MerchantCategoryCode\\\":\\\"5967\\\",\\\"MerchantCustomerIdentification\\\":\\\"053598653254\\\",\\\"DeliveryAddress\\\":{\\\"AddressLine\\\":[\\\"Flat 7\\\",\\\"Acacia Lodge\\\"],\\\"StreetName\\\":\\\"Acacia Avenue\\\",\\\"BuildingNumber\\\":\\\"27\\\",\\\"PostCode\\\":\\\"GU31 2ZZ\\\",\\\"TownName\\\":\\\"Sparsholt\\\",\\\"CountySubDivision\\\":[\\\"Wessex\\\"],\\\"Country\\\":\\\"UK\\\"}}}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = JSON.stringify({\n  \"Data\": {\n    \"ConsentId\": \"58923\",\n    \"Initiation\": {\n      \"InstructionIdentification\": \"ACME412\",\n      \"EndToEndIdentification\": \"FRESCO.21302.GFX.20\",\n      \"InstructedAmount\": {\n        \"Amount\": \"165.88\",\n        \"Currency\": \"GBP\"\n      },\n      \"CreditorAccount\": {\n        \"SchemeName\": \"UK.OBIE.SortCodeAccountNumber\",\n        \"Identification\": \"08080021325698\",\n        \"Name\": \"ACME Inc\",\n        \"SecondaryIdentification\": \"0002\"\n      },\n      \"RemittanceInformation\": {\n        \"Reference\": \"FRESCO-101\",\n        \"Unstructured\": \"Internal ops code 5120101\"\n      }\n    }\n  },\n  \"Risk\": {\n    \"PaymentContextCode\": \"EcommerceGoods\",\n    \"MerchantCategoryCode\": \"5967\",\n    \"MerchantCustomerIdentification\": \"053598653254\",\n    \"DeliveryAddress\": {\n      \"AddressLine\": [\n        \"Flat 7\",\n        \"Acacia Lodge\"\n      ],\n      \"StreetName\": \"Acacia Avenue\",\n      \"BuildingNumber\": \"27\",\n      \"PostCode\": \"GU31 2ZZ\",\n      \"TownName\": \"Sparsholt\",\n      \"CountySubDivision\": [\n        \"Wessex\"\n      ],\n      \"Country\": \"UK\"\n    }\n  }\n});\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"POST\", \"https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payments\");\nxhr.setRequestHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-idempotency-key\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-jws-signature\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"content-type\", \"application/json\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'POST',\n  url: 'https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payments',\n  headers: {\n    'x-fapi-financial-id': 'SOME_STRING_VALUE',\n    'x-fapi-customer-last-logged-time': 'SOME_STRING_VALUE',\n    'x-fapi-customer-ip-address': 'SOME_STRING_VALUE',\n    'x-fapi-interaction-id': 'SOME_STRING_VALUE',\n    'x-idempotency-key': 'SOME_STRING_VALUE',\n    'x-jws-signature': 'SOME_STRING_VALUE',\n    'x-customer-user-agent': 'SOME_STRING_VALUE',\n    Authorization: 'SOME_STRING_VALUE',\n    'content-type': 'application/json'\n  },\n  body: {\n    Data: {\n      ConsentId: '58923',\n      Initiation: {\n        InstructionIdentification: 'ACME412',\n        EndToEndIdentification: 'FRESCO.21302.GFX.20',\n        InstructedAmount: {Amount: '165.88', Currency: 'GBP'},\n        CreditorAccount: {\n          SchemeName: 'UK.OBIE.SortCodeAccountNumber',\n          Identification: '08080021325698',\n          Name: 'ACME Inc',\n          SecondaryIdentification: '0002'\n        },\n        RemittanceInformation: {Reference: 'FRESCO-101', Unstructured: 'Internal ops code 5120101'}\n      }\n    },\n    Risk: {\n      PaymentContextCode: 'EcommerceGoods',\n      MerchantCategoryCode: '5967',\n      MerchantCustomerIdentification: '053598653254',\n      DeliveryAddress: {\n        AddressLine: ['Flat 7', 'Acacia Lodge'],\n        StreetName: 'Acacia Avenue',\n        BuildingNumber: '27',\n        PostCode: 'GU31 2ZZ',\n        TownName: 'Sparsholt',\n        CountySubDivision: ['Wessex'],\n        Country: 'UK'\n      }\n    }\n  },\n  json: true\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/domestic-payment-consents": {
+      "post": {
+        "tags": [
+          "Domestic Payment Consents"
+        ],
+        "summary": "Create Domestic Payment Consents",
+        "description": "Create a Domestic Payment Consent",
+        "operationId": "PostDomesticPaymentConsents",
+        "parameters": [
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-idempotency-key",
+            "in": "header",
+            "description": "Unique request identifier to support idempotency.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-jws-signature",
+            "in": "header",
+            "description": "A detached JWS signature of the body of the payload.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Domestic Payment Consents object. LocalInstrument field is mandatory and its value must be UK.OBIE.MoneyTransfer or UK.OBIE.BalanceTransfer.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DomesticPaymentConsents"
+              },
+              "example": {
+                "Data": {
+                  "Initiation": {
+                    "InstructionIdentification": "ACME412",
+                    "EndToEndIdentification": "FRESCO.21302.GFX.20",
+                    "LocalInstrument": "UK.OBIE.MoneyTransfer",
+                    "InstructedAmount": {
+                      "Amount": "165.88",
+                      "Currency": "GBP"
+                    },
+                    "CreditorAccount": {
+                      "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                      "Identification": "08080021325698",
+                      "Name": "ACME Inc",
+                      "SecondaryIdentification": "0002"
+                    },
+                    "RemittanceInformation": {
+                      "Reference": "FRESCO-101",
+                      "Unstructured": "Internal ops code 5120101"
+                    }
+                  }
+                },
+                "Risk": {
+                  "PaymentContextCode": "EcommerceGoods",
+                  "MerchantCategoryCode": "5967",
+                  "MerchantCustomerIdentification": "053598653254",
+                  "DeliveryAddress": {
+                    "AddressLine": [
+                      "Flat 7",
+                      "Acacia Lodge"
+                    ],
+                    "StreetName": "Acacia Avenue",
+                    "BuildingNumber": "27",
+                    "PostCode": "GU31 2ZZ",
+                    "TownName": "Sparsholt",
+                    "CountySubDivision": [
+                      "Wessex"
+                    ],
+                    "Country": "UK"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Domestic Payments Consent Created",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Data": {
+                    "ConsentId": "58923",
+                    "Status": "AwaitingAuthorisation",
+                    "CreationDateTime": "2017-06-05T15:15:13.0000000+00:00",
+                    "StatusUpdateDateTime": "2017-06-05T15:15:13.0000000+00:00",
+                    "Initiation": {
+                      "InstructionIdentification": "ACME412",
+                      "EndToEndIdentification": "FRESCO.21302.GFX.20",
+                      "InstructedAmount": {
+                        "Amount": "165.88",
+                        "Currency": "GBP"
+                      },
+                      "CreditorAccount": {
+                        "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                        "Identification": "08080021325698",
+                        "Name": "ACME Inc",
+                        "SecondaryIdentification": "0002"
+                      },
+                      "RemittanceInformation": {
+                        "Reference": "FRESCO-101",
+                        "Unstructured": "Internal ops code 5120101"
+                      }
+                    }
+                  },
+                  "Risk": {
+                    "PaymentContextCode": "EcommerceGoods",
+                    "MerchantCategoryCode": "5967",
+                    "MerchantCustomerIdentification": "053598653254",
+                    "DeliveryAddress": {
+                      "AddressLine": [
+                        "Flat 7",
+                        "Acacia Lodge"
+                      ],
+                      "StreetName": "Acacia Avenue",
+                      "BuildingNumber": "27",
+                      "PostCode": "GU31 2ZZ",
+                      "TownName": "Sparsholt",
+                      "CountySubDivision": [
+                        "Wessex"
+                      ],
+                      "Country": "UK"
+                    }
+                  },
+                  "Links": {
+                    "Self": "https://azuweudevopenbanking.azure-api.net/open-banking/v3.1/pisp/domestic-payment-consents/58923"
+                  },
+                  "Meta": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "400 Bad Request",
+                  "Message": "Validation failed.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Field.Missing",
+                      "Message": "Data Field is missing."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "403 Forbidden",
+                  "Message": "Missing header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Missing",
+                      "Message": "x-fapi-financial-id Header is Missing.",
+                      "Path": "x-fapi-financial-id"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "406 Not Acceptable",
+                  "Message": "Invalid header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Invalid",
+                      "Message": "Accept Header is invalid.",
+                      "Path": "Accept"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "x-jws-signature": {
+                "description": "A detached JWS signature of the body of the payload",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "500 Internal Server Error",
+                  "Errors": [
+                    {
+                      "ErrorCode": "500 Internal Server Error",
+                      "Message": "Value cannot be null.\r\nParameter name: instance"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-customer-user-agent: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-ip-address: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-last-logged-time: SOME_STRING_VALUE' \\\n  --header 'x-fapi-financial-id: SOME_STRING_VALUE' \\\n  --header 'x-fapi-interaction-id: SOME_STRING_VALUE' \\\n  --header 'x-idempotency-key: SOME_STRING_VALUE' \\\n  --header 'x-jws-signature: SOME_STRING_VALUE' \\\n  --data '{\"Data\":{\"Initiation\":{\"InstructionIdentification\":\"ACME412\",\"EndToEndIdentification\":\"FRESCO.21302.GFX.20\",\"LocalInstrument\":\"UK.OBIE.MoneyTransfer\",\"InstructedAmount\":{\"Amount\":\"165.88\",\"Currency\":\"GBP\"},\"CreditorAccount\":{\"SchemeName\":\"UK.OBIE.SortCodeAccountNumber\",\"Identification\":\"08080021325698\",\"Name\":\"ACME Inc\",\"SecondaryIdentification\":\"0002\"},\"RemittanceInformation\":{\"Reference\":\"FRESCO-101\",\"Unstructured\":\"Internal ops code 5120101\"}}},\"Risk\":{\"PaymentContextCode\":\"EcommerceGoods\",\"MerchantCategoryCode\":\"5967\",\"MerchantCustomerIdentification\":\"053598653254\",\"DeliveryAddress\":{\"AddressLine\":[\"Flat 7\",\"Acacia Lodge\"],\"StreetName\":\"Acacia Avenue\",\"BuildingNumber\":\"27\",\"PostCode\":\"GU31 2ZZ\",\"TownName\":\"Sparsholt\",\"CountySubDivision\":[\"Wessex\"],\"Country\":\"UK\"}}}'"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-idempotency-key\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-jws-signature\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddParameter(\"application/json\", \"{\\\"Data\\\":{\\\"Initiation\\\":{\\\"InstructionIdentification\\\":\\\"ACME412\\\",\\\"EndToEndIdentification\\\":\\\"FRESCO.21302.GFX.20\\\",\\\"LocalInstrument\\\":\\\"UK.OBIE.MoneyTransfer\\\",\\\"InstructedAmount\\\":{\\\"Amount\\\":\\\"165.88\\\",\\\"Currency\\\":\\\"GBP\\\"},\\\"CreditorAccount\\\":{\\\"SchemeName\\\":\\\"UK.OBIE.SortCodeAccountNumber\\\",\\\"Identification\\\":\\\"08080021325698\\\",\\\"Name\\\":\\\"ACME Inc\\\",\\\"SecondaryIdentification\\\":\\\"0002\\\"},\\\"RemittanceInformation\\\":{\\\"Reference\\\":\\\"FRESCO-101\\\",\\\"Unstructured\\\":\\\"Internal ops code 5120101\\\"}}},\\\"Risk\\\":{\\\"PaymentContextCode\\\":\\\"EcommerceGoods\\\",\\\"MerchantCategoryCode\\\":\\\"5967\\\",\\\"MerchantCustomerIdentification\\\":\\\"053598653254\\\",\\\"DeliveryAddress\\\":{\\\"AddressLine\\\":[\\\"Flat 7\\\",\\\"Acacia Lodge\\\"],\\\"StreetName\\\":\\\"Acacia Avenue\\\",\\\"BuildingNumber\\\":\\\"27\\\",\\\"PostCode\\\":\\\"GU31 2ZZ\\\",\\\"TownName\\\":\\\"Sparsholt\\\",\\\"CountySubDivision\\\":[\\\"Wessex\\\"],\\\"Country\\\":\\\"UK\\\"}}}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = JSON.stringify({\n  \"Data\": {\n    \"Initiation\": {\n      \"InstructionIdentification\": \"ACME412\",\n      \"EndToEndIdentification\": \"FRESCO.21302.GFX.20\",\n      \"LocalInstrument\": \"UK.OBIE.MoneyTransfer\",\n      \"InstructedAmount\": {\n        \"Amount\": \"165.88\",\n        \"Currency\": \"GBP\"\n      },\n      \"CreditorAccount\": {\n        \"SchemeName\": \"UK.OBIE.SortCodeAccountNumber\",\n        \"Identification\": \"08080021325698\",\n        \"Name\": \"ACME Inc\",\n        \"SecondaryIdentification\": \"0002\"\n      },\n      \"RemittanceInformation\": {\n        \"Reference\": \"FRESCO-101\",\n        \"Unstructured\": \"Internal ops code 5120101\"\n      }\n    }\n  },\n  \"Risk\": {\n    \"PaymentContextCode\": \"EcommerceGoods\",\n    \"MerchantCategoryCode\": \"5967\",\n    \"MerchantCustomerIdentification\": \"053598653254\",\n    \"DeliveryAddress\": {\n      \"AddressLine\": [\n        \"Flat 7\",\n        \"Acacia Lodge\"\n      ],\n      \"StreetName\": \"Acacia Avenue\",\n      \"BuildingNumber\": \"27\",\n      \"PostCode\": \"GU31 2ZZ\",\n      \"TownName\": \"Sparsholt\",\n      \"CountySubDivision\": [\n        \"Wessex\"\n      ],\n      \"Country\": \"UK\"\n    }\n  }\n});\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"POST\", \"https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents\");\nxhr.setRequestHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-idempotency-key\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-jws-signature\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"content-type\", \"application/json\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'POST',\n  url: 'https://api.newdaycards.com/open-banking/v3.1/pisp/domestic-payment-consents',\n  headers: {\n    'x-fapi-financial-id': 'SOME_STRING_VALUE',\n    'x-fapi-customer-last-logged-time': 'SOME_STRING_VALUE',\n    'x-fapi-customer-ip-address': 'SOME_STRING_VALUE',\n    'x-fapi-interaction-id': 'SOME_STRING_VALUE',\n    'x-idempotency-key': 'SOME_STRING_VALUE',\n    'x-jws-signature': 'SOME_STRING_VALUE',\n    'x-customer-user-agent': 'SOME_STRING_VALUE',\n    Authorization: 'SOME_STRING_VALUE',\n    'content-type': 'application/json'\n  },\n  body: {\n    Data: {\n      Initiation: {\n        InstructionIdentification: 'ACME412',\n        EndToEndIdentification: 'FRESCO.21302.GFX.20',\n        LocalInstrument: 'UK.OBIE.MoneyTransfer',\n        InstructedAmount: {Amount: '165.88', Currency: 'GBP'},\n        CreditorAccount: {\n          SchemeName: 'UK.OBIE.SortCodeAccountNumber',\n          Identification: '08080021325698',\n          Name: 'ACME Inc',\n          SecondaryIdentification: '0002'\n        },\n        RemittanceInformation: {Reference: 'FRESCO-101', Unstructured: 'Internal ops code 5120101'}\n      }\n    },\n    Risk: {\n      PaymentContextCode: 'EcommerceGoods',\n      MerchantCategoryCode: '5967',\n      MerchantCustomerIdentification: '053598653254',\n      DeliveryAddress: {\n        AddressLine: ['Flat 7', 'Acacia Lodge'],\n        StreetName: 'Acacia Avenue',\n        BuildingNumber: '27',\n        PostCode: 'GU31 2ZZ',\n        TownName: 'Sparsholt',\n        CountySubDivision: ['Wessex'],\n        Country: 'UK'\n      }\n    }\n  },\n  json: true\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DomesticPayments": {
+        "type": "object",
+        "xml": {
+          "name": "DomesticPayments"
+        },
+        "example": {
+          "Data": {
+            "ConsentId": "58923",
+            "Initiation": {
+              "InstructionIdentification": "ACME412",
+              "EndToEndIdentification": "FRESCO.21302.GFX.20",
+              "InstructedAmount": {
+                "Amount": "165.88",
+                "Currency": "GBP"
+              },
+              "CreditorAccount": {
+                "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                "Identification": "08080021325698",
+                "Name": "ACME Inc",
+                "SecondaryIdentification": "0002"
+              },
+              "RemittanceInformation": {
+                "Reference": "FRESCO-101",
+                "Unstructured": "Internal ops code 5120101"
+              }
+            }
+          },
+          "Risk": {
+            "PaymentContextCode": "EcommerceGoods",
+            "MerchantCategoryCode": "5967",
+            "MerchantCustomerIdentification": "053598653254",
+            "DeliveryAddress": {
+              "AddressLine": [
+                "Flat 7",
+                "Acacia Lodge"
+              ],
+              "StreetName": "Acacia Avenue",
+              "BuildingNumber": "27",
+              "PostCode": "GU31 2ZZ",
+              "TownName": "Sparsholt",
+              "CountySubDivision": [
+                "Wessex"
+              ],
+              "Country": "UK"
+            }
+          }
+        }
+      },
+      "DomesticPaymentConsents": {
+        "type": "object",
+        "xml": {
+          "name": "DomesticPaymentConsent"
+        },
+        "example": {
+          "Data": {
+            "Initiation": {
+              "InstructionIdentification": "ACME412",
+              "EndToEndIdentification": "FRESCO.21302.GFX.20",
+              "LocalInstrument": "UK.OBIE.MoneyTransfer",
+              "InstructedAmount": {
+                "Amount": "165.88",
+                "Currency": "GBP"
+              },
+              "CreditorAccount": {
+                "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                "Identification": "08080021325698",
+                "Name": "ACME Inc",
+                "SecondaryIdentification": "0002"
+              },
+              "RemittanceInformation": {
+                "Reference": "FRESCO-101",
+                "Unstructured": "Internal ops code 5120101"
+              }
+            }
+          },
+          "Risk": {
+            "PaymentContextCode": "EcommerceGoods",
+            "MerchantCategoryCode": "5967",
+            "MerchantCustomerIdentification": "053598653254",
+            "DeliveryAddress": {
+              "AddressLine": [
+                "Flat 7",
+                "Acacia Lodge"
+              ],
+              "StreetName": "Acacia Avenue",
+              "BuildingNumber": "27",
+              "PostCode": "GU31 2ZZ",
+              "TownName": "Sparsholt",
+              "CountySubDivision": [
+                "Wessex"
+              ],
+              "Country": "UK"
+            }
+          }
+        }
+      }
+    }
+  }
+}

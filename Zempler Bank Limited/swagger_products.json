@@ -1,0 +1,603 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "Zempler API - Products",
+    "description": "<br><h3>Sandbox</h3><br><p>This Sandbox environment provides a means to test integrations prior to going live.</p><br><p>Please use the ClientID: <i>aps.swagger.client</i> and Secret: <i>secret</i> for sandbox.</p><br><p><i>The table below shows mapping between the Product Name (known to public) and Product Name returned in the endpoint (Internal system name).</i><br/><table><thead><tr><td><strong>ProductName</strong><td><strong>Internal System Name</td></tr></thead><tbody><tr><td>Business Annual</td><td>CashplusBusPremier</td></tr><tr><td>Business Extra</td><td>CashplusBusEdge</td></tr><tr><td>Business Go</td><td>CashplusBusDeluxe</td></tr><tr><td>Business Invoice</td><td>CashplusBusInvoice</td></tr><tr><td>Consumer Active-Plus</td><td>ActivePlus595</td></tr><tr><td>MCF Busines Invoice</td><td>CashplusBusInvoiceTot</td></tr></tbody></table><i>Limited number of products are available in sandbox. Business Go (CashplusBusDeluxe) is not available. You can choose a different product for testing; specifications would be exactly the same.</p><br/><p>If you are uncertain which product to select, please contact your Zempler relationship manager or contact: <a href=\"mailto:relationship.management@zemplerbank.com\">relationship.management@zemplerbank.com</a></i></p>"
+  },
+  "host": "apisandbox.zempler.tech",
+  "basePath": "/products/",
+  "schemes": [ "https" ],
+  "paths": {
+    "/product/products": {
+      "get": {
+        "tags": [ "Operations Products - Product" ],
+        "summary": "Get the list of Products.",
+        "operationId": "GETproduct/products",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of products",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Products.Contracts.Domain.Entities.Product" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "ChannelProductId": 0,
+                  "FeePaymentSchedule": {
+                    "Id": 1,
+                    "Name": "Annual"
+                  },
+                  "ProductType": "Debit",
+                  "TermsAndConditions": [
+                    {
+                      "TCsReferenceNumber": 123456,
+                      "Url": "http://termsAndConditionsUrl_123456",
+                      "ValidFromDate": "2019-06-29T15:17:28.0387716+01:00",
+                      "ValidToDate": "2020-06-27T15:17:28.0387716+01:00",
+                      "StockCode": "STCK_EXAMPLE_001"
+                    },
+                    {
+                      "TCsReferenceNumber": 123456,
+                      "Url": "http://termsAndConditionsUrl_123456_1",
+                      "ValidFromDate": "2020-06-28T15:17:28.0387716+01:00",
+                      "StockCode": "STCK_EXAMPLE_002"
+                    }
+                  ],
+                  "AppliedFees": [
+                    {
+                      "Fee": {
+                        "Name": "Card issue fee",
+                        "Description": "Fee paid for issuing the Zempler card",
+                        "Id": 1
+                      },
+                      "FeeChargingDestination": {
+                        "Id": 0,
+                        "Name": "ChargedToCard"
+                      },
+                      "Amount": {
+                        "Amount": 1.00,
+                        "CurrencyCode": "GBP"
+                      },
+                      "Id": 1
+                    },
+                    {
+                      "Fee": {
+                        "Name": "Additional card fee",
+                        "Description": "Fee paid for requesting an additional card",
+                        "Id": 2
+                      },
+                      "FeeChargingDestination": {
+                        "Id": 0,
+                        "Name": "ChargedToCard"
+                      },
+                      "Amount": {
+                        "Amount": 2.00,
+                        "CurrencyCode": "GBP"
+                      },
+                      "Id": 2
+                    },
+                    {
+                      "Fee": {
+                        "Name": "Printed statement copy fee",
+                        "Description": "Fee of creating a printed statement copy",
+                        "Id": 10
+                      },
+                      "FeeChargingDestination": {
+                        "Id": 0,
+                        "Name": "ChargedToCard"
+                      },
+                      "Amount": {
+                        "Amount": 3.00,
+                        "CurrencyCode": "GBP"
+                      },
+                      "Id": 3
+                    },
+                    {
+                      "Fee": {
+                        "Name": "Deposit funds at Post Offices",
+                        "Description": "Fee for cash deposits at Post Offices",
+                        "Id": 18
+                      },
+                      "FeeChargingDestination": {
+                        "Id": 0,
+                        "Name": "ChargedToCard"
+                      },
+                      "LimitConfigurations": [
+                        {
+                          "LimitAppliedPeriod": {
+                            "Id": 2,
+                            "Name": "CalendarMonth"
+                          },
+                          "TransactionValueLimit": {
+                            "Amount": 1000.00,
+                            "CurrencyCode": "GBP"
+                          },
+                          "AmountAppliedLimitNotExceeded": {
+                            "Amount": 0.00,
+                            "CurrencyCode": "GBP"
+                          },
+                          "PercentageAppliedLimitNotExceeded": 0.0,
+                          "AmountAppliedLimitExceeded": {
+                            "Amount": 0.00,
+                            "CurrencyCode": "GBP"
+                          },
+                          "PercentageAppliedLimitExceeded": 0.25
+                        }
+                      ],
+                      "Amount": {
+                        "Amount": 4.00,
+                        "CurrencyCode": "GBP"
+                      },
+                      "Id": 4
+                    },
+                    {
+                      "Fee": {
+                        "Name": "Cash withdrawal at bank/Post Office fee",
+                        "Description": "Fee of making cash withdrawals at bank / Post Offices",
+                        "Id": 17
+                      },
+                      "FeeChargingDestination": {
+                        "Id": 0,
+                        "Name": "ChargedToCard"
+                      },
+                      "LimitConfigurations": [
+                        {
+                          "LimitAppliedPeriod": {
+                            "Id": 2,
+                            "Name": "CalendarMonth"
+                          },
+                          "TransactionCountLimit": 5,
+                          "AmountAppliedLimitNotExceeded": {
+                            "Amount": 0.00,
+                            "CurrencyCode": "GBP"
+                          },
+                          "AmountAppliedLimitExceeded": {
+                            "Amount": 6.00,
+                            "CurrencyCode": "GBP"
+                          },
+                          "PercentageAppliedLimitExceeded": 0.00
+                        }
+                      ],
+                      "Id": 5
+                    }
+                  ],
+                  "Name": "Zempler Product 1",
+                  "Description": "Example product 1",
+                  "CurrencyCode": "GBP",
+                  "ValidFromDate": "2019-06-29T15:17:28.0387716+01:00",
+                  "ValidToDate": "2021-06-29T15:17:28.0387716+01:00",
+                  "StatusChangeInfo": {
+                    "LastUpdatedDate": "2020-06-28T15:17:28.0387716+01:00",
+                    "ChangeReason": "New T&Cs version is added"
+                  },
+                  "ProductSegment": "Business, Personal",
+                  "ProductRoles": [
+                    {
+                      "RoleName": "Role1"
+                    },
+                    {
+                      "RoleName": "Role2"
+                    }
+                  ],
+                  "Id": 1
+                },
+                {
+                  "ChannelProductId": 0,
+                  "FeePaymentSchedule": {
+                    "Id": 4,
+                    "Name": "Invoice"
+                  },
+                  "ProductType": "Debit",
+                  "TermsAndConditions": [
+                    {
+                      "TCsReferenceNumber": 234567,
+                      "Url": "http://termsAndConditionsUrl_234567",
+                      "ValidFromDate": "2020-06-27T15:17:28.0387716+01:00",
+                      "ValidToDate": "2021-06-29T15:17:28.0387716+01:00",
+                      "StockCode": "STCK_EXAMPLE_003"
+                    }
+                  ],
+                  "AppliedFees": [
+                    {
+                      "Fee": {
+                        "Name": "Card issue fee",
+                        "Description": "Fee paid for issuing the Zempler card",
+                        "Id": 1
+                      },
+                      "FeeChargingDestination": {
+                        "Id": 0,
+                        "Name": "ChargedToCard"
+                      },
+                      "Amount": {
+                        "Amount": 2.00,
+                        "CurrencyCode": "GBP"
+                      },
+                      "Id": 1
+                    },
+                    {
+                      "Fee": {
+                        "Name": "Deposit funds at Post Offices",
+                        "Description": "Fee for cash deposits at Post Offices",
+                        "Id": 18
+                      },
+                      "FeeChargingDestination": {
+                        "Id": 0,
+                        "Name": "ChargedToCard"
+                      },
+                      "LimitConfigurations": [
+                        {
+                          "LimitAppliedPeriod": {
+                            "Id": 2,
+                            "Name": "CalendarMonth"
+                          },
+                          "TransactionValueLimit": {
+                            "Amount": 1000.00,
+                            "CurrencyCode": "GBP"
+                          },
+                          "AmountAppliedLimitNotExceeded": {
+                            "Amount": 0.00,
+                            "CurrencyCode": "GBP"
+                          },
+                          "PercentageAppliedLimitNotExceeded": 0.0,
+                          "AmountAppliedLimitExceeded": {
+                            "Amount": 0.00,
+                            "CurrencyCode": "GBP"
+                          },
+                          "PercentageAppliedLimitExceeded": 0.25
+                        }
+                      ],
+                      "Id": 4
+                    },
+                    {
+                      "Fee": {
+                        "Name": "Cash withdrawal at bank/Post Office fee",
+                        "Description": "Fee of making cash withdrawals at bank / Post Offices",
+                        "Id": 17
+                      },
+                      "FeeChargingDestination": {
+                        "Id": 0,
+                        "Name": "ChargedToCard"
+                      },
+                      "Percentage": 0.025,
+                      "Id": 5
+                    }
+                  ],
+                  "Name": "Zempler Product 2",
+                  "Description": "example product 2",
+                  "CurrencyCode": "GBP",
+                  "ValidFromDate": "2020-04-30T15:17:28.0387716+01:00",
+                  "ValidToDate": "2020-08-28T15:17:28.0387716+01:00",
+                  "StatusChangeInfo": {
+                    "LastUpdatedDate": "2020-04-30T15:17:28.0387716+01:00",
+                    "ChangeReason": "Product is created"
+                  },
+                  "ProductSegment": "Business",
+                  "ProductRoles": [
+                    {
+                      "RoleName": "Role"
+                    }
+                  ],
+                  "Id": 0
+                }
+              ]
+            }
+          }
+        },
+"security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/info/version": {
+      "get": {
+        "summary": "Get the version of the API.",
+        "tags": [ "Operations Products - Service Information" ],
+        "operationId": "GETinfo/version",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { 
+              "type": "object",
+              "properties": {
+                "major": { "type": "integer" },
+                "minor": { "type": "integer" },
+                "build": { "type": "integer" },
+                "revision": { "type": "integer" },
+                "majorRevision": { "type": "integer" },
+                "minorRevision": { "type": "integer" }
+              }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "major": 3,
+                  "minor": 0,
+                  "build": 1504,
+                  "revision": -1,
+                  "majorRevision": -1,
+                  "minorRevision": -1
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LEAPS.Products.Contracts.Domain.Entities.Product": {
+      "description": "This class represent a product",
+      "type": "object",
+      "properties": {
+        "channelProductId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "feePaymentSchedule": {
+          "type": "object",
+          "$ref": "#/definitions/FeePaymentSchedule"
+        },
+        "productType" : {
+          "description": "The type of the product.",
+          "type": "string"
+        },
+        "termsAndConditions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/TermsAndConditions" }
+        },
+        "appliedFees": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/AppliedFee" }
+        },
+        "name": {
+          "description": "The name of the product published to the customers.",
+          "type": "string"
+        },
+        "description": {
+          "description": "The description of the product.",
+          "type": "string"
+        },
+        "currencyCode": {
+          "description": "The ISO 4217 (alpha) Currency Code of the product",
+          "type": "string"
+        },
+        "validFromDate": {
+          "format": "date-time",
+          "description": "The date from which the Product is available for use.",
+          "type": "string"
+        },
+        "validToDate": {
+          "format": "date-time",
+          "description": "The date until the Product is available for use.",
+          "type": "string"
+        },
+        "statusChangeInfo": {
+          "$ref": "#/definitions/LEAPS.Products.Contracts.Domain.ValueObjects.StatusChangeInfo",
+          "description": "Information about the last status change of the Product."
+        },
+        "productSegment": {
+          "description": "The segment(s) the product is available for.",
+          "enum": [ "None", "Business", "Personal" ],
+          "type": "string"
+        },
+        "productRoles": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/LEAPS.Products.Contracts.Domain.ValueObjects.ProductRole" }
+        },
+        "id": {
+          "format": "int64",
+          "type": "integer"
+        }
+      }
+    },
+    "FeePaymentSchedule": {
+      "description": "This class represent a fee payment schedule",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "description": "The name of the fee payment schedule.",
+          "type": "string"
+        }
+      }
+    },
+    "TermsAndConditions": {
+      "type": "object",
+      "properties": {
+        "TCsReferenceNumber": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "Url": {
+          "type": "string"
+        },
+        "ValidFromDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "ValidToDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "StockCode": {
+          "type": "string"
+        }
+      }
+    },
+    "AppliedFee": {
+      "type": "object",
+      "properties": {
+        "fee": {
+          "$ref": "#/definitions/Fee"
+        },
+        "feeChargingDestination": {
+          "$ref": "#/definitions/FeeChargingDestination"
+        },
+        "limitConfigurations": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/LimitConfiguration" }
+        },
+        "amount": {
+          "$ref": "#/definitions/Amount"
+        },
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "Fee": {
+      "type": "object",
+        "properties": {
+            "name": {
+                "type": "string"
+            },
+            "description": {
+                "type": "string"
+            },
+            "id": {
+                "format": "int32",
+                "type": "integer"
+            }
+        }
+    },
+    "FeeChargingDestination": {
+        "type": "object",
+        "properties": {
+            "id": {
+            "format": "int32",
+            "type": "integer"
+            },
+            "name": {
+            "type": "string"
+            }
+        }
+    },
+    "LimitConfiguration": {
+        "type": "object",
+        "properties": {
+            "limitAppliedPeriod": {
+            "$ref": "#/definitions/LimitAppliedPeriod"
+            },
+            "transactionValueLimit": {
+            "$ref": "#/definitions/Amount"
+            },
+            "transactionCountLimit": {
+            "format": "int32",
+            "type": "integer"
+            },
+            "amountAppliedLimitNotExceeded": {
+            "$ref": "#/definitions/Amount"
+            },
+            "percentageAppliedLimitNotExceeded": {
+            "type": "number"
+            },
+            "amountAppliedLimitExceeded": {
+            "$ref": "#/definitions/Amount"
+            },
+            "percentageAppliedLimitExceeded": {
+            "type": "number"
+            }
+        }
+    },
+    "LimitAppliedPeriod":
+    { 
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+      
+    },
+    "Amount": {
+      "type": "object",
+        "properties": {
+            "amount": {
+            "type": "number"
+            },
+            "currencyCode": {
+            "type": "string"
+            }
+        }
+    },
+    "LEAPS.Products.Contracts.Domain.ValueObjects.StatusChangeInfo": {
+      "description": "Information about the last status change of the Product.",
+      "type": "object",
+      "properties": {
+        "lastUpdatedDate": {
+          "format": "date-time",
+          "description": "The most recent date and time of making an update in the status of the product.",
+          "type": "string"
+        },
+        "changeReason": {
+          "description": "The reason of changing the product's status.",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Products.Contracts.Domain.ValueObjects.ProductRole": {
+      "type": "object",
+      "properties": { "roleName": { "type": "string" } }
+    }
+  },
+  "LEAPS.Products.Contracts.Domain.Entities.FeePaymentSchedule" : {
+    "description": "This class represent a fee payment schedule",
+    "type": "object",
+    "properties": {
+      "id": {
+        "format": "int32",
+        "type": "integer"
+      },
+      "name": {
+        "description": "The name of the fee payment schedule.",
+        "type": "string"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "description": "OAuth2 Client Credentials flow",
+      "flow": "application",
+      "authorizationUrl": "https://apisandbox.zempler.tech/identity/auth/connect/authorize",
+      "tokenUrl": "https://apisandbox.zempler.tech/identity/auth/connect/token",
+      "scopes": {
+        "aps_profile": "APS profile data.",
+        "applications": "Allow access to application API.",
+        "accounts": "Allow access to account and transaction data on behalf of the client.",
+        "payments": "Allow access to payments and payment submissions data.",
+        "eligibility": "Allow access to eligibility API."
+      }
+    }
+  }
+}

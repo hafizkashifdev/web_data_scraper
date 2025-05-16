@@ -1,0 +1,1234 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "Zempler API - Accounts",
+    "description": "<br><h3>Sandbox</h3><br><br><p>The Sandbox environment provides a means to test integrations prior to going live.</p><br><p>Please use the ClientID: <i>aps.swagger.client</i> and Secret: <i>secret</i> for sandbox.</p><br><p>Please note that the below endpoints are not possible to test in sandbox, they are only available in production.<br><ul><li>/accounts/account/details/owned - Owned accounts</li><li>/accounts/account/details/managed/extended - Managed Accounts Extended</li></ul></p>"
+  },
+  "host": "apisandbox.zempler.tech",
+  "basePath": "/accounts/",
+  "schemes": [ "https" ],
+  "paths": {
+    "/account/details/owned": {
+      "get": {
+        "tags": [ "Operations Accounts - Account" ],
+        "summary": "Get the Zempler identifier of each owned account of the logged in user.",
+        "operationId": "GETaccount/details/owned",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Zempler identifiers of the owned accounts",
+            "schema": {
+              "type": "array",
+              "items": {
+                "format": "uuid",
+                "type": "string",
+                "example": "00000000-0000-0000-0000-000000000000"
+              }
+            },
+            "examples": {
+              "application/json": [
+                { "AccountId": "1ee90755-34e9-470b-ba46-19654ce1477f" },
+                { "AccountId": "4dc4b6dc-6807-49a9-8f19-87db337abeab" },
+                { "AccountId": "3d805dbb-7bb3-42e1-b3b1-0801c9712a06" }
+              ]
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible or not found",
+            "schema": { "type": "NotAuthorisedException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/account/details/managed": {
+      "get": {
+        "tags": [ "Operations Accounts - Account" ],
+        "summary": "Get the Zempler identifier of all managed accounts of the logged in user.",
+        "operationId": "GETaccount/details/managed",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Zempler identifiers of the managed accounts.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "format": "uuid",
+                "type": "string",
+                "example": "00000000-0000-0000-0000-000000000000"
+              }
+            },
+            "examples": {
+              "application/json": [
+                { "AccountId": "6c726ce5-cbcf-4431-a7c1-ea9e31984347" },
+                { "AccountId": "4f08ff9c-0898-4d92-b19a-bbc435d91252" },
+                { "AccountId": "f07e2679-7642-4b89-ac14-237869636b57" },
+                { "AccountId": "39b62dd9-e7b1-4ccc-89e8-e2cb28e21b9b" },
+                { "AccountId": "361db000-7ab7-414b-9362-4a3da535fecb" },
+                { "AccountId": "81aa1e01-2ae5-448a-9888-67ed7be72760" },
+                { "AccountId": "b8b35308-2549-4bb4-bb19-ec3a5e80d20c" },
+                { "AccountId": "4f0c5662-f414-4406-9876-3ea743285cf2" },
+                { "AccountId": "c69cd0a4-29a4-4ee6-abc9-5acb9c77ca9c" },
+                { "AccountId": "d04f600c-8191-43c7-8977-0e0a20977e03" },
+                { "AccountId": "1670715f-6360-4905-bbb4-661da910fed0" },
+                { "AccountId": "da8fccff-05bf-4b2a-a86e-d8804869ac48" },
+                { "AccountId": "9b8e911d-796c-4942-bac8-fcaf16c26396" },
+                { "AccountId": "9d066543-a448-4860-83b0-566c517a83df" },
+                { "AccountId": "f1d7b50e-f5cc-4ac4-bb71-d57c31e5a32b" },
+                { "AccountId": "6f1ea637-5afc-4a7c-9966-d9c54f5b87e6" },
+                { "AccountId": "d032f591-d480-404c-a1af-cbad62805997" },
+                { "AccountId": "61661afb-11c9-4b88-ab26-90423a6d997e" },
+                { "AccountId": "b3b630e8-7e37-4053-a449-82e9dcba667b" },
+                { "AccountId": "42f1499d-0339-4774-9aa2-a16acec94163" },
+                { "AccountId": "c2a699eb-dbc8-41cf-8f2e-3183dff47dcb" },
+                { "AccountId": "22dc27a9-8265-4b22-890a-de11bf64ae81" },
+                { "AccountId": "a2397b9e-05eb-453a-ae10-41235e3167c6" },
+                { "AccountId": "7cef30f3-ac4e-4fd1-a618-0676d24e028b" },
+                { "AccountId": "a2b01b63-d5e1-4c18-aa29-c78af4c4e72e" },
+                { "AccountId": "d3c13746-73eb-4327-afb6-f9f8a1391113" },
+                { "AccountId": "806d52cc-d467-4915-97ed-0bc819493225" },
+                { "AccountId": "19d2e643-507f-49ca-a940-74d16848c577" },
+                { "AccountId": "9b798c9b-6259-4e46-81b4-52098d3c4e93" },
+                { "AccountId": "500c67e2-a88e-4024-b95c-8603f4ddc49e" },
+                { "AccountId": "0c4cbc2f-a3e4-4b89-8719-88d5979d1aab" },
+                { "AccountId": "86bad456-fd85-42a6-a8d1-79760e3585f6" },
+                { "AccountId": "d36c772d-883f-4285-93ae-e2d624f52455" },
+                { "AccountId": "e99968e5-a1d3-49fc-b9f9-144bff657807" },
+                { "AccountId": "cc2646ff-3830-4a5e-b3d8-95d3f6723a25" },
+                { "AccountId": "80cfc50e-b874-41ca-a801-b09852888e39" },
+                { "AccountId": "d7686d67-829a-4b73-a770-1228be70988d" },
+                { "AccountId": "98b0775a-42f8-4d82-bb8a-ad91350f1d3e" },
+                { "AccountId": "0cbb6b3e-ed65-4d15-be64-dbfd867946b8" },
+                { "AccountId": "1ef3f42d-082f-463f-b697-7cf2fbf8a0fb" },
+                { "AccountId": "ee54709b-05d2-4a60-95f9-7bb0ba471410" },
+                { "AccountId": "fecb86bc-0da4-4fd1-a2c0-5355eef43f60" },
+                { "AccountId": "10c7c9c1-12ff-4b51-89a8-50a63a7eb410" },
+                { "AccountId": "8c3a33ae-a911-4d5d-9eaf-6f5b70c9903e" },
+                { "AccountId": "053a897f-0520-4a13-a066-daef7c222bf4" },
+                { "AccountId": "a66e44c7-7f0d-4b9e-b6fc-e8faf13bfce0" },
+                { "AccountId": "8520aa4a-9818-48d1-93ec-52e4fb0b2b27" },
+                { "AccountId": "85f3b4b1-bec0-48a6-9137-c18d5d60c3c9" },
+                { "AccountId": "ed434b89-6c29-471a-9126-6670978c7537" },
+                { "AccountId": "8e55aa6c-7855-494f-956d-326d9fa04b64" },
+                { "AccountId": "72c8e090-5e56-49a7-9643-2f67f07b06e8" },
+                { "AccountId": "dda93bad-b3c3-462b-9172-e80ea634de2b" },
+                { "AccountId": "63520abd-a84d-44ca-b7f3-7bb3556af325" },
+                { "AccountId": "dbb4aa9a-4dbc-4b95-956e-5e49ba8ecf36" },
+                { "AccountId": "ac06b069-591f-4fc6-ae24-29027dcb4bb7" },
+                { "AccountId": "92ed6346-bbe3-42e9-ad8b-d18fb0fd5dcb" },
+                { "AccountId": "bda382e6-3645-4567-bde3-53055214e92f" },
+                { "AccountId": "39940390-dbf8-4daa-81b1-993119aa8518" },
+                { "AccountId": "2d2eed8e-e138-419a-9141-37787e8c7d81" },
+                { "AccountId": "27bde7e4-b5b2-420a-ae96-870b8f5497db" },
+                { "AccountId": "cebf02ea-7787-4720-a1ce-a984a1b3d04c" },
+                { "AccountId": "1da7d96b-e5d4-4dc0-ad1b-c8caec603446" },
+                { "AccountId": "0baef0f6-cfc1-412b-97ed-0fdec02ec554" },
+                { "AccountId": "d0537514-642d-419c-a59a-02736f237537" },
+                { "AccountId": "41bb710b-8c67-436c-bdda-f0cf3b4d328f" },
+                { "AccountId": "838237f8-60e6-48c4-80b0-1cc8a51c136f" },
+                { "AccountId": "b3f9501f-8240-404c-890e-f406853fb105" },
+                { "AccountId": "f123beb9-abda-4080-a725-ca8f2ad54068" },
+                { "AccountId": "db203749-a3b3-4499-a0ad-e4ab985697d1" },
+                { "AccountId": "b953f555-5a29-4ee6-95bf-47bc888986e9" },
+                { "AccountId": "b5519c7f-b603-4be1-af96-97eaf64d8c28" },
+                { "AccountId": "2ba8ead0-3d8c-4710-b097-ad751af1c256" },
+                { "AccountId": "2f280c15-35f0-4b0f-90c2-b74852ebd9bc" },
+                { "AccountId": "02393b74-d8a1-47ea-98ef-1b5dea562832" },
+                { "AccountId": "23539cf6-bb53-4854-9362-61b01fd2ebd7" },
+                { "AccountId": "e16f0933-2606-4d05-a2a5-21c59fe4f4dd" },
+                { "AccountId": "7126046a-2930-43db-aac7-9cf13669c8b9" },
+                { "AccountId": "9ba31ea3-e1fc-4ae6-861c-87bf0137db43" },
+                { "AccountId": "a3ce82fd-cd69-4412-bd87-01df1b834a0b" },
+                { "AccountId": "81edf94f-bafd-4a4a-9d27-4a3c807582c9" },
+                { "AccountId": "ca0436e1-1d8d-480c-9db1-3f1366f921de" },
+                { "AccountId": "0a768b3b-00c8-46ae-8b44-29e167e8a73f" },
+                { "AccountId": "7dbe64c4-267c-4dba-ab0c-0152ee8185c5" },
+                { "AccountId": "cd3d470e-776c-4d53-997a-c4ac64266691" },
+                { "AccountId": "ebc5bd93-90e9-460c-8ab5-c548e38cc53e" },
+                { "AccountId": "7f6574a6-6056-4551-9b41-3e1ce691d252" },
+                { "AccountId": "edccf886-9417-4737-b4e5-7ff2b9ddeb95" },
+                { "AccountId": "cc7cc3ed-f8a9-4760-a926-850e46b2537e" },
+                { "AccountId": "6a91aece-95e8-4f0d-91ee-7de0c1e146df" },
+                { "AccountId": "97bc8ef1-c222-4aed-9239-80de22514ecb" },
+                { "AccountId": "b44e9ba6-651f-44a0-bb3d-93a461fb473e" },
+                { "AccountId": "5a08c99d-9f86-4f2e-8ad8-5498e51345f4" },
+                { "AccountId": "f98b5cc4-4cca-4d04-9130-5c2d4163e558" },
+                { "AccountId": "74bf4e90-c65f-4cba-b3e8-0b3c52f1f172" },
+                { "AccountId": "376d2fb8-7bc1-4efb-874e-715ed2ac1dd6" },
+                { "AccountId": "7b19067f-3690-4944-899f-97b47855e469" },
+                { "AccountId": "e52216b4-5c5f-4bec-966f-850cc7dffd78" },
+                { "AccountId": "9121c7ae-75ad-4f17-ba02-6ce030717231" },
+                { "AccountId": "ae5d3a8e-4124-45bd-bda2-b92391a18f6a" },
+                { "AccountId": "ad9007e9-a2e2-4cf8-b296-566c86ef5108" }
+              ]
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible or not found",
+            "schema": { "type": "NotAuthorisedException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/account/details/managed/extended": {
+      "get": {
+        "tags": [
+          "Operations Accounts - Account"
+        ],
+        "summary": "Get details of all managed accounts of the logged in user.",
+        "operationId": "GETaccount/details/managed/extended",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of the managed accounts details.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.Entities.ManagedAccountDetails"
+              }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "AccountId": "b154c818-01e6-4f8c-96fc-4e0913214695",
+                  "AccountNumber": "12345678",
+                  "SortCode": "123456"
+                },
+                {
+                  "AccountId": "d0c01030-9d65-41c7-9c5b-dc41ca247ec4",
+                  "AccountNumber": "12345678",
+                  "SortCode": "123456"
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "schema": {
+              "type": "AuthenticationRequiredException"
+            }
+          },
+          "403": {
+            "description": "The account is not accessible or not found",
+            "schema": {
+              "type": "NotAuthorisedException"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "aps_profile",
+              "applications",
+              "accounts",
+              "payments",
+              "eligibility"
+            ]
+          }
+        ]
+      }
+    },
+    "/account/details/{sortCode}/{accountNumber}": {
+      "get": {
+        "tags": [ "Operations Accounts - Account" ],
+        "summary": "Get the details of the account by its clearing info (Sort Code, Account Number).",
+        "operationId": "GETaccount/details/{sortCode}/{accountNumber}?currencyCode={currencyCode}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "sortCode",
+            "in": "path",
+            "description": "The Sort Code of the customer's account.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "description": "The Account Number of the customer's account",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "currencyCode",
+            "in": "query",
+            "description": "The ISO 4217 (alpha) Currency Code of account. Optional, if not provided it's ignored.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The details of the account (balance excluded).",
+            "schema": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.Entities.Account" },
+            "examples": {
+              "application/json": {
+                "CurrencyCode": "GBP",
+                "PrimaryCardIds": [ "d39817d0-2cf9-459a-8e16-81cd2ebf2154" ],
+                "AdditionalCardIds": [ "c4b61eb9-f093-42c3-95a7-3c7ef2f5c414", "f989e443-fb77-48c7-b520-37884517fe0c" ],
+                "ClearingInfo": {
+                  "AccountNumber": "12345678",
+                  "SortCode": "123456"
+                },
+                "ProductType": "Debit",
+                "TermsAndConditions": { "Url": "http://termsAndConditionsUrl" },
+                "Platform": { "Name": "FIS-CORTEX" },
+                "AccountOwner": {
+                  "FirstName": "Example",
+                  "LastName": "Doe",
+                  "Title": "Ms"
+                },
+                "Id": "55d029e3-3174-44b4-8a88-0f7538b322e5"
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible or not found",
+            "schema": { "type": "NoReadAccountDetailsPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/account/details/{accountId}": {
+      "get": {
+        "tags": [ "Operations Accounts - Account" ],
+        "summary": "Get the details of the account by the Zempler account identifier.",
+        "operationId": "GETaccount/details/{accountId}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The Zempler account identifier.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The details of the account (balance excluded).",
+            "schema": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.Entities.Account" },
+            "examples": {
+              "application/json": {
+                "CurrencyCode": "GBP",
+                "PrimaryCardIds": [ "ea0c9182-3804-4db8-bdbe-8b93a75ddceb" ],
+                "AdditionalCardIds": [ "f8fac1d1-1458-4a7e-884d-492c9ea3d0f6", "859ccdb5-ec0f-4b97-a47f-7a5372439710" ],
+                "ClearingInfo": {
+                  "AccountNumber": "12345678",
+                  "SortCode": "123456"
+                },
+                "ProductType": "Debit",
+                "TermsAndConditions": { "Url": "http://termsAndConditionsUrl" },
+                "Platform": { "Name": "FIS-CORTEX" },
+                "AccountOwner": {
+                  "FirstName": "Example",
+                  "LastName": "Doe",
+                  "Title": "Ms"
+                },
+                "Id": "5d36d30d-c90e-4e5e-adeb-0aa367321f65"
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible or not found",
+            "schema": { "type": "NoReadAccountDetailsPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/account/details/batch": {
+      "post": {
+        "tags": [ "Operations Accounts - Account" ],
+        "summary": "Get the details of the listed Accounts looked up either by the Zempler account identifier or by Sort Code/Account Number.",
+        "operationId": "POSTaccount/details/batch",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "description": "Contains the list of account identifiers, either the Zempler identifier of the account, or Sort Code/Account Number.\r\n            Precedence order of processing the identifiers: Account Id is used, if provided. Otherwise, Sort Code and Account Number are used to look up the account.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Descriptors.AccountBatchDescriptorItem" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The details of the listed accounts.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Descriptors.AccountDetailsBatchResponseDescriptorItem" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "StatusCode": 200,
+                  "Message": "OK",
+                  "AccountId": "d7458195-4319-4cdd-a4a9-f334c70fa833",
+                  "AccountDetails": {
+                    "CurrencyCode": "GBP",
+                    "PrimaryCardIds": [ "48c22dc8-6dce-40dd-aa85-debb480fc274", "18f91b74-54aa-4528-8c9c-c0d66dd1604a" ],
+                    "AdditionalCardIds": [ "ebe275a9-4dc4-4e03-afa8-3e6d4a29c280", "16b8ed68-aa23-43ff-be7a-fbd7a39e1b21", "c07a92de-73fe-4c00-9326-39c94c6804d9" ],
+                    "ClearingInfo": {
+                      "AccountNumber": "12345678",
+                      "SortCode": "123456"
+                    },
+                    "ProductType": "Debit",
+                    "TermsAndConditions": { "Url": "http://termsAndConditionsUrl" },
+                    "AccountOwner": {
+                      "FirstName": "Example",
+                      "LastName": "Doe",
+                      "Title": "Ms"
+                    },
+                    "Id": "d7458195-4319-4cdd-a4a9-f334c70fa833"
+                  }
+                },
+                {
+                  "StatusCode": 200,
+                  "Message": "OK",
+                  "AccountId": "9ed7b9f9-5317-4812-8354-1ee7d6d15a4c",
+                  "AccountDetails": {
+                    "CurrencyCode": "GBP",
+                    "PrimaryCardIds": [ "c45128e0-30c5-4a5c-adf2-d0e02c588baf", "56d6bf81-7120-450b-aca5-0329b7742721" ],
+                    "AdditionalCardIds": [ "c0ad8c70-b301-48d1-823f-46d9e4d8b3bb", "b030e51e-065e-49bb-a19a-007cd9274c57", "2786cba8-90b8-4970-8750-ce4d3d2b5c88" ],
+                    "ClearingInfo": {
+                      "AccountNumber": "12345677",
+                      "SortCode": "123455"
+                    },
+                    "ProductType": "Debit",
+                    "TermsAndConditions": { "Url": "http://termsAndConditionsUrl" },
+                    "AccountOwner": {
+                      "FirstName": "Example",
+                      "LastName": "Doe",
+                      "Title": "Ms"
+                    },
+                    "Id": "9ed7b9f9-5317-4812-8354-1ee7d6d15a4c"
+                  }
+                },
+                {
+                  "StatusCode": 403,
+                  "Message": "The account is not accessible.",
+                  "AccountId": "cb92615e-4981-4b29-9650-5a7533848aea"
+                },
+                {
+                  "StatusCode": 403,
+                  "Message": "The account is not accessible.",
+                  "SortCode": "ABCDEF",
+                  "AccountNumber": "ABCDEFGH"
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/balance/{accountId}": {
+      "get": {
+        "tags": [ "Operations Accounts - Account Balance" ],
+        "summary": "Get the balance of the account identified by the Zempler account identifier.",
+        "operationId": "GETbalance/{accountId}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The Zempler account identifier.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The balance of the account looked up by its Zempler identifier.",
+            "schema": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.AccountBalance" },
+            "examples": {
+              "application/json": {
+                "Balance": {
+                  "Amount": 1524.50,
+                  "CurrencyCode": "GBP"
+                },
+                "Blocked": {
+                  "Amount": 100.00,
+                  "CurrencyCode": "GBP"
+                },
+                "AvailableBalance": {
+                  "Amount": 1424.50,
+                  "CurrencyCode": "GBP"
+                },
+                "CreditLine":{
+                   "Amount":100.0,
+                   "CurrencyCode":"GBP"
+                },
+                "LastUpdatedDateTime": "2020-06-28T15:16:29.5166482+01:00",
+                "BalanceType": "ClosingAvailable",
+                "RetrievalStatus": 0
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible or not found",
+            "schema": { "type": "NoReadBalancePermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/balance/{sortCode}/{accountNumber}": {
+      "get": {
+        "tags": [ "Operations Accounts - Account Balance" ],
+        "summary": "Get the balance of the account identified by the account clearing info (Sort Code, Account Number).",
+        "operationId": "GETbalance/{sortCode}/{accountNumber}?currencyCode={currencyCode}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "sortCode",
+            "in": "path",
+            "description": "The Sort Code of the customer's account.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "description": "The Account Number of the customer's account",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "currencyCode",
+            "in": "query",
+            "description": "The ISO 4217 (alpha) Currency Code of account. Optional, if not provided it's ignored.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The account balance",
+            "schema": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.AccountBalance" },
+            "examples": {
+              "application/json": {
+                "Balance": {
+                  "Amount": 1524.50,
+                  "CurrencyCode": "GBP"
+                },
+                "Blocked": {
+                  "Amount": 100.00,
+                  "CurrencyCode": "GBP"
+                },
+                "AvailableBalance": {
+                  "Amount": 1424.50,
+                  "CurrencyCode": "GBP"
+                },
+                "CreditLine":{
+                   "Amount":100.0,
+                   "CurrencyCode":"GBP"
+                },
+                "LastUpdatedDateTime": "2020-06-28T15:16:29.5166482+01:00",
+                "BalanceType": "ClosingAvailable",
+                "RetrievalStatus": 0
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible or not found",
+            "schema": { "type": "NoReadBalancePermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/balance/{accountId}/aggregated": {
+      "get": {
+        "tags": [ "Operations Accounts - Account Balance" ],
+        "summary": "Get the balance of the account identified by the Zempler account identifier.",
+        "operationId": "GETbalance/{accountId}/aggregated",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The Zempler account identifier.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The aggregated balance of the account.",
+            "schema": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.AggregatedBalance" },
+            "examples": {
+              "application/json": {
+                "Balance": {
+                  "Amount": 1524.50,
+                  "CurrencyCode": "GBP"
+                },
+                "AvailableBalance": {
+                  "Amount": 1424.50,
+                  "CurrencyCode": "GBP"
+                },
+                "Blocked": {
+                  "Amount": 100.00,
+                  "CurrencyCode": "GBP"
+                },
+                "LastUpdatedDateTime": "2020-06-28T15:16:29.5176597+01:00"
+              }
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible",
+            "schema": { "type": "NoReadBalancePermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/balance/batch": {
+      "post": {
+        "tags": [ "Operations Accounts - Account Balance" ],
+        "summary": "Get the balance of the listed accounts looked up either by the Zempler account identifier or by Sort Code/Account Number.",
+        "operationId": "POSTbalance/batch",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "description": "Contains the list of account identifiers, either the Zempler identifier of the account, or Sort Code/Account Number.\r\n            Precedence order of processing the identifiers: Account Id is used, if provided. Otherwise, Sort Code and Account Number are used to look up the account.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Descriptors.AccountBatchDescriptorItem" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The balance of the listed accounts.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Descriptors.AccountBalanceBatchResponseDescriptorItem" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "StatusCode": 200,
+                  "Message": "OK",
+                  "AccountId": "9dd97d38-17a8-45cd-9728-25b662ef22d7",
+                  "Balance": {
+                    "Balance": {
+                      "Amount": 150.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "Blocked": {
+                      "Amount": 50.0,
+                      "CurrencyCode": "GBP"
+                    },
+                    "AvailableBalance": {
+                      "Amount": 100.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "CreditLine": {
+                      "Amount": 100.0,
+                      "CurrencyCode": "GBP"
+                    },
+                    "LastUpdatedDateTime": "2020-06-28T15:16:29.5216578+01:00",
+                    "BalanceType": "InterimAvailable",
+                    "RetrievalStatus": 0
+                  }
+                },
+                {
+                  "StatusCode": 200,
+                  "Message": "OK",
+                  "SortCode": "123456",
+                  "AccountNumber": "12345678",
+                  "Balance": {
+                    "Balance": {
+                      "Amount": 150.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "CreditLimit": {
+                      "Amount": 2000.0,
+                      "CurrencyCode": "GBP"
+                    },
+                    "AvailableCredit": {
+                      "Amount": 1849.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "LastUpdatedDateTime": "2020-06-28T15:16:29.5216578+01:00",
+                    "BalanceType": "ClosingAvailable",
+                    "RetrievalStatus": 0
+                  }
+                },
+                {
+                  "StatusCode": 403,
+                  "Message": "The account is not accessible.",
+                  "AccountId": "a7d2a247-50cf-4787-85e6-a6ae0d6cb2c6"
+                },
+                {
+                  "StatusCode": 403,
+                  "Message": "The account is not accessible.",
+                  "SortCode": "123456",
+                  "AccountNumber": "12345678"
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/balance/batch/cached": {
+      "post": {
+        "tags": [ "Operations Accounts - Account Balance" ],
+        "summary": "Get the cached balance of the listed accounts.",
+        "operationId": "POSTbalance/batch/cached",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "description": "Contains the list of Zempler account identifiers.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Descriptors.CachedBalanceDescriptorItem" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The cached balance of the listed accounts.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Descriptors.CachedBalanceBatchResponseDescriptorItem" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "StatusCode": 200,
+                  "Message": "OK",
+                  "AccountId": "16b74abe-a3e1-47a8-a5b8-1eff38e118ae",
+                  "Balance": {
+                    "Balance": {
+                      "Amount": 150.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "Blocked": {
+                      "Amount": 50.0,
+                      "CurrencyCode": "GBP"
+                    },
+                    "AvailableBalance": {
+                      "Amount": 100.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "CreditLine": {
+                      "Amount": 100.0,
+                      "CurrencyCode": "GBP"
+                    },
+                    "LastUpdatedDateTime": "2020-06-28T15:16:29.5256817+01:00",
+                    "BalanceType": "InterimAvailable",
+                    "RetrievalStatus": 0
+                  }
+                },
+                {
+                  "StatusCode": 200,
+                  "Message": "OK",
+                  "AccountId": "e88f9094-8edc-498d-84d1-a42a0c5f3f61",
+                  "Balance": {
+                    "Balance": {
+                      "Amount": 150.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "CreditLimit": {
+                      "Amount": 2000.0,
+                      "CurrencyCode": "GBP"
+                    },
+                    "AvailableCredit": {
+                      "Amount": 1849.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "LastUpdatedDateTime": "2020-06-28T15:16:29.5256817+01:00",
+                    "BalanceType": "ClosingAvailable",
+                    "RetrievalStatus": 0
+                  }
+                },
+                {
+                  "StatusCode": 403,
+                  "Message": "The account is not accessible.",
+                  "AccountId": "242de233-693a-49e5-a84a-7d69f681f109"
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/info/version": {
+      "get": {
+        "tags": [ "Operations Accounts - Service Information" ],
+        "operationId": "GETinfo/version",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "object" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LEAPS.Accounts.Web.Viewmodels.AccountIdViewModel": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "format": "uuid",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Domain.Entities.Account": {
+      "type": "object",
+      "properties": {
+        "originId": {
+          "description": "Populated by CAPDB.dbo.Account.Id.\r\nUsed to back-link an Account in LEAPS to an Account in CAPDB.",
+          "type": "string"
+        },
+        "currencyCode": { "type": "string" },
+        "primaryCardIds": {
+          "type": "array",
+          "items": {
+            "format": "uuid",
+            "type": "string",
+            "example": "00000000-0000-0000-0000-000000000000"
+          }
+        },
+        "additionalCardIds": {
+          "type": "array",
+          "items": {
+            "format": "uuid",
+            "type": "string",
+            "example": "00000000-0000-0000-0000-000000000000"
+          }
+        },
+        "clearingInfo": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.ClearingInfo" },
+        "accountBalance": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.AccountBalance" },
+        "productType": {
+          "enum": [ "Debit", "Credit" ],
+          "type": "string"
+        },
+        "termsAndConditions": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.TermsAndConditions" },
+        "productInfo": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.ProductInfo" },
+        "aggregatedBalance": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.AggregatedBalance" },
+        "platform": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.Platform" },
+        "accountOwner": { "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.AccountOwner" },
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Domain.ValueObjects.ClearingInfo": {
+      "type": "object",
+      "properties": {
+        "accountNumber": { "type": "string" },
+        "sortCode": { "type": "string" }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Domain.ValueObjects.AccountBalance": {
+      "type": "object",
+      "properties": {
+        "balance": {
+          "$ref": "#/definitions/LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue",
+          "description": "The balance of the account"
+        },
+        "blocked": {
+          "$ref": "#/definitions/System.Nullable[LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue]",
+          "description": "Amount blocked no the account (blocked because of pending transactions)"
+        },
+        "lastUpdatedDateTime": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Domain.ValueObjects.TermsAndConditions": {
+      "type": "object",
+      "properties": { "url": { "type": "string" } }
+    },
+    "LEAPS.Accounts.Contracts.Domain.ValueObjects.ProductInfo": {
+      "description": "The product the account is associated with.",
+      "type": "object",
+      "properties": {
+        "accountProductId": {
+          "format": "int64",
+          "description": "The ID of the Account Product the Account is associated with. It's a link between Accounts and Products bounded contexts.",
+          "type": "integer"
+        }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Domain.ValueObjects.AggregatedBalance": {
+      "description": "The aggregated balance of the managed accounts.",
+      "type": "object",
+      "properties": {
+        "balance": {
+          "$ref": "#/definitions/LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue",
+          "description": "The aggregated balance"
+        },
+        "availableBalance": {
+          "$ref": "#/definitions/LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue",
+          "description": "The aggregated available balance"
+        },
+        "blocked": {
+          "$ref": "#/definitions/System.Nullable[LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue]",
+          "description": "The aggregated blocked amount"
+        },
+        "lastUpdatedDateTime": {
+          "format": "date-time",
+          "description": "The date and time (UK) of starting the job that gets the balance from FIS.",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Domain.ValueObjects.Platform": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The unique name of the platform.",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Domain.ValueObjects.AccountOwner": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "description": "First name of the account owner.",
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the account owner.",
+          "type": "string"
+        },
+        "title": {
+          "description": "Title of the account owner.",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "format": "double",
+          "type": "number"
+        },
+        "currencyCode": { "type": "string" }
+      }
+    },
+    "System.Nullable[LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue]": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "format": "double",
+          "type": "number"
+        },
+        "currencyCode": { "type": "string" }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Domain.Entities.ManagedAccountDetails": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "format": "uuid",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "accountNumber": {
+          "type": "string"
+        },
+        "sortCode": {
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Descriptors.AccountBatchDescriptorItem": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "format": "uuid",
+          "description": "The Zempler identifier of the account.",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "sortCode": {
+          "description": "The Sort Code of the Account",
+          "type": "string"
+        },
+        "accountNumber": {
+          "description": "The Account Number of the Account",
+          "type": "string"
+        },
+        "currencyCode": {
+          "description": "The ISO 4217 Currency Code of the Account. If not provided, ignored.",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Descriptors.AccountDetailsBatchResponseDescriptorItem": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "format": "int32",
+          "description": "The status code of fulfilling the account details request for the particular account.\r\nFor example, 200",
+          "type": "integer"
+        },
+        "message": {
+          "description": "Details about the outcome of fulfilling the account details request for the particular account.\r\nFor example, 'OK'",
+          "type": "string"
+        },
+        "accountId": {
+          "format": "uuid",
+          "description": "The Zempler identifier of the Account of which the account details were requested.",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "sortCode": {
+          "description": "The Sort Code of the Account",
+          "type": "string"
+        },
+        "accountNumber": {
+          "description": "The Account Number of the Account",
+          "type": "string"
+        },
+        "currencyCode": {
+          "description": "The ISO 4217 Currency Code of the Account. If not provided, ignored.",
+          "type": "string"
+        },
+        "accountDetails": {
+          "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.Entities.Account",
+          "description": "The details of the requested account"
+        }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Descriptors.AccountBalanceBatchResponseDescriptorItem": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "format": "int32",
+          "description": "The status code of fulfilling the accountBalance balance request for the particular accountBalance.\r\nFor example, 200",
+          "type": "integer"
+        },
+        "message": {
+          "description": "Details about the outcome of fulfilling the accountBalance balance request for the particular accountBalance.\r\nFor example, 'OK'",
+          "type": "string"
+        },
+        "accountId": {
+          "format": "uuid",
+          "description": "The Zempler identifier of the Account of which the balance was requested.",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "sortCode": {
+          "description": "The Sort Code of the Account",
+          "type": "string"
+        },
+        "accountNumber": {
+          "description": "The accountBalance number of the Account",
+          "type": "string"
+        },
+        "currencyCode": {
+          "description": "The ISO 4217 Currency Code of the Account. If not provided, ignored.",
+          "type": "string"
+        },
+        "balance": {
+          "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.AccountBalance",
+          "description": "The balance of the requested accountBalance"
+        }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Descriptors.CachedBalanceDescriptorItem": {
+      "description": "Describes an account for which the cached balance is returned",
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "format": "uuid",
+          "description": "The Zempler identifier of the account.",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        }
+      }
+    },
+    "LEAPS.Accounts.Contracts.Descriptors.CachedBalanceBatchResponseDescriptorItem": {
+      "description": "Describes the cached balance response of an account",
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "format": "int32",
+          "description": "The status code of fulfilling the cached balance request for a particular account.\r\nFor example, 200",
+          "type": "integer"
+        },
+        "message": {
+          "description": "Details about the outcome of fulfilling the cached balance request for a particular account.\r\nFor example, 'OK'",
+          "type": "string"
+        },
+        "accountId": {
+          "format": "uuid",
+          "description": "The Zempler identifier of the account of which the cached balance was requested.",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "balance": {
+          "$ref": "#/definitions/LEAPS.Accounts.Contracts.Domain.ValueObjects.AccountBalance",
+          "description": "The cached balance of the account"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "description": "OAuth2 Client Credentials flow",
+      "flow": "application",
+      "authorizationUrl": "https://apisandbox.zempler.tech/identity/auth/connect/authorize",
+      "tokenUrl": "https://apisandbox.zempler.tech/identity/auth/connect/token",
+      "scopes": {
+        "aps_profile": "APS profile data.",
+        "applications": "Allow access to application API.",
+        "accounts": "Allow access to account and transaction data on behalf of the client.",
+        "payments": "Allow access to payments and payment submissions data.",
+        "eligibility": "Allow access to eligibility API."
+      }
+    }
+  }
+}

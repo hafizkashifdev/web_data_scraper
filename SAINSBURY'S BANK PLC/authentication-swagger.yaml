@@ -1,0 +1,267 @@
+openapi: 3.0.0
+info:
+  title: Sainsburys Bank Open Banking Authentication API
+  description: |
+    Implementation of [OAuth 2.0](https://tools.ietf.org/html/rfc6749  "Docs") with Authorization Code Grant type
+  version: 1.0.0
+servers:
+  - url: https://tsob.sainsburysbank.co.uk:443/sso/oauth2/realms/root/realms/general # Sandbox
+  - url: https://ob.sainsburysbank.co.uk:443/sso/oauth2/realms/root/realms/general # prod
+paths:
+  /access_token:
+    post:
+      summary: Request Access Token
+      description: |
+        Partner makes a request to the token endpoint by adding the
+        following parameters described below.
+
+        When requesting an access token you must pass one or more of the OAuth Scopes you have been granted. You may register multiple consents using a single Access Token.
+      tags:
+        - Request Access Token
+      parameters:
+        - $ref: "#/components/parameters/Content-Type"
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                grant_type: # Will always be client_credentials
+                  $ref: "#/components/schemas/grant_type"
+                scope: # This is the only scope for IMIMobile
+                  $ref: "#/components/schemas/scope"
+                client_assertion_type: # Will always be this value
+                  $ref: "#/components/schemas/client_assertion_type"
+                client_assertion: # This is the signed JWT
+                  $ref: "#/components/schemas/client_assertion"
+                code:
+                  $ref: "#/components/schemas/code"
+                redirect_uri:
+                  $ref: "#/components/schemas/redirect_uri"
+                refresh_token: # This is the signed JWT
+                  $ref: "#/components/schemas/refresh_token"
+              required:
+                - grant_type
+                - client_assertion_type
+                - client_assertion
+      responses:
+        "200":
+          description: 200 OK - Authorisation token (Bearer)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/getAccessTokenResponse200"
+              example:
+                access_token: eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoid1UzaWZJSWFMT1VBUmVSQi9GRzZlTTFQMVFNPSIsImFsZyI6IlBTMjU2In0.eyJzdWIiOiIxMGFiOTYxOC0zZDE2LTRhZTMtYjgxNy1mOWE0YjgwNGZlYmQiLCJjdHMiOiJPQVVUSDJfU1RBVEVMRVNTX0dSQU5UIiwiYXVkaXRUcmFja2luZ0lkIjoiMTdiZGFiZmEtNTJiOC00Y2YzLWEwYjctNmE0NDk2MTdiODkyLTE1OTE3NiIsImlzcyI6Imh0dHBzOi8vdHNvYi5zYWluc2J1cnlzYmFuay5jby51azo0NDMvc3NvL29hdXRoMi9yZWFsbXMvcm9vdC9yZWFsbXMvZ2VuZXJhbCIsInRva2VuTmFtZSI6ImFjY2Vzc190b2tlbiIsInRva2VuX3R5cGUiOiJCZWFyZXIiLCJhdXRoR3JhbnRJZCI6ImtsWm5JWXBlX2tsdDJTLUxoR3czRnA0S18wTSIsImF1ZCI6IjEwYWI5NjE4LTNkMTYtNGFlMy1iODE3LWY5YTRiODA0ZmViZCIsIm5iZiI6MTU4NTY4MDUwMSwiZ3JhbnRfdHlwZSI6ImNsaWVudF9jcmVkZW50aWFscyIsInNjb3BlIjpbIm9wZW5pZCIsImFjY291bnRzIl0sImF1dGhfdGltZSI6MTU4NTY4MDUwMSwicmVhbG0iOiIvZ2VuZXJhbCIsImV4cCI6MTU4NTY4MDgwMSwiaWF0IjoxNTg1NjgwNTAxLCJleHBpcmVzX2luIjozMDAsImp0aSI6ImVfSExfeFVLYjVTTS1JWWp3bjFJcTFzbWFEWSJ9.DGuqHw_ge4CCmKFde2z1qR6aVOT0Lsi4aNTkkiGMoSuAaRTQuiDvI_xXqd7fGBYACJLVLNNVdOiz3WdWtdAV216MO2FchGZcyoZDsJyTbm-o5KjCq9AtfbxJtyJtPFWaA1XO4IHQ3EsOj9iIuA3L4EMO5gTM5ZmF81McGDlyLXhpTDHz1bhp69DrgCISsNLNXbPDcgx5CgmsA536kaNlU6lnRSp7wltpDH8clnk9i2viGbk9OWhvZxgFuarUi3TGSA36Y2jRLxHRycMl8Nbkje6mXireLIpi2qewad06rXO1M5I5QFPckMUR6suFnfEraQcloOOq-o21CZyzMBUg6w
+                scope: openid accounts
+                id_token: eyJ0eXAiOiJKV1QiLCJraWQiOiJ3VTNpZklJYUxPVUFSZVJCL0ZHNmVNMVAxUU09IiwiYWxnIjoiUFMyNTYifQ.eyJhdF9oYXNoIjoiYzNsZDNwNWg4ZGxJdnRJTUdNUzFLUSIsInN1YiI6IjEwYWI5NjE4LTNkMTYtNGFlMy1iODE3LWY5YTRiODA0ZmViZCIsImF1ZGl0VHJhY2tpbmdJZCI6IjE3YmRhYmZhLTUyYjgtNGNmMy1hMGI3LTZhNDQ5NjE3Yjg5Mi0xNTkxNzciLCJpc3MiOiJodHRwczovL3Rzb2Iuc2FpbnNidXJ5c2JhbmsuY28udWs6NDQzL3Nzby9vYXV0aDIvcmVhbG1zL3Jvb3QvcmVhbG1zL2dlbmVyYWwiLCJ0b2tlbk5hbWUiOiJpZF90b2tlbiIsImF1ZCI6IjEwYWI5NjE4LTNkMTYtNGFlMy1iODE3LWY5YTRiODA0ZmViZCIsImF6cCI6IjEwYWI5NjE4LTNkMTYtNGFlMy1iODE3LWY5YTRiODA0ZmViZCIsImF1dGhfdGltZSI6MTU4NTY4MDUwMSwicmVhbG0iOiIvZ2VuZXJhbCIsImV4cCI6MTU4NTY4NDEwMSwidG9rZW5UeXBlIjoiSldUVG9rZW4iLCJpYXQiOjE1ODU2ODA1MDF9.0Zdbe-ow8aSWQ62Q3LfUkSPFgh7sZrCOptWxN9H-Sp9dS0LVE74rB7f9scWlt0Q7R_xi7g_PljE4hm-kVFo2p_6naphCnE4kM6onUR-fEH6cg9QgCMIvTeyKwJu1cNHJvfuQRfbAlzrgWU1bAMKJm4auhLMrTvvYDPKAsO2VFCFExkWsptFz8YeWIrqDL0dTJs-I0DAqedYzTjlUjdgLqkE0HMe3-sJykX_Hxa0NIRa6fokwHFyGjBwq2uphgVWELE0VzTqjDi83NZclIhokTlkcZdwwCk79E4727o8qKz02tsiQ9msSExaAYR-vwKx5yCgrMKf22jYl9nt1rE7bPw
+                token_type: Bearer
+                expires_in: 299
+        400:
+          description: As per RFC authorisation server responds with 400 in case of error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                # Properties of the referenced object
+                error: invalid_request
+                error_description: JWT is not valid
+                error_uri: https://bla.com/page
+components:
+  parameters:
+    Content-Type:
+      name: Content-Type
+      description: Content type of the request
+      in: header
+      required: true
+      schema:
+        type: string
+        example: application/x-www-form-urlencoded
+  responses:
+    getAccessTokenResponse200:
+      description: 200 OK - Authorisation token (Bearer)
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/Token"
+              - $ref: "#/components/schemas/Token_with_consent"
+  schemas:
+    grant_type:
+      description: >
+        Grant Types:
+
+        * `client_credentials` - Requesting an access token
+
+        * `authorization_code` - Following successful authentication in the Sainsbury’s Bank Authentication App the user will be redirected to your redirect_uri with a hash fragment containing the authorization_code (code) and also an id_token in signed JWT format.  The authorization_code must be exchanged via the token_endpoint for an access_token_with_consent
+
+        * `refresh_token` - An access_token will only last a limited time. Once it has expired, the refresh_token must be used to generate a new one.  access_tokens are refreshed using our token endpoint.
+      type: string
+      example: client_credentials
+      enum:
+        - client_credentials
+        - authorization_code
+        - refresh_token
+    scope:
+      description: Minimum scope should be `openid` plus appropriate scope for PSD2 role. Please check the .well-known/openid-configuration `scopes_supported` for the list of supported scopes.  Scope does not need to be supplied when exchanging an authorization code for an access_token_with_consent.
+      type: string
+      example: "openid accounts fundsconfirmation"
+      minLength: 1
+      maxLength: 256
+    client_assertion_type:
+      description: Client Assertion Type
+      type: string
+      example: urn:ietf:params:oauth:client-assertion-type:jwt-bearer
+      enum:
+        - urn:ietf:params:oauth:client-assertion-type:jwt-bearer
+    client_assertion:
+      description: The request body must contain the signed client assertion JWT.  This is made up of `Client Assertion JWT Header` and `Client Assertion JWT Body`.  Decoded examples are shown in schemas below.
+      type: string
+      format: jwt
+      example: "eyJhbGciOiJQUzI1NiIsInR5cCI6Imp3dCIsImtpZCI6IkxtX3dJdGMxbklBd2IxN2JsOVB5ZXVPSHgyVSJ9.eyJzdWIiOiIxMGFiOTYxOC0zZDE2LTRhZTMtYjgxNy1mOWE0YjgwNGZlYmQiLCJhdWQiOiJodHRwczovL3Rzb2Iuc2FpbnNidXJ5c2JhbmsuY28udWs6NDQzL3Nzby9vYXV0aDIvcmVhbG1zL3Jvb3QvcmVhbG1zL2dlbmVyYWwiLCJpc3MiOiIxMGFiOTYxOC0zZDE2LTRhZTMtYjgxNy1mOWE0YjgwNGZlYmQiLCJqdGkiOiJjZjg1YWI4Mi1lNjg2LTRiOTUtOWY3NC0zZmU0MmI4MDk1ZDEiLCJpYXQiOjE1ODU2NTAzMTAsImV4cCI6MTU4NTY1MDYxMH0.xVpbjIoNjixpTMTC9v9hHTqKN060JAu7Ew_mFGc7V1aodJid-tSI7ro_6iO63mFgqIJUm-HeVcSaHU_2Zep1kZUqeGt_W5J2rTRa2HPc4JPmGV8KZxp0WW73e3pAAvoWeqoCYEAY60smTFBINXuNNgZHtiaLEsZfUXC0c8PP4MqjPH4zi_uMaSGiwpIQ0_6RP7CMLXsw_jBMGOo2sTnr83HK_jy-uTEep8KNwQIIkRrcyOEK5ctJFwyZB0QAg35KME-EZhZDOivC8peSNqe1jYmqz2ttddUuYwz-QIXP1CEpsGqw87D1kIA7wHhWVrd4ACtTqtrHtKZIHVyUR-vdLA"
+    code:
+      description: Following successful authentication in the Sainsbury’s Bank Authentication App the user will be redirected to your redirect_uri with a hash fragment containing the authorization_code (code) and also an id_token in signed JWT format.  The authorization_code must be exchanged via the token_endpoint for an access_token_with_consent
+      type: string
+      example: dWfWhScmaWB0NoBhh_nP7oRWODs
+    redirect_uri:
+      description: Redirect URI for the TPP
+      type: string
+      example: <<TPP Redirect URI>>
+    refresh_token:
+      description: An access_token will only last a limited time. Once it has expired, the refresh_token must be used to generate a new one.  Access_tokens are refreshed using our token endpoint.  A Refresh Token lasts 90 days.
+      type: string
+      format: jwt
+      example: eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoid1UzaWZJSWFMT1VBUmVSQi9GRzZlTTFQMVFNPSIsImFsZyI6IlBTMjU2In0.eyJzdWIiOiI0N2EyODk3NS05NzFhLTMwZTctOThhMi02ZTJjZWViMjg5ODkiLCJjdHMiOiJPQVVUSDJfU1RBVEVMRVNTX0dSQU5UIiwiYXVkaXRUcmFja2luZ0lkIjoiMTdiZGFiZmEtNTJiOC00Y2YzLWEwYjctNmE0NDk2MTdiODkyLTE2OTE1MCIsImlzcyI6Imh0dHBzOi8vdHNvYi5zYWluc2J1cnlzYmFuay5jby51azo0NDMvc3NvL29hdXRoMi9yZWFsbXMvcm9vdC9yZWFsbXMvZ2VuZXJhbCIsInRva2VuTmFtZSI6InJlZnJlc2hfdG9rZW4iLCJ0b2tlbl90eXBlIjoiQmVhcmVyIiwiYXV0aEdyYW50SWQiOiJLOUlIMVZ3bnNSbE9Rb1FoRWZqTGpnRFo0dWciLCJhdWQiOiIxMGFiOTYxOC0zZDE2LTRhZTMtYjgxNy1mOWE0YjgwNGZlYmQiLCJhY3IiOiJ1cm46b3BlbmJhbmtpbmc6cHNkMjpjYSIsIm5iZiI6MTU4NTc1MjM0MSwib3BzIjoiWUttdGtHSF8zTFUzRTVTWk8zOVZsUEVGWmQ0IiwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb25fY29kZSIsInNjb3BlIjpbIm9wZW5pZCIsImFjY291bnRzIl0sImF1dGhfdGltZSI6MCwiY2xhaW1zIjoie1wiaWRfdG9rZW5cIjp7XCJhY3JcIjp7XCJ2YWx1ZVwiOlwidXJuOm9wZW5iYW5raW5nOnBzZDI6Y2FcIixcImVzc2VudGlhbFwiOnRydWV9LFwib3BlbmJhbmtpbmdfaW50ZW50X2lkXCI6e1widmFsdWVcIjpcInVybi1zYi1pbnRlbnQtNmQxMDdjNzYtM2JlOS00MmJkLTk5MTQtYmVmYTliYzBiNmI0XCIsXCJlc3NlbnRpYWxcIjp0cnVlfX0sXCJ1c2VyaW5mb1wiOntcIm9wZW5iYW5raW5nX2ludGVudF9pZFwiOntcInZhbHVlXCI6XCJ1cm4tc2ItaW50ZW50LTZkMTA3Yzc2LTNiZTktNDJiZC05OTE0LWJlZmE5YmMwYjZiNFwiLFwiZXNzZW50aWFsXCI6dHJ1ZX19fSIsInJlYWxtIjoiL2dlbmVyYWwiLCJleHAiOjE1OTM1MjgzNDEsImlhdCI6MTU4NTc1MjM0MSwiZXhwaXJlc19pbiI6Nzc3NjAwMCwianRpIjoiWGhlbkpQOXJQQnRYcm1talpkR3ZkMDVKRTVzIn0.bKRYdjH1HXoEfl6YGa0y3uHSRCF0yIdt4tEXwW0cIPNOtQ1aJZgFZsDd7I25gCqVtQ3Wh94VoKVUXrzrEwoktKnIdFGryM3Wwa931TxSTPUIKnyRmoifNlH98vfdcwKr46Nwh1vkY93RNY0wJZyIhAp3YHrcbpyH6DoelWHQH3YtLR-aQB-T7tMUdntuLqPy98nTZhCMOSEmFUblV_ehuAQKJN-sG0M2cT6YbvpTGuKVA2s-XDZcCmfRdwm9DQRWdCAvoNnPMLayswCFaEGYKr2lHVPgmWVi4N6Rx5RPJuB5-rqBPCShwRXkfJUImCZBY-P0M8iRAduy-_doGuBT6A
+    ClientAssertionJWTHeader:
+      type: object
+      properties:
+        alg:
+          type: string
+          example: PS256
+        kid:
+          type: string
+          description: Signing key id of public signing certificate as held in the JWKS for software statement as per SSA entry software_jwks_endpoint
+          example: <<Signing Key Id>>
+        typ:
+          type: string
+          example: jwt
+    ClientAssertionJWTBody:
+      type: object
+      properties:
+        sub:
+          description: >-
+            The client_id received after dynamic client registration
+          type: string
+          pattern: "^[0-9a-zA-Z]{1,22}$"
+          minLength: 1
+          maxLength: 22
+          example: <<Software statement ID (software_id) of the software statement>>
+        aud:
+          description: >
+            Must be the same value as the Authorization Server Issuer (AS_ISSUER_ID) that mints the ID or access token
+          type: string
+          example: <<issuer url from wellknown endpoint response>>
+        exp:
+          description: >-
+            JWT expiry time ( in format of NumericDate per `https://tools.ietf.org/ html/rfc7519#section-2`) Suggest 30 seconds from iat.
+          type: integer
+          format: int32
+          example: 1576757554
+        iat:
+          description: >-
+            JWT issued at time ( in format of NumericDate per `https://tools.ietf.org/html/rfc751 9#section-2`)
+          type: integer
+          format: int32
+          example: 1576753954
+        iss:
+          description: >-
+            The client_id received after dynamic client registration
+          type: string
+          pattern: "^[0-9a-zA-Z]{1,22}$"
+          minLength: 1
+          maxLength: 22
+          example: <<Software statement ID (software_id) of the software statement>>
+        jti:
+          description: A unique identifier for the token, which can be used to prevent reuse of the token. These tokens MUST only be used once, UUID for example.
+          type: string
+          pattern: >-
+            ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          minLength: 36
+          maxLength: 36
+          example: 103f08aa-912c-45cc-954d-a51cbf0dc297
+    Token:
+      type: object
+      properties:
+        access_token:
+          description: The value of the access_token field is the Access Token which needs to be used to register an account access consent request.  An Access Token lasts 5 minutes.
+          type: string
+          format: jwt
+          example: <<signed access token JWT>>
+        scope:
+          type: string
+          example: openid accounts
+        id_token:
+          type: string
+          format: jwt
+          example: <<signed id token JWT>>
+        token_type:
+          type: string
+          enum:
+            - Bearer
+          example: Bearer
+        expires_in:
+          type: integer
+          format: int32
+          example: 299
+    Token_with_consent:
+      type: object
+      properties:
+        access_token:
+          description: The value of the access_token field is the Access Token which needs to be used to register an account access consent request.  An Access Token lasts 5 minutes.
+          type: string
+          format: jwt
+          example: <<signed access token JWT>>
+        refresh_token:
+          description: The value of the refresh_token field is the Refresh Token which will remain valid for 90 days.
+          type: string
+          format: jwt
+          example: <<signed refresh token JWT>>
+        scope:
+          type: string
+          example: openid accounts
+        id_token:
+          type: string
+          format: jwt
+          example: <<signed id token JWT>>
+        token_type:
+          type: string
+          enum:
+            - Bearer
+          example: Bearer
+        expires_in:
+          type: integer
+          format: int32
+          example: 299
+        nonce:
+          type: string
+          example: 2b6eb382-e1ae-48bf-aa8d-1d0345ff153d
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          enum:
+            - invalid_request
+            - invalid_client
+            - invalid_grant
+            - invalid_scope
+            - unauthorized_client
+            - unsupported_grant_type
+        error_description:
+          type: string
+          description: Human-readable text providing additional information
+        error_uri:
+          type: string
+          description: A URI identifying a human-readable web page with information about the error_description
+          

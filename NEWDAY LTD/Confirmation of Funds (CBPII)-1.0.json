@@ -1,0 +1,832 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Confirmation of Funds (CBPII)",
+    "description": "Verify sufficient funds in a customer’s account with ease.",
+    "version": "1.0"
+  },
+  "x-pub-settings": {
+    "pub-ready": true,
+    "team": "",
+    "tags": [
+      "Open Banking",
+      "Issuer Bank"
+    ],
+    "commitDate": 1739207354000
+  },
+  "servers": [
+    {
+      "url": "https://api.newdaycards.com/open-banking/v3.1/cbpii",
+      "description": "Production"
+    },
+    {
+      "url": "https://api.newdaycards.com/sandbox/open-banking/v3.1/cbpii",
+      "description": "Sandbox"
+    }
+  ],
+  "paths": {
+    "/funds-confirmation-consents/{consentId}": {
+      "get": {
+        "tags": [
+          "Confirmation of Funds Consents"
+        ],
+        "summary": "Get Confirmation of Funds Consent By ConsentId",
+        "description": "Get a Confirmation of Funds Consent",
+        "operationId": "GetConfirmationOfFundsconsentConsentid",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Confirmation of Funds Consent Read",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Data": {
+                    "ConsentId": "88036",
+                    "CreationDateTime": "2019-01-28T13:59:56.0000000+00:00",
+                    "Status": "AwaitingAuthorisation",
+                    "StatusUpdateDateTime": "2019-01-28T13:59:56.0000000+00:00",
+                    "ExpirationDateTime": "2020-05-02T00:00:00.0000000+00:00",
+                    "DebtorAccount": {
+                      "SchemeName": "UK.OBIE.IBAN",
+                      "Identification": "GB76LOYD30949301273801",
+                      "SecondaryIdentification": "Roll 56988"
+                    }
+                  },
+                  "Links": {
+                    "Self": "https://azuweudevopenbanking.azure-api.net/open-banking/v3.1/cbpii/funds-confirmation-consents/88036"
+                  },
+                  "Meta": {
+                    "TotalPages": 1
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "403 Forbidden",
+                  "Message": "Missing header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Missing",
+                      "Message": "x-fapi-financial-id Header is Missing.",
+                      "Path": "x-fapi-financial-id"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "404 Not Found",
+                  "Errors": [
+                    {
+                      "ErrorCode": "404 Not Found",
+                      "Message": "Not Found"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "406 Not Acceptable",
+                  "Message": "Invalid header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Invalid",
+                      "Message": "Accept Header is invalid.",
+                      "Path": "Accept"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request GET \\\n  --url https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents/%7BconsentId%7D \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'x-customer-user-agent: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-ip-address: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-last-logged-time: SOME_STRING_VALUE' \\\n  --header 'x-fapi-financial-id: SOME_STRING_VALUE' \\\n  --header 'x-fapi-interaction-id: SOME_STRING_VALUE'"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents/%7BconsentId%7D\");\nvar request = new RestRequest(Method.GET);\nrequest.AddHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"GET\", \"https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents/%7BconsentId%7D\");\nxhr.setRequestHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"Authorization\", \"SOME_STRING_VALUE\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'GET',\n  url: 'https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents/%7BconsentId%7D',\n  headers: {\n    'x-fapi-financial-id': 'SOME_STRING_VALUE',\n    'x-fapi-customer-last-logged-time': 'SOME_STRING_VALUE',\n    'x-fapi-customer-ip-address': 'SOME_STRING_VALUE',\n    'x-fapi-interaction-id': 'SOME_STRING_VALUE',\n    'x-customer-user-agent': 'SOME_STRING_VALUE',\n    Authorization: 'SOME_STRING_VALUE'\n  }\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Confirmation of Funds Consents"
+        ],
+        "summary": "Delete Confirmation of Funds Consents",
+        "description": "Summary: Delete a Confirmation of Funds Consent. Description: Delete a Confirmation of Funds Consent",
+        "operationId": "DeleteConfirmationOffundsConsentsConsentId",
+        "parameters": [
+          {
+            "name": "consentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Confirmation of Funds Consents Deleted"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "403 Forbidden",
+                  "Message": "Missing header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Missing",
+                      "Message": "x-fapi-financial-id Header is Missing.",
+                      "Path": "x-fapi-financial-id"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "404 Not Found",
+                  "Errors": [
+                    {
+                      "ErrorCode": "404 Not Found",
+                      "Message": "Not Found"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request DELETE \\\n  --url https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents/%7BconsentId%7D \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'x-customer-user-agent: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-ip-address: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-last-logged-time: SOME_STRING_VALUE' \\\n  --header 'x-fapi-financial-id: SOME_STRING_VALUE' \\\n  --header 'x-fapi-interaction-id: SOME_STRING_VALUE'"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents/%7BconsentId%7D\");\nvar request = new RestRequest(Method.DELETE);\nrequest.AddHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = null;\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"DELETE\", \"https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents/%7BconsentId%7D\");\nxhr.setRequestHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"Authorization\", \"SOME_STRING_VALUE\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'DELETE',\n  url: 'https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents/%7BconsentId%7D',\n  headers: {\n    'x-fapi-financial-id': 'SOME_STRING_VALUE',\n    'x-fapi-customer-last-logged-time': 'SOME_STRING_VALUE',\n    'x-fapi-customer-ip-address': 'SOME_STRING_VALUE',\n    'x-fapi-interaction-id': 'SOME_STRING_VALUE',\n    'x-customer-user-agent': 'SOME_STRING_VALUE',\n    Authorization: 'SOME_STRING_VALUE'\n  }\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/funds-confirmation-consents": {
+      "post": {
+        "tags": [
+          "Confirmation of Funds Consents"
+        ],
+        "summary": "Create Confirmation of Funds Consents",
+        "description": "Summary: Create a Confirmation of Funds Consent. Description: Create a Confirmation of Funds Consent",
+        "operationId": "CreateConfirmationOfFundsConsents",
+        "parameters": [
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Confirmation Of Funds Consent object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmationOfFundsConsent"
+              },
+              "example": {
+                "Data": {
+                  "DebtorAccount": {
+                    "SchemeName": "UK.OBIE.IBAN",
+                    "Identification": "GB76LOYD30949301273801",
+                    "SecondaryIdentification": "Roll 56988"
+                  },
+                  "ExpirationDateTime": "2020-05-02T00:00:00.0000000+00:00"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Account Access Consents Created",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Data": {
+                    "ConsentId": "88036",
+                    "CreationDateTime": "2019-01-28T13:59:56.0000000+00:00",
+                    "Status": "AwaitingAuthorisation",
+                    "StatusUpdateDateTime": "2019-01-28T13:59:56.0000000+00:00",
+                    "ExpirationDateTime": "2020-05-02T00:00:00.0000000+00:00",
+                    "DebtorAccount": {
+                      "SchemeName": "UK.OBIE.IBAN",
+                      "Identification": "GB76LOYD30949301273801",
+                      "SecondaryIdentification": "Roll 56988"
+                    }
+                  },
+                  "Links": {
+                    "Self": "https://azuweudevopenbanking.azure-api.net/open-banking/v3.1/cbpii/funds-confirmation-consents/88036"
+                  },
+                  "Meta": {
+                    "TotalPages": 1
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "400 Bad Request",
+                  "Message": "Validation failed.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Field.Missing",
+                      "Message": "Data Field is missing."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "403 Forbidden",
+                  "Message": "Missing header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Missing",
+                      "Message": "x-fapi-financial-id Header is Missing.",
+                      "Path": "x-fapi-financial-id"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "406 Not Acceptable",
+                  "Message": "Invalid header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Invalid",
+                      "Message": "Accept Header is invalid.",
+                      "Path": "Accept"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "500 Internal Server Error",
+                  "Errors": [
+                    {
+                      "ErrorCode": "500 Internal Server Error",
+                      "Message": "Value cannot be null.\r\nParameter name: instance"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-customer-user-agent: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-ip-address: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-last-logged-time: SOME_STRING_VALUE' \\\n  --header 'x-fapi-financial-id: SOME_STRING_VALUE' \\\n  --header 'x-fapi-interaction-id: SOME_STRING_VALUE' \\\n  --data '{\"Data\":{\"DebtorAccount\":{\"SchemeName\":\"UK.OBIE.IBAN\",\"Identification\":\"GB76LOYD30949301273801\",\"SecondaryIdentification\":\"Roll 56988\"},\"ExpirationDateTime\":\"2020-05-02T00:00:00.0000000+00:00\"}}'"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddParameter(\"application/json\", \"{\\\"Data\\\":{\\\"DebtorAccount\\\":{\\\"SchemeName\\\":\\\"UK.OBIE.IBAN\\\",\\\"Identification\\\":\\\"GB76LOYD30949301273801\\\",\\\"SecondaryIdentification\\\":\\\"Roll 56988\\\"},\\\"ExpirationDateTime\\\":\\\"2020-05-02T00:00:00.0000000+00:00\\\"}}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = JSON.stringify({\n  \"Data\": {\n    \"DebtorAccount\": {\n      \"SchemeName\": \"UK.OBIE.IBAN\",\n      \"Identification\": \"GB76LOYD30949301273801\",\n      \"SecondaryIdentification\": \"Roll 56988\"\n    },\n    \"ExpirationDateTime\": \"2020-05-02T00:00:00.0000000+00:00\"\n  }\n});\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"POST\", \"https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents\");\nxhr.setRequestHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"content-type\", \"application/json\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'POST',\n  url: 'https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmation-consents',\n  headers: {\n    'x-fapi-financial-id': 'SOME_STRING_VALUE',\n    'x-fapi-customer-last-logged-time': 'SOME_STRING_VALUE',\n    'x-fapi-customer-ip-address': 'SOME_STRING_VALUE',\n    'x-fapi-interaction-id': 'SOME_STRING_VALUE',\n    'x-customer-user-agent': 'SOME_STRING_VALUE',\n    Authorization: 'SOME_STRING_VALUE',\n    'content-type': 'application/json'\n  },\n  body: {\n    Data: {\n      DebtorAccount: {\n        SchemeName: 'UK.OBIE.IBAN',\n        Identification: 'GB76LOYD30949301273801',\n        SecondaryIdentification: 'Roll 56988'\n      },\n      ExpirationDateTime: '2020-05-02T00:00:00.0000000+00:00'\n    }\n  },\n  json: true\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    },
+    "/funds-confirmations": {
+      "post": {
+        "tags": [
+          "Confirmation of Funds"
+        ],
+        "summary": "Create Confirmation of Funds",
+        "description": "Summary: Create a funds confirmation resource. Description: Creates a funds-confirmation resource and responds with a unique FundsConfirmationId to refer to the resource, and a flag confirming if funds are available",
+        "operationId": "CreateConfirmationOfFunds",
+        "parameters": [
+          {
+            "name": "x-fapi-financial-id",
+            "in": "header",
+            "description": "The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-last-logged-time",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP.  All dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below:  Sun, 10 Sep 2017 19:43:31 UTC",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Funds confirmation object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Funds"
+              },
+              "example": {
+                "Data": {
+                  "ConsentId": "88093",
+                  "Reference": "Purchase01",
+                  "InstructedAmount": {
+                    "Amount": "90.00",
+                    "Currency": "GBP"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Account Access Consents Created",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Data": {
+                    "FundsConfirmationId": "1",
+                    "ConsentId": "88093",
+                    "CreationDateTime": "2019-01-28T13:59:56.0000000+00:00",
+                    "FundsAvailable": true,
+                    "Reference": "Purchase01",
+                    "InstructedAmount": {
+                      "Amount": "90.00",
+                      "Currency": "GBP"
+                    }
+                  },
+                  "Links": {
+                    "Self": "https://azuweudevopenbanking.azure-api.net/open-banking/v3.1/cbpii/funds-confirmations"
+                  },
+                  "Meta": {
+                    "TotalPages": 1
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "400 Bad Request",
+                  "Message": "Validation failed.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Field.Missing",
+                      "Message": "Data Field is missing."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "403 Forbidden",
+                  "Message": "Missing header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Missing",
+                      "Message": "x-fapi-financial-id Header is Missing.",
+                      "Path": "x-fapi-financial-id"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "406 Not Acceptable",
+                  "Message": "Invalid header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Invalid",
+                      "Message": "Accept Header is invalid.",
+                      "Path": "Accept"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "415 Unsupported Media Type",
+                  "Message": "Invalid header.",
+                  "Errors": [
+                    {
+                      "ErrorCode": "UK.OBIE.Header.Missing",
+                      "Message": "Content-Type Header is missing.",
+                      "Path": "Content-Type"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Code": "500 Internal Server Error",
+                  "Errors": [
+                    {
+                      "ErrorCode": "500 Internal Server Error",
+                      "Message": "Value cannot be null.\r\nParameter name: instance"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "Shell + Curl",
+            "source": "curl --request POST \\\n  --url https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmations \\\n  --header 'Authorization: SOME_STRING_VALUE' \\\n  --header 'content-type: application/json' \\\n  --header 'x-customer-user-agent: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-ip-address: SOME_STRING_VALUE' \\\n  --header 'x-fapi-customer-last-logged-time: SOME_STRING_VALUE' \\\n  --header 'x-fapi-financial-id: SOME_STRING_VALUE' \\\n  --header 'x-fapi-interaction-id: SOME_STRING_VALUE' \\\n  --data '{\"Data\":{\"ConsentId\":\"88093\",\"Reference\":\"Purchase01\",\"InstructedAmount\":{\"Amount\":\"90.00\",\"Currency\":\"GBP\"}}}'"
+          },
+          {
+            "lang": "Csharp + Restsharp",
+            "source": "var client = new RestClient(\"https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmations\");\nvar request = new RestRequest(Method.POST);\nrequest.AddHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nrequest.AddHeader(\"content-type\", \"application/json\");\nrequest.AddParameter(\"application/json\", \"{\\\"Data\\\":{\\\"ConsentId\\\":\\\"88093\\\",\\\"Reference\\\":\\\"Purchase01\\\",\\\"InstructedAmount\\\":{\\\"Amount\\\":\\\"90.00\\\",\\\"Currency\\\":\\\"GBP\\\"}}}\", ParameterType.RequestBody);\nIRestResponse response = client.Execute(request);"
+          },
+          {
+            "lang": "Javascript + Xhr",
+            "source": "const data = JSON.stringify({\n  \"Data\": {\n    \"ConsentId\": \"88093\",\n    \"Reference\": \"Purchase01\",\n    \"InstructedAmount\": {\n      \"Amount\": \"90.00\",\n      \"Currency\": \"GBP\"\n    }\n  }\n});\n\nconst xhr = new XMLHttpRequest();\nxhr.withCredentials = true;\n\nxhr.addEventListener(\"readystatechange\", function () {\n  if (this.readyState === this.DONE) {\n    console.log(this.responseText);\n  }\n});\n\nxhr.open(\"POST\", \"https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmations\");\nxhr.setRequestHeader(\"x-fapi-financial-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-last-logged-time\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-customer-ip-address\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-fapi-interaction-id\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"x-customer-user-agent\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"Authorization\", \"SOME_STRING_VALUE\");\nxhr.setRequestHeader(\"content-type\", \"application/json\");\n\nxhr.send(data);"
+          },
+          {
+            "lang": "Node + Request",
+            "source": "const request = require('request');\n\nconst options = {\n  method: 'POST',\n  url: 'https://api.newdaycards.com/open-banking/v3.1/cbpii/funds-confirmations',\n  headers: {\n    'x-fapi-financial-id': 'SOME_STRING_VALUE',\n    'x-fapi-customer-last-logged-time': 'SOME_STRING_VALUE',\n    'x-fapi-customer-ip-address': 'SOME_STRING_VALUE',\n    'x-fapi-interaction-id': 'SOME_STRING_VALUE',\n    'x-customer-user-agent': 'SOME_STRING_VALUE',\n    Authorization: 'SOME_STRING_VALUE',\n    'content-type': 'application/json'\n  },\n  body: {\n    Data: {\n      ConsentId: '88093',\n      Reference: 'Purchase01',\n      InstructedAmount: {Amount: '90.00', Currency: 'GBP'}\n    }\n  },\n  json: true\n};\n\nrequest(options, function (error, response, body) {\n  if (error) throw new Error(error);\n\n  console.log(body);\n});\n"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Funds": {
+        "type": "object",
+        "xml": {
+          "name": "Funds"
+        },
+        "example": {
+          "Data": {
+            "ConsentId": "88093",
+            "Reference": "Purchase01",
+            "InstructedAmount": {
+              "Amount": "90.00",
+              "Currency": "GBP"
+            }
+          }
+        }
+      },
+      "ConfirmationOfFundsConsent": {
+        "type": "object",
+        "xml": {
+          "name": "ConfirmationOfFundsConsent"
+        },
+        "example": {
+          "Data": {
+            "DebtorAccount": {
+              "SchemeName": "UK.OBIE.IBAN",
+              "Identification": "GB76LOYD30949301273801",
+              "SecondaryIdentification": "Roll 56988"
+            },
+            "ExpirationDateTime": "2020-05-02T00:00:00.0000000+00:00"
+          }
+        }
+      }
+    }
+  }
+}

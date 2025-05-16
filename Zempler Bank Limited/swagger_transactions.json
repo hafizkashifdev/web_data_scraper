@@ -1,0 +1,2704 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "Zempler API - Transactions"
+  },
+  "host": "apisandbox.zempler.tech",
+  "basePath": "/transactions/",
+  "schemes": [ "https" ],
+  "paths": {
+    "/history/account/{sortCode}/{accountNumber}/posted": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get the posted transactions for all cards of the account identified by the Sort Code, Account Number, Currency Code.",
+        "operationId": "GEThistory/account/{sortCode}/{accountNumber}/posted?fromDate={fromDate}&toDate={toDate}&currencyCode={currencyCode}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "sortCode",
+            "in": "path",
+            "description": "The Sort Code of the customer's account.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "description": "The Account Number of the customer's account",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "description": "Queried transactions are on or after this date (i.e. transaction date &gt;= fromDate). Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "description": "Queried transactions are on or before this date (i.e. transaction date &lt;= toDate). Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "currencyCode",
+            "in": "query",
+            "description": "The ISO 4217 (alpha) Currency Code of account. Optional, if not provided it's ignored.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of posted transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.PostedTransaction" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "RunningBalance": {
+                    "Amount": 1350.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-27T15:17:43.5194108+01:00",
+                  "ReasonCode": "2402",
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.5194108+01:00",
+                  "CardId": "25442168-aec0-4abc-97bb-2a48d6f439f1",
+                  "AccountId": "0b3d7383-1ea7-4986-8ba3-5424317d16da",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS - CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XYZ Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "RunningBalance": {
+                    "Amount": 1400.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-29T15:17:43.5194108+01:00",
+                  "ReasonCode": "8364",
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.5194108+01:00",
+                  "CardId": "d701d855-1380-4378-8cb8-acc09b074d37",
+                  "AccountId": "b4e13204-e98b-4cb5-8e56-1b9b94f6d2de",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible or not found",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/account/{accountId}/posted": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get the posted transactions for all cards of the account identified by the Zempler identifier of the Account.",
+        "operationId": "GEThistory/account/{accountId}/posted?fromDate={fromDate}&toDate={toDate}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The Zempler identifier of the Account.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "description": "Queried transactions are on or after this date (i.e. transaction date &gt;= fromDate). Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "description": "Queried transactions are on or before this date (i.e. transaction date &lt;= toDate). Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of posted transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.PostedTransaction" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "RunningBalance": {
+                    "Amount": 1350.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-27T15:17:43.5204107+01:00",
+                  "ReasonCode": "2402",
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.5204107+01:00",
+                  "CardId": "ac99d719-9251-4881-b129-d50d43a4af7e",
+                  "AccountId": "d0a1857c-8c80-4124-bb40-700fee4743fd",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS - CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XYZ Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "RunningBalance": {
+                    "Amount": 1400.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-29T15:17:43.5204107+01:00",
+                  "ReasonCode": "8364",
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.5204107+01:00",
+                  "CardId": "63bacd3f-6270-4ff7-870a-d655cfee3f58",
+                  "AccountId": "35e37311-40d4-4f51-a49c-3bdddfef38e9",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible or not found",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/card/{cardId}/posted": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get the posted transactions of a particular card identified by its Zempler identifier.",
+        "operationId": "GEThistory/card/{cardId}/posted?fromDate={fromDate}&toDate={toDate}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "path",
+            "description": "The Zempler identifier of Card.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "description": "Queried transactions are on or after this date (i.e. transaction date &gt;= fromDate). Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "description": "Queried transactions are on or before this date (i.e. transaction date &lt;= toDate). Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of posted transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.PostedTransaction" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "RunningBalance": {
+                    "Amount": 1350.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-27T15:17:43.5204107+01:00",
+                  "ReasonCode": "2402",
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.5204107+01:00",
+                  "CardId": "2136ab63-95af-4c42-8e9b-0b5602df9e0b",
+                  "AccountId": "19b54dd9-5311-4fb3-8f99-c126d3c98178",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS - CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XYZ Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "RunningBalance": {
+                    "Amount": 1400.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-29T15:17:43.5204107+01:00",
+                  "ReasonCode": "8364",
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.5204107+01:00",
+                  "CardId": "8362e6d1-519f-4f30-93d1-fa4c9bc9559d",
+                  "AccountId": "4119313b-61e5-44d8-b7c3-973c9fc11eb3",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The card is not accessible or not found",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/account/{sortCode}/{accountNumber}/recent": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get the maximum number of most recent transactions of the Account identified by its Sort Code, Account Number.",
+        "operationId": "GEThistory/account/{sortCode}/{accountNumber}/recent?maxTransactions={maxTransactions}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "sortCode",
+            "in": "path",
+            "description": "The Sort Code of the account.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "description": "The Account Number of the account",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "maxTransactions",
+            "in": "query",
+            "description": "The maximum number of transactions to return. E.g. maxTransactions=5 - the last 5 transactions of the Account are returned.",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of most recent transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.TransactionBase" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "RunningBalance": {
+                    "Amount": 1350.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-27T15:17:43.52741+01:00",
+                  "ReasonCode": "2402",
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.52741+01:00",
+                  "CardId": "35e049f6-f4a3-4ea2-8b46-e5354a688578",
+                  "AccountId": "21fa0556-7122-4619-b335-7c4be48b3603",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS - CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XYZ Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.52741+01:00",
+                  "CardId": "ba22829d-a533-4440-b1bf-739ade401cc1",
+                  "AccountId": "33cbcde8-e897-4c54-8067-11655296e47e",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example pending transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible.",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/account/{accountId}/recent": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get the maximum number of most recent transactions of the Account identified by its Zempler identifier.",
+        "operationId": "GEThistory/account/{accountId}/recent?maxTransactions={maxTransactions}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The Zempler identifier of the Account.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "maxTransactions",
+            "in": "query",
+            "description": "The maximum number of transactions to return. E.g. maxTransactions=5 - the last 5 transactions created with the card(s) of the Account are returned.",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of most recent posted transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.PostedTransaction" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "RunningBalance": {
+                    "Amount": 1350.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-27T15:17:43.5284113+01:00",
+                  "ReasonCode": "2402",
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.5284113+01:00",
+                  "CardId": "414cc804-753d-45ba-8f22-11514d119556",
+                  "AccountId": "d06f1782-0d21-4fb6-b6b7-dccf89f1a7ee",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS - CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XYZ Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "RunningBalance": {
+                    "Amount": 1400.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-29T15:17:43.5284113+01:00",
+                  "ReasonCode": "8364",
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.5284113+01:00",
+                  "CardId": "e878745d-c7d9-4b87-b1a6-55d15b435c42",
+                  "AccountId": "e31358c0-aacf-4174-8590-9755f8ad2820",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible or not found",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/card/{cardId}/recent": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get the maximum number of most recent transactions for a particular card identified by its Zempler identifier.",
+        "operationId": "GEThistory/card/{cardId}/recent?maxTransactions={maxTransactions}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "path",
+            "description": "The Zempler identifier of Card.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "maxTransactions",
+            "in": "query",
+            "description": "The maximum number of transactions to return. E.g. maxTransactions=5 - the last 5 transactions created with the card(s) of the Account are returned.",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of most recent posted transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.PostedTransaction" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "RunningBalance": {
+                    "Amount": 1350.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-27T15:17:43.5284113+01:00",
+                  "ReasonCode": "2402",
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.5284113+01:00",
+                  "CardId": "1c0f9367-c2ff-4fe4-8635-e6503947205c",
+                  "AccountId": "15acdaa8-da02-48fe-9d86-de74db14e1e9",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS - CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XYZ Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "RunningBalance": {
+                    "Amount": 1400.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-29T15:17:43.5284113+01:00",
+                  "ReasonCode": "8364",
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.5284113+01:00",
+                  "CardId": "04e20265-f82b-4fae-baf2-e05b47a29a11",
+                  "AccountId": "1311ef8b-6aa7-42f1-a079-ce1ca7aa12e0",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The card is not accessible or not found",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/account/{sortCode}/{accountNumber}/pending": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get the pending transactions of an account identified by its Clearing Info (Sort Code, Account Number).",
+        "operationId": "GEThistory/account/{sortCode}/{accountNumber}/pending",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "sortCode",
+            "in": "path",
+            "description": "The Sort Code of the account.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "description": "The Account Number of the account",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of pending transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.PendingTransaction" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.5354111+01:00",
+                  "CardId": "cb469cd5-42e3-49fb-acc2-2494211e54d8",
+                  "AccountId": "84102e66-45fd-4ef9-9d8d-771256b6b33e",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example pending transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS-CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XZY Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.5354111+01:00",
+                  "CardId": "88c7f614-8f6d-4086-8e12-417c934aa322",
+                  "AccountId": "aaad9796-f7f8-4f34-8875-46e569172a2b",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example pending transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245,
+                    "Platform": { "Name": "FIS-CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible.",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/account/{accountId}/pending": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get the pending transactions of an account identified by its Zempler identifier.",
+        "operationId": "GEThistory/account/{accountId}/pending",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The Zempler identifier of the account.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of pending transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.PendingTransaction" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.5364115+01:00",
+                  "CardId": "04da0be1-2da9-41c6-a15d-9dc2d437643b",
+                  "AccountId": "b82ff71a-6530-4d6a-9422-5e1d0e8f992a",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example pending transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS-CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XZY Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.5364115+01:00",
+                  "CardId": "3f231401-6cf7-4208-8140-75fa63b16e23",
+                  "AccountId": "b750871a-2fda-416b-9247-971a79dd5499",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example pending transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245,
+                    "Platform": { "Name": "FIS-CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible.",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/card/{cardId}/pending": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get the pending transactions made by a specific card.",
+        "operationId": "GEThistory/card/{cardId}/pending",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "path",
+            "description": "The Zempler identifier of the card.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of pending transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.PendingTransaction" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.5364115+01:00",
+                  "CardId": "ddf3e3c7-28a1-4383-9611-0678d0b016de",
+                  "AccountId": "73df89d3-1d9d-44b3-846c-0245610cb4c4",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example pending transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS-CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XZY Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.5364115+01:00",
+                  "CardId": "032bd55f-04d9-42c4-beaf-720c765f0aff",
+                  "AccountId": "9a7ebb74-eb4f-484c-bcd7-7b99d3e68ae5",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example pending transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245,
+                    "Platform": { "Name": "FIS-CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The card is not accessible.",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/account/{sortCode}/{accountNumber}/all": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get all (pending and posted) transactions for all cards of the account identified by its Sort Code and Account Number.",
+        "operationId": "GEThistory/account/{sortCode}/{accountNumber}/all?fromDate={fromDate}&toDate={toDate}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "sortCode",
+            "in": "path",
+            "description": "The Sort Code of the account.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountNumber",
+            "in": "path",
+            "description": "The Account Number of the account",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "description": "Queried transactions are on or after this date. Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "description": "Queried transactions are on or before this date (i.e. transaction date &lt;= toDate). Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of posted and pending transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.TransactionBase" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "RunningBalance": {
+                    "Amount": 1350.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-27T15:17:43.5374115+01:00",
+                  "ReasonCode": "2402",
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.5374115+01:00",
+                  "CardId": "16ab6f63-52a4-442c-8e19-ffde96e57be4",
+                  "AccountId": "2a950029-fe23-44ec-9121-3f6eca1c7f3e",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS - CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XYZ Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.5374115+01:00",
+                  "CardId": "162562e1-c6d9-4624-8dc5-e6b4a3d24417",
+                  "AccountId": "0996d745-69eb-4686-827e-597511433d0c",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example pending transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "500": {
+            "description": "The account is not accessible.",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/account/{accountId}/all": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get all (pending and posted) transactions for all cards of the account identified by its Zempler identifier.",
+        "operationId": "GEThistory/account/{accountId}/all?fromDate={fromDate}&toDate={toDate}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "The Zempler identifier of the Account.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "description": "Queried transactions are on or after this date. Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "description": "Queried transactions are on or before this date (i.e. transaction date &lt;= toDate). Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of pending and posted transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.TransactionBase" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "RunningBalance": {
+                    "Amount": 1350.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-27T15:17:43.5384119+01:00",
+                  "ReasonCode": "2402",
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.5384119+01:00",
+                  "CardId": "c5ca96ad-cfe8-4b63-a9a4-a80804295dc8",
+                  "AccountId": "068ec5c7-4c07-4483-b325-a81854418842",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS - CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XYZ Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.5384119+01:00",
+                  "CardId": "304a95e7-023a-45dd-a0c7-0f7898104990",
+                  "AccountId": "186ef72e-e308-4884-97f9-5266f5a71635",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example pending transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The account is not accessible.",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/card/{cardId}/all": {
+      "get": {
+        "tags": [ "Operations Transactions - Transaction History" ],
+        "summary": "Get all (pending and posted) transactions for a specific card.",
+        "operationId": "GEThistory/card/{cardId}/all?fromDate={fromDate}&toDate={toDate}",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "path",
+            "description": "The Zempler identifier of the Card.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "description": "Queried transactions are on or after this date. Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "description": "Queried transactions are on or before this date (i.e. transaction date &lt;= toDate). Date must be in the format of yyyy-MM-dd.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Bypasses a specified number of elements in a sequence and then returns the remaining elements.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "Returns a specified number of contiguous elements from the start of a sequence.",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of pending and posted transactions.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.TransactionBase" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "RunningBalance": {
+                    "Amount": 1350.25,
+                    "CurrencyCode": "GBP"
+                  },
+                  "SettledDate": "2020-06-27T15:17:43.5384119+01:00",
+                  "ReasonCode": "2402",
+                  "TransactionProcessedDateTime": "2020-06-27T15:17:43.5384119+01:00",
+                  "CardId": "9c6ef7c4-d70d-4647-84bb-dd3a9ca2969a",
+                  "AccountId": "b7152099-2719-4d0d-82b6-1c32b441139d",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example posted transaction",
+                  "TransactionCode": 10,
+                  "IsDebitTransaction": true,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 120.50,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 8872345,
+                    "SourceTransactionLogId": 5134124,
+                    "Platform": { "Name": "FIS - CORTEX" }
+                  },
+                  "TerminalInfo": {
+                    "Location": "XYZ Store, XYZ Centre",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "4111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "0742",
+                    "Description": "Veterinary Services"
+                  },
+                  "Id": 9874293
+                },
+                {
+                  "TransactionProcessedDateTime": "2020-06-29T15:17:43.5384119+01:00",
+                  "CardId": "7491f85e-cd2e-4bae-8df2-01f1c4dd91be",
+                  "AccountId": "177ed7e9-4c00-43fe-bbc6-80d6d4d702f2",
+                  "CardEndingIn": "2434",
+                  "StatementDescription": "This is an example pending transaction",
+                  "TransactionCode": 14,
+                  "IsDebitTransaction": false,
+                  "TransactionAmount": {
+                    "BillingAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "RequestedAmount": {
+                      "Amount": 50.00,
+                      "CurrencyCode": "GBP"
+                    },
+                    "ConversionRate": 1.0
+                  },
+                  "SourceSystemInfo": {
+                    "SourceTransactionId": 135154,
+                    "SourceTransactionLogId": 72456245
+                  },
+                  "TerminalInfo": {
+                    "Location": "ATM",
+                    "Street": "XYZ Lane",
+                    "City": "London",
+                    "CountryCode": "GB",
+                    "PostCode": "PC1 AAA",
+                    "CardAcceptorId": "1111",
+                    "Latitude": 51.508475,
+                    "Longitude": -0.125613,
+                    "Category": "Shopping"
+                  },
+                  "MerchantInfo": {
+                    "CategoryCode": "4225",
+                    "Description": "Warehousing, Public"
+                  },
+                  "Id": 23423425
+                }
+              ]
+            }
+          },
+          "204": { "description": "No transaction found." },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "403": {
+            "description": "The card is not accessible.",
+            "schema": { "type": "NoReadTransactionPermissionException" }
+          }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/history/batch/posted": {
+      "post": {
+        "tags": [ "Operations Transactions - Transaction History - Batch" ],
+        "summary": "Get the posted transactions of the listed Accounts and Cards. Accounts can be identified by Sort Code/Account Number, or their Zempler account identifier. \r\nCards are identified by their Zempler Card Id.",
+        "operationId": "POSThistory/batch/posted?date={date}",
+        "consumes": [ "application/json", "text/json", "application/x-www-form-urlencoded" ],
+        "produces": [ "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "description": "Contains the list of account and/or card identifiers. \r\n            Precedence order of processing the identifiers: Card Id is used, if provided. Otherwise Account Id is used. If neither Card Id nor Account Id is provided\r\n            Sort Code and Account Number are used. If Currency Code is not provided, then it's ignored.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Descriptors.TransactionBatchDescriptorItem" }
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Queried transactions are on this date. Date must be in the format of yyyy-MM-dd and cannot exceed yesterday's date.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Posted transactions of the listed accounts/cards.",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Descriptors.TransactionBatchResponseDescriptorItem" }
+            },
+            "examples": {
+              "application/json": [
+                {
+                  "StatusCode": 200,
+                  "Message": "OK",
+                  "AccountId": "71e07fe8-9dcb-45ca-99b5-c454370cad3b",
+                  "Transactions": [
+                    {
+                      "RunningBalance": {
+                        "Amount": 1000.0,
+                        "CurrencyCode": "GBP"
+                      },
+                      "SettledDate": "2020-03-11T15:17:43.5454117+00:00",
+                      "ReasonCode": "2402",
+                      "TransactionProcessedDateTime": "2020-03-11T15:17:43.5454117+00:00",
+                      "CardId": "7cf6bdd9-481b-48f8-9db3-b2ce84795556",
+                      "AccountId": "1fc28f50-89eb-40bc-8306-dfb034557cbc",
+                      "CardEndingIn": "2434",
+                      "StatementDescription": "This is an example posted transaction",
+                      "TransactionCode": 10,
+                      "IsDebitTransaction": true,
+                      "TransactionAmount": {
+                        "BillingAmount": {
+                          "Amount": 120.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "RequestedAmount": {
+                          "Amount": 120.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "ConversionRate": 1.0
+                      },
+                      "SourceSystemInfo": {
+                        "SourceTransactionId": 8872345,
+                        "SourceTransactionLogId": 5134124,
+                        "Platform": { "Name": "FIS - CORTEX" }
+                      },
+                      "TerminalInfo": {
+                        "Location": "XYZ Store, XYZ Centre",
+                        "Street": "XZY Lane",
+                        "City": "London",
+                        "CountryCode": "GB",
+                        "PostCode": "PC1 AAA",
+                        "CardAcceptorId": "4111",
+                        "Latitude": 51.508475,
+                        "Longitude": -0.125613,
+                        "Category": "Shopping"
+                      },
+                      "MerchantInfo": {
+                        "CategoryCode": "0742",
+                        "Description": "Veterinary Services"
+                      },
+                      "Id": 9874293
+                    },
+                    {
+                      "RunningBalance": {
+                        "Amount": 1010.0,
+                        "CurrencyCode": "GBP"
+                      },
+                      "SettledDate": "2020-03-12T15:17:43.5454117+00:00",
+                      "ReasonCode": "4425",
+                      "TransactionProcessedDateTime": "2020-03-12T15:17:43.5454117+00:00",
+                      "CardId": "b2369152-fe68-4917-88f2-1a8cb95be9e1",
+                      "AccountId": "5aa71719-ff35-4a18-af2a-2e03ad07329e",
+                      "CardEndingIn": "1134",
+                      "StatementDescription": "This is an example posted transaction",
+                      "TransactionCode": 15,
+                      "IsDebitTransaction": false,
+                      "TransactionAmount": {
+                        "BillingAmount": {
+                          "Amount": 121.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "RequestedAmount": {
+                          "Amount": 121.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "ConversionRate": 1.0
+                      },
+                      "SourceSystemInfo": {
+                        "SourceTransactionId": 8872346,
+                        "SourceTransactionLogId": 5134125,
+                        "Platform": { "Name": "FIS - CORTEX" }
+                      },
+                      "TerminalInfo": {
+                        "Location": "XYZ Store, XYZ Centre",
+                        "Street": "XZY Lane",
+                        "City": "London",
+                        "CountryCode": "GB",
+                        "PostCode": "PC1 AAA",
+                        "CardAcceptorId": "4111",
+                        "Latitude": 51.508475,
+                        "Longitude": -0.125613,
+                        "Category": "Shopping"
+                      },
+                      "MerchantInfo": {
+                        "CategoryCode": "0742",
+                        "Description": "Veterinary Services"
+                      },
+                      "Id": 9874294
+                    },
+                    {
+                      "RunningBalance": {
+                        "Amount": 1020.0,
+                        "CurrencyCode": "GBP"
+                      },
+                      "SettledDate": "2020-03-13T15:17:43.5454117+00:00",
+                      "ReasonCode": "2402",
+                      "TransactionProcessedDateTime": "2020-03-13T15:17:43.5454117+00:00",
+                      "CardId": "03bd9c7c-23e5-42ed-8e58-8dbf56826874",
+                      "AccountId": "b3567124-9e12-455b-b4ea-f75815f55d7e",
+                      "CardEndingIn": "2434",
+                      "StatementDescription": "This is an example posted transaction",
+                      "TransactionCode": 10,
+                      "IsDebitTransaction": true,
+                      "TransactionAmount": {
+                        "BillingAmount": {
+                          "Amount": 122.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "RequestedAmount": {
+                          "Amount": 122.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "ConversionRate": 1.0
+                      },
+                      "SourceSystemInfo": {
+                        "SourceTransactionId": 8872347,
+                        "SourceTransactionLogId": 5134126,
+                        "Platform": { "Name": "FIS - CORTEX" }
+                      },
+                      "TerminalInfo": {
+                        "Location": "XYZ Store, XYZ Centre",
+                        "Street": "XZY Lane",
+                        "City": "London",
+                        "CountryCode": "GB",
+                        "PostCode": "PC1 AAA",
+                        "CardAcceptorId": "4111",
+                        "Latitude": 51.508475,
+                        "Longitude": -0.125613,
+                        "Category": "Shopping"
+                      },
+                      "MerchantInfo": {
+                        "CategoryCode": "0742",
+                        "Description": "Veterinary Services"
+                      },
+                      "Id": 9874295
+                    }
+                  ]
+                },
+                {
+                  "StatusCode": 403,
+                  "Message": "The account is not accessible.",
+                  "AccountId": "0a86ec13-f257-4028-bcaf-f8112e95f791",
+                  "Transactions": []
+                },
+                {
+                  "StatusCode": 403,
+                  "Message": "The account is not accessible.",
+                  "SortCode": "ABCDEF",
+                  "AccountNumber": "ABCDEFGH",
+                  "Transactions": []
+                },
+                {
+                  "StatusCode": 200,
+                  "Message": "OK",
+                  "CardId": "71cfef83-92b0-4132-85ab-799a1bf04b36",
+                  "Transactions": [
+                    {
+                      "RunningBalance": {
+                        "Amount": 1000.0,
+                        "CurrencyCode": "GBP"
+                      },
+                      "SettledDate": "2020-03-11T15:17:43.5454117+00:00",
+                      "ReasonCode": "2402",
+                      "TransactionProcessedDateTime": "2020-03-11T15:17:43.5454117+00:00",
+                      "CardId": "89dfb826-9612-43fb-b2d5-0a95a3b8cffc",
+                      "AccountId": "1f17adf6-e8aa-4963-9347-5614b8b06d5a",
+                      "CardEndingIn": "2434",
+                      "StatementDescription": "This is an example posted transaction",
+                      "TransactionCode": 10,
+                      "IsDebitTransaction": true,
+                      "TransactionAmount": {
+                        "BillingAmount": {
+                          "Amount": 120.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "RequestedAmount": {
+                          "Amount": 120.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "ConversionRate": 1.0
+                      },
+                      "SourceSystemInfo": {
+                        "SourceTransactionId": 5552345,
+                        "SourceTransactionLogId": 5134124
+                      },
+                      "TerminalInfo": {
+                        "Location": "XYZ Store, XYZ Centre",
+                        "Street": "XZY Lane",
+                        "City": "London",
+                        "CountryCode": "GB",
+                        "PostCode": "PC1 AAA",
+                        "CardAcceptorId": "4111",
+                        "Latitude": 51.508475,
+                        "Longitude": -0.125613,
+                        "Category": "Shopping"
+                      },
+                      "MerchantInfo": {
+                        "CategoryCode": "0742",
+                        "Description": "Veterinary Services"
+                      },
+                      "Id": 5554293
+                    },
+                    {
+                      "RunningBalance": {
+                        "Amount": 1010.0,
+                        "CurrencyCode": "GBP"
+                      },
+                      "SettledDate": "2020-03-12T15:17:43.5454117+00:00",
+                      "ReasonCode": "4425",
+                      "TransactionProcessedDateTime": "2020-03-12T15:17:43.5454117+00:00",
+                      "CardId": "ea2c5bd0-a282-4a97-8a75-fe06738583e1",
+                      "AccountId": "4d22ce70-0c82-4782-b4d6-ef1e163b4d4a",
+                      "CardEndingIn": "1134",
+                      "StatementDescription": "This is an example posted transaction",
+                      "TransactionCode": 15,
+                      "IsDebitTransaction": false,
+                      "TransactionAmount": {
+                        "BillingAmount": {
+                          "Amount": 121.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "RequestedAmount": {
+                          "Amount": 121.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "ConversionRate": 1.0
+                      },
+                      "SourceSystemInfo": {
+                        "SourceTransactionId": 5552346,
+                        "SourceTransactionLogId": 5134125
+                      },
+                      "TerminalInfo": {
+                        "Location": "XYZ Store, XYZ Centre",
+                        "Street": "XZY Lane",
+                        "City": "London",
+                        "CountryCode": "GB",
+                        "PostCode": "PC1 AAA",
+                        "CardAcceptorId": "4111",
+                        "Latitude": 51.508475,
+                        "Longitude": -0.125613,
+                        "Category": "Shopping"
+                      },
+                      "MerchantInfo": {
+                        "CategoryCode": "0742",
+                        "Description": "Veterinary Services"
+                      },
+                      "Id": 5554294
+                    },
+                    {
+                      "RunningBalance": {
+                        "Amount": 1020.0,
+                        "CurrencyCode": "GBP"
+                      },
+                      "SettledDate": "2020-03-13T15:17:43.5454117+00:00",
+                      "ReasonCode": "2402",
+                      "TransactionProcessedDateTime": "2020-03-13T15:17:43.5454117+00:00",
+                      "CardId": "f4b268bb-f72a-4bb7-98c0-aa8fdcae1d28",
+                      "AccountId": "0c80a42c-524b-4bb4-ac07-467f7777f6fe",
+                      "CardEndingIn": "2434",
+                      "StatementDescription": "This is an example posted transaction",
+                      "TransactionCode": 10,
+                      "IsDebitTransaction": true,
+                      "TransactionAmount": {
+                        "BillingAmount": {
+                          "Amount": 122.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "RequestedAmount": {
+                          "Amount": 122.50,
+                          "CurrencyCode": "GBP"
+                        },
+                        "ConversionRate": 1.0
+                      },
+                      "SourceSystemInfo": {
+                        "SourceTransactionId": 5552347,
+                        "SourceTransactionLogId": 5134126
+                      },
+                      "TerminalInfo": {
+                        "Location": "XYZ Store, XYZ Centre",
+                        "Street": "XZY Lane",
+                        "City": "London",
+                        "CountryCode": "GB",
+                        "PostCode": "PC1 AAA",
+                        "CardAcceptorId": "4111",
+                        "Latitude": 51.508475,
+                        "Longitude": -0.125613,
+                        "Category": "Shopping"
+                      },
+                      "MerchantInfo": {
+                        "CategoryCode": "0742",
+                        "Description": "Veterinary Services"
+                      },
+                      "Id": 5554295
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "400": { "description": "Invalid input parameter." },
+          "401": {
+            "description": "Authentication required.",
+            "schema": { "type": "AuthenticationRequiredException" }
+          },
+          "427": { "description": "Process has not been completed." }
+        },
+        "security": [ { "oauth2": [ "aps_profile", "applications", "accounts", "payments", "eligibility" ] } ]
+      }
+    },
+    "/info/version": {
+      "get": {
+        "tags": [ "Operations Transactions - Service Information" ],
+        "operationId": "GETinfo/version",
+        "consumes": [],
+        "produces": [ "application/json", "text/json" ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": { "type": "object" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LEAPS.Transactions.Contracts.Domain.Entities.PostedTransaction": {
+      "description": "A transaction is “posted” to the customer’s account when it is debited or credited against the account. \r\n            Posted transactions are also called as settled, or completed, or cleared transaction.",
+      "type": "object",
+      "properties": {
+        "runningBalance": {
+          "$ref": "#/definitions/System.Nullable[LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue]",
+          "description": "The balance after the transaction is carried out. \r\nFor example, the balance is £150 and there is a debit transaction for £30. A new transaction is created\r\nwith RunningBalance £120."
+        },
+        "settledDate": {
+          "format": "date-time",
+          "description": "The date when the when the transaction has been processed in the Source system.",
+          "type": "string"
+        },
+        "reasonCode": {
+          "description": "The reason code of creating the (fee or balance adjustment) transaction. \r\nIf provided by FIS, it specifies the type of the fee for which the transaction is created.\r\nIf provided by APS, it specifies the reason of creating the Balance Adjustment transaction.",
+          "type": "string"
+        },
+        "transactionProcessedDateTime": {
+          "format": "date-time",
+          "description": "The date and time when the transaction was processed by the Source system(e.g.FIS).\r\nIt was nullable because CTXDATELOCAL and CTXTIMELOCAL (of which TransactionProcessedDateTime \r\nis composed of) was introduced only in January 2009.",
+          "type": "string"
+        },
+        "cardId": {
+          "format": "uuid",
+          "description": "The internal primary key of the Card entity.\r\nCard Id is used to identify the card with which the transaction has been made.",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "accountId": {
+          "format": "uuid",
+          "description": "The Zempler identifier of the Account the card (with which the transaction was created) belongs to.\r\nThis Id is used for returning results for bach queries (so that it will be obvious which account the transactions are returned to).",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "cardEndingIn": {
+          "description": "The last 4 digits of the card number.",
+          "type": "string"
+        },
+        "statementDescription": {
+          "description": "The description of the transcation.",
+          "type": "string"
+        },
+        "transactionCode": {
+          "format": "int32",
+          "description": "Transaction Code indicating the type of transaction. Only the code is stored, look up table can be added later, if needed.",
+          "type": "integer"
+        },
+        "isDebitTransaction": {
+          "description": "If true, the transaction is a debit transaction. Otherwise, it's a credit transaction.",
+          "type": "boolean"
+        },
+        "transactionAmount": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.TransactionAmount",
+          "description": "Contains information about the transactions' amount in the currency of the transaction as well as in the currency of the account."
+        },
+        "sourceSystemInfo": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.SourceSystemInfo",
+          "description": "Information about the source system from which the transaction was loaded to LEAPS.\r\nHaving this information ensures the linkage between LEAPS and the source system."
+        },
+        "terminalInfo": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.TerminalInfo",
+          "description": "Information about the terminal the transaction is created on."
+        },
+        "merchantInfo": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.MerchantInfo",
+          "description": "Information about the merchant at which the transaction has been created."
+        },
+        "id": {
+          "format": "int64",
+          "type": "integer"
+        }
+      }
+    },
+    "System.Nullable[LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue]": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "format": "double",
+          "type": "number"
+        },
+        "currencyCode": { "type": "string" }
+      }
+    },
+    "LEAPS.Transactions.Contracts.Domain.ValueObjects.TransactionAmount": {
+      "description": "TransactionAmount value object contains information about the transactions' amount in the currency of the transaction as well as in the currency of the account.",
+      "type": "object",
+      "properties": {
+        "billingAmount": {
+          "$ref": "#/definitions/LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue",
+          "description": "The amount of the transaction billed (for financials) or blocked (for authorisations) to the cardholder account, expressed in the account currency."
+        },
+        "requestedAmount": {
+          "$ref": "#/definitions/LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue",
+          "description": "The value of the transaction requested by the cardholder, expressed in the currency of the transaction"
+        },
+        "conversionRate": {
+          "format": "double",
+          "description": "The conversion rate used to calculate the billing amount from the transaction amount.",
+          "type": "number"
+        }
+      }
+    },
+    "LEAPS.Transactions.Contracts.Domain.ValueObjects.SourceSystemInfo": {
+      "description": "This value object stores information about the system in which the transaction has been captured, \r\nso that it is possible to back-link the transaction in LEAPS to the transaction captured in the source system.",
+      "type": "object",
+      "properties": {
+        "sourceTransactionId": {
+          "format": "int64",
+          "description": "Unique identifier of the transaction in the Source system.",
+          "type": "integer"
+        },
+        "sourceTransactionLogId": {
+          "format": "int64",
+          "description": "Identifier in the Source system to sort the transactions. \r\nIf a transaction is consists of multiple items(e.g.the posted transaction, related fee, exchange rate), all these related transactions will have the same TransactionLogId\r\nApplicable to network-received transactions only.",
+          "type": "integer"
+        },
+        "platform": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.Platform",
+          "description": "Identifies the source system in which the transaction was captured (e.g. FIS - CORTEX, FIS - B2K)"
+        }
+      }
+    },
+    "LEAPS.Transactions.Contracts.Domain.ValueObjects.TerminalInfo": {
+      "description": "Provides information about the terminal on which the transaction has been carried out.",
+      "type": "object",
+      "properties": {
+        "location": {
+          "description": "Defines the site where the terminal is located. It can be a branch code or store name. \r\nUsed as a part of the cardholder statement. Also contains description of any issuer/processor \r\ntransactions applied to card holder accounts.",
+          "type": "string"
+        },
+        "street": {
+          "description": "Description of the terminal location. Can be used as a part of the cardholder statement.",
+          "type": "string"
+        },
+        "city": {
+          "description": "Can be used as a part of the cardholder statement.",
+          "type": "string"
+        },
+        "countryCode": {
+          "description": "ISO codes. Can be used as a part of the cardholder statement.",
+          "type": "string"
+        },
+        "postCode": {
+          "description": "Postcode of the area the terminal is located.",
+          "type": "string"
+        },
+        "cardAcceptorId": {
+          "description": "Card Acceptor Identifier is also known as Merchant Code. Can be used as a part of the cardholder statement.\r\nThe Card Acceptor ID is typically assigned for each store location uniquely identifying it.\r\nCard Acceptor Id and MCC are not unique, one merchant terminal can post multiple MCCs.",
+          "type": "string"
+        },
+        "latitude": {
+          "format": "double",
+          "description": "The latitude of the geo location of the terminal.",
+          "type": "number"
+        },
+        "longitude": {
+          "format": "double",
+          "description": "The longitude of the geo location of the terminal.",
+          "type": "number"
+        },
+        "category": {
+          "description": "It is a category representing the transaction type that can be edited (down the line) by the customer.\r\nFor example, \"Shopping\".",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Transactions.Contracts.Domain.ValueObjects.MerchantInfo": {
+      "description": "This value object stores information about the Merchant of the transaction.",
+      "type": "object",
+      "properties": {
+        "categoryCode": {
+          "description": "Merchant Catalogue Code, a.k.a. Card Acceptor Business Code. It's a four-digit number assigned to a business by an acquiring bank or institution when the business begins accepting Visa or MasterCard as a form of payment.\r\nMerchant category codes have been used to classify businesses by specific market segments. For example, a veterinary clinic would be assigned a merchant category code of 0742 for \"Veterinary Services.\"",
+          "type": "string"
+        },
+        "description": {
+          "description": "The description for a category code. For example, 0742 is for \"Veterinary Services.\"\r\nLook up in MerchantCategoryDescription table by CategoryCode.",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Shared.Contracts.Domain.Primitives.MonetaryValue": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "format": "double",
+          "type": "number"
+        },
+        "currencyCode": { "type": "string" }
+      }
+    },
+    "LEAPS.Transactions.Contracts.Domain.ValueObjects.Platform": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The unique name of the platform.",
+          "type": "string"
+        }
+      }
+    },
+    "LEAPS.Transactions.Contracts.Domain.Entities.TransactionBase": {
+      "description": "The base class of Transactions.",
+      "type": "object",
+      "properties": {
+        "transactionProcessedDateTime": {
+          "format": "date-time",
+          "description": "The date and time when the transaction was processed by the Source system(e.g.FIS).\r\nIt was nullable because CTXDATELOCAL and CTXTIMELOCAL (of which TransactionProcessedDateTime \r\nis composed of) was introduced only in January 2009.",
+          "type": "string"
+        },
+        "cardId": {
+          "format": "uuid",
+          "description": "The internal primary key of the Card entity.\r\nCard Id is used to identify the card with which the transaction has been made.",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "accountId": {
+          "format": "uuid",
+          "description": "The Zempler identifier of the Account the card (with which the transaction was created) belongs to.\r\nThis Id is used for returning results for bach queries (so that it will be obvious which account the transactions are returned to).",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "cardEndingIn": {
+          "description": "The last 4 digits of the card number.",
+          "type": "string"
+        },
+        "statementDescription": {
+          "description": "The description of the transcation.",
+          "type": "string"
+        },
+        "transactionCode": {
+          "format": "int32",
+          "description": "Transaction Code indicating the type of transaction. Only the code is stored, look up table can be added later, if needed.",
+          "type": "integer"
+        },
+        "isDebitTransaction": {
+          "description": "If true, the transaction is a debit transaction. Otherwise, it's a credit transaction.",
+          "type": "boolean"
+        },
+        "transactionAmount": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.TransactionAmount",
+          "description": "Contains information about the transactions' amount in the currency of the transaction as well as in the currency of the account."
+        },
+        "sourceSystemInfo": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.SourceSystemInfo",
+          "description": "Information about the source system from which the transaction was loaded to LEAPS.\r\nHaving this information ensures the linkage between LEAPS and the source system."
+        },
+        "terminalInfo": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.TerminalInfo",
+          "description": "Information about the terminal the transaction is created on."
+        },
+        "merchantInfo": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.MerchantInfo",
+          "description": "Information about the merchant at which the transaction has been created."
+        },
+        "id": {
+          "format": "int64",
+          "type": "integer"
+        }
+      }
+    },
+    "LEAPS.Transactions.Contracts.Domain.Entities.PendingTransaction": {
+      "description": "A transaction is “pending” when it has yet to post (clear) the customer’s account. These transactions may take several days to post. \r\nPending transactions don’t affect the Balance, but they adjust the Available Balance(Available to Spend).",
+      "type": "object",
+      "properties": {
+        "transactionProcessedDateTime": {
+          "format": "date-time",
+          "description": "The date and time when the transaction was processed by the Source system(e.g.FIS).\r\nIt was nullable because CTXDATELOCAL and CTXTIMELOCAL (of which TransactionProcessedDateTime \r\nis composed of) was introduced only in January 2009.",
+          "type": "string"
+        },
+        "cardId": {
+          "format": "uuid",
+          "description": "The internal primary key of the Card entity.\r\nCard Id is used to identify the card with which the transaction has been made.",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "accountId": {
+          "format": "uuid",
+          "description": "The Zempler identifier of the Account the card (with which the transaction was created) belongs to.\r\nThis Id is used for returning results for bach queries (so that it will be obvious which account the transactions are returned to).",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "cardEndingIn": {
+          "description": "The last 4 digits of the card number.",
+          "type": "string"
+        },
+        "statementDescription": {
+          "description": "The description of the transcation.",
+          "type": "string"
+        },
+        "transactionCode": {
+          "format": "int32",
+          "description": "Transaction Code indicating the type of transaction. Only the code is stored, look up table can be added later, if needed.",
+          "type": "integer"
+        },
+        "isDebitTransaction": {
+          "description": "If true, the transaction is a debit transaction. Otherwise, it's a credit transaction.",
+          "type": "boolean"
+        },
+        "transactionAmount": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.TransactionAmount",
+          "description": "Contains information about the transactions' amount in the currency of the transaction as well as in the currency of the account."
+        },
+        "sourceSystemInfo": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.SourceSystemInfo",
+          "description": "Information about the source system from which the transaction was loaded to LEAPS.\r\nHaving this information ensures the linkage between LEAPS and the source system."
+        },
+        "terminalInfo": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.TerminalInfo",
+          "description": "Information about the terminal the transaction is created on."
+        },
+        "merchantInfo": {
+          "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.ValueObjects.MerchantInfo",
+          "description": "Information about the merchant at which the transaction has been created."
+        },
+        "id": {
+          "format": "int64",
+          "type": "integer"
+        }
+      }
+    },
+    "LEAPS.Transactions.Contracts.Descriptors.TransactionBatchDescriptorItem": {
+      "type": "object",
+      "properties": {
+        "sortCode": {
+          "description": "The Sort Code of the Account",
+          "type": "string"
+        },
+        "accountNumber": {
+          "description": "The Account Number of the Account",
+          "type": "string"
+        },
+        "currencyCode": {
+          "description": "The ISO 4217 Currency Code of the Account. If not provided, ignored.",
+          "type": "string"
+        },
+        "accountId": {
+          "format": "uuid",
+          "description": "The unique Zempler identifier of the Account. If populated, it will be used to get the transactions, regardless whether other identifiers (e.g. Sort Code, Account Number, Card Id) are provided, or not.",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "cardId": {
+          "format": "uuid",
+          "description": "The unique Zempler identifier of the Card for which the transactions are queried. If Card Id is populated and Account Id is not, Card Id is used to get the transactions. If neither Account Id nor Card Id is provided, the Sort Code, Account Number, Currency Code are used to query the transactions.",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        }
+      }
+    },
+    "LEAPS.Transactions.Contracts.Descriptors.TransactionBatchResponseDescriptorItem": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "format": "int32",
+          "description": "The status code of fulfilling the transaction request for the particular account or card.\r\nFor example, 200",
+          "type": "integer"
+        },
+        "message": {
+          "description": "Details about the outcome of fulfilling the transaction request for a particular account.\r\nFor example, 'OK'",
+          "type": "string"
+        },
+        "accountId": {
+          "format": "uuid",
+          "description": "The Zempler identifier of the Account the transactions are requested for",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "cardId": {
+          "format": "uuid",
+          "description": "The Zempler identifier of the Card the transactions are requested for",
+          "type": "string",
+          "example": "00000000-0000-0000-0000-000000000000"
+        },
+        "sortCode": {
+          "description": "The Sort Code of the Account",
+          "type": "string"
+        },
+        "accountNumber": {
+          "description": "The Account Number of the Account",
+          "type": "string"
+        },
+        "transactions": {
+          "description": "Contains the list of transactions",
+          "type": "array",
+          "items": { "$ref": "#/definitions/LEAPS.Transactions.Contracts.Domain.Entities.TransactionBase" }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "description": "OAuth2 Client Credentials flow",
+      "flow": "application",
+      "authorizationUrl": "https://apisandbox.zempler.tech/identity/auth/connect/authorize",
+      "tokenUrl": "https://apisandbox.zempler.tech/identity/auth/connect/token",
+      "scopes": {
+        "aps_profile": "APS profile data.",
+        "applications": "Allow access to application API.",
+        "accounts": "Allow access to account and transaction data on behalf of the client.",
+        "payments": "Allow access to payments and payment submissions data.",
+        "eligibility": "Allow access to eligibility API."
+      }
+    }
+  }
+}

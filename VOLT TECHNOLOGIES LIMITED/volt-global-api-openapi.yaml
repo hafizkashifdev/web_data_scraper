@@ -1,0 +1,3092 @@
+openapi: 3.1.0
+x-stoplight:
+  id: 1pnky2sai19io
+info:
+  version: 2024.12.09
+  title: 'Real-time payments, everywhere.'
+  description: |-
+    Join the real-time revolution! Give your customers a faster, easier and safer way to pay. Volt has developed a REST API for merchants, allowing you to offer the option to use Open Banking payments on your online checkout.
+
+    ## API idempotency 
+
+    Each `POST` request creating a resource (for example a payment) requires to send a unique idempotency key. It is included in the `Idempotency-Key` HTTP header. Idempotency key helps prevent duplicates in your `POST` requests. We recommend using an **UUID** for the key, however you may use any other unique identifier you choose. 
+
+    ##### Preventing duplicates 
+    If we have already processed the request and you send a request using the same idempotency key, it will fail with an error, returning a ```409 Conflict``` response. 
+
+    ## Case-sensitivity
+    All properties/keys within request's/response's payload are case-sensitive.
+
+    HTTP headers' names are case-insensitive.
+
+    ## API base URL
+    **Sandbox: [https://gateway.sandbox.volt.io]()**
+
+    **Production: [https://gateway.volt.io]()**
+  contact:
+    email: support@volt.io
+    name: Volt Support
+    url: 'https://www.volt.io/contact/'
+servers:
+  - url: 'https://gateway.sandbox.volt.io'
+    description: Sandbox
+  - url: 'https://gateway.volt.io'
+    description: Production
+paths:
+  /oauth:
+    post:
+      tags:
+        - Authenticating with the API
+      summary: Authenticate
+      description: |
+        We use the industry-standard oAuth2 authentication to secure our API.   
+
+        ### Information you'll need
+        - Your **Client ID** and **Client Secret** (from the application you created in Fuzebox).
+        - Your **API username** and **password** (from the merchant credentials section in Fuzebox).
+
+        Step-by-step instructions on how to authenticate are available in our [integration guides](https://docs.volt.io/global-api-payment-processing/how-api-works/api-authentication/) area.
+      operationId: post-oauth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - grant_type
+                - client_id
+                - client_secret
+                - username
+                - password
+              properties:
+                grant_type:
+                  description: Grant type **must** be `password`.
+                  type: string
+                  example: password
+                  enum:
+                    - password
+                client_id:
+                  type: string
+                  description: Client identifier from the application created in Fuzebox.
+                  format: uuid
+                  example: 59280aee-6efd-48c2-b85a-7c315b885374
+                client_secret:
+                  type: string
+                  description: Client secret from the application created in Fuzebox.
+                  format: uuid
+                  example: 384f286f-4e89-4c93-b1d0-41f288fbc00c
+                username:
+                  type: string
+                  description: API username from merchant credentials created in Fuzebox.
+                  format: email
+                  example: john@example.com
+                password:
+                  type: string
+                  description: API password from merchant credentials created in Fuzebox.
+                  example: myverystrongandlongpassword
+      responses:
+        '200':
+          description: |
+            **OK** - Successful login attempt, returning an access token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: Access token (bearer).
+                    examples:
+                      - eyJ0eXAiOi...
+                  token_type:
+                    type: string
+                    description: Type of the token.
+                    default: Bearer
+                  expires_in:
+                    type: integer
+                    description: 'Token''s expiration time, in minutes.'
+                    examples:
+                      - 86400
+                  refresh_token:
+                    type: string
+                    description: Refresh token. Can be used to refresh access token without the need to re-authenticate.
+                    examples:
+                      - 50679c5db61d63b107273fa11a666a09fc7ae28
+        '401':
+          description: |
+            **Unauthorized** - Your credentials were invalid. It may be that the token you've used has expired. Try re-authenticating with valid or updated credentials and retry this request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    x-stoplight:
+                      id: wbywmfijh3xc9
+                    default: 401
+                    description: Error code.
+                  message:
+                    type: string
+                    x-stoplight:
+                      id: 7gak4clem84g4
+                    example: 'Bad credentials, please verify your credentials are correctly set'
+                    description: Error message.
+      security:
+        - oauth: []
+      servers:
+        - url: 'https://gateway.sandbox.volt.io'
+          description: SANDBOX
+        - url: 'https://gateway.volt.io'
+          description: PRODUCTION
+      x-stoplight:
+        id: rii29k164ute0
+  /institutions:
+    get:
+      tags:
+        - Institutions
+      summary: Get institutions' list
+      operationId: get-institutions
+      parameters:
+        - $ref: '#/components/parameters/X-Volt-Api-Version'
+        - $ref: '#/components/parameters/X-Volt-Initiation-Channel'
+        - name: country
+          in: query
+          description: Filter for country code (ISO 3166 alpha-2 format) of the payer.
+          required: true
+          schema:
+            type: string
+            minLength: 2
+            maxLength: 2
+            example: DE
+        - name: currency
+          in: query
+          description: Filter for currency code (ISO 4217 format) institution must support.
+          required: true
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 3
+            example: EUR
+        - name: 'payments[active]'
+          in: query
+          description: Filter whether payments functionality in institution is active or not (temporary disabled).
+          schema:
+            type: boolean
+            example: true
+        - name: 'group[name]'
+          in: query
+          description: Filter institutions by group name.
+          schema:
+            type: string
+            example: Sparkasse
+        - schema:
+            type: string
+            format: uuid
+            example: 04e3ac49-2640-4749-b500-826de225a7cf
+          in: query
+          name: customerId
+          description: 'Filter institutions for a given customer. If query param is not provided, customer identifier is taken from the bearer token.'
+      responses:
+        '200':
+          $ref: '#/components/responses/Institutions-list'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - Bearer: []
+      servers:
+        - url: 'https://gateway.sandbox.volt.io'
+          description: SANDBOX
+        - url: 'https://gateway.volt.io'
+          description: PRODUCTION
+      x-stoplight:
+        id: 6zlcbn0chkvan
+      description: 'Get list of institutions. All the details can be used for creating a institution selection UI, along with required account identifiers inputs.'
+  '/institutions/{id}':
+    get:
+      tags:
+        - Institutions
+      summary: Get institution details
+      operationId: get-institution-id
+      parameters:
+        - $ref: '#/components/parameters/X-Volt-Api-Version'
+        - $ref: '#/components/parameters/X-Volt-Initiation-Channel'
+        - name: id
+          in: path
+          description: Identifier of the institution.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/Institution-details'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - Bearer: []
+      servers:
+        - url: 'https://gateway.sandbox.volt.io'
+          description: SANDBOX
+        - url: 'https://gateway.volt.io'
+          description: PRODUCTION
+      x-stoplight:
+        id: e363j1lo6lk8s
+      description: Fetch particular institution details.
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Identifier of the institution
+  /institutions/countries:
+    get:
+      tags:
+        - Institutions
+      summary: Get institutions' countries
+      operationId: get-institutions-countries
+      parameters:
+        - $ref: '#/components/parameters/X-Volt-Api-Version'
+        - $ref: '#/components/parameters/X-Volt-Initiation-Channel'
+        - name: 'institution[currency]'
+          in: query
+          description: Filter for currency code (ISO 4217 format) institution must support.
+          required: true
+          schema:
+            type: string
+        - name: 'institution[payments][active]'
+          in: query
+          description: Filter whether institution is active or not (temporary disabled) in terms of payments capability.
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: '**OK** - Successful request, returning list of insitutions'' countries.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    country:
+                      type: string
+                      description: Country code.
+                      minLength: 2
+                      maxLength: 2
+                      examples:
+                        - DE
+              examples:
+                Example 1:
+                  value:
+                    - country: DE
+                    - country: ES
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - Bearer: []
+      servers:
+        - url: 'https://gateway.sandbox.volt.io'
+          description: SANDBOX
+        - url: 'https://gateway.volt.io'
+          description: PRODUCTION
+      x-stoplight:
+        id: 6z1n3w8b1gd3c
+      description: Get list of countries in which institutions operate. This information is useful for generating a bank's country switcher.
+  /payments:
+    post:
+      tags:
+        - Payments
+      summary: Create payment
+      description: Create new payment request.
+      operationId: post-payments
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          description: 'It helps preventing duplicates in your `POST` requests. It is recommend using a **UUID** for the key, however you may use any other unique identifier you choose.'
+          required: true
+          schema:
+            type: string
+            maxLength: 64
+            example: 85136c79cbf9fe36bb9d05d0639c70c265c18d37
+        - $ref: '#/components/parameters/X-Volt-Api-Version'
+        - $ref: '#/components/parameters/X-Volt-Initiation-Channel'
+      requestBody:
+        $ref: '#/components/requestBodies/Create-one-off-payment'
+      responses:
+        '201':
+          $ref: '#/components/responses/Post-payment-details'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '422':
+          $ref: '#/components/responses/422'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - Bearer: []
+      servers:
+        - url: 'https://gateway.sandbox.volt.io'
+          description: SANDBOX
+        - url: 'https://gateway.volt.io'
+          description: PRODUCTION
+      x-stoplight:
+        id: aiguyfpej8n21
+  '/payments/{id}':
+    get:
+      tags:
+        - Payments
+      summary: Get payment details
+      operationId: get-payment
+      parameters:
+        - name: id
+          in: path
+          description: Identifier of the payment.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/Get-payment-details'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - Bearer: []
+      servers:
+        - url: 'https://gateway.sandbox.volt.io'
+          description: SANDBOX
+        - url: 'https://gateway.volt.io'
+          description: PRODUCTION
+      x-stoplight:
+        id: 7xsbs2jpelb09
+      description: Fetch particular payment details.
+    patch:
+      tags:
+        - Payments
+      summary: Update payment
+      operationId: patch-payment
+      parameters:
+        - name: id
+          in: path
+          description: Identifier of the payment.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                openBankingEU:
+                  type: object
+                  description: |-
+                    Definition used for processing transfer with the PSD directive (Open Banking). 
+
+                    Object is `allowed` if `paymentSystem` was set to `OPEN_BANKING_EU`.
+                  properties:
+                    institutionId:
+                      type: string
+                      x-stoplight:
+                        id: snhl1fniog6oj
+                      description: Identifier of the institution chosen to originate the transfer.
+                      format: uuid
+                    accountIdentifiers:
+                      type: object
+                      description: |-
+                        Source account identifiers.
+
+                        In most cases allowed/required identifiers depend on the institution. Institutions endpoint provide such information.
+                      properties:
+                        iban:
+                          type: string
+                          description: Account IBAN.
+                        psuId:
+                          type: string
+                          description: '`psu` identifier at the institution.'
+                        accountNumber:
+                          type: string
+                          description: Account number.
+                    redirectType:
+                      type: string
+                      description: |-
+                        Redirect type to use. This is specific for `ES` institutions.
+
+                        Allowed values should be provided by `GET` payment details request, or in response for `POST`/`PATCH` payment request.
+                openBankingUK:
+                  type: object
+                  x-stoplight:
+                    id: 61uqkf0iywo3m
+                  description: |-
+                    Definition used for processing transfer with the PSD directive (Open Banking). 
+
+                    Object is `allowed` if `paymentSystem` was set to `OPEN_BANKING_UK`.
+                  properties:
+                    institutionId:
+                      type: string
+                      x-stoplight:
+                        id: 5tai1geaov40q
+                      description: Identifier of the institution chosen to originate the transfer.
+                      format: uuid
+                nppPayToAU:
+                  type: object
+                  description: Definition used for processing transfer with the Australian NPP (New Payments Platform). Object is present in the response if paymentSystem is set to NPP_PAY_TO_AU.
+                  properties:
+                    accountIdentifiers:
+                      type: object
+                      properties:
+                        payId:
+                          description: Pay ID.
+                          type:
+                            - string
+                            - 'null'
+                        bsb:
+                          type:
+                            - string
+                            - 'null'
+                          description: BSB. 0nly digits are allowed. Must be paired with account number.
+                          minLength: 6
+                          maxLength: 6
+                        accountNumber:
+                          type:
+                            - string
+                            - 'null'
+                          description: Account number. 0nly digits are allowed. Must be paired with BSB.
+                          minLength: 8
+                          maxLength: 8
+                sca:
+                  type: object
+                  description: Information about strong customer authentication (SCA).
+                  properties:
+                    username:
+                      type: string
+                      description: Username used to authenticate with the institution. This field is `required` when `password` is provided.
+                    password:
+                      type: string
+                      description: Password used to authenticate with the institution. This field is `required` when `username` is provided.
+                    method:
+                      type: string
+                      description: |-
+                        SCA method.
+
+                        Allowed values should be provided by `GET` payment details request, or in response for `POST`/`PATCH` payment request.
+                    code:
+                      type: string
+                      description: SCA code.
+            examples:
+              Set redirect type:
+                value:
+                  openBankingEU:
+                    redirectType: web
+              Set `psu` IBAN:
+                value:
+                  openBankingEU:
+                    accountIdentifications:
+                      iban: DE75512108001245126199
+              Set SCA method:
+                value:
+                  sca:
+                    method: 258211#MANUEL
+      responses:
+        '200':
+          $ref: '#/components/responses/Patch-payment-details'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '409':
+          $ref: '#/components/responses/409'
+        '422':
+          $ref: '#/components/responses/422'
+        '424':
+          $ref: '#/components/responses/424'
+        '500':
+          $ref: '#/components/responses/500'
+      security:
+        - Bearer: []
+      servers:
+        - url: 'https://gateway.sandbox.volt.io'
+          description: SANDBOX
+        - url: 'https://gateway.volt.io'
+          description: PRODUCTION
+      x-stoplight:
+        id: pe552li9tjf55
+      description: Update payment request.
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Identifier of the payment
+      - $ref: '#/components/parameters/X-Volt-Api-Version'
+      - $ref: '#/components/parameters/X-Volt-Initiation-Channel'
+  '/payments/{id}/cancel':
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Identifier of the payment
+      - $ref: '#/components/parameters/X-Volt-Api-Version'
+      - in: header
+        name: X-Volt-Initiation-Channel
+        schema:
+          type: string
+          enum:
+            - api
+          example: api
+        description: Channel used for payment initiation flow.
+        required: true
+    post:
+      summary: Cancel payment
+      tags:
+        - Payments
+      responses:
+        '200':
+          $ref: '#/components/responses/Get-cancelled-payment-details'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+      operationId: cancel-payment
+      x-stoplight:
+        id: mmujhjyzb5pna
+      security:
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      description: Cancel payment request.
+  '/payments/{id}/name-match-score':
+    get:
+      summary: Get payment's name match score
+      tags:
+        - Payments
+      responses:
+        '200':
+          description: '**OK** - Name match score is successfully returned.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Name-match-score-response'
+              examples:
+                Example 1:
+                  value:
+                    invocationId: e9725468-0858-4dbb-af72-1e49c8254d68
+                    score: 0.89
+        '404':
+          $ref: '#/components/responses/404'
+        '409':
+          $ref: '#/components/responses/409'
+        '500':
+          $ref: '#/components/responses/500'
+      operationId: get-name-match-score
+      x-stoplight:
+        id: et26av68qjnbu
+      description: Return name match score for given payment.
+      security:
+        - Bearer: []
+      parameters:
+        - schema:
+            type: boolean
+            default: true
+          in: query
+          name: allowInitials
+          description: Allows for receiving an account holder name that contains an initial instead of a first name.
+          allowEmptyValue: true
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: Identifier of the payment
+tags:
+  - name: Authenticating with the API
+    description: |
+      Before using any endpoint in the Volt API, you'll need to authenticate using this endpoint. Upon successful authentication, we'll return an access code which you can use to access the rest of the API.
+  - name: Institutions
+    description: |
+      Build institutions' list.
+  - name: Payments
+    description: |
+      Create and process A2A payments.
+components:
+  requestBodies:
+    Create-one-off-payment:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - currency
+              - amount
+              - payer
+              - device
+              - paymentSystem
+            properties:
+              currency:
+                type: string
+                description: 'Currency in which the payment should be made, in ISO 4217 format (3 uppercase letters).'
+                minLength: 3
+                maxLength: 3
+                examples:
+                  - EUR
+              amount:
+                type: integer
+                description: 'The amount of the transaction in fractional unit (pence, cents etc).'
+                examples:
+                  - 10000
+                exclusiveMinimum: 0
+              paymentReference:
+                type: string
+                x-stoplight:
+                  id: fxqdlhj2iqykl
+                description: |-
+                  **Unique** reference for the payment from the partner's system. Reference must contain only alphanumeric characters.
+
+                  If value is not provided, it will be generated by Volt.
+                maxLength: 18
+                example: T1Qwerty
+              internalReference:
+                type: string
+                description: |-
+                  Identifier of the transaction in the partner's system. This field can contain up to 100 characters, including special ones.
+
+                  Despite field being `optional`, we recommend to set this value.
+                maxLength: 100
+                examples:
+                  - H35X48Y4FWOD6G3S
+              payer:
+                $ref: '#/components/schemas/Payer-request'
+                description: Information about the payer.
+              device:
+                $ref: '#/components/schemas/Device-request'
+                description: Device used to call the endpoint.
+              paymentSystem:
+                type: string
+                enum:
+                  - OPEN_BANKING_EU
+                  - OPEN_BANKING_UK
+                  - NPP_PAY_TO_AU
+                description: Payment system used to make a transfer.
+              openBankingEU:
+                $ref: '#/components/schemas/OpenBankingEU-request'
+                description: |-
+                  Definition used for processing transfer with the PSD directive (Open Banking).
+
+                  Object is `required` if `paymentSystem` is set to `OPEN_BANKING_EU`.
+              openBankingUK:
+                $ref: '#/components/schemas/OpenBankingUK-request'
+                description: |-
+                  Definition used for processing transfer with the PSD directive (Open Banking).
+
+                  Object is `required` if `paymentSystem` is set to `OPEN_BANKING_UK`.
+              nppPayToAU:
+                $ref: '#/components/schemas/NppPayToAU-request'
+                description: |-
+                  Definition used for processing transfer with the Australian NPP (New Payments Platform).
+
+                  Object is `required` if `paymentSystem` is set to `NPP_PAY_TO_AU`.
+              beneficiary:
+                $ref: '#/components/schemas/Beneficiary-request'
+                description: 'Only use these fields if you are approved by Volt for the dynamic beneficiary feature. Dynamic beneficiary allows you to initiate transfers to a different bank account per payment, within a pool of addresses pre-approved by Volt. The most common use case is initiating transfers to individual IBANs assigned to user wallets.'
+              communication:
+                $ref: '#/components/schemas/Communication-request'
+                description: |-
+                  Settings for establishing communication back to the partner.
+
+                  Object is `required` when `X-Volt-Initiation-Channel` is `api`.
+              displayInfo:
+                type: array
+                x-stoplight:
+                  id: 7j4tl6ui61lfd
+                maxItems: 5
+                description: Key-value pairs useful for passing some additional information to be displayed on checkout.
+                items:
+                  x-stoplight:
+                    id: 1gw5ammf9uvd6
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      x-stoplight:
+                        id: dv1rbrc6wfinf
+                      maxLength: 15
+                      description: Key name.
+                    value:
+                      type: string
+                      x-stoplight:
+                        id: f8zznhd1c5tg2
+                      maxLength: 15
+                      description: Value for given key.
+              termsAndConditionsAccepted:
+                type: boolean
+                description: |-
+                  Flag indicated that T&C has been presented to the payer and accepted by the payer. 
+
+                  This field is `required` when `X-Volt-Initiation-Channel` is `api`.
+
+                  If value is different than `true`, validation will fail.
+          examples:
+            Example 1:
+              value:
+                currency: EUR
+                amount: 10000
+                internalReference: H35X48Y4FWOD6G3S
+                payer:
+                  reference: JDOE-101
+                  firstName: John
+                  lastName: Doe
+                  organisationName: JD Holdings
+                  email: johndoe@example.com
+                device:
+                  ip: 192.168.0.1
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+                  fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+                paymentSystem: OPEN_BANKING_EU
+                openBankingEU:
+                  type: SERVICES
+                  institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+                  statementDescriptor: Black coffee - big
+                  validityPeriod: 1440
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                beneficiary:
+                  name: Jane Doe
+                  accountIdentifiers:
+                    iban: PL10105000997603123456789123
+                communication:
+                  notification:
+                    url: 'https://mywebsite.com/webhooks'
+                  return:
+                    urls:
+                      unified:
+                        url: 'https://mywebsite.com/payment'
+                      success:
+                        url: 'https://mywebsite.com/payment/success'
+                      failure:
+                        url: 'https://mywebsite.com/payment/failed'
+                      pending:
+                        url: 'https://mywebsite.com/payment/pending'
+                      cancel:
+                        url: 'https://mywebsite.com/payment/cancelled'
+                    queryString: id=xyz
+                displayInfo:
+                  - key: Product SKU
+                    value: 87ec73a0
+                termsAndConditionsAccepted: true
+  securitySchemes:
+    oauth:
+      type: oauth2
+      description: OAuth2 password grant - see the documentation in the oAuth2 Authentication section.
+      flows:
+        password:
+          refreshUrl: ''
+          tokenUrl: /oauth
+          scopes: {}
+    Bearer:
+      type: http
+      scheme: bearer
+  responses:
+    '400':
+      description: '**Bad request** - Request you sent is invalid or malformed. Response will contain a description of the actual problem.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - BAD_REQUEST
+                  - MISSING_HTTP_HEADER
+                  - INVALID_HTTP_HEADER
+                  - MALFORMED_PATH_PARAM
+                  - MISSING_QUERY_PARAM
+                  - INVALID_QUERY_PARAM
+                  - MALFORMED_QUERY_PARAM
+                  - CONFIGURATION_ERROR
+                description: Error code.
+              message:
+                type: string
+                description: Error message.
+                examples:
+                  - Missing "X-Volt-Initiation-Channel" HTTP header.
+          examples:
+            Example 1:
+              value:
+                code: MISSING_HTTP_HEADER
+                message: Missing "X-Volt-Initiation-Channel" HTTP header.
+    '401':
+      description: '**Unauthorized** - Your credentials were invalid. It may be that the token you''ve used has expired. Try re-authenticating with valid or updated credentials and retry this request.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code.
+                enum:
+                  - UNAUTHORISED
+              message:
+                type: string
+                description: Error message.
+                examples:
+                  - Unauthorised.
+    '403':
+      description: '**Access denied** - Although your credentials are correct, your access to this section of the API has been disabled or limited. Subsequent requests to this endpoint will not be processed.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code.
+                enum:
+                  - ACCESS_DENIED
+              message:
+                type: string
+                description: Error message.
+                examples:
+                  - Access denied.
+    '404':
+      description: '**Not found** - The resource that you are requesting cannot be found.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code.
+                enum:
+                  - RESOURCE_NOT_FOUND
+              message:
+                type: string
+                description: Error message.
+                examples:
+                  - Not found.
+    '409':
+      description: '**Conflict** - Modification of a resource is not possible, because current state of it does not allow it. Or `Idempotency-Key` was already used.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - CONFLICT
+                  - IDEMPOTENCY_CONFLICT
+                  - RESOURCE_NOT_MODIFIABLE
+                description: Error code.
+              message:
+                type: string
+                description: Error message.
+                examples:
+                  - Payment update is not allowed anymore.
+          examples:
+            Example 1:
+              value:
+                code: IDEMPOTENCY_CONFLICT
+                message: Idempontency key already used.
+    '422':
+      description: '**Unprocessable** - Request''s payload validation fails.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Error code.
+                enum:
+                  - VALIDATION_FAILURE
+              message:
+                type: string
+                description: Error message.
+                examples:
+                  - Validation failed.
+              errors:
+                type: array
+                description: Array with validation errors.
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      description: |-
+                        Type (code) of the constaint that was violated.
+
+                        List of types can be found [here](https://docs.volt.io/global-api-payment-processing/how-api-works/error-handling/#validation-error-types).
+                      examples:
+                        - TOO_LONG
+                    propertyPath:
+                      type: string
+                      description: Path of the property in the request object that violated given constraint.
+                      examples:
+                        - psdEurope.accountIdentifications.iban
+                    message:
+                      type: string
+                      description: Human-readable message about constraint violation.
+                      examples:
+                        - IBAN must have a maximum of 36 characters
+    '424':
+      description: '**Failed dependency** - Request failed at the institution. It is mostly related with embedded flow and passing credentials to the institution.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                x-stoplight:
+                  id: 3ph1burhoyawp
+                type: string
+                enum:
+                  - FAILED_DEPENDENCY
+                  - UNAUTHORISED
+                  - RETRY_LIMIT_EXCEEDED
+                description: Error code.
+              message:
+                type: string
+                x-stoplight:
+                  id: m53w3z4ti07zz
+                description: Error message.
+          examples:
+            Example 1:
+              value:
+                code: UNAUTHORISED
+                message: Provided credentials to the institution are invalid.
+    '500':
+      description: '**Internal server error** - Something went wrong and request cannot be processed due to server error. Message will contain trace ID and timestamp, which allows to investigate what went wrong.'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - INTERNAL_SERVER_ERROR
+                description: Error code.
+              message:
+                type: string
+                examples:
+                  - 'Something went wrong. Please, contact support. TraceId: b8cfd344-093c-4b8c-8fd4-f0e406060c3c. Timestamp: 1723193467.'
+                description: Error message.
+    Post-payment-details:
+      description: '**Created** - The payment request was validated, created, and payment details returned.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Payment-response'
+          examples:
+            Processing (awaiting user redirect):
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                currency: EUR
+                amount: 10000
+                paymentReference: XV9840MK550AMKQ910
+                internalReference: H35X48Y4FWOD6G3S
+                paymentSystem: OPEN_BANKING_EU
+                openBankingEU:
+                  type: BILL
+                  institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+                  validityPeriod: 1440
+                  provider: Volt
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                payer:
+                  reference: JDOE-101
+                  firstName: John
+                  lastName: Doe
+                  organisationName: JD Holdings
+                  email: johndoe@example.com
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                sender:
+                  name: John Doe
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                beneficiary:
+                  name: Jane Doe
+                  accountIdentifiers:
+                    iban: PL10105000997603123456789123
+                device:
+                  ip: 192.168.0.1
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+                  fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+                status: NEW_PAYMENT
+                transferType: SWIFT
+                displayInfo:
+                  - key: Product SKU
+                    value: 87ec73a0
+                createdAt: '2024-04-15T15:52:01+00:00'
+                updatedAt: '2005-08-15T15:52:01+00:00'
+                paymentInitiationFlow:
+                  status: PROCESSING
+                  details:
+                    reason: AWAITING_USER_REDIRECT
+                    redirect:
+                      url: 'https://vo.lt/asqIs'
+                      directUrl: 'https://myBank.com/authorisation?code=xyz'
+            Waiting for user input (account identification required):
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                currency: EUR
+                amount: 10000
+                paymentReference: XV9840MK550AMKQ910
+                internalReference: H35X48Y4FWOD6G3S
+                paymentSystem: OPEN_BANKING_EU
+                openBankingEu:
+                  type: BILL
+                  institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+                  validityPeriod: 1440
+                  provider: Volt
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                payer:
+                  name: John Doe
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                beneficiary:
+                  name: Jane Doe
+                  accountIdentifiers:
+                    iban: PL10105000997603123456789123
+                shopper:
+                  reference: JDOE-101
+                  firstName: John
+                  lastName: Doe
+                  organisationName: JD Holdings
+                  email: johndoe@example.com
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                device:
+                  ip: 192.168.0.1
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+                  fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+                status: NEW_PAYMENT
+                transferType: SWIFT
+                displayInfo:
+                  - key: Product SKU
+                    value: 87ec73a0
+                createdAt: '2024-04-15T15:52:01+00:00'
+                updatedAt: '2005-08-15T15:52:01+00:00'
+                paymentInitiationFlow:
+                  status: WAITING_FOR_INPUT
+                  requiredInput:
+                    - name: IBAN
+                      propertyPath: openBankingEU.accountIdentifcations.iban
+            Waiting for user input (SCA method required):
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                currency: EUR
+                amount: 10000
+                paymentReference: XV9840MK550AMKQ910
+                internalReference: H35X48Y4FWOD6G3S
+                paymentSystem: OPEN_BANKING_EU
+                openBankingEU:
+                  type: BILL
+                  institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+                  validityPeriod: 1440
+                  provider: Volt
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                payer:
+                  reference: JDOE-101
+                  firstName: John
+                  lastName: Doe
+                  organisationName: JD Holdings
+                  email: johndoe@example.com
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                sender:
+                  name: John Doe
+                  accountIdentifications:
+                    iban: DE75512108001245126199
+                beneficiary:
+                  name: Jane Doe
+                  accountIdentifiers:
+                    iban: PL10105000997603123456789123
+                device:
+                  ip: 192.168.0.1
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+                  fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+                status: NEW_PAYMENT
+                transferType: SWIFT
+                displayInfo:
+                  - key: Product SKU
+                    value: 87ec73a0
+                createdAt: '2024-04-15T15:52:01+00:00'
+                updatedAt: '2005-08-15T15:52:01+00:00'
+                paymentInitiationFlow:
+                  status: WAITING_FOR_INPUT
+                  requiredInput:
+                    - name: SCA_METHOD
+                      propertyPath: sca.method
+                      allowedValues:
+                        - name: PUSH_OTP
+                          value: 258211#MANUEL
+                          description: Additional details about the field.
+                        - name: SMS_OTP
+                          value: '591655'
+                          description: Additional details about the field.
+    Institutions-list:
+      description: '**OK** - Successful request, returning institutions'' list.'
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Institution-response'
+          examples:
+            Example 1:
+              value:
+                - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                  country: DE
+                  name: Sparkasse Nienburg
+                  localName: Sparkasse Nienburg
+                  alternativeName: null
+                  group:
+                    name: Sparkasse
+                    localName: Sparkasse
+                  branch:
+                    name: Nienburg
+                    localName: Nienburg
+                  nationalId: '25650106'
+                  assets:
+                    icon: 'http://cdn.mywebsite.com/assets/bank.svg'
+                    logo: 'http://cdn.mywebsite.com/assets/bank.svg'
+                  types:
+                    - BUSINESS
+                  supportedCurrencies:
+                    - EUR
+                  capabilities:
+                    payments:
+                      active: true
+                      accountIdentifiersRequired:
+                        - IBAN
+                      additionalDataRequired: []
+                      communication:
+                        appToApp: SUPPORTED
+    Institution-details:
+      description: '**OK** - Successful request, returning given institution''s details.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Institution-details-response'
+          examples:
+            Example 1:
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                country: DE
+                name: Sparkasse Nienburg
+                localName: Sparkasse Nienburg
+                alternativeName: null
+                group:
+                  name: Sparkasse
+                  localName: Sparkasse
+                branch:
+                  name: Nienburg
+                  localName: Nienburg
+                nationalId: '25650106'
+                assets:
+                  icon: 'http://cdn.mywebsite.com/assets/bank.svg'
+                  logo: 'http://cdn.mywebsite.com/assets/bank.svg'
+                types:
+                  - BUSINESS
+                capabilities:
+                  payments:
+                    active: true
+                    accountIdentifiersRequired:
+                      - IBAN
+                    additionalDataRequired: []
+                    communication:
+                      appToApp: SUPPORTED
+    Get-payment-details:
+      description: '**OK** - Successful request, returing given payment''s details.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Payment-response'
+          examples:
+            Processing (awaiting user redirect):
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                currency: EUR
+                amount: 10000
+                paymentReference: XV9840MK550AMKQ910
+                internalReference: H35X48Y4FWOD6G3S
+                paymentSystem: OPEN_BANKING_EU
+                openBankingEU:
+                  type: BILL
+                  institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+                  validityPeriod: 1440
+                  provider: Volt
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                payer:
+                  reference: JDOE-101
+                  firstName: John
+                  lastName: Doe
+                  organisationName: JD Holdings
+                  email: johndoe@example.com
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                sender:
+                  name: John Doe
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                beneficiary:
+                  name: Jane Doe
+                  accountIdentifiers:
+                    iban: PL10105000997603123456789123
+                device:
+                  ip: 192.168.0.1
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+                  fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+                status: NEW_PAYMENT
+                transferType: SWIFT
+                displayInfo:
+                  - key: Product SKU
+                    value: 87ec73a0
+                createdAt: '2024-04-15T15:52:01+00:00'
+                updatedAt: '2005-08-15T15:52:01+00:00'
+                paymentInitiationFlow:
+                  status: PROCESSING
+                  details:
+                    reason: AWAITING_USER_REDIRECT
+                    redirect:
+                      url: 'https://vo.lt/asqIs'
+                      directUrl: 'https://myBank.com/authorisation?code=xyz'
+            Waiting for user input (account identification required):
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                currency: EUR
+                amount: 10000
+                paymentReference: XV9840MK550AMKQ910
+                internalReference: H35X48Y4FWOD6G3S
+                paymentSystem: OPEN_BANKING_EU
+                openBankingEu:
+                  type: BILL
+                  institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+                  validityPeriod: 1440
+                  provider: Volt
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                payer:
+                  name: John Doe
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                beneficiary:
+                  name: Jane Doe
+                  accountIdentifiers:
+                    iban: PL10105000997603123456789123
+                shopper:
+                  reference: JDOE-101
+                  firstName: John
+                  lastName: Doe
+                  organisationName: JD Holdings
+                  email: johndoe@example.com
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                device:
+                  ip: 192.168.0.1
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+                  fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+                status: NEW_PAYMENT
+                transferType: SWIFT
+                displayInfo:
+                  - key: Product SKU
+                    value: 87ec73a0
+                createdAt: '2024-04-15T15:52:01+00:00'
+                updatedAt: '2005-08-15T15:52:01+00:00'
+                paymentInitiationFlow:
+                  status: WAITING_FOR_INPUT
+                  requiredInput:
+                    - name: IBAN
+                      propertyPath: openBankingEU.accountIdentifcations.iban
+            Waiting for user input (SCA method required):
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                currency: EUR
+                amount: 10000
+                paymentReference: XV9840MK550AMKQ910
+                internalReference: H35X48Y4FWOD6G3S
+                paymentSystem: OPEN_BANKING_EU
+                openBankingEU:
+                  type: BILL
+                  institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+                  validityPeriod: 1440
+                  provider: Volt
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                payer:
+                  reference: JDOE-101
+                  firstName: John
+                  lastName: Doe
+                  organisationName: JD Holdings
+                  email: johndoe@example.com
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                sender:
+                  name: John Doe
+                  accountIdentifications:
+                    iban: DE75512108001245126199
+                beneficiary:
+                  name: Jane Doe
+                  accountIdentifiers:
+                    iban: PL10105000997603123456789123
+                device:
+                  ip: 192.168.0.1
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+                  fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+                status: NEW_PAYMENT
+                transferType: SWIFT
+                displayInfo:
+                  - key: Product SKU
+                    value: 87ec73a0
+                createdAt: '2024-04-15T15:52:01+00:00'
+                updatedAt: '2005-08-15T15:52:01+00:00'
+                paymentInitiationFlow:
+                  status: WAITING_FOR_INPUT
+                  requiredInput:
+                    - name: SCA_METHOD
+                      propertyPath: sca.method
+                      allowedValues:
+                        - name: PUSH_OTP
+                          value: 258211#MANUEL
+                          description: Additional details about the field.
+                        - name: SMS_OTP
+                          value: '591655'
+                          description: Additional details about the field.
+    Patch-payment-details:
+      description: '**OK** - payment successfully updated, returing payment''s details.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Payment-response'
+          examples:
+            Processing (awaiting user redirect):
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                currency: EUR
+                amount: 10000
+                paymentReference: XV9840MK550AMKQ910
+                internalReference: H35X48Y4FWOD6G3S
+                paymentSystem: OPEN_BANKING_EU
+                openBankingEU:
+                  type: BILL
+                  institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+                  validityPeriod: 1440
+                  provider: Volt
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                payer:
+                  reference: JDOE-101
+                  firstName: John
+                  lastName: Doe
+                  organisationName: JD Holdings
+                  email: johndoe@example.com
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                sender:
+                  name: John Doe
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                beneficiary:
+                  name: Jane Doe
+                  accountIdentifiers:
+                    iban: PL10105000997603123456789123
+                device:
+                  ip: 192.168.0.1
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+                  fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+                status: NEW_PAYMENT
+                transferType: SWIFT
+                displayInfo:
+                  - key: Product SKU
+                    value: 87ec73a0
+                createdAt: '2024-04-15T15:52:01+00:00'
+                updatedAt: '2005-08-15T15:52:01+00:00'
+                paymentInitiationFlow:
+                  status: PROCESSING
+                  details:
+                    reason: AWAITING_USER_REDIRECT
+                    redirect:
+                      url: 'https://vo.lt/asqIs'
+                      directUrl: 'https://myBank.com/authorisation?code=xyz'
+            Waiting for user input (account identification required):
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                currency: EUR
+                amount: 10000
+                paymentReference: XV9840MK550AMKQ910
+                internalReference: H35X48Y4FWOD6G3S
+                paymentSystem: OPEN_BANKING_EU
+                openBankingEu:
+                  type: BILL
+                  institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+                  validityPeriod: 1440
+                  provider: Volt
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                payer:
+                  name: John Doe
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                beneficiary:
+                  name: Jane Doe
+                  accountIdentifiers:
+                    iban: PL10105000997603123456789123
+                shopper:
+                  reference: JDOE-101
+                  firstName: John
+                  lastName: Doe
+                  organisationName: JD Holdings
+                  email: johndoe@example.com
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                device:
+                  ip: 192.168.0.1
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+                  fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+                status: NEW_PAYMENT
+                transferType: SWIFT
+                displayInfo:
+                  - key: Product SKU
+                    value: 87ec73a0
+                createdAt: '2024-04-15T15:52:01+00:00'
+                updatedAt: '2005-08-15T15:52:01+00:00'
+                paymentInitiationFlow:
+                  status: WAITING_FOR_INPUT
+                  requiredInput:
+                    - name: IBAN
+                      propertyPath: openBankingEU.accountIdentifcations.iban
+            Waiting for user input (SCA method required):
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                currency: EUR
+                amount: 10000
+                paymentReference: XV9840MK550AMKQ910
+                internalReference: H35X48Y4FWOD6G3S
+                paymentSystem: OPEN_BANKING_EU
+                openBankingEU:
+                  type: BILL
+                  institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+                  validityPeriod: 1440
+                  provider: Volt
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                payer:
+                  reference: JDOE-101
+                  firstName: John
+                  lastName: Doe
+                  organisationName: JD Holdings
+                  email: johndoe@example.com
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                sender:
+                  name: John Doe
+                  accountIdentifications:
+                    iban: DE75512108001245126199
+                beneficiary:
+                  name: Jane Doe
+                  accountIdentifiers:
+                    iban: PL10105000997603123456789123
+                device:
+                  ip: 192.168.0.1
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+                  fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+                status: NEW_PAYMENT
+                transferType: SWIFT
+                displayInfo:
+                  - key: Product SKU
+                    value: 87ec73a0
+                createdAt: '2024-04-15T15:52:01+00:00'
+                updatedAt: '2005-08-15T15:52:01+00:00'
+                paymentInitiationFlow:
+                  status: WAITING_FOR_INPUT
+                  requiredInput:
+                    - name: SCA_METHOD
+                      propertyPath: sca.method
+                      allowedValues:
+                        - name: PUSH_OTP
+                          value: 258211#MANUEL
+                          description: Additional details about the field.
+                        - name: SMS_OTP
+                          value: '591655'
+                          description: Additional details about the field.
+    Get-cancelled-payment-details:
+      description: '**OK** - Successful request, returing given payment''s details.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Payment-response'
+          examples:
+            Example 1:
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                currency: EUR
+                amount: 10000
+                paymentReference: XV9840MK550AMKQ910
+                internalReference: H35X48Y4FWOD6G3S
+                paymentSystem: OPEN_BANKING_EU
+                openBankingEU:
+                  type: BILL
+                  institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+                  validityPeriod: 1440
+                  provider: Volt
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                payer:
+                  reference: JDOE-101
+                  firstName: John
+                  lastName: Doe
+                  organisationName: JD Holdings
+                  email: johndoe@example.com
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                sender:
+                  name: John Doe
+                  accountIdentifiers:
+                    iban: DE75512108001245126199
+                beneficiary:
+                  name: Jane Doe
+                  accountIdentifiers:
+                    iban: PL10105000997603123456789123
+                device:
+                  ip: 192.168.0.1
+                  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+                  fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+                status: CANCELLED_BY_USER
+                transferType: SWIFT
+                displayInfo:
+                  - key: Product SKU
+                    value: 87ec73a0
+                createdAt: '2024-04-15T15:52:01+00:00'
+                updatedAt: '2005-08-15T15:52:01+00:00'
+                paymentInitiationFlow:
+                  status: ABORTED
+    Get-name-match-score:
+      description: '**OK** - Name match score is successfully returned.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Name-match-score-response'
+          examples:
+            Example 1:
+              value:
+                invocationId: e9725468-0858-4dbb-af72-1e49c8254d68
+                score: 0.89
+  schemas:
+    Payer-request:
+      type: object
+      title: object<payer>
+      examples:
+        - reference: JDOE-101
+          firstName: John
+          lastName: Doe
+          organisationName: JD Holdings
+          email: johndoe@example.com
+      x-stoplight:
+        id: 1fgi6vx5txuil
+      required:
+        - reference
+      properties:
+        reference:
+          type: string
+          description: 'Your unique reference for the payer, e.g. customer ID or email address. It can feature a combination of letters and numbers, along with an optional single `@` symbol and a curated selection of special characters like `!$#%^&*.-_`. Please, note that special characters are not permitted at the end of the reference value, and the `@` symbol is only allowed in the middle of the reference value.'
+          pattern: '^[a-zA-Z0-9.!#$%&\''\*+\/\=?^_`{|}~-]+@?[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          maxLength: 255
+          examples:
+            - JDOE-101
+        firstName:
+          type: string
+          description: |-
+            First name. 
+
+            This field is `required` when `lastName` is provided.
+          maxLength: 255
+          examples:
+            - John
+        lastName:
+          type: string
+          description: |-
+            Last name. 
+
+            This field is `required` when `firstName` is provided.
+          maxLength: 255
+          examples:
+            - Doe
+        organisationName:
+          type: string
+          description: |-
+            Organisation name. 
+
+            This field is `required` when `firstName` and `lastName` are not provided.
+          maxLength: 255
+          examples:
+            - JD Holdings
+        email:
+          type: string
+          description: Email address.
+          format: email
+          examples:
+            - johndoe@example.com
+        phoneNumber:
+          type: string
+          description: 'Phone number, in E.164 format.'
+          examples:
+            - '+14155550123'
+    Device-request:
+      type: object
+      title: object<device>
+      examples:
+        - ip: 192.168.0.1
+          userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+          fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+      x-stoplight:
+        id: 8kljj9ehcoaf1
+      required:
+        - ip
+      properties:
+        ip:
+          type: string
+          description: IP address of the payer.
+          format: ipv4 or ipv6
+          examples:
+            - 192.168.0.1
+        userAgent:
+          type: string
+          description: User agent used by the payer to call the endpoint.
+          examples:
+            - 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+        fingerprint:
+          type: string
+          description: Fingerprint of the device used to call the endpoint.
+          maxLength: 255
+          examples:
+            - 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+    OpenBankingEU-request:
+      type: object
+      title: object<openBankingEU>
+      examples:
+        - type: SERVICES
+          institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+          validityPeriod: 1440
+          accountIdentifiers:
+            iban: DE75512108001245126199
+      x-stoplight:
+        id: 9uvyiq27q7j2x
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - BILL
+            - GOODS
+            - PERSON_TO_PERSON
+            - OTHER
+            - SERVICES
+          description: The transaction type.
+        institutionId:
+          type: string
+          description: Identifier of the institution chosen to originate the transfer.
+          format: uuid
+          examples:
+            - cdae5c01-a629-4362-be56-52101ec22a49
+        validityPeriod:
+          type: integer
+          description: Custom expiration time (in minutes).
+          default: 30
+          examples:
+            - 1440
+        accountIdentifiers:
+          type: object
+          description: |-
+            Payer's account identifiers.
+
+            Required account identifiers depend on the institution. Institutions endpoint provide such information.
+
+            Account identifiers(s) returned from `GET /institutions` endpoint **must** be properly mapped to input data. Simply, convert received value from `SNAKE_CASE` format into `camelCase`, for example: `PSU_ID` would be mapped to `psuId`.
+          properties:
+            iban:
+              type: string
+              description: Account IBAN.
+            psuId:
+              type: string
+              description: Payer (psu) identifier at the institution.
+            branchCode:
+              type: string
+              description: Branch code.
+              minLength: 3
+              maxLength: 3
+            accountNumber:
+              type: string
+              description: Account number.
+              minLength: 7
+              maxLength: 7
+        redirectType:
+          type: string
+          description: Redirect type to use. This is specific for `ES` institutions.
+    OpenBankingUK-request:
+      type: object
+      title: object<openBankingUK>
+      examples:
+        - type: SERVICES
+          institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+          validityPeriod: 1440
+          accountIdentifiers:
+            iban: GB29NWBK60161331926819
+      x-stoplight:
+        id: frsrx75h94yg0
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - BILL
+            - GOODS
+            - PERSON_TO_PERSON
+            - OTHER
+            - SERVICES
+          description: The transaction type.
+        institutionId:
+          type: string
+          description: Identifier of the institution chosen to originate the transfer.
+          format: uuid
+          examples:
+            - cdae5c01-a629-4362-be56-52101ec22a49
+        validityPeriod:
+          type: integer
+          description: Custom expiration time (in minutes).
+          default: 30
+          examples:
+            - 1440
+        accountIdentifiers:
+          type: object
+          description: |-
+            Payer's account identifiers.
+
+            Required account identifiers depend on the institution. Institutions endpoint provide such information.
+
+            Account identifiers(s) returned from `GET /institutions` endpoint **must** be properly mapped to input data. Simply, convert received value from `SNAKE_CASE` format into `camelCase`, for example: `PSU_ID` would be mapped to `psuId`.
+          properties:
+            sortCode:
+              type: string
+              description: Sort code.
+              minLength: 6
+              maxLength: 6
+            accountNumber:
+              type: string
+              description: Account number.
+              minLength: 8
+              maxLength: 8
+    NppPayToAU-request:
+      type: object
+      title: object<nppPayToAU>
+      required:
+        - type
+        - additionalDescription
+      properties:
+        type:
+          type: string
+          enum:
+            - BILL
+            - GOODS
+            - PERSON_TO_PERSON
+            - OTHER
+            - SERVICES
+          description: The transaction type.
+        accountIdentifiers:
+          type: object
+          description: |-
+            Account identifiers provided by the payer for given payment system.
+            Object **can** be empty.
+          properties:
+            payId:
+              type:
+                - string
+                - 'null'
+              description: Pay ID.
+            bsb:
+              type:
+                - string
+                - 'null'
+              description: BSB. 0nly digits are allowed. Must be paired with account number.
+              minLength: 6
+              maxLength: 6
+            accountNumber:
+              type:
+                - string
+                - 'null'
+              description: Account number. 0nly digits are allowed. Must be paired with BSB.
+              minLength: 8
+              maxLength: 8
+        additionalDescription:
+          type:
+            - string
+            - 'null'
+          description: Additional information that will be passed to the bank as description of transaction and should appear on bank statements.
+          maxLength: 121
+        ultimateBeneficiary:
+          type:
+            - string
+            - 'null'
+          description: Refers to the final party receiving the payment, even if the payment is processed through intermediaries.
+          maxLength: 140
+      examples:
+        - type: OTHER
+          additionalDescription: 'Description'
+          accountIdentifiers:
+            payId: test@test.au
+          ultimateBeneficiary: 'Adam Smith'
+    Beneficiary-request:
+      type: object
+      title: object<beneficiary>
+      properties:
+        name:
+          type:
+            - string
+            - 'null'
+          description: Account name.
+          maxLength: 70
+          examples:
+            - Jane Doe
+        accountIdentifiers:
+          type: object
+          description: |-
+            Target account identifiers.
+
+            One of `iban` or `accountNumber` identifiers must be provided.
+
+            `iban` and `accountNumber` identifiers are mutually exclusive and should not be send together.
+
+            It is an object with keys as identifiers' types, and values as identifier's values.
+          properties:
+            iban:
+              type: string
+              description: Account IBAN.
+            swiftBic:
+              type: string
+              description: SWIFT/BIC code.
+            accountNumber:
+              type: string
+              description: Account number.
+            sortCode:
+              type: string
+              description: Sort code.
+      required:
+        - accountIdentifiers
+      examples:
+        - name: Jane Doe
+          accountIdentifiers:
+            iban: PL10105000997603123456789123
+      x-stoplight:
+        id: 38zlddtir0y2d
+    Communication-request:
+      type: object
+      title: object<communication>
+      examples:
+        - notifications:
+            url: 'https://mywebsite.com/webhooks'
+          return:
+            urls:
+              unified:
+                url: 'https://mywebsite.com/payment'
+              success:
+                url: 'https://mywebsite.com/payment/success'
+              failure:
+                url: 'https://mywebsite.com/payment/failed'
+              pending:
+                url: 'https://mywebsite.com/payment/pending'
+              cancel:
+                url: 'https://mywebsite.com/payment/cancelled'
+            queryString: id=xyz
+      x-stoplight:
+        id: 21lpwuendey0w
+      properties:
+        notifications:
+          type: object
+          description: Settings for notifications (webhooks).
+          properties:
+            url:
+              type: string
+              description: URL where the notifications (webhooks) are going to be sent when the payment status changes. This value will take precedence over Fuzebox configuration. Provide a value here only if you need to overwrite it.
+              format: uri
+              examples:
+                - 'https://mywebsite.com/webhooks'
+        return:
+          type: object
+          description: Settings for redirecting payer back to the partner.
+          properties:
+            urls:
+              type: object
+              description: URLs to which payer will be redirected after consent authorisation/payment initialisation.
+              properties:
+                unified:
+                  type: object
+                  description: |-
+                    Default redirect configuration.
+
+                    Object is `required` when `X-Volt-Initiation-Channel` is `api`.
+                  properties:
+                    url:
+                      type: string
+                      description: |-
+                        For `X-Volt-Initiation-Channel: api` - URL to which shopper will be redirected after consent authorisation.
+
+                        For any other initiation channel - URL to which shopper will be redirected from Volt's checkout after payment initialisation.
+
+                        This field is `required` when `X-Volt-Initiation-Channel` is `api`.
+                      format: uri
+                      examples:
+                        - 'https://mywebsite.com/payment'
+                success:
+                  type: object
+                  description: |-
+                    Successful payment initialisation redirect configuration. Used only when Volt's checkout is in use.
+
+                    Overrides `unified` configuration in case of successful payment initialisation.
+                  properties:
+                    url:
+                      type: string
+                      description: URL to which shopper will be redirected from Volt's checkout after successful payment initialisation.
+                      format: uri
+                      examples:
+                        - 'https://mywebsite.com/payment/success'
+                failure:
+                  type: object
+                  description: |-
+                    Failed payment initialisation redirect configuration. Used only when Volt's checkout is in use.
+
+                    Overrides `unified` configuration in case of failed payment initialisation.
+                  properties:
+                    url:
+                      type: string
+                      description: URL to which shopper will be redirected from Volt's checkout after failed payment initialisation.
+                      format: uri
+                      examples:
+                        - 'https://mywebsite.com/payment/failed'
+                pending:
+                  type: object
+                  description: |-
+                    Delayed payment initialisation redirect configuration. Used only when Volt's checkout is in use.
+
+                    Overrides `unified` configuration in case of delayed payment initialisation.
+                  properties:
+                    url:
+                      type: string
+                      description: URL to which shopper will be redirected from Volt's checkout after delayed payment initialisation.
+                      format: uri
+                      examples:
+                        - 'https://mywebsite.com/payment/pending'
+                cancel:
+                  type: object
+                  description: |-
+                    Cancelled payment initialisation redirect configuration. Used only when Volt's checkout is in use.
+
+                    Overrides `unified` configuration in case of cancelled payment initialisation.
+                  properties:
+                    url:
+                      type: string
+                      description: URL to which shopper will be redirected from Volt's checkout after cancelled payment initialisation.
+                      format: uri
+                      examples:
+                        - 'https://mywebsite.com/payment/cancelled'
+            queryString:
+              type: string
+              description: Query string that will be added to the redirect URL.
+              examples:
+                - id=xyz
+    Payment-response:
+      type: object
+      title: object<payment>
+      x-stoplight:
+        id: 43yv3daury72v
+      properties:
+        id:
+          type: string
+          description: Identifier of the payment.
+          format: uuid
+          examples:
+            - 497f6eca-6276-4993-bfeb-53cbbbba6f08
+        currency:
+          type: string
+          description: 'Currency in which the payment is made, in ISO 4217 format (3 uppercase letters).'
+          examples:
+            - EUR
+        amount:
+          type: integer
+          description: 'The amount of the transaction in fractional unit (pence, cents etc).'
+          examples:
+            - 10000
+        paymentReference:
+          type: string
+          description: 'Payment reference provided by the partner (or generated by Volt). Used for reconcilliation, visible on the bank statement.'
+          maxLength: 18
+          examples:
+            - XV9840MK550AMKQ910
+        internalReference:
+          type: string
+          description: Identifier of the transaction in the partner's system.
+          examples:
+            - H35X48Y4FWOD6G3S
+        paymentSystem:
+          type: string
+          enum:
+            - OPEN_BANKING_EU
+            - OPEN_BANKING_UK
+            - NPP_PAY_TO_AU
+          description: Payment system used to make a transfer.
+        openBankingEU:
+          $ref: '#/components/schemas/OpenBankingEU-response'
+          description: Definition used for processing transfer with the PSD directive (Open Banking). Object is present in the response if `paymentSystem` is set to `OPEN_BANKING_EU`.
+        openBankingUK:
+          $ref: '#/components/schemas/OpenBankingUK-response'
+          description: Definition used for processing transfer with the PSD directive (Open Banking). Object is present in the response if `paymentSystem` is set to `OPEN_BANKING_UK`.
+        nppPayToAU:
+          $ref: '#/components/schemas/NppPayToAU-response'
+          description: Definition used for processing transfer with the Australian NPP (New Payments Platform). Object is present in the response if `paymentSystem` is set to `NPP_PAY_TO_AU`.
+        payer:
+          $ref: '#/components/schemas/Payer-response'
+          description: Information about the payer.
+        sender:
+          $ref: '#/components/schemas/Sender-response'
+          description: Information about the source account (sender).
+        beneficiary:
+          $ref: '#/components/schemas/Beneficiary-response'
+          description: Information about the target account (beneficiary).
+        device:
+          $ref: '#/components/schemas/Device-response'
+          description: Device used to call the endpoint for payment creation.
+        status:
+          type: string
+          enum:
+            - NEW_PAYMENT
+            - APPROVED_BY_RISK
+            - REFUSED_BY_RISK
+            - BANK_REDIRECT
+            - ADDITIONAL_AUTHORIZATION_REQUIRED
+            - AUTHORISED_BY_USER
+            - ERROR_AT_BANK
+            - REFUSED_BY_BANK
+            - DELAYED_AT_BANK
+            - COMPLETED
+            - NOT_RECEIVED
+            - RECEIVED
+            - FAILED
+            - CANCELLED_BY_USER
+            - ABANDONED_BY_USER
+            - AWAITING_CHECKOUT_AUTHORISATION
+            - ACCOUNT_SELECTION
+            - REQUIRED_REDEEM
+            - PAYOUT_INITIATED
+            - SETTLED
+            - UNKNOWN
+            - PROVIDER_COMMUNICATION_ERROR
+          description: Status of the transaction.
+        transferType:
+          type:
+            - string
+            - 'null'
+          description: Payment schema used to make a transaction.
+          examples:
+            - SWIFT
+        displayInfo:
+          type: array
+          x-stoplight:
+            id: hsr71a215w67d
+          description: Additional information (key-value pairs) to be displayed on checkout.
+          items:
+            x-stoplight:
+              id: jm07ykefzoh5e
+            type: object
+            properties:
+              key:
+                type: string
+                x-stoplight:
+                  id: 8lgwj7o9t7l40
+                description: Key name.
+              value:
+                type: string
+                x-stoplight:
+                  id: a0qasy0qg4tla
+                description: Value for given key.
+        createdAt:
+          type: string
+          description: Date of payment creation.
+          format: date-time
+          examples:
+            - '2024-04-15T15:52:01+00:00'
+        updatedAt:
+          type:
+            - string
+            - 'null'
+          description: Date of payment's last update.
+          examples:
+            - '2005-08-15T15:52:01+00:00'
+          format: date-time
+        paymentInitiationFlow:
+          $ref: '#/components/schemas/PaymentInitiationFlow-response'
+          description: Payment initiation flow object. It steers the initiation flow.
+    OpenBankingEU-response:
+      type: object
+      title: object<openBankingEU>
+      properties:
+        type:
+          type: string
+          enum:
+            - BILL
+            - GOODS
+            - PERSON_TO_PERSON
+            - OTHER
+            - SERVICES
+          description: The transaction type.
+        institutionId:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the institution chosen to originate the transfer.
+          examples:
+            - cdae5c01-a629-4362-be56-52101ec22a49
+        validityPeriod:
+          type: integer
+          description: Custom expiration time (in minutes).
+          examples:
+            - 1440
+        provider:
+          type:
+            - string
+            - 'null'
+          enum:
+            - Volt
+            - Yapily
+            - Token
+            - Neonomics
+          description: Underlying provider used for processing the payment.
+        accountIdentifiers:
+          type: object
+          description: |-
+            Account identifiers provided by the payer for given payment system.
+
+            Object **can** be empty.
+          properties:
+            iban:
+              type: string
+              description: Account IBAN.
+            branchCode:
+              type: string
+              description: Branch code.
+            accountNumber:
+              type: string
+              description: Account number.
+      examples:
+        - type: BILL
+          institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+          validityPeriod: 1440
+          provider: PowerGrid
+          accountIdentifiers: {}
+      x-stoplight:
+        id: wz0mymaljz07u
+    OpenBankingUK-response:
+      type: object
+      title: object<openBankingUK>
+      properties:
+        type:
+          type: string
+          enum:
+            - BILL
+            - GOODS
+            - PERSON_TO_PERSON
+            - OTHER
+            - SERVICES
+          description: The transaction type.
+        institutionId:
+          type:
+            - string
+            - 'null'
+          description: Identifier of the institution chosen to originate the transfer.
+          examples:
+            - cdae5c01-a629-4362-be56-52101ec22a49
+        validityPeriod:
+          type: integer
+          description: Custom expiration time (in minutes).
+          examples:
+            - 1440
+        provider:
+          type:
+            - string
+            - 'null'
+          enum:
+            - Volt
+            - Yapily
+            - Token
+            - Neonomics
+          description: Underlying provider used for processing the payment.
+        accountIdentifiers:
+          type: object
+          description: |-
+            Account identifiers provided by the payer for given payment system.
+
+            Object **can** be empty.
+          properties:
+            sortCode:
+              type: string
+              description: Sort code.
+            accountNumber:
+              type: string
+              description: Account number.
+      examples:
+        - type: BILL
+          institutionId: cdae5c01-a629-4362-be56-52101ec22a49
+          validityPeriod: 1440
+          provider: PowerGrid
+          accountIdentifiers: {}
+      x-stoplight:
+        id: 4fhjun44r7621
+    NppPayToAU-response:
+      type: object
+      title: object<nppPayToAU>
+      properties:
+        type:
+          type: string
+          enum:
+            - BILL
+            - GOODS
+            - PERSON_TO_PERSON
+            - OTHER
+            - SERVICES
+          description: The transaction type.
+        validityPeriod:
+          type: integer
+          description: Custom expiration time (in minutes).
+          examples:
+            - 30
+        additionalDescription:
+          type:
+            - string
+            - 'null'
+          description: Additional information that will be passed to the bank as description of transaction and should appear on bank statements.
+        accountIdentifiers:
+          type: object
+          description: |-
+            Account identifiers provided by the payer for given payment system.
+
+            Object **can** be empty.
+          properties:
+            payId:
+              type: string
+              description: Pay ID.
+            bsb:
+              type: string
+              description: BSB.
+            accountNumber:
+              type: string
+              description: Account number.
+        ultimateBeneficiary:
+          type:
+            - string
+            - 'null'
+          description: Refers to the final party receiving the payment, even if the payment is processed through intermediaries.
+      examples:
+        - type: OTHER
+          validityPeriod: 30
+          additionalDescription: 'Description'
+          accountIdentifiers: {}
+          ultimateBeneficiary: 'Adam Smith'
+      x-stoplight:
+        id: 4fhjun44r7622
+    Payer-response:
+      type: object
+      title: object<payer>
+      properties:
+        reference:
+          type: string
+          description: Your unique reference for the payer.
+          maxLength: 255
+          examples:
+            - JDOE-101
+        firstName:
+          type:
+            - string
+            - 'null'
+          description: First name.
+          maxLength: 255
+          examples:
+            - John
+        lastName:
+          type:
+            - string
+            - 'null'
+          description: First name.
+          maxLength: 255
+          examples:
+            - Doe
+        organisationName:
+          type:
+            - string
+            - 'null'
+          description: Organisation name.
+          maxLength: 255
+          examples:
+            - JD Holdings
+        email:
+          type:
+            - string
+            - 'null'
+          description: Email address.
+          examples:
+            - johndoe@example.com
+        phoneNumber:
+          type:
+            - string
+            - 'null'
+          description: Phone number.
+          examples:
+            - '+14155550123'
+        accountIdentifiers:
+          type: object
+          description: |-
+            Payer account identifiers.
+
+            It is an object with keys as identifiers' types, and values as identifiers' values.
+
+            Object **can** be empty.
+          properties:
+            iban:
+              type: string
+              description: Account IBAN.
+            branchCode:
+              type: string
+              description: Branch code.
+            sortCode:
+              type: string
+              description: Sort code.
+            accountNumber:
+              type: string
+              description: Account number.
+      examples:
+        - reference: JDOE-101
+          firstName: John
+          lastName: Doe
+          organisationName: JD Holdings
+          email: johndoe@example.com
+          phoneNumber: null
+          accountIdentifiers:
+            iban: DE75512108001245126199
+      x-stoplight:
+        id: ayreh2ti6ave8
+    Sender-response:
+      type: object
+      title: object<sender> or null
+      properties:
+        name:
+          type:
+            - string
+            - 'null'
+          description: Account name.
+          examples:
+            - John Doe
+        accountIdentifiers:
+          type: object
+          description: |-
+            Source account (sender) identifications.
+
+            It is an object with keys as identification types, and values as identification values.
+
+            Object **can** be empty.
+          properties:
+            iban:
+              type: string
+              description: Account IBAN.
+            swiftBic:
+              type: string
+              description: SWIFT code (BIC).
+            accountNumber:
+              type: string
+              description: Account number.
+            sortCode:
+              type: string
+              description: Sort code.
+      examples:
+        - name: John Doe
+          accountIdentifiers:
+            iban: DE75512108001245126199
+      x-stoplight:
+        id: 0i3g9y6z3rzvn
+    Beneficiary-response:
+      type: object
+      title: object<beneficiary>
+      properties:
+        name:
+          type:
+            - string
+            - 'null'
+          description: Account name.
+        accountIdentifiers:
+          type: object
+          description: |-
+            Target account (beneficiary) identifications.
+
+            It is an object with keys as identification types, and values as identification values.
+          properties:
+            iban:
+              type: string
+              description: Account IBAN.
+            swiftBic:
+              type: string
+              description: SWIFT code (BIC).
+            sortCode:
+              type: string
+              description: Sort code. Only for UK accounts.
+            accountNumber:
+              type: string
+              description: 'Account number. Only for UK, AU or US accounts.'
+            routingNumber:
+              type: string
+              description: Routing number. Only for US accounts.
+            bsb:
+              type: string
+              description: BSB code. Only for AU accounts.
+      examples:
+        - name: Jane Doe
+          accountIdentifiers:
+            iban: PL10105000997603123456789123
+      x-stoplight:
+        id: ibnh67fxo1rou
+    Device-response:
+      type: object
+      title: object<device>
+      properties:
+        ip:
+          type:
+            - string
+            - 'null'
+          description: IP address of the shopper.
+          format: ipv4 or ipv6
+          examples:
+            - 192.168.0.1
+        userAgent:
+          type:
+            - string
+            - 'null'
+          description: User agent used by the shopper to call the endpoint.
+          examples:
+            - 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+        fingerprint:
+          type:
+            - string
+            - 'null'
+          description: Fingerprint of the device used to call the endpoint.
+          maxLength: 255
+          examples:
+            - 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+      examples:
+        - ip: 192.168.0.1
+          userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+          fingerprint: 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed
+      x-stoplight:
+        id: 30yrzdaluo6ei
+    PaymentInitiationFlow-response:
+      type: object
+      title: object<paymentInitiationFlow>
+      properties:
+        status:
+          type: string
+          enum:
+            - PROCESSING
+            - FINISHED
+            - ABORTED
+            - EXCEPTION
+            - WAITING_FOR_INPUT
+          description: Status of the authorisation process.
+        details:
+          type: object
+          description: |-
+            Additional information about authorisation process. 
+
+            Object is **usually** present when `status` is `PROCESSING`. However, if authorisation flow does not require any actions from the merchant, except pooling, object **might not** be present.
+
+            Object **can** be present when `status` is `WAITING_FOR_INPUT` (for recovery flows).
+          properties:
+            reason:
+              type: string
+              enum:
+                - AWAITING_USER_REDIRECT
+                - AWAITING_REDIRECT_URL
+                - AWAITING_DECOUPLED_AUTHORISATION
+              description: |-
+                Additional information about the status. 
+
+                It might be used to process `psu` in a different way, or display a different screen.
+            redirect:
+              type: object
+              description: |-
+                Configuration of redirect of the payer.
+
+                This object is present **only** when `reason` is `AWAITING_USER_REDIRECT`.
+              properties:
+                url:
+                  type: string
+                  description: |-
+                    URL for payer redirect.
+
+                    This is URL optimised for app-to-app redirects.
+                  format: uri
+                  examples:
+                    - 'https://short.vo/authorisation?code=xyz'
+                directUrl:
+                  type: string
+                  description: |-
+                    URL for payer redirect. 
+
+                    This is direct URL to the institution, not optimised for app-to-app redirects.
+                  format: uri
+                  examples:
+                    - 'https://myBank.com/authorisation?code=xyz'
+        requiredInput:
+          type: array
+          description: |-
+            Definition of required input from the payer to proceed with the authorisation.
+
+            This field is present **only** when `status` is `WAITING_FOR_INPUT`.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                enum:
+                  - IBAN
+                  - BRANCH_CODE
+                  - ACCOUNT_NUMBER
+                  - INSTITUTION_ID
+                  - SCA_USERNAME
+                  - SCA_PASSWORD
+                  - REDIRECT_TYPE
+                  - SCA_METHOD
+                  - SCA_CODE
+                  - PSU_ID
+                description: |-
+                  Name of the field. It can help displaying proper label/type on merchant's side.
+
+                  Possible values depend on the situtation and current stage of the flow:
+                  * `IBAN`/`BRANCH_CODE`/`ACCOUNT_NUMBER`/`PSU_ID`/`PSU_IP_ADDRESS` - gathering additional account identifiers,
+                  * `USERNAME`/`PASSWORD` - gather credentials for SCA flow,
+                  * `INSTITUTION_ID` - set institution ID,
+                  * `REDIRECT_TYPE` - select redirect type (for ES institutions).
+              propertyPath:
+                type: string
+                description: |-
+                  Path of the property within payload in payment's `PATCH` request.
+
+                  Each dot (.) represents nested object.
+                examples:
+                  - openBankingEU.accountIdentifiers.iban
+              allowedValues:
+                type: array
+                description: |-
+                  Information about possible options for a given property.
+
+                  Object is present **only** if input must be populated with given values.
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      enum:
+                        - PUSH_OTP
+                        - SMS_OTP
+                        - APP
+                        - WEB
+                      description: |-
+                        Name of the option. It can help displaying proper label on merchant's side.
+
+                        Possible values depend on the situtation and current stage of the flow:
+                        * `PUSH_OTP`/`SMS_OTP` - select SCA method,
+                        * `APP`/`WEB` - select redirect type (for ES institutions).
+                      examples:
+                        - PUSH_OTP
+                    value:
+                      type: string
+                      description: 'Value of the option. It this option is chosen, this value should be sent as the value of the property defined in `propertyPath`.'
+                      examples:
+                        - 258211#MANUEL
+                    description:
+                      type:
+                        - string
+                        - 'null'
+                      description: Additional description for the field on merchant's side.
+                      default: Additional details about the field.
+      x-stoplight:
+        id: 58jci9ehlhvac
+    Institution-response:
+      type: object
+      title: object<institution>
+      examples:
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          country: DE
+          name: Sparkasse Nienburg
+          localName: Sparkasse Nienburg
+          alternativeName: null
+          group:
+            name: Sparkasse
+            localName: Sparkasse
+          branch:
+            name: Nienburg
+            localName: Nienburg
+          nationalId: '25650106'
+          assets:
+            icon: 'http://cdn.mywebsite.com/assets/bank.svg'
+            logo: 'http://cdn.mywebsite.com/assets/bank.svg'
+          types:
+            - BUSINESS
+          supportedCurrencies:
+            - EUR
+          capabilities:
+            payments:
+              active: true
+              accountIdentifiersRequired:
+                - IBAN
+              additionalDataRequired: []
+              communication:
+                appToApp: SUPPORTED
+      x-stoplight:
+        id: k6q1bmcvy5hzv
+      properties:
+        id:
+          type: string
+          description: Identifier of the institution.
+          format: uuid
+          examples:
+            - 497f6eca-6276-4993-bfeb-53cbbbba6f08
+        country:
+          type: string
+          description: Institution country.
+          minLength: 2
+          maxLength: 2
+          examples:
+            - PL
+        name:
+          type: string
+          description: Name of the institution.
+          examples:
+            - Sparkasse Nienburg
+        localName:
+          type:
+            - string
+            - 'null'
+          description: Localised name of the institution.
+          examples:
+            - Sparkasse Nienburg
+        alternativeName:
+          type:
+            - string
+            - 'null'
+          description: |-
+            Alternative name of the institution.
+
+            Might be previous name, etc. Handy for search mechanisms on merchant's side.
+        group:
+          type: object
+          description: Institutions' group info.
+          properties:
+            name:
+              type:
+                - string
+                - 'null'
+              description: Name of the institions' group.
+              examples:
+                - Sparkasse
+            localName:
+              type:
+                - string
+                - 'null'
+              description: Localised name of the institions' group.
+              examples:
+                - Sparkasse
+        branch:
+          type: object
+          description: Institution's branch info.
+          properties:
+            name:
+              type:
+                - string
+                - 'null'
+              description: Name of the instition's branch.
+              examples:
+                - Nienburg
+            localName:
+              type:
+                - string
+                - 'null'
+              description: Localised name of the instition's branch.
+              examples:
+                - Nienburg
+        nationalId:
+          type:
+            - string
+            - 'null'
+          description: National ID of the institution.
+        assets:
+          type: object
+          description: Graphical assets for the institution.
+          properties:
+            icon:
+              type:
+                - string
+                - 'null'
+              description: Institution icon.
+              examples:
+                - 'http://cdn.mywebsite.com/assets/bank.svg'
+            logo:
+              type:
+                - string
+                - 'null'
+              description: Institution logo.
+              examples:
+                - 'http://cdn.mywebsite.com/assets/bank.svg'
+        types:
+          type: array
+          description: Institution type(s).
+          items:
+            type: string
+            enum:
+              - BUSINESS
+              - PERSONAL
+        supportedCurrencies:
+          type: array
+          description: List of institution's supported currencies.
+          items:
+            type: string
+            minLength: 3
+            maxLength: 3
+            examples:
+              - EUR
+        capabilities:
+          type: object
+          description: List of institution's capabilities with details.
+          properties:
+            payments:
+              type: object
+              description: Payments-related capabilities.
+              properties:
+                active:
+                  type: boolean
+                  description: Whether institution has payments functionality active or not.
+                accountIdentifiersRequired:
+                  type: array
+                  description: Account identifier(s) institution requires to start with the payment initiation process.
+                  items:
+                    type: string
+                    enum:
+                      - IBAN
+                      - BRANCH_CODE
+                      - ACCOUNT_NUMBER
+                      - PSU_ID
+                additionalDataRequired:
+                  type: array
+                  description: |-
+                    Any additional data institution requires to start with the payment initiation process.
+
+                    For now, only additional required data can be `REDIRECT_TYPE`. This is specific for `ES` institutions.
+
+                    It is discouraged to use this property and gather data upfront. It is safer and more aligned with API design to react upon API responses.
+                  items:
+                    const: REDIRECT_TYPE
+                    type: string
+                communication:
+                  type: object
+                  x-stoplight:
+                    id: 2pnty7ft6m6fv
+                  description: Communication-related capabilities of the institution.
+                  properties:
+                    appToApp:
+                      type: string
+                      x-stoplight:
+                        id: upsiia5yv6hlu
+                      enum:
+                        - SUPPORTED
+                        - NOT_SUPPORTED
+                        - UNKNOWN
+                      description: Information whether the institution supports app-to-app redirects.
+    Institution-details-response:
+      type: object
+      title: object<institution>
+      examples:
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+          country: DE
+          name: Sparkasse Nienburg
+          localName: Sparkasse Nienburg
+          alternativeName: null
+          group:
+            name: Sparkasse
+            localName: Sparkasse
+          branch:
+            name: Nienburg
+            localName: Nienburg
+          nationalId: '25650106'
+          assets:
+            icon: 'http://cdn.mywebsite.com/assets/bank.svg'
+            logo: 'http://cdn.mywebsite.com/assets/bank.svg'
+          types:
+            - BUSINESS
+          capabilities:
+            payments:
+              active: true
+              accountIdentifiersRequired:
+                - IBAN
+              additionalDataRequired: []
+              communication:
+                appToApp: SUPPORTED
+      x-stoplight:
+        id: kxjb9l3zmpgbx
+      properties:
+        id:
+          type: string
+          description: Identifier of the institution.
+          format: uuid
+          examples:
+            - 497f6eca-6276-4993-bfeb-53cbbbba6f08
+        country:
+          type: string
+          description: Institution country.
+          minLength: 2
+          maxLength: 2
+          examples:
+            - PL
+        name:
+          type: string
+          description: Name of the institution.
+          examples:
+            - Sparkasse Nienburg
+        localName:
+          type:
+            - string
+            - 'null'
+          description: Localised name of the institution.
+          examples:
+            - Sparkasse Nienburg
+        alternativeName:
+          type:
+            - string
+            - 'null'
+          description: |-
+            Alternative name of the institution.
+
+            Might be previous name, etc. Handy for search mechanisms on merchant's side.
+        group:
+          type: object
+          description: Institutions' group info.
+          properties:
+            name:
+              type:
+                - string
+                - 'null'
+              description: Name of the institions' group.
+              examples:
+                - Sparkasse
+            localName:
+              type:
+                - string
+                - 'null'
+              description: Localised name of the institions' group.
+              examples:
+                - Sparkasse
+        branch:
+          type: object
+          description: Institution's branch info.
+          properties:
+            name:
+              type:
+                - string
+                - 'null'
+              description: Name of the instition's branch.
+              examples:
+                - Nienburg
+            localName:
+              type:
+                - string
+                - 'null'
+              description: Localised name of the instition's branch.
+              examples:
+                - Nienburg
+        nationalId:
+          type:
+            - string
+            - 'null'
+          description: National ID of the institution.
+        assets:
+          type: object
+          description: Graphical assets for the institution.
+          properties:
+            icon:
+              type:
+                - string
+                - 'null'
+              description: Institution icon.
+              examples:
+                - 'http://cdn.mywebsite.com/assets/bank.svg'
+            logo:
+              type:
+                - string
+                - 'null'
+              description: Institution logo.
+              examples:
+                - 'http://cdn.mywebsite.com/assets/bank.svg'
+        types:
+          type: array
+          description: Institution type(s).
+          items:
+            type: string
+            enum:
+              - BUSINESS
+              - PERSONAL
+        capabilities:
+          type: object
+          description: List of institution's capabilities with details.
+          properties:
+            payments:
+              type: object
+              description: Payments-related capabilities.
+              properties:
+                active:
+                  type: boolean
+                  description: Whether institution has payments functionality active or not.
+                accountIdentifiersRequired:
+                  type: array
+                  description: Account identifier(s) institution requires to start with the payment initiation process.
+                  items:
+                    type: string
+                    enum:
+                      - IBAN
+                      - BRANCH_CODE
+                      - ACCOUNT_NUMBER
+                      - PSU_ID
+                      - PSU_IP_ADDRESS
+                additionalDataRequired:
+                  type: array
+                  description: |-
+                    Any additional data institution requires to start with the payment initiation process.
+
+                    For now, only additional required data can be `REDIRECT_TYPE`. This is specific for `ES` institutions.
+
+                    It is discouraged to use this property and gather data upfront. It is safer and more aligned with API design to react upon API responses.
+                  items:
+                    const: REDIRECT_TYPE
+                    type: string
+                communication:
+                  type: object
+                  x-stoplight:
+                    id: 4q0glhysgpwom
+                  description: Communication-related capabilities of the institution.
+                  properties:
+                    appToApp:
+                      type: string
+                      x-stoplight:
+                        id: r2gfdks3ei7k4
+                      enum:
+                        - SUPPORTED
+                        - NOT_SUPPORTED
+                        - UNKNOWN
+                      description: Information whether the institution supports app-to-app redirects.
+    Name-match-score-response:
+      title: Name-match-score-response
+      x-stoplight:
+        id: byhf87g8iw6as
+      type: object
+      properties:
+        invocationId:
+          type: string
+          x-stoplight:
+            id: z37q7pzc45d22
+          format: uuid
+          description: Unique ID of operation's invocation.
+        score:
+          type: number
+          x-stoplight:
+            id: g4k242kju0xyx
+          description: Name match score as a floating number.
+  parameters:
+    X-Volt-Api-Version:
+      name: X-Volt-Api-Version
+      in: header
+      required: true
+      schema:
+        type: integer
+        example: 1
+        enum:
+          - 1
+      description: 'Version of the API used. Currently, version `1` is the only version.'
+    X-Volt-Initiation-Channel:
+      name: X-Volt-Initiation-Channel
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - api
+          - hosted
+        example: api
+      description: Channel used for payment initiation flow.
+security:
+  - oauth: []
+    Bearer: []
+x-internal: false
