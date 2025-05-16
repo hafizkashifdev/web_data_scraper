@@ -1,0 +1,30 @@
+<h1>Security Model1</h1>
+<h2>Dynamic Client Registration</h2>
+<p>Our API allows dynamic client registration in order to create a valid client that is able to use our Authorisation Server. We only trust Software Statement Assertions (SSAs) issued by the Open Banking Directory provided by OBIE. eIDAS certificates are supported via onboarding to the Open Banking Directory (as discussed in more detail below).</p>
+<p>The url of the registration endpoint is advertised on our OIDC Discovery Endpoints (see below) using the registration_endpoint claim.
+The <code>aud</code> claim used in the outer JWT of a Dynamic Client Registration request is the OBIE issued <code>org_id</code> (as documented in the OBIE DCR v3.1 standard)</p>
+<h2>Production security profile</h2>
+<p>As defined further in the Tide Open Banking API Specification</p>
+<ul>
+<li>ID Token Signing Algorithm: <code>PS256</code></li>
+<li>Response Types: <code>code id_token</code></li>
+<li>Request Object Signing Algorithms: <code>PS256</code></li>
+<li>Token Endpoint Auth Singing Algorithms: <code>PS256</code></li>
+<li>Token Endpoint Auth Methods: <code>private_key_jwt</code>, <code>tls_client_auth</code></li>
+</ul>
+<blockquote>
+<p>For private_key_jwt - the <code>aud</code> claim is the url of the token endpoint as specified in OIDC client authentication
+The request object used in OIDC flows the aud claim is the issuer url from the Tide ASPSP .wellknown endpoint (linked below).</p>
+</blockquote>
+<blockquote>
+<p>Note: Our Sandbox API also offers less strict profiles to assist with integration testing. See below for more details.</p>
+</blockquote>
+<h2>Certificate Support</h2>
+<h3>OB Transport &amp; OB Signing Certificates</h3>
+<p>We recommend that TPPs use OB Transport and OB Signing certificates where possible. TPPs can use their QWACs and QSeals to onboard to the OBIE directory and generate these certificates.</p>
+<h3>OB WAC &amp; OB Seal</h3>
+<p>We support the use of OBWAC and OBSeal on our production and sandbox environments. TPPs can use their QWACs and QSeals to onboard to the OBIE directory and generate these certificates.</p>
+<h3>QWACs</h3>
+<p>We support the use of QWACs, but this is not our recommended approach. TPPs facing issues onboarding with QWACs should contact our support desk. Please attach a pem file of the certificate to your support ticket.</p>
+<h3>QSeal</h3>
+<p>We support the use of QSeals that have been attached to your software statement in the OB Directory.</p>

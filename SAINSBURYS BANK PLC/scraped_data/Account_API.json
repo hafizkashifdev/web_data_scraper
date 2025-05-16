@@ -1,0 +1,67 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Account and Transaction API Specification for Sainsburys Bank",
+    "description": "Open API for Account and Transaction API Specification",
+    "version": "v3.1.1",
+    "parameters": {
+      "FromBookingDateTimeParam": {
+        "in": "header"
+      },
+      "AccountId": {
+        "name": "AccountId"
+      },
+      "ConsentId": {
+        "name": "ConsentId"
+      },
+      "StatementId": {
+        "name": "StatementId"
+      },
+      "x-customer-user-agent-Param": {
+        "in": "header"
+      }
+    },
+    "responses": {
+      "201AccountAccessConsentsCreated": { "description": "Account Access Consents Created" },
+      "200AccountAccessConsentsConsentIdRead": { "description": "Account Access Consents Read" },
+      "204AccountAccessConsentsConsentIdDeleted": { "description": "Account Access Consents Deleted" },
+      "200AccountsRead": { "description": "Accounts Read" },
+      "200AccountsAccountIdRead": { "description": "Accounts Read" },
+      "200AccountsAccountIdTransactionsRead": { "description": "Transactions Read" },
+      "200AccountsAccountIdBalancesRead": { "description": "Balances Read" },
+      "400ErrorResponse": { "description": "Bad request" },
+      "401ErrorResponse": { "description": "Unauthorized" },
+      "403ErrorResponse": { "description": "Forbidden" },
+      "404ErrorResponse": { "description": "Not found" },
+      "405ErrorResponse": { "description": "Method Not Allowed" },
+      "406ErrorResponse": { "description": "Not Acceptable" },
+      "415ErrorResponse": { "description": "Unsupported Media Type" },
+      "429ErrorResponse": { "description": "Too Many Requests" },
+      "500ErrorResponse": { "description": "Internal Server Error" }
+    },
+    "schemas": {
+      "AccountId": {
+        "description": "Account Identification of the customer for Product Details",
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 40
+      },
+      "OBRisk2": {
+        "description": "The Risk section is sent by the initiating party to the ASPSP. It is used to specify additional details for risk scoring for Account Info.",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    }
+  },
+  "servers": [
+    { "url": "https://tsob.sainsburysbank.co.uk/open-banking/v3.1/aisp" },
+    { "url": "https://ob.sainsburysbank.co.uk/open-banking/v3.1/aisp" }
+  ],
+  "paths": {
+    // ...all paths from YAML, converted to JSON...
+  },
+  "components": {
+    // ...all components from YAML, converted to JSON...
+  }
+}

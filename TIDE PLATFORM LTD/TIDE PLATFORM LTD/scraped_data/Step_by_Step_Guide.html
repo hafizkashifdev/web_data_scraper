@@ -1,0 +1,223 @@
+<h1>Guide to connect to sandbox</h1>
+<h2>Step 1: Pre-Requisites for TPP</h2>
+<p>Ensure that the following pre-requisites are met before onboarding onto Tide.
+The TPP has registered on the Directory Sandbox - <a href="https://directory.openbanking.org.uk/s/login/" target="_blank">https://directory.openbanking.org.uk/s/login/</a>
+The TPP has at least one software statement created on the Directory Sandbox environment
+The TPP has at least one transport certificate created for each of its software statements.
+The TPP has at least one redirect URI for each of its software statements.
+The TPP has a copy of the OB root and issuing certificate attached. </p>
+<h2>Step 2: Register TPP with Bank using Dynamic Client Registration</h2>
+<p>See <a href="http://openid.net/specs/openid-connect-registration-1_0-21.html" target="_blank">http://openid.net/specs/openid-connect-registration-1_0-21.html</a>
+Claims required in dynamic client registration for Banks are as follows</p>
+<table>
+<thead>
+<tr>
+<th>Field Names</th>
+<th>Example Values</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>token_endpoint_auth_signing_alg</td>
+<td>PS256</td>
+<td>Signature algorithm used JWK.</td>
+</tr>
+<tr>
+<td>grant_types</td>
+<td>authorization_code, client_credentials</td>
+<td></td>
+</tr>
+<tr>
+<td>subject_type</td>
+<td>public</td>
+<td>subject_type requested for responses to this client_id.</td>
+</tr>
+<tr>
+<td>application_type</td>
+<td>web</td>
+<td>The issuer must be your software ID. This is important as it's used verify it matches the SSA software ID claim.</td>
+</tr>
+<tr>
+<td>redirect_uris</td>
+<td></td>
+<td>All redirect Uris should be added in the claims</td>
+</tr>
+<tr>
+<td>token_endpoint_auth_method</td>
+<td>client_secret_basic</td>
+<td>Requested authentication method for the Token Endpoint.</td>
+</tr>
+<tr>
+<td>aud</td>
+<td>0015800001ZEc3hAAD</td>
+<td>The audience must match the AS issuer ID.</td>
+</tr>
+<tr>
+<td>scopes</td>
+<td>openid, accounts, payments</td>
+<td>The scopes will depend on your role from the FCA (AISP and/or PISP)</td>
+</tr>
+<tr>
+<td>request_object_signing_alg</td>
+<td>none</td>
+<td></td>
+</tr>
+<tr>
+<td>exp</td>
+<td>timestamp</td>
+<td></td>
+</tr>
+<tr>
+<td>iat</td>
+<td>timestamp</td>
+<td></td>
+</tr>
+<tr>
+<td>jti</td>
+<td></td>
+<td>UUID</td>
+</tr>
+<tr>
+<td>response_types</td>
+<td>code, code id_token</td>
+<td>UUJSON array containing a list of the OAuth 2.0 response_type values that the Client is declaring that it will restrict itself to using</td>
+</tr>
+<tr>
+<td>id_token_signed_response_alg</td>
+<td>PS256</td>
+<td>JWS alg algorithm</td>
+</tr>
+<tr>
+<td>software_statement</td>
+<td></td>
+<td>UUID</td>
+</tr>
+</tbody></table>
+<p>2.1 Example Registration Request JWT (Python)
+This code is compatible with python3.6 and requires the jwcrypto module (pip install jwcrypto)</p>
+<pre><code>import time, uuid
+from jwcrypto import jwt
+from jwcrypto import jwk
+
+# The software statement ID (software_id) of the software statement created in software statements (MIT).
+SOFTWARE_STATEMENT_ID = ""
+#  Value of the kid parameter associated with the signing certificate generated in Generate a
+# transport/signing certificate pair (please note that you need to use the signing certificate kid).
+KID = ""
+# Your private signing key. You will use this to sign your JWT.
+PRIVATE_RSA_KEY = """
+-----BEGIN PRIVATE KEY-----
+-----END PRIVATE KEY-----
+"""
+
+SOFTWARE_STATEMENT = ""
+
+def make_registration_jwt(software_statement_id: str, kid: str, software_statement: str) -&gt; str:
+    jwt_iat = int(time.time())
+    jwt_exp = jwt_iat + 3600
+    header = dict(alg='RS256', kid=kid, typ='JWT')
+    claims = dict(
+        token_endpoint_auth_signing_alg="PS256",
+        grant_types=["authorization_code", "client_credentials"],
+        subject_type="public",
+        application_type="web",
+        iss=software_statement_id,
+        redirect_uris=["https://app.getpostman.com/oauth2/callback"],
+        token_endpoint_auth_method="client_secret_basic",
+        aud="0015800001ZEc3hAAD",
+        scope= "openid accounts payments",   #accounts for AISP or payments for PISP or both
+        request_object_signing_alg="none",
+        exp=jwt_exp,
+        iat=jwt_iat,
+        jti=str(uuid.uuid4()),
+        response_types=["code", "code id_token"],
+        id_token_signed_response_alg="RS256",
+        software_statement=software_statement
+     )
+
+    token = jwt.JWT(header=header, claims=claims)
+    key_obj = jwk.JWK.from_pem(PRIVATE_RSA_KEY.encode('latin-1'))
+    token.make_signed_token(key_obj)
+    signed_token = token.serialize()
+
+    print(signed_token)
+    return signed_token
+
+make_registration_jwt(SOFTWARE_STATEMENT_ID, KID, SOFTWARE_STATEMENT)
+</code></pre>
+<p>2.2 Request Registration Endpoint Example (Python): </p>
+<pre><code>headers = {'Content-Type': 'application/jwt'}
+client = ('./transport.pem', './transports.key')
+response = requests.post("https://ob-api1.sandbox.tide.co:4501/v1.0/dynamic-client-registration/v3.1/register",
+                                registration_request,
+                                headers=headers,
+                                verify=False,
+                                cert=client
+                                )
+print(response.content)
+</code></pre>
+<p>The response you get from this registration is exactly the same as the one described by the OIDC dynamic registration.
+You should now have successfully onboarded your TPP with the ASPSP and received a client ID; you will need this client ID for future interactions with the ASPSP.</p>
+<p>2.3 Environment File download</p>
+<p>Once a TPP successfully registers to Ozone, they can download the environment file for their client via an ozone helper api</p>
+<pre><code>Endpoint: https://ob-api1.sandbox.tide.co:4501/ozone/v1.0/postman/environment
+
+Headers: Authorization: Basic &lt;token&gt;
+The token is the base64 encoded string of clientId:clientsecret
+</code></pre>
+<p>On successful response the TPP can then save the environment file on to their local system.</p>
+<h2>Step 3: Import Environment Files and Collections To Postman</h2>
+<p>3.1. Import Environment Files and Collections into Postman</p>
+<p><img src="../../assets/images/postmanimport1.png" alt=""></p>
+<p><img src="../../assets/images/postmanimport2.png" alt=""></p>
+<p>3.2) Check URLs and Environments are loaded successfully </p>
+<p>3.3) Add Client Certificates
+Add the following ASPSP end points into Postman;
+<a href="https://ob-api1.sandbox.tide.co:4501" target="_blank">https://ob-api1.sandbox.tide.co:4501</a>
+<a href="https://ob-auth1.sandbox.tide.co:4201/token" target="_blank">https://ob-auth1.sandbox.tide.co:4201/token</a></p>
+<p>The CRT should be set to the transport certificate downloaded from the open banking directory. The Key value should be set to the private key for the transport certificate.</p>
+<p>3.4) SSL Certificate Verification (TPP)
+In Postman settings ensure SSL Certificate Verification is set to off.</p>
+<h2>Step 4: Account Information Flow</h2>
+<p>4.1) Client Credentials Grant</p>
+<p><img src="../../assets/images/ccg.png" alt=""></p>
+<p>4.2) Account Access Consent</p>
+<p><img src="../../assets/images/accountaccess.png" alt=""></p>
+<p>4.3) PSU Consent Flow
+TPPs can generate the consent flow URL by postman</p>
+<p><img src="../../assets/images/consent1.png" alt=""></p>
+<p>Once the URL is constructed, open the URL to initiate the PSU consent flow</p>
+<p>Authenticate user</p>
+<p><img src="../../assets/images/consent2.png" alt=""></p>
+<p>Sandbox User Accounts</p>
+<table>
+<thead>
+<tr>
+<th>user</th>
+<th>password</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rora</td>
+<td>rora</td>
+</tr>
+<tr>
+<td>mits</td>
+<td>mits</td>
+</tr>
+<tr>
+<td>ivsa</td>
+<td>ivsa</td>
+</tr>
+</tbody></table>
+<p>Select accounts</p>
+<p><img src="../../assets/images/consent3.png" alt=""></p>
+<p>Once the PSU consent is successful, Ozone bank will redirect back to the redirect URI. Copy the auth code from the URL</p>
+<p><img src="../../assets/images/consent4.png" alt=""></p>
+<p>4.4) Generate the access token</p>
+<p><img src="../../assets/images/accesstoken.png" alt=""></p>
+<h2>Step 5: Retrieve Account and Transaction Data</h2>
+<p>Retrieve Account Data</p>
+<p><img src="../../assets/images/accounts.png" alt=""></p>
+<p>Retrieve Transaction Data</p>
+<p><img src="../../assets/images/transactions.png" alt=""></p>
