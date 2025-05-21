@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@api/triodos": "file:TRIODOS BANK UK LIMITED/.api/apis/triodos",
     "puppeteer": "^24.8.2",
     "sanitize-filename": "^1.6.3",
     "xlsx": "^0.18.5"

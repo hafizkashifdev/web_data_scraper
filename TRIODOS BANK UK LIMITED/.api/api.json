@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "triodos",
+      "source": "@triodos/v1.1#14a4wgom2mynybw",
+      "integrity": "sha512-3EjT2EUx6VrWvtG06JIUC6UmFp5ctwJJFrOCsCjfA4VlQyCYTBQ934KkXp/EhbBp++HdVVA6ewotn86iT26psg==",
+      "installerVersion": "6.1.3"
+    }
+  ]
+}

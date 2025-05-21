@@ -1,0 +1,1786 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Events API Specification - ASPSP Endpoints",
+    "version": "v3.1.8"
+  },
+  "basePath": "/open-banking/v3.1",
+  "schemes": [
+    "https"
+  ],
+  "externalDocs": {
+    "url": "http://",
+    "description": "OpenAPI for Events (Subscription & Aggregated Polling) API Specification - ASPSP Endpoints",
+    "x-amf-title": "Events API Specification - ASPSP Endpoints"
+  },
+  "paths": {
+    "/event-subscriptions": {
+      "post": {
+        "operationId": "CreateEventSubscriptions",
+        "description": "Create Event Subscription",
+        "parameters": [
+          {
+            "name": "x-fapi-auth-date",
+            "description": "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC",
+            "required": false,
+            "in": "header",
+            "type": "string",
+            "pattern": "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-jws-signature",
+            "description": "A detached JWS signature of the body of the payload.",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "x-amf-mediaType": "application/json",
+            "in": "body",
+            "name": "generated",
+            "schema": {
+              "title": "body",
+              "description": "Default",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Data"
+              ],
+              "properties": {
+                "Data": {
+                  "$ref": "#/definitions/Data"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Event Subscription Created",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              },
+              "x-jws-signature": {
+                "title": "x-jws-signature",
+                "description": "Header containing a detached JWS signature of the body of the payload.\n",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response201",
+              "description": "",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Data"
+              ],
+              "properties": {
+                "Meta": {
+                  "title": "Meta",
+                  "description": "Meta Data relevant to the payload",
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "LastAvailableDateTime": {
+                      "title": "LastAvailableDateTime",
+                      "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "FirstAvailableDateTime": {
+                      "title": "FirstAvailableDateTime",
+                      "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "TotalPages": {
+                      "title": "TotalPages",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "Data": {
+                  "$ref": "#/definitions/Data_1"
+                },
+                "Links": {
+                  "$ref": "#/definitions/Links"
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response201",
+                  "description": ""
+                }
+              }
+            ]
+          },
+          "400": {
+            "description": "Bad request",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response400",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response400",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response403",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response403",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "title": "Retry-After",
+                "description": "Number in seconds to wait",
+                "type": "string"
+              },
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response500",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response500",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          }
+        },
+        "security": [
+          {
+            "auth": [
+              "accounts",
+              "payments",
+              "fundsconfirmations"
+            ]
+          }
+        ]
+      },
+      "get": {
+        "operationId": "GetEventSubscriptions",
+        "description": "Get Event Subscription",
+        "parameters": [
+          {
+            "name": "x-fapi-auth-date",
+            "description": "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC",
+            "required": false,
+            "in": "header",
+            "type": "string",
+            "pattern": "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event Subscription Read",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              },
+              "x-jws-signature": {
+                "title": "x-jws-signature",
+                "description": "Header containing a detached JWS signature of the body of the payload.\n",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response200",
+              "description": "",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Data"
+              ],
+              "properties": {
+                "Meta": {
+                  "title": "Meta",
+                  "description": "Meta Data relevant to the payload",
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "LastAvailableDateTime": {
+                      "title": "LastAvailableDateTime",
+                      "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "FirstAvailableDateTime": {
+                      "title": "FirstAvailableDateTime",
+                      "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "TotalPages": {
+                      "title": "TotalPages",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "Data": {
+                  "$ref": "#/definitions/Data_2"
+                },
+                "Links": {
+                  "$ref": "#/definitions/Links"
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response200",
+                  "description": ""
+                }
+              }
+            ]
+          },
+          "400": {
+            "description": "Bad request",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response400",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response400",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response403",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response403",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "title": "Retry-After",
+                "description": "Number in seconds to wait",
+                "type": "string"
+              },
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response500",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response500",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          }
+        },
+        "security": [
+          {
+            "auth": [
+              "accounts",
+              "payments",
+              "fundsconfirmations"
+            ]
+          }
+        ]
+      }
+    },
+    "/event-subscriptions/{EventSubscriptionId}": {
+      "delete": {
+        "operationId": "DeleteEventSubscriptionsEventSubscriptionId",
+        "description": "Delete Event Subscription",
+        "parameters": [
+          {
+            "name": "EventSubscriptionId",
+            "description": "EventSubscriptionId",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          },
+          {
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-fapi-auth-date",
+            "description": "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC",
+            "required": false,
+            "in": "header",
+            "type": "string",
+            "pattern": "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Event Subscription Deleted",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response400",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response400",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response403",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response403",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "title": "Retry-After",
+                "description": "Number in seconds to wait",
+                "type": "string"
+              },
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response500",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response500",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          }
+        },
+        "security": [
+          {
+            "auth": [
+              "accounts",
+              "payments",
+              "fundsconfirmations"
+            ]
+          }
+        ]
+      }
+    },
+    "/events": {
+      "post": {
+        "operationId": "CreateEvents",
+        "description": "Create Events",
+        "parameters": [
+          {
+            "name": "x-fapi-auth-date",
+            "description": "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC",
+            "required": false,
+            "in": "header",
+            "type": "string",
+            "pattern": "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"
+          },
+          {
+            "name": "x-fapi-customer-ip-address",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-fapi-interaction-id",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-customer-user-agent",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "required": false,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "x-amf-mediaType": "application/json",
+            "in": "body",
+            "name": "generated",
+            "schema": {
+              "title": "body",
+              "description": "Default",
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "setErrs": {
+                  "title": "setErrs",
+                  "description": "An object that encapsulates all negative acknowledgements transmitted by the TPP",
+                  "type": "object",
+                  "additionalProperties": true,
+                  "patternProperties": {
+                    "^.*$": {
+                      "$ref": "#/definitions/SetErrs"
+                    }
+                  }
+                },
+                "ack": {
+                  "title": "ack",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                },
+                "returnImmediately": {
+                  "title": "returnImmediately",
+                  "description": "Indicates whether an ASPSP should return a response immediately or provide a long poll",
+                  "type": "boolean"
+                },
+                "maxEvents": {
+                  "title": "maxEvents",
+                  "description": "Maximum number of events to be returned. A value of zero indicates the ASPSP should not return events even if available",
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Read awaiting events",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response200",
+              "description": "",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "moreAvailable",
+                "sets"
+              ],
+              "properties": {
+                "moreAvailable": {
+                  "title": "moreAvailable",
+                  "description": "A JSON boolean value that indicates if more unacknowledged event notifications are available to be returned.",
+                  "type": "boolean"
+                },
+                "sets": {
+                  "title": "sets",
+                  "description": "A JSON object that contains zero or more nested JSON attributes. If there are no outstanding event notifications to be transmitted, the JSON object SHALL be empty.",
+                  "type": "object",
+                  "additionalProperties": true,
+                  "patternProperties": {
+                    "^.*$": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response200",
+                  "description": ""
+                }
+              }
+            ]
+          },
+          "201": {
+            "description": "Events Created",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response201",
+              "description": "",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "moreAvailable",
+                "sets"
+              ],
+              "properties": {
+                "moreAvailable": {
+                  "title": "moreAvailable",
+                  "description": "A JSON boolean value that indicates if more unacknowledged event notifications are available to be returned.",
+                  "type": "boolean"
+                },
+                "sets": {
+                  "title": "sets",
+                  "description": "A JSON object that contains zero or more nested JSON attributes. If there are no outstanding event notifications to be transmitted, the JSON object SHALL be empty.",
+                  "type": "object",
+                  "additionalProperties": true,
+                  "patternProperties": {
+                    "^.*$": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response201",
+                  "description": ""
+                }
+              }
+            ]
+          },
+          "400": {
+            "description": "Bad request",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response400",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response400",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response403",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response403",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          },
+          "404": {
+            "description": "Not found",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "title": "Retry-After",
+                "description": "Number in seconds to wait",
+                "type": "string"
+              },
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "title": "x-fapi-interaction-id",
+                "description": "An RFC4122 UID used as a correlation id.",
+                "type": "string"
+              }
+            },
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response500",
+              "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "Errors",
+                "Message",
+                "Code"
+              ],
+              "properties": {
+                "Id": {
+                  "title": "Id",
+                  "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "Errors": {
+                  "title": "Errors",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "$ref": "#/definitions/OBError1"
+                  }
+                },
+                "Message": {
+                  "title": "Message",
+                  "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "Code": {
+                  "title": "Code",
+                  "description": "High level textual error code, to help categorize the errors.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                }
+              }
+            },
+            "x-amf-responsePayloads": [
+              {
+                "mediaType": "application/jose+jwe",
+                "schema": {
+                  "title": "response500",
+                  "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+                }
+              }
+            ]
+          }
+        },
+        "security": [
+          {
+            "auth": [
+              "accounts",
+              "fundsconfirmations"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Data": {
+      "title": "Data",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "Version"
+      ],
+      "properties": {
+        "CallbackUrl": {
+          "title": "CallbackUrl",
+          "description": "Callback URL for a TPP hosted service. Will be used by ASPSPs, in conjunction with the resource name, to construct a URL to send event notifications to.",
+          "type": "string"
+        },
+        "Version": {
+          "title": "Version",
+          "description": "Version for the event notification.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10
+        },
+        "EventTypes": {
+          "title": "EventTypes",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Data_1": {
+      "title": "Data",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "EventSubscriptionId",
+        "Version"
+      ],
+      "properties": {
+        "EventSubscriptionId": {
+          "title": "EventSubscriptionId",
+          "description": "Unique identification as assigned by the ASPSP to uniquely identify the callback URL resource.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "CallbackUrl": {
+          "title": "CallbackUrl",
+          "description": "Callback URL for a TPP hosted service. Will be used by ASPSPs, in conjunction with the resource name, to construct a URL to send event notifications to.",
+          "type": "string"
+        },
+        "Version": {
+          "title": "Version",
+          "description": "Version for the event notification.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10
+        },
+        "EventTypes": {
+          "title": "EventTypes",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Links": {
+      "title": "Links",
+      "description": "Links relevant to the payload",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "Self"
+      ],
+      "properties": {
+        "Self": {
+          "title": "Self",
+          "type": "string"
+        },
+        "First": {
+          "title": "First",
+          "type": "string"
+        },
+        "Prev": {
+          "title": "Prev",
+          "type": "string"
+        },
+        "Next": {
+          "title": "Next",
+          "type": "string"
+        },
+        "Last": {
+          "title": "Last",
+          "type": "string"
+        }
+      }
+    },
+    "OBError1": {
+      "title": "OBError1",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": true,
+      "required": [
+        "ErrorCode",
+        "Message"
+      ],
+      "properties": {
+        "ErrorCode": {
+          "title": "ErrorCode",
+          "description": "Low level textual error code, e.g., UK.OBIE.Field.Missing",
+          "type": "string"
+        },
+        "Message": {
+          "title": "Message",
+          "description": "A description of the error that occurred. e.g., 'A mandatory field isn't supplied' or 'RequestedExecutionDateTime must be in future'\n\nOBIE doesn't standardise this field\n",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "Path": {
+          "title": "Path",
+          "description": "Recommended but optional reference to the JSON Path of the field with error, e.g., Data.Initiation.InstructedAmount.Currency",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "Url": {
+          "title": "Url",
+          "description": "URL to help remediate the problem, or provide more information, or to API Reference, or help etc",
+          "type": "string"
+        }
+      }
+    },
+    "Data_2": {
+      "title": "Data",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "EventSubscription": {
+          "title": "EventSubscription",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EventSubscription"
+          }
+        }
+      }
+    },
+    "SetErrs": {
+      "title": "SetErrs",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "err",
+        "description"
+      ],
+      "properties": {
+        "err": {
+          "title": "err",
+          "description": "A value from the IANA \"Security Event Token Delivery Error Codes\" registry that identifies the error as defined here \nhttps://tools.ietf.org/id/draft-ietf-secevent-http-push-03.html#error_codes",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "description": {
+          "title": "description",
+          "description": "A human-readable string that provides additional diagnostic information",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "EventSubscription": {
+      "title": "EventSubscription",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "EventSubscriptionId",
+        "Version"
+      ],
+      "properties": {
+        "EventSubscriptionId": {
+          "title": "EventSubscriptionId",
+          "description": "Unique identification as assigned by the ASPSP to uniquely identify the callback url resource.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "CallbackUrl": {
+          "title": "CallbackUrl",
+          "description": "Callback URL for a TPP hosted service. Will be used by ASPSPs, in conjunction with the resource name, to construct a URL to send event notifications to.",
+          "type": "string"
+        },
+        "Version": {
+          "title": "Version",
+          "description": "Version for the event notification.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10
+        },
+        "EventTypes": {
+          "title": "EventTypes",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "auth": {
+      "type": "oauth2",
+      "authorizationUrl": "",
+      "tokenUrl": "https://authserver.example/token",
+      "scopes": {
+        "accounts": "null",
+        "fundsconfirmations": "null",
+        "payments": "null"
+      },
+      "x-amf-settings": {
+        "authorizationGrants": [
+          "client_credentials"
+        ]
+      }
+    }
+  }
+}
