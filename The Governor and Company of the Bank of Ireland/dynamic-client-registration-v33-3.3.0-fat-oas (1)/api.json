@@ -1,0 +1,946 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Dynamic Client Registration API",
+    "version": "v3.3.0"
+  },
+  "host": "www.example.com",
+  "x-amf-baseUriParameters": {
+    "defaultHost": {
+      "displayName": "defaultHost",
+      "default": "www.example.com",
+      "type": "string"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "externalDocs": {
+    "url": "http://",
+    "description": "This specification defines the APIs for a TPP to submit a Software Statement Assertion to an ASPSP for the purpose of creating OAuth clients that are registered with ASPSP.",
+    "x-amf-title": "Dynamic Client Registration API"
+  },
+  "paths": {
+    "/register": {
+      "post": {
+        "operationId": "RegisteraclientbywayofaSoftwareStatementAssertion",
+        "description": "Endpoint will be secured by way of Mutual Authentication over TLS",
+        "parameters": [
+          {
+            "x-amf-mediaType": "application/jose",
+            "in": "body",
+            "name": "generated",
+            "schema": {
+              "title": "requestBody",
+              "description": "A request to register a Software Statement Assertion with an ASPSP",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Client registration",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response",
+              "description": "",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "grant_types",
+                "request_object_signing_alg",
+                "iat",
+                "id_token_signed_response_alg",
+                "exp",
+                "token_endpoint_auth_method",
+                "software_statement",
+                "jti",
+                "scope",
+                "iss",
+                "aud",
+                "application_type",
+                "redirect_uris"
+              ],
+              "properties": {
+                "grant_types": {
+                  "title": "grant_types",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "enum": [
+                      "client_credentials",
+                      "authorization_code",
+                      "refresh_token",
+                      "urn:openid:params:grant-type:ciba"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "request_object_signing_alg": {
+                  "title": "request_object_signing_alg",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "backchannel_client_notification_endpoint": {
+                  "title": "backchannel_client_notification_endpoint",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified iff the grant_types includes  urn:openid:params:grant-type:ciba and  backchannel_token_delivery_mode is not poll.  This must be a valid HTTPS URL",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "iat": {
+                  "title": "iat",
+                  "description": "The time at which the request was issued by the TPP  expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "id_token_signed_response_alg": {
+                  "title": "id_token_signed_response_alg",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "exp": {
+                  "title": "exp",
+                  "description": "The time at which the request expires expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "token_endpoint_auth_method": {
+                  "title": "token_endpoint_auth_method",
+                  "enum": [
+                    "private_key_jwt",
+                    "client_secret_jwt",
+                    "client_secret_basic",
+                    "client_secret_post",
+                    "tls_client_auth"
+                  ],
+                  "type": "string"
+                },
+                "software_statement": {
+                  "title": "software_statement",
+                  "type": "string"
+                },
+                "backchannel_authentication_request_signing_alg": {
+                  "title": "backchannel_authentication_request_signing_alg",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified iff the grant_types includes  urn:openid:params:grant-type:ciba.",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "jti": {
+                  "title": "jti",
+                  "description": "Unique identifier for the JWT implemented as UUID v4",
+                  "type": "string",
+                  "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                  "minLength": 36,
+                  "maxLength": 36
+                },
+                "scope": {
+                  "title": "scope",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "client_secret": {
+                  "title": "client_secret",
+                  "description": "OAuth 2.0 client secret string",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 36
+                },
+                "client_id_issued_at": {
+                  "title": "client_id_issued_at",
+                  "description": "Time at which the client identifier was issued expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 0
+                },
+                "client_secret_expires_at": {
+                  "title": "client_secret_expires_at",
+                  "description": "Time at which the client secret will expire expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC. Set to 0 if does not expire",
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 0
+                },
+                "token_endpoint_auth_signing_alg": {
+                  "title": "token_endpoint_auth_signing_alg",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "client_id": {
+                  "title": "client_id",
+                  "description": "OAuth 2.0 client identifier string",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 36
+                },
+                "response_types": {
+                  "title": "response_types",
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "code",
+                      "code id_token"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "backchannel_token_delivery_mode": {
+                  "title": "backchannel_token_delivery_mode",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified iff the grant_types includes  urn:openid:params:grant-type:ciba",
+                  "enum": [
+                    "poll",
+                    "ping",
+                    "push"
+                  ],
+                  "type": "string"
+                },
+                "iss": {
+                  "title": "iss",
+                  "description": "Unique identifier for the TPP. Implemented as Base62 encoded GUID",
+                  "type": "string",
+                  "pattern": "^[0-9a-zA-Z]{1,22}$",
+                  "minLength": 1,
+                  "maxLength": 22
+                },
+                "tls_client_auth_subject_dn": {
+                  "title": "tls_client_auth_subject_dn",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "aud": {
+                  "title": "aud",
+                  "description": "The audience for the request. This should be the unique identifier\n\nfor the ASPSP issued by the issuer of the software statement.\n\nImplemented as Base62 encoded GUID\n",
+                  "type": "string",
+                  "pattern": "^[0-9a-zA-Z]{1,18}$",
+                  "minLength": 1,
+                  "maxLength": 18
+                },
+                "application_type": {
+                  "title": "application_type",
+                  "enum": [
+                    "web",
+                    "mobile"
+                  ],
+                  "type": "string"
+                },
+                "software_id": {
+                  "title": "software_id",
+                  "type": "string",
+                  "pattern": "^[0-9a-zA-Z]{1,22}$",
+                  "minLength": 1,
+                  "maxLength": 22
+                },
+                "redirect_uris": {
+                  "title": "redirect_uris",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  }
+                },
+                "backchannel_user_code_parameter_supported": {
+                  "title": "backchannel_user_code_parameter_supported",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified only if the grant_types includes  urn:openid:params:grant-type:ciba.  If specified, it MUST be set to false.",
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request failed due to client error",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response",
+              "description": "",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "error"
+              ],
+              "properties": {
+                "error": {
+                  "title": "error",
+                  "enum": [
+                    "invalid_redirect_uri",
+                    "invalid_client_metadata",
+                    "invalid_software_statement",
+                    "unapproved_software_statement"
+                  ],
+                  "type": "string"
+                },
+                "error_description": {
+                  "title": "error_description",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ]
+      }
+    },
+    "/register/{ClientId}": {
+      "get": {
+        "operationId": "GetaclientbywayofClientID",
+        "description": "Get a client by way of Client ID",
+        "parameters": [
+          {
+            "name": "ClientId",
+            "description": "The client ID",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client registration",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response",
+              "description": "",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "grant_types",
+                "request_object_signing_alg",
+                "iat",
+                "id_token_signed_response_alg",
+                "exp",
+                "token_endpoint_auth_method",
+                "software_statement",
+                "jti",
+                "scope",
+                "iss",
+                "aud",
+                "application_type",
+                "redirect_uris"
+              ],
+              "properties": {
+                "grant_types": {
+                  "title": "grant_types",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "enum": [
+                      "client_credentials",
+                      "authorization_code",
+                      "refresh_token",
+                      "urn:openid:params:grant-type:ciba"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "request_object_signing_alg": {
+                  "title": "request_object_signing_alg",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "backchannel_client_notification_endpoint": {
+                  "title": "backchannel_client_notification_endpoint",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified iff the grant_types includes  urn:openid:params:grant-type:ciba and  backchannel_token_delivery_mode is not poll.  This must be a valid HTTPS URL",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "iat": {
+                  "title": "iat",
+                  "description": "The time at which the request was issued by the TPP  expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "id_token_signed_response_alg": {
+                  "title": "id_token_signed_response_alg",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "exp": {
+                  "title": "exp",
+                  "description": "The time at which the request expires expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "token_endpoint_auth_method": {
+                  "title": "token_endpoint_auth_method",
+                  "enum": [
+                    "private_key_jwt",
+                    "client_secret_jwt",
+                    "client_secret_basic",
+                    "client_secret_post",
+                    "tls_client_auth"
+                  ],
+                  "type": "string"
+                },
+                "software_statement": {
+                  "title": "software_statement",
+                  "type": "string"
+                },
+                "backchannel_authentication_request_signing_alg": {
+                  "title": "backchannel_authentication_request_signing_alg",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified iff the grant_types includes  urn:openid:params:grant-type:ciba.",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "jti": {
+                  "title": "jti",
+                  "description": "Unique identifier for the JWT implemented as UUID v4",
+                  "type": "string",
+                  "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                  "minLength": 36,
+                  "maxLength": 36
+                },
+                "scope": {
+                  "title": "scope",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "client_secret": {
+                  "title": "client_secret",
+                  "description": "OAuth 2.0 client secret string",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 36
+                },
+                "client_id_issued_at": {
+                  "title": "client_id_issued_at",
+                  "description": "Time at which the client identifier was issued expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 0
+                },
+                "client_secret_expires_at": {
+                  "title": "client_secret_expires_at",
+                  "description": "Time at which the client secret will expire expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC. Set to 0 if does not expire",
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 0
+                },
+                "token_endpoint_auth_signing_alg": {
+                  "title": "token_endpoint_auth_signing_alg",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "client_id": {
+                  "title": "client_id",
+                  "description": "OAuth 2.0 client identifier string",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 36
+                },
+                "response_types": {
+                  "title": "response_types",
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "code",
+                      "code id_token"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "backchannel_token_delivery_mode": {
+                  "title": "backchannel_token_delivery_mode",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified iff the grant_types includes  urn:openid:params:grant-type:ciba",
+                  "enum": [
+                    "poll",
+                    "ping",
+                    "push"
+                  ],
+                  "type": "string"
+                },
+                "iss": {
+                  "title": "iss",
+                  "description": "Unique identifier for the TPP. Implemented as Base62 encoded GUID",
+                  "type": "string",
+                  "pattern": "^[0-9a-zA-Z]{1,22}$",
+                  "minLength": 1,
+                  "maxLength": 22
+                },
+                "tls_client_auth_subject_dn": {
+                  "title": "tls_client_auth_subject_dn",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "aud": {
+                  "title": "aud",
+                  "description": "The audience for the request. This should be the unique identifier\n\nfor the ASPSP issued by the issuer of the software statement.\n\nImplemented as Base62 encoded GUID\n",
+                  "type": "string",
+                  "pattern": "^[0-9a-zA-Z]{1,18}$",
+                  "minLength": 1,
+                  "maxLength": 18
+                },
+                "application_type": {
+                  "title": "application_type",
+                  "enum": [
+                    "web",
+                    "mobile"
+                  ],
+                  "type": "string"
+                },
+                "software_id": {
+                  "title": "software_id",
+                  "type": "string",
+                  "pattern": "^[0-9a-zA-Z]{1,22}$",
+                  "minLength": 1,
+                  "maxLength": 22
+                },
+                "redirect_uris": {
+                  "title": "redirect_uris",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  }
+                },
+                "backchannel_user_code_parameter_supported": {
+                  "title": "backchannel_user_code_parameter_supported",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified only if the grant_types includes  urn:openid:params:grant-type:ciba.  If specified, it MUST be set to false.",
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Request failed due to unknown or invalid Client or invalid access token",
+            "headers": {
+              "WWW-Authenticate": {
+                "title": "WWW-Authenticate",
+                "description": "Response header field specified in https://tools.ietf.org/html/rfc6750",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "The client does not have permission to read, update or delete the Client"
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "UpdateaclientbywayofClientID",
+        "description": "Update a client by way of Client ID",
+        "parameters": [
+          {
+            "name": "ClientId",
+            "description": "The client ID",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "x-amf-mediaType": "application/jose",
+            "in": "body",
+            "name": "generated",
+            "schema": {
+              "title": "requestBody",
+              "description": "A request to register a Software Statement Assertion with an ASPSP",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client registration",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response",
+              "description": "",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "grant_types",
+                "request_object_signing_alg",
+                "iat",
+                "id_token_signed_response_alg",
+                "exp",
+                "token_endpoint_auth_method",
+                "software_statement",
+                "jti",
+                "scope",
+                "iss",
+                "aud",
+                "application_type",
+                "redirect_uris"
+              ],
+              "properties": {
+                "grant_types": {
+                  "title": "grant_types",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": false,
+                  "items": {
+                    "enum": [
+                      "client_credentials",
+                      "authorization_code",
+                      "refresh_token",
+                      "urn:openid:params:grant-type:ciba"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "request_object_signing_alg": {
+                  "title": "request_object_signing_alg",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "backchannel_client_notification_endpoint": {
+                  "title": "backchannel_client_notification_endpoint",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified iff the grant_types includes  urn:openid:params:grant-type:ciba and  backchannel_token_delivery_mode is not poll.  This must be a valid HTTPS URL",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "iat": {
+                  "title": "iat",
+                  "description": "The time at which the request was issued by the TPP  expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "id_token_signed_response_alg": {
+                  "title": "id_token_signed_response_alg",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "exp": {
+                  "title": "exp",
+                  "description": "The time at which the request expires expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "token_endpoint_auth_method": {
+                  "title": "token_endpoint_auth_method",
+                  "enum": [
+                    "private_key_jwt",
+                    "client_secret_jwt",
+                    "client_secret_basic",
+                    "client_secret_post",
+                    "tls_client_auth"
+                  ],
+                  "type": "string"
+                },
+                "software_statement": {
+                  "title": "software_statement",
+                  "type": "string"
+                },
+                "backchannel_authentication_request_signing_alg": {
+                  "title": "backchannel_authentication_request_signing_alg",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified iff the grant_types includes  urn:openid:params:grant-type:ciba.",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "jti": {
+                  "title": "jti",
+                  "description": "Unique identifier for the JWT implemented as UUID v4",
+                  "type": "string",
+                  "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+                  "minLength": 36,
+                  "maxLength": 36
+                },
+                "scope": {
+                  "title": "scope",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "client_secret": {
+                  "title": "client_secret",
+                  "description": "OAuth 2.0 client secret string",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 36
+                },
+                "client_id_issued_at": {
+                  "title": "client_id_issued_at",
+                  "description": "Time at which the client identifier was issued expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 0
+                },
+                "client_secret_expires_at": {
+                  "title": "client_secret_expires_at",
+                  "description": "Time at which the client secret will expire expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC. Set to 0 if does not expire",
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 0
+                },
+                "token_endpoint_auth_signing_alg": {
+                  "title": "token_endpoint_auth_signing_alg",
+                  "enum": [
+                    "RS256",
+                    "PS256",
+                    "ES256"
+                  ],
+                  "type": "string"
+                },
+                "client_id": {
+                  "title": "client_id",
+                  "description": "OAuth 2.0 client identifier string",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 36
+                },
+                "response_types": {
+                  "title": "response_types",
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "code",
+                      "code id_token"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "backchannel_token_delivery_mode": {
+                  "title": "backchannel_token_delivery_mode",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified iff the grant_types includes  urn:openid:params:grant-type:ciba",
+                  "enum": [
+                    "poll",
+                    "ping",
+                    "push"
+                  ],
+                  "type": "string"
+                },
+                "iss": {
+                  "title": "iss",
+                  "description": "Unique identifier for the TPP. Implemented as Base62 encoded GUID",
+                  "type": "string",
+                  "pattern": "^[0-9a-zA-Z]{1,22}$",
+                  "minLength": 1,
+                  "maxLength": 22
+                },
+                "tls_client_auth_subject_dn": {
+                  "title": "tls_client_auth_subject_dn",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "aud": {
+                  "title": "aud",
+                  "description": "The audience for the request. This should be the unique identifier\n\nfor the ASPSP issued by the issuer of the software statement.\n\nImplemented as Base62 encoded GUID\n",
+                  "type": "string",
+                  "pattern": "^[0-9a-zA-Z]{1,18}$",
+                  "minLength": 1,
+                  "maxLength": 18
+                },
+                "application_type": {
+                  "title": "application_type",
+                  "enum": [
+                    "web",
+                    "mobile"
+                  ],
+                  "type": "string"
+                },
+                "software_id": {
+                  "title": "software_id",
+                  "type": "string",
+                  "pattern": "^[0-9a-zA-Z]{1,22}$",
+                  "minLength": 1,
+                  "maxLength": 22
+                },
+                "redirect_uris": {
+                  "title": "redirect_uris",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  }
+                },
+                "backchannel_user_code_parameter_supported": {
+                  "title": "backchannel_user_code_parameter_supported",
+                  "description": "As defined in CIBA - Registration and Discovery Metadata.  This value MUST be specified only if the grant_types includes  urn:openid:params:grant-type:ciba.  If specified, it MUST be set to false.",
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request failed due to client error",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "response",
+              "description": "",
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "error"
+              ],
+              "properties": {
+                "error": {
+                  "title": "error",
+                  "enum": [
+                    "invalid_redirect_uri",
+                    "invalid_client_metadata",
+                    "invalid_software_statement",
+                    "unapproved_software_statement"
+                  ],
+                  "type": "string"
+                },
+                "error_description": {
+                  "title": "error_description",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Request failed due to unknown or invalid Client or invalid access token",
+            "headers": {
+              "WWW-Authenticate": {
+                "title": "WWW-Authenticate",
+                "description": "Response header field specified in https://tools.ietf.org/html/rfc6750",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "The client does not have permission to read, update or delete the Client"
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "DeleteaclientbywayofClientID",
+        "description": "Delete a client by way of Client ID",
+        "parameters": [
+          {
+            "name": "ClientId",
+            "description": "The client ID",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Client deleted"
+          },
+          "401": {
+            "description": "Request failed due to unknown or invalid Client or invalid access token",
+            "headers": {
+              "WWW-Authenticate": {
+                "title": "WWW-Authenticate",
+                "description": "Response header field specified in https://tools.ietf.org/html/rfc6750",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "The client does not have permission to read, update or delete the Client"
+          },
+          "405": {
+            "description": "The client does not have permission to read, update or delete the Client"
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "auth": {
+      "type": "oauth2",
+      "authorizationUrl": "",
+      "tokenUrl": "https://authserver.example/token",
+      "scopes": {
+        "*": ""
+      },
+      "x-amf-settings": {
+        "authorizationGrants": [
+          "client_credentials"
+        ]
+      }
+    }
+  }
+}
