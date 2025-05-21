@@ -1,0 +1,141 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Upload Test Root Certificate",
+    "description": "Upload Test Root Certificate API for Sandbox",
+    "version": "v1.0"
+  },
+  "paths": {
+    "/uploadcertificate": {
+      "post": {
+        "operationId": "Upload Test Root Certificate",
+        "description": "Upload Test Root Certificate",
+        "parameters": [
+          {
+            "name": "Content-type",
+            "description": "Represents the format of the payload in the request.",
+            "required": true,
+            "in": "header",
+            "example": "application/json",
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "description": "Represents the format of the payload returned in the response.",
+            "required": false,
+            "in": "header",
+            "example": "application/json",
+            "type": "string"
+          },
+          {
+            "x-amf-mediaType": "application/json",
+            "in": "body",
+            "name": "generated",
+            "schema": {
+              "title": "Request",
+              "example": {
+                "x509Certificate": "A valid  X.509 certificate"
+              },
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "x509Certificate"
+              ],
+              "properties": {
+                "x509Certificate": {
+                  "title": "X509Certificate",
+                  "description": "The test root certificate the TPP would be using",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Test Root Certificate uploaded successfully",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "Response",
+              "description": "Test Root Certificate uploaded successfully",
+              "example": {
+                "message": "Certificate uploaded successfully"
+              },
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "title": "message",
+                  "description": "Specifies the reponse of the upload certificate API",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "Response",
+              "example": {
+                "message": "Certificate is either invalid or not present"
+              },
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "title": "message",
+                  "description": "Specifies the reponse of the upload certificate API",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "title": "Response",
+              "example": {
+                "message": "Failed to upload certificate"
+              },
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "title": "message",
+                  "description": "Specifies the reponse of the upload certificate API",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1884 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "APIs PSD2 Berlin Group 2.0",
+    "version": "2.0.0",
+    "title": "NextGenPSD2 XS2A Framework. Triodos Bank",
+    "contact": {
+      "name": "Triodos Bank",
+      "url": "https://www.triodos.es/es/que-es-psd2",
+      "email": "triodos.apimarket@triodos.es"
+    }
+  },
+  "host": "api.triodos.es",
+  "basePath": "/xs2a/2.0.0",
+  "tags": [
+    {
+      "name": "Account Information Service (AIS)",
+      "description": "Listado de las cuentas de pago disponibles.\n\nSaldo de una cuenta obtenida de la lista de cuentas.\n\nMovimientos de una cuenta obtenida de la lista de cuentas.\n"
+    },
+    {
+      "name": "Payment Initiation Service (PIS)",
+      "description": "Ofrece los siguientes servicios:\n  * Inicio de pago\n  * Consulta informaciÃ³n de un pago\n  * Consulta estado de un pago\n"
+    },
+    {
+      "name": "Confirmation of Funds Service (PIIS)",
+      "description": "ConfirmaciÃ³n de saldo suficiente para realizar un pago\nen una cuenta determinada.\n"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/accounts": {
+      "get": {
+        "tags": [
+          "Account Information Service (AIS)"
+        ],
+        "summary": "getAccountList",
+        "description": "Lista de cuentas de pago disponibles. \nInformaciÃ³n del saldo, segÃºn parÃ¡metro.\nSe debe disponer del consentimiento del Usuario (PSU) para este acceso.\n",
+        "operationId": "AccountsGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "withBalance",
+            "in": "query",
+            "description": "true/false",
+            "required": false,
+            "type": "string",
+            "format": "boolean"
+          }
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "accounts"
+            ]
+          }
+        ],
+        "deprecated": false,
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/accountList"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          }
+        },
+        "x-auth-type": "Application & Application User",
+        "x-scope": "accounts_list",
+        "x-throttling-tier": "Unlimited"
+      }
+    },
+    "/accounts/{account-id}/balances": {
+      "get": {
+        "tags": [
+          "Account Information Service (AIS)"
+        ],
+        "summary": "getBalances",
+        "description": "Consulta de saldo de una cuenta determinada. \n\nEl identificador de la cuenta es el iban obtenido en la lista de cuentas.\n",
+        "operationId": "AccountsBalancesByAccountIdGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "account-id",
+            "in": "path",
+            "description": "El identificador de la cuenta es el iban obtenido en la lista de cuentas.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "accounts"
+            ]
+          }
+        ],
+        "deprecated": false,
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AccountBalanceResponse-200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          }
+        },
+        "x-auth-type": "Application & Application User",
+        "x-scope": "accounts_balances",
+        "x-throttling-tier": "Unlimited"
+      }
+    },
+    "/{payment-service}/{payment-product}/{paymentId}/status": {
+      "get": {
+        "tags": [
+          "Payment Initiation Service (PIS)"
+        ],
+        "summary": "getPaymentInitiationStatus",
+        "description": "Devuelve el estado de un pago.",
+        "operationId": "PaymentIdStatusByPaymentServiceAndPaymentProductGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "payment-service",
+            "in": "path",
+            "description": "Payment service.\n\nPosibles valores:\n* payments\n* periodic-payments\n",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "payments",
+              "periodic-payments"
+            ]
+          },
+          {
+            "name": "payment-product",
+            "in": "path",
+            "description": "Payment product.\n\nPosibles valores:\n* sepa-credit-transfers \n",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "sepa-credit-transfers"
+            ]
+          },
+          {
+            "name": "paymentId",
+            "in": "path",
+            "description": "Identificador creado en la API de inicio de pago.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "deprecated": false,
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/paymentInitiationStatusResponse-200_json"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          }
+        },
+        "x-auth-type": "Application & Application User",
+        "x-throttling-tier": "Unlimited"
+      }
+    },
+    "/bulk-payments/pain.001-sepa-credit-transfers": {
+      "post": {
+        "tags": [
+          "Payment Initiation Service (PIS)"
+        ],
+        "summary": "initiatePayment",
+        "description": "Este mÃ©todo se utiliza para iniciar un bulk payment\nEl mÃ©todo de pago admitido es **pain.001-sepa-credit-transfers**\nEste es el primer paso en la API para iniciar el proceso de pago.",
+        "operationId": "ByBulkPaymentServiceAndPaymentProductPost",
+        "consumes": [
+          "application/xml"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-Request-ID",
+            "in": "header",
+            "description": "X-Request-ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Digest",
+            "in": "header",
+            "description": "Digest",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Signature",
+            "in": "header",
+            "description": "Signature",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "date",
+            "in": "header",
+            "description": "Date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "A pain.001 structure corresponding to the SCT schema urn:iso:std:iso:20022:tech:xsd:pain.001.001.03\n",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n              <Document xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.001.001.03\">\n                 <CstmrCdtTrfInitn>\n                    <GrpHdr>\n                       <MsgId>MIPI-123456789RI-123456789</MsgId>\n                       <CreDtTm>2019-12-12T20:23:34.000Z</CreDtTm>\n                       <NbOfTxs>1</NbOfTxs>\n                       <CtrlSum>123</CtrlSum>\n                       <InitgPty>\n                          <Nm>PaymentInitiator</Nm>\n                          <Id>\n                             <OrgId>\n                                <Othr>\n                                   <Id>71436468D</Id>\n                                   <SchmeNm>\n                                      <Prtry>BANK</Prtry>\n                                   </SchmeNm>\n                                </Othr>\n                             </OrgId>\n                          </Id>\n                       </InitgPty>\n                    </GrpHdr>\n                    <PmtInf>\n                       <PmtInfId>BIPI-123456789RI-123456789</PmtInfId>\n                       <PmtMtd>TRF</PmtMtd>\n                       <NbOfTxs>1</NbOfTxs>\n                       <CtrlSum>123</CtrlSum>\n                       <PmtTpInf>\n                          <SvcLvl>\n                             <Cd>SEPA</Cd>\n                          </SvcLvl>\n                       </PmtTpInf>\n                       <ReqdExctnDt>2024-12-12</ReqdExctnDt>\n                       <Dbtr>\n                          <Nm>PSU Name</Nm>\n                       </Dbtr>\n                       <DbtrAcct>\n                          <Id>\n                             <IBAN>ES0200754363926295333219</IBAN>\n                          </Id>\n                       </DbtrAcct>\n              \t\t <DbtrAgt>\n              \t\t    <FinInstnId>\n              \t\t\t\t<BIC>BSCHESMM</BIC>\n              \t\t\t</FinInstnId>\n              \t\t </DbtrAgt>\n                       <CdtTrfTxInf>\n                          <PmtId>\n                             <EndToEndId>RI-123456789</EndToEndId>\n                          </PmtId>\n                          <Amt>\n                             <InstdAmt Ccy=\"EUR\">123</InstdAmt>\n                          </Amt>\n                          <Cdtr>\n                             <Nm>Merchant123</Nm>\n                          </Cdtr>\n                          <CdtrAcct>\n                             <Id>\n                                <IBAN>ES6914919726930075996398</IBAN>\n                             </Id>\n                          </CdtrAcct>\n                          <RmtInf>\n                             <Ustrd>Ref Number Merchant-123456</Ustrd>\n                          </RmtInf>\n                       </CdtTrfTxInf>\n                    </PmtInf>\n                 </CstmrCdtTrfInitn>\n              </Document>"
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "deprecated": false,
+        "responses": {
+          "201": {
+            "description": "CREATED",
+            "headers": {
+              "ASPSP-SCA-Approach": {
+                "type": "string",
+                "default": "REDIRECT"
+              },
+              "Location": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/paymentInitationRequestResponse-201"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "schema": {}
+          },
+          "408": {
+            "description": "Request Timeout",
+            "schema": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "schema": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {}
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "schema": {}
+          },
+          "default": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        },
+        "x-auth-type": "Application & Application User",
+        "x-throttling-tier": "Unlimited"
+      }
+    },
+    "/{payment-service}/{payment-product}": {
+      "post": {
+        "tags": [
+          "Payment Initiation Service (PIS)"
+        ],
+        "summary": "initiatePayment",
+        "description": "Este mÃ©todo se utiliza para iniciar un pago.\nEl mÃ©todo de pago admitido es **sepa-credit-transfers**\nEste es el primer paso en la API para iniciar el proceso de pago.",
+        "operationId": "ByPaymentServiceAndPaymentProductPost",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "payment-service",
+            "in": "path",
+            "description": "Payment-service",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "payments",
+              "periodic-payments"
+            ]
+          },
+          {
+            "name": "payment-product",
+            "in": "path",
+            "description": "Tipo de pago, valor fijo sepa-credit-transfers.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "sepa-credit-transfers"
+            ]
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-Request-ID",
+            "in": "header",
+            "description": "X-Request-ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Digest",
+            "in": "header",
+            "description": "Digest",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Signature",
+            "in": "header",
+            "description": "Signature",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "date",
+            "in": "header",
+            "description": "Date",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Datos del beneficiario del pago",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/paymentInitiation_json"
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "deprecated": false,
+        "responses": {
+          "201": {
+            "description": "CREATED",
+            "headers": {
+              "ASPSP-SCA-Approach": {
+                "type": "string",
+                "default": "REDIRECT"
+              },
+              "Location": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/paymentInitationRequestResponse-201"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "schema": {}
+          },
+          "408": {
+            "description": "Request Timeout",
+            "schema": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "schema": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {}
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "schema": {}
+          },
+          "default": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        },
+        "x-auth-type": "Application & Application User",
+        "x-throttling-tier": "Unlimited"
+      }
+    },
+    "/payments/sepa-credit-transfers/{paymentId}": {
+      "get": {
+        "tags": [
+          "Payment Initiation Service (PIS)"
+        ],
+        "summary": "getPaymentInformation",
+        "description": "Devuelve el importe, la cuenta de abono y el estado de un pago.",
+        "operationId": "PaymentIdByPaymentServiceAndPaymentProductGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "payment-service",
+            "in": "path",
+            "description": "Payment service.\n\nPosibles valores :\n* payments\n",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "payments"
+            ]
+          },
+          {
+            "name": "payment-product",
+            "in": "path",
+            "description": "Payment product.\n\nPosibles valores:\n* sepa-credit-transfers\n",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "sepa-credit-transfers"
+            ]
+          },
+          {
+            "name": "paymentId",
+            "in": "path",
+            "description": "Identificador creado en la API de inicio de pago.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-Request-ID",
+            "in": "header",
+            "description": "X-Request-ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Digest",
+            "in": "header",
+            "description": "Digest",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Signature",
+            "in": "header",
+            "description": "Signature",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "date",
+            "in": "header",
+            "description": "Date",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "deprecated": false,
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/paymentInitiationWithStatusResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          }
+        },
+        "x-auth-type": "Application & Application User",
+        "x-throttling-tier": "Unlimited"
+      }
+    },
+    "/periodic-payments/sepa-credit-transfers/list": {
+      "get": {
+        "tags": [
+          "Payment Initiation Service (PIS)"
+        ],
+        "summary": "getPaymentInitiationList",
+        "description": "Devuelve el listado de pagos realizados por el usuario mediante la aplicacion llamante",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-Request-ID",
+            "in": "header",
+            "description": "X-Request-ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Digest",
+            "in": "header",
+            "description": "Digest",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Signature",
+            "in": "header",
+            "description": "Signature",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Date",
+            "in": "header",
+            "description": "Date",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "default": [
+              "accounts_transactions"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/periodicPaymentListResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          }
+        },
+        "x-auth-type": "Application & Application User",
+        "x-throttling-tier": "Basico",
+        "x-wso2-application-security": {
+          "security-types": [
+            "oauth2"
+          ],
+          "optional": false
+        }
+      }
+    },
+    "/periodic-payments/sepa-credit-transfers/{paymentId}": {
+      "get": {
+        "tags": [
+          "Payment Initiation Service (PIS)"
+        ],
+        "summary": "getPaymentInformation",
+        "description": "Devuelve el importe, la cuenta de abono y el estado de un pago.",
+        "parameters": [
+          {
+            "name": "paymentId",
+            "in": "path",
+            "description": "Identificador del pago",
+            "required": true,
+            "type": "string",
+            "format": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-Request-ID",
+            "in": "header",
+            "description": "X-Request-ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Digest",
+            "in": "header",
+            "description": "Digest",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Signature",
+            "in": "header",
+            "description": "Signature",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Date",
+            "in": "header",
+            "description": "Date",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "default": [
+              "payment"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/periodicPaymentDetails"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          }
+        },
+        "x-auth-type": "Application & Application User",
+        "x-throttling-tier": "Basico",
+        "x-wso2-application-security": {
+          "security-types": [
+            "oauth2"
+          ],
+          "optional": false
+        }
+      },
+      "delete": {
+        "tags": [
+          "Payment Initiation Service (PIS)"
+        ],
+        "summary": "cancelPayment",
+        "description": "Iniciacion de la cancelacion de un pago.",
+        "parameters": [
+          {
+            "name": "paymentId",
+            "in": "path",
+            "description": "Identificador creado en la API de inicio de pago.",
+            "required": true,
+            "type": "string",
+            "format": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-Request-ID",
+            "in": "header",
+            "description": "X-Request-ID",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Digest",
+            "in": "header",
+            "description": "Digest",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Signature",
+            "in": "header",
+            "description": "Signature",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Date",
+            "in": "header",
+            "description": "Date",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "default": [
+              "payment"
+            ]
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "CREATED",
+            "headers": {
+              "ASPSP-SCA-Approach": {
+                "type": "string",
+                "default": "REDIRECT"
+              },
+              "Location": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/paymentInitationRequestResponse-201"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "schema": {}
+          },
+          "408": {
+            "description": "Request Timeout",
+            "schema": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "schema": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {}
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "schema": {}
+          },
+          "default": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        },
+        "x-auth-type": "Application & Application User",
+        "x-throttling-tier": "Basico",
+        "x-wso2-application-security": {
+          "security-types": [
+            "oauth2"
+          ],
+          "optional": false
+        }
+      }
+    },
+    "/funds-confirmations": {
+      "post": {
+        "tags": [
+          "Confirmation of Funds Service (PIIS)"
+        ],
+        "summary": "checkAvailabilityOfFunds",
+        "description": "ConfirmaciÃ³n de saldo suficiente para realizar un pago.",
+        "operationId": "FundsConfirmationsPost",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Datos para confirmar el saldo, cuenta e importe.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/confirmationOfFunds"
+            }
+          }
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "accounts"
+            ]
+          }
+        ],
+        "deprecated": false,
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "Location": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/FundsConfirmationsResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "schema": {}
+          },
+          "408": {
+            "description": "Request Timeout",
+            "schema": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "schema": {}
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {}
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "schema": {}
+          },
+          "default": {
+            "description": "Internal Server Error",
+            "schema": {}
+          }
+        },
+        "x-auth-type": "Application & Application User",
+        "x-scope": "accounts_funds",
+        "x-throttling-tier": "Unlimited"
+      }
+    },
+    "/accounts/{account-id}/transactions": {
+      "get": {
+        "tags": [
+          "Account Information Service (AIS)"
+        ],
+        "summary": "getTransactionList",
+        "description": "Consulta de movimientos de una cuenta. Si no se entran fechas realiza la consulta de los 10 Ãºltimos movimientos. Se puede realizar la consulta por fechas. OrdenaciÃ³n movimientos, primero muestra los mÃ¡s recientes.\n",
+        "operationId": "AccountsTransactionsByAccountIdGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "account-id",
+            "in": "path",
+            "description": "El identificador de la cuenta es el iban obtenido en la lista de cuentas.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "Fecha de inicio de la consulta (AAAA-MM-DD)",
+            "required": false,
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "Fecha final de la consulta (AAAA-MM-DD)",
+            "required": false,
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "accounts"
+            ]
+          }
+        ],
+        "deprecated": false,
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AccountTransactionsResponse-200"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error_json"
+            }
+          }
+        },
+        "x-auth-type": "Application & Application User",
+        "x-scope": "accounts_transactions",
+        "x-throttling-tier": "Unlimited"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    },
+    "OAuth2": {
+      "type": "oauth2",
+      "authorizationUrl": "https://api.triodos.es/oauth2/authorize",
+      "tokenUrl": "https://api.triodos.es/oauth2/token",
+      "flow": "accessCode",
+      "scopes": {
+        "accounts": "Grants access to accounts",
+        "payment": "Grants access for confirming initiated payments"
+      }
+    }
+  },
+  "definitions": {
+    "Error_json": {
+      "type": "object",
+      "properties": {
+        "fault": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/fault_json"
+          }
+        }
+      },
+      "title": "Error_json",
+      "description": "HTTP error.\n"
+    },
+    "accountDetails": {
+      "type": "object",
+      "properties": {
+        "balances": {
+          "type": "object",
+          "description": "Saldo de la cuenta.",
+          "properties": {
+            "balanceAmount": {
+              "$ref": "#/definitions/amount"
+            }
+          },
+          "required": [
+            "balanceAmount"
+          ]
+        },
+        "cashAccountType": {
+          "type": "string",
+          "description": "ExternalCashAccountType1Code from ISO 20022."
+        },
+        "currency": {
+          "type": "string",
+          "example": "EUR",
+          "description": "ISO 4217 Alpha 3 currency code",
+          "pattern": "[A-Z]{3}"
+        },
+        "iban": {
+          "type": "string",
+          "example": "ES0014910000000000000000",
+          "description": "IBAN de la cuenta",
+          "pattern": "[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}"
+        },
+        "name": {
+          "type": "string",
+          "description": "Nombre del producto de la cuenta.",
+          "maxLength": 35
+        },
+        "product": {
+          "type": "string",
+          "description": "CÃ³digo del producto de la cuenta.",
+          "maxLength": 35
+        }
+      },
+      "title": "accountDetails",
+      "description": "El ASPSP deberÃ¡ proporcionar al menos uno de los identificadores de referencia de la cuenta:\n  - iban"
+    },
+    "accountList": {
+      "type": "object",
+      "required": [
+        "accounts"
+      ],
+      "properties": {
+        "accounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/accountDetails"
+          }
+        }
+      },
+      "title": "accountList",
+      "description": "Lista de cuentas con detalle."
+    },
+    "amount": {
+      "type": "object",
+      "required": [
+        "amount",
+        "currency"
+      ],
+      "properties": {
+        "amount": {
+          "type": "string",
+          "example": "5877.78",
+          "description": "Importe con decimales.  El separador decimal es un punto. Las cifras negativas tienen el signo negativo delante. Ejemplo: Importes vÃ¡lidos para cifras con EUR:\n  * 1056\n  * 5768.2\n  * -1.50\n  * 5877.78",
+          "pattern": "-?[0-9]{1,14}(\\.[0-9]{1,3})?"
+        },
+        "currency": {
+          "type": "string",
+          "example": "EUR",
+          "description": "ISO 4217 Alpha 3 currency code",
+          "pattern": "[A-Z]{3}"
+        }
+      },
+      "title": "amount",
+      "example": {
+        "amount": "123",
+        "currency": "EUR"
+      }
+    },
+    "fault_json": {
+      "type": "object",
+      "required": [
+        "code"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "title": "fault_json"
+    },
+    "AccountBalanceResponse-200": {
+      "type": "object",
+      "required": [
+        "balances"
+      ],
+      "properties": {
+        "account": {
+          "$ref": "#/definitions/accountReference"
+        },
+        "balances": {
+          "type": "array",
+          "description": "Saldo disponible de la cuenta.",
+          "items": {
+            "$ref": "#/definitions/balance"
+          }
+        }
+      },
+      "title": "AccountBalanceResponse-200",
+      "description": "Body of the response for a successful read balance for an account request."
+    },
+    "accountReference": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "type": "string",
+          "example": "EUR",
+          "description": "ISO 4217 Alpha 3 CÃ³digo de moneda.",
+          "pattern": "[A-Z]{3}"
+        },
+        "iban": {
+          "type": "string",
+          "example": "ES0014910000000000000000",
+          "description": "IBAN de una cuenta.",
+          "pattern": "[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}"
+        }
+      },
+      "title": "accountReference",
+      "description": "Reference to an account by either\n  * IBAN, of a payment accounts"
+    },
+    "balance": {
+      "type": "object",
+      "required": [
+        "balanceAmount",
+        "balanceType"
+      ],
+      "properties": {
+        "balanceAmount": {
+          "$ref": "#/definitions/amount"
+        },
+        "balanceType": {
+          "$ref": "#/definitions/balanceType"
+        },
+        "referenceDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Reference date of the balance"
+        }
+      },
+      "title": "balance",
+      "description": "Saldo de la cuenta"
+    },
+    "balanceType": {
+      "type": "string",
+      "title": "balanceType",
+      "description": "The following balance types are defined:\n  - \"closingBooked\": ",
+      "example": "closingBooked",
+      "enum": [
+        "closingBooked"
+      ]
+    },
+    "FundsConfirmationsResponse": {
+      "type": "object",
+      "required": [
+        "fundsAvailable"
+      ],
+      "properties": {
+        "fundsAvailable": {
+          "type": "boolean"
+        }
+      },
+      "title": "FundsConfirmationsResponse",
+      "description": "Respuesta de la confirmaciÃ³n de fondos de una cuenta. \"true\" SÃ hay saldo suficiente. \"false\" NO hay saldo suficiente"
+    },
+    "accountReferenceIBAN": {
+      "type": "object",
+      "properties": {
+        "iban": {
+          "type": "string",
+          "example": "ES0002340000000000000000",
+          "description": "IBAN de una cuenta.",
+          "pattern": "[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}"
+        }
+      },
+      "description": "Referencia de la cuenta bancaria"
+    },
+    "address": {
+      "type": "object",
+      "required": [
+        "country"
+      ],
+      "properties": {
+        "buildingNumber": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "$ref": "#/definitions/countryCode"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string",
+          "maxLength": 70
+        }
+      },
+      "example": {
+        "street": "calle xx"
+      }
+    },
+    "confirmationOfFunds": {
+      "type": "object",
+      "required": [
+        "account",
+        "instructedAmount"
+      ],
+      "properties": {
+        "account": {
+          "$ref": "#/definitions/accountReference"
+        },
+        "debtorName": {
+          "$ref": "#/definitions/debtorName"
+        },
+        "instructedAmount": {
+          "$ref": "#/definitions/amount"
+        }
+      },
+      "title": "confirmationOfFunds",
+      "description": "Body de la confirmaciÃ³n de fondos de una cuenta."
+    },
+    "countryCode": {
+      "type": "string",
+      "pattern": "[A-Z]{2}",
+      "description": "ISO 3166 ALPHA 2 CÃ³digo de paÃ­s.",
+      "example": "ES"
+    },
+    "debtorName": {
+      "type": "string",
+      "maxLength": 70,
+      "description": "Nombre del debtor",
+      "example": "Debtor Name"
+    },
+    "paymentId_json": {
+      "type": "object",
+      "properties": {
+        "paymentId": {
+          "type": "string",
+          "example": "306DE72E508DBEF77CCF365BE80D302B8426D0D227F9D322"
+        }
+      },
+      "title": "paymentId_json",
+      "description": "Id pago"
+    },
+    "paymentInitationRequestResponse-201": {
+      "type": "object",
+      "required": [
+        "paymentId",
+        "transactionStatus"
+      ],
+      "properties": {
+        "paymentId": {
+          "type": "string",
+          "example": "306DE72E508DBEF77CCF365BE80D302B8426D0D227F9D322",
+          "description": "Identificador del pago."
+        },
+        "transactionStatus": {
+          "$ref": "#/definitions/transactionStatus"
+        }
+      },
+      "title": "paymentInitationRequestResponse-201",
+      "description": "Respuesta para un inicio de pago correcto."
+    },
+    "paymentInitiationConfirmationResponse-200_json": {
+      "type": "object",
+      "required": [
+        "transactionStatus"
+      ],
+      "properties": {
+        "transactionStatus": {
+          "$ref": "#/definitions/transactionStatus"
+        }
+      },
+      "title": "paymentInitiationConfirmationResponse-200_json",
+      "description": "Respuesta de la confirmaciÃ³n de un pago."
+    },
+    "paymentInitiationStatusResponse-200_json": {
+      "type": "object",
+      "required": [
+        "transactionStatus"
+      ],
+      "properties": {
+        "transactionStatus": {
+          "$ref": "#/definitions/transactionStatus"
+        }
+      },
+      "title": "paymentInitiationStatusResponse-200_json",
+      "description": "Respuesta de la consulta de pago de un pago."
+    },
+    "periodicPaymentListResponse": {
+      "type": "object",
+      "required": [
+        "transactionStatus"
+      ],
+      "properties": {
+        "transactionStatus": {
+          "type": "object",
+          "description": "Estado global del pago.",
+          "properties": {
+            "paymentId": {
+              "type": "string",
+              "example": "3F2991711F161E73A9A6D1BE28E1E5A1306DB5615D02A934",
+              "description": "Identificador del pago."
+            },
+            "detail": {
+              "type": "object",
+              "description": "Detalles del pago.",
+              "properties": {
+                "remittanceInformationUnstructured": {
+                  "type": "string",
+                  "example": "Ref Number Merchant",
+                  "description": "Concepto del pago."
+                },
+                "instructedAmount": {
+                  "$ref": "#/definitions/amount"
+                },
+                "creditorAccount": {
+                  "$ref": "#/definitions/accountReference"
+                },
+                "creditorName": {
+                  "type": "string",
+                  "example": "Name Subname",
+                  "description": "Nombre del beneficiario."
+                },
+                "startDate": {
+                  "type": "string",
+                  "example": "2024-05-02T00:00:00.000+00:00",
+                  "description": "Fecha de inicio del pago."
+                },
+                "endDate": {
+                  "type": "string",
+                  "example": "2024-12-02T00:00:00.000+00:00",
+                  "description": "Fecha de fin del pago."
+                },
+                "frequency": {
+                  "type": "string",
+                  "example": "Quarterly",
+                  "description": "Frecuencia de pago."
+                }
+              }
+            }
+          }
+        }
+      },
+      "title": "periodicPaymentListResponse",
+      "description": "Respuesta de la consulta de pagos periÃ³dicos en curso."
+    },
+    "periodicPaymentDetails": {
+      "type": "object",
+      "required": [
+        "creditorAccount",
+        "creditorName",
+        "endToEndIdentification",
+        "frequency",
+        "instructedAmount",
+        "remittanceInformationUnstructured",
+        "startDate"
+      ],
+      "properties": {
+        "endToEndIdentification": {
+          "type": "string",
+          "example": "14910100010000213000154751",
+          "description": "Identificador."
+        },
+        "instructedAmount": {
+          "$ref": "#/definitions/amount"
+        },
+        "creditorAccount": {
+          "$ref": "#/definitions/accountReference"
+        },
+        "creditorName": {
+          "type": "string",
+          "example": "Name Subname",
+          "description": "Nombre del beneficiario."
+        },
+        "remittanceInformationUnstructured": {
+          "type": "string",
+          "example": "Ref Number Merchant",
+          "description": "Concepto del pago."
+        },
+        "startDate": {
+          "type": "string",
+          "example": "2024-05-02T00:00:00.000+00:00",
+          "description": "Fecha de inicio del pago."
+        },
+        "endDate": {
+          "type": "string",
+          "example": "2024-12-02T00:00:00.000+00:00",
+          "description": "Fecha de fin del pago."
+        },
+        "frequency": {
+          "type": "string",
+          "example": "Quarterly",
+          "description": "Frecuencia de pago."
+        }
+      },
+      "title": "periodicPaymentDetails",
+      "description": "Respuesta de la consulta de detalle pago periÃ³dico."
+    },
+    "paymentInitiationWithStatusResponse": {
+      "type": "object",
+      "required": [
+        "creditorAccount",
+        "debtorAccount",
+        "instructedAmount"
+      ],
+      "properties": {
+        "creditorAccount": {
+          "$ref": "#/definitions/accountReference"
+        },
+        "debtorAccount": {
+          "$ref": "#/definitions/accountReferenceIBAN"
+        },
+        "debtorName": {
+          "$ref": "#/definitions/debtorName"
+        },
+        "endToEndIdentification": {
+          "type": "string",
+          "maxLength": 35
+        },
+        "instructedAmount": {
+          "$ref": "#/definitions/amount"
+        },
+        "transactionStatus": {
+          "$ref": "#/definitions/transactionStatus"
+        }
+      },
+      "title": "paymentInitiationWithStatusResponse",
+      "description": "Respuesta de la consulta de informaciÃ³n de un pago."
+    },
+    "paymentInitiation_json": {
+      "type": "object",
+      "required": [
+        "creditorAccount",
+        "instructedAmount"
+      ],
+      "properties": {
+        "creditorAccount": {
+          "$ref": "#/definitions/accountReference"
+        },
+        "creditorAddress": {
+          "$ref": "#/definitions/address"
+        },
+        "endToEndIdentification": {
+          "type": "string",
+          "maxLength": 35
+        },
+        "instructedAmount": {
+          "$ref": "#/definitions/amount"
+        },
+        "remittanceInformationUnstructured": {
+          "$ref": "#/definitions/remittanceInformationUnstructured"
+        }
+      },
+      "title": "paymentInitiation_json",
+      "description": "Respuesta del inicio de un pago."
+    },
+    "remittanceInformationUnstructured": {
+      "type": "string",
+      "maxLength": 140,
+      "description": "Concepto del pago.",
+      "example": "Ref Number Merchant"
+    },
+    "transactionStatus": {
+      "type": "string",
+      "title": "transactionStatus",
+      "description": "The transaction status is filled with codes of the ISO 20022 data table:\n- 'ACCC': 'AcceptedSettlementCompleted' -\n  Settlement on the creditor's account has been completed.\n- 'ACCP': 'AcceptedCustomerProfile' - \n  Preceding check of technical validation was successful. \n  Customer profile check was also successful.\n- 'ACSC': 'AcceptedSettlementCompleted' - \n  Settlement on the debtorÃ¯Â¿Â½s account has been completed.\n  \n  **Usage:** this can be used by the first agent to report to the debtor that the transaction has been completed. \n  \n  **Warning:** this status is provided for transaction status reasons, not for financial information. \n  It can only be used after bilateral agreement.\n- 'ACSP': 'AcceptedSettlementInProcess' - \n  All preceding checks such as technical validation and customer profile were successful and therefore the payment initiation has been accepted for execution.\n- 'ACTC': 'AcceptedTechnicalValidation' - \n  Authentication and syntactical and semantical validation are successful.\n- 'ACWC': 'AcceptedWithChange' - \n  Instruction is accepted but a change will be made, such as date or remittance not sent.\n- 'ACWP': 'AcceptedWithoutPosting' - \n  Payment instruction included in the credit transfer is accepted without being posted to the creditor customerÃ¯Â¿Â½s account.\n- 'RCVD': 'Received' - \n  Payment initiation has been received by the receiving agent.\n- 'PDNG': 'Pending' - \n  Payment initiation or individual transaction included in the payment initiation is pending. \n  Further checks and status update will be performed.\n- 'RJCT': 'Rejected' - \n  Payment initiation or individual transaction included in the payment initiation has been rejected.\n- 'CANC': 'Cancelled'\n  Payment initiation has been cancelled before execution\n  Remark: This codeis accepted as new code by ISO20022.\n- 'ACFC': 'AcceptedFundsChecked' -\n  Preceding check of technical validation and customer profile was successful and an automatic funds check was positive .\n  Remark: This code is accepted as new code by ISO20022.\n- 'PATC': 'PartiallyAcceptedTechnical'\n  Correct The payment initiation needs multiple authentications, where some but not yet all have been performed. Syntactical and semantical validations are successful.\n  Remark: This code is accepted as new code by ISO20022.\n- 'PART': 'PartiallyAccepted' -\n  A number of transactions have been accepted, whereas another number of transactions have not yet achieved 'accepted' status.\n  Remark: This code may be used only in case of bulk payments. It is only used in a situation where all mandated authorisations have been applied, but some payments have been rejected.",
+      "example": "RCVD",
+      "enum": [
+        "ACCC",
+        "ACCP",
+        "ACSC",
+        "ACSP",
+        "ACTC",
+        "ACWC",
+        "ACWP",
+        "RCVD",
+        "PDNG",
+        "RJCT",
+        "CANC",
+        "ACFC",
+        "PATC",
+        "PART"
+      ]
+    },
+    "AccountTransactionsResponse-200": {
+      "type": "object",
+      "properties": {
+        "transactions": {
+          "$ref": "#/definitions/accountReport"
+        }
+      },
+      "title": "AccountTransactionsResponse-200",
+      "description": "Lista de movimientos."
+    },
+    "accountReport": {
+      "type": "object",
+      "properties": {
+        "booked": {
+          "$ref": "#/definitions/transactionList"
+        }
+      },
+      "description": "Lista de movimientos."
+    },
+    "transactionDetails": {
+      "type": "object",
+      "required": [
+        "transactionAmount"
+      ],
+      "properties": {
+        "bookingDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Fecha del movimiento."
+        },
+        "remittanceInformationUnstructured": {
+          "type": "string",
+          "description": "Concepto del movimiento."
+        },
+        "transactionAmount": {
+          "$ref": "#/definitions/amount"
+        },
+        "valueDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Fecha valor del movimiento."
+        }
+      },
+      "title": "transactionDetails",
+      "description": "Detalles del movimiento."
+    },
+    "transactionList": {
+      "type": "array",
+      "description": "Detalles del movimiento.",
+      "items": {
+        "$ref": "#/definitions/transactionDetails"
+      }
+    }
+  },
+  "x-wso2-security": {
+    "apim": {
+      "x-wso2-scopes": [
+        {
+          "description": "Grants access for accounts list",
+          "key": "accounts_list",
+          "name": "accounts_list",
+          "roles": "Internal/everyone"
+        },
+        {
+          "description": "Grants access for accounts balances",
+          "key": "accounts_balances",
+          "name": "accounts_balances",
+          "roles": "Internal/everyone"
+        },
+        {
+          "description": "Grants access for confirming initiated payments",
+          "key": "payment",
+          "name": "payment",
+          "roles": "Internal/everyone"
+        },
+        {
+          "description": "Grants access for availability of founds",
+          "key": "accounts_funds",
+          "name": "accounts_funds",
+          "roles": "Internal/everyone"
+        },
+        {
+          "description": "Grants access for accounts transactions",
+          "key": "accounts_transactions",
+          "name": "accounts_transactions",
+          "roles": "Internal/everyone"
+        }
+      ]
+    }
+  }
+}

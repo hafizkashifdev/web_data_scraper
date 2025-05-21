@@ -1,0 +1,625 @@
+{
+  "swagger": "2.0",
+  "host": "hostname",
+  "basePath": "/open-banking/v3.1/tpp-client",
+  "info": {
+    "title": "Dynamic Client Registration API",
+    "description": "Swagger Specification for Dynamic Client Registration API. Please refer postman collection for sample request and response.",
+    "x-postman-collection-id": "3bebfcfd409a0ae8facf",
+    "version": "v3.1"
+  },
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "summary": "Register a client using a Software Statement Assertion",
+        "description": "To register a client using a Software Statement Assertion",
+        "tags": [
+          "Client Registration"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "required": true,
+            "default": "application/jwt",
+            "description": "Standard HTTP Header; Represents the format of the payload being provided in the request.This must be set to application/jwt. The TPP may provide additional information (e.g. a 'q' value and charset). If set to any other value, we will respond with a 415 Unsupported Media Type."
+          },
+          {
+            "$ref": "#/parameters/ClientRegistration"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/OBClientRegistration1"
+          },
+          "201": {
+            "description": "Client registration"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/register/<ClientId>": {
+      "get": {
+        "summary": "To get registration information about TPP by providing client id",
+        "tags": [
+          "Client Registration"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "ClientId",
+            "description": "The client ID of TPP App",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "required": true,
+            "default": "Bearer ",
+            "description": "Standard HTTP Header; Bearer Authentication Schemes."
+          },
+          {
+            "$ref": "#/parameters/Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/OBClientRegistration2"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      },
+      "put": {
+        "summary": "To update TPP App details by passing in client id of the App",
+        "tags": [
+          "Client Registration"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "ClientId",
+            "description": "The client id of TPP App",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "required": true,
+            "default": "Bearer ",
+            "description": "Standard HTTP Header; Bearer Authentication Schemes."
+          },
+          {
+            "$ref": "#/parameters/ClientRegistration"
+          },
+          {
+            "$ref": "#/parameters/Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/OBClientRegistration3"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      },
+      "delete": {
+        "summary": "To delete TPP App details by passing in client id of the App",
+        "tags": [
+          "Client Registration"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "ClientId",
+            "description": "The client id of TPP App",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "required": true,
+            "default": "Bearer ",
+            "description": "Standard HTTP Header; Bearer Authentication Schemes."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Client deleted"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "405": {
+            "description": "Method Not Allowed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "Authorization": {
+      "in": "header",
+      "name": "Authorization",
+      "type": "string",
+      "required": true,
+      "description": "An Authorisation Token"
+    },
+    "ClientRegistration": {
+      "name": "requestBody",
+      "description": "A request to register a Software Statement Assertion with an ASPSP",
+      "in": "body",
+      "schema": {
+        "type": "string",
+        "format": "OBClientRegistration1"
+      }
+    }
+  },
+  "responses": {
+    "OBClientRegistration1": {
+      "description": "Client registration",
+      "schema": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/OBRegistrationProperties1"
+          },
+          {
+            "required": [
+              "client_id"
+            ]
+          }
+        ]
+      }
+    },
+    "OBClientRegistration2": {
+      "description": "Client registration",
+      "schema": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/OBRegistrationProperties1"
+          },
+          {
+            "required": [
+              "client_id"
+            ]
+          }
+        ]
+      }
+    },
+    "OBClientRegistration3": {
+      "description": "Client registration",
+      "schema": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/OBRegistrationProperties1"
+          },
+          {
+            "required": [
+              "client_id"
+            ]
+          }
+        ]
+      }
+    },
+    "OBClientRegistration4": {
+      "description": "Client registration",
+      "schema": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/OBRegistrationProperties1"
+          },
+          {
+            "required": [
+              "client_id"
+            ]
+          }
+        ]
+      }
+    },
+    "400Error": {
+      "description": "Request failed due to client error",
+      "schema": {
+        "$ref": "#/definitions/RegistrationError"
+      }
+    },
+    "401Error": {
+      "description": "Unauthorized",
+      "headers": {
+        "WWW-Authenticate": {
+          "description": "Response header field specified in https://tools.ietf.org/html/rfc6750",
+          "type": "string",
+          "pattern": "^Bearer .*"
+        }
+      }
+    },
+    "403Error": {
+      "description": "Forbidden"
+    },
+    "405Error": {
+      "description": "Method Not Allowed"
+    }
+  },
+  "definitions": {
+    "SupportedAlgorithms": {
+      "type": "string",
+      "enum": [
+        "PS256"
+      ]
+    },
+    "OBRegistrationProperties1": {
+      "type": "object",
+      "required": [
+        "redirect_uris",
+        "token_endpoint_auth_method",
+        "grant_types",
+        "application_type",
+        "id_token_signed_response_alg",
+        "request_object_signing_alg",
+        "tls_client_auth_dn"
+      ],
+      "properties": {
+        "client_id": {
+          "description": "OAuth 2.0 client identifier string",
+          "type": "string",
+          "maxLength": 36
+        },
+        "client_secret": {
+          "description": "OAuth 2.0 client secret string",
+          "type": "string",
+          "maxLength": 36
+        },
+        "client_id_issued_at": {
+          "description": "Time at which the client identifier was issued expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0
+        },
+        "client_secret_expires_at": {
+          "description": "Time at which the client secret will expire expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC. Set to 0 if does not expire",
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0
+        },
+        "redirect_uris": {
+          "description": "Registered URIs the TPP will use to interact with the ASPSP",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 256
+          }
+        },
+        "token_endpoint_auth_method": {
+          "type": "string",
+          "enum": [
+            "private_key_jwt"
+          ]
+        },
+        "grant_types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "client_credentials",
+              "authorization_code",
+              "refresh_token"
+            ]
+          },
+          "minItems": 1
+        },
+        "response_types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "code id_token"
+            ]
+          }
+        },
+        "software_id": {
+          "description": "Unique identifier for the software statement\n",
+          "type": "string"
+        },
+        "scope": {
+          "description": "Scopes the client is asking for (if not specified, default scopes are assigned by the AS)\n",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 32
+          }
+        },
+        "software_environment": {
+          "description": "Envirnoment for the software statement\n",
+          "type": "string"
+        },
+        "software_mode": {
+          "description": "Software statement mode can be either \"Live\" or \"Not Live\"\n",
+          "type": "string"
+        },
+        "software_client_id": {
+          "description": "ClientId allocated by Open Banking for the software statement\n",
+          "type": "string"
+        },
+        "software_client_name": {
+          "description": "Unique name for the software statement\n",
+          "type": "string"
+        },
+        "software_client_description": {
+          "description": "Description for the software statement\n",
+          "type": "string"
+        },
+        "software_version": {
+          "description": "Version number field for the software statement\n",
+          "type": "string"
+        },
+        "software_client_uri": {
+          "description": "Client URIs defined by the software statement\n",
+          "type": "string"
+        },
+        "software_redirect_uris": {
+          "description": "Redirect URIs defined by software statement\n",
+          "type": "string"
+        },
+        "software_roles": {
+          "description": "Roles of the software statement (AISP, PISP, CPBII)\n",
+          "type": "string",
+          "enum": [
+            "AISP",
+            "PISP",
+            "CBPII"
+          ]
+        },
+        "organisation_competent_authority_claims": {
+          "$ref": "#/definitions/AuthorityClaims"
+        },
+        "software_logo_uri": {
+          "description": "Logo of uri defined by software statement\n",
+          "type": "string"
+        },
+        "org_status": {
+          "description": "Status of organisation\n",
+          "type": "string"
+        },
+        "org_name": {
+          "description": "Unique name of organisation\n",
+          "type": "string"
+        },
+        "org_id": {
+          "description": "Unique identifier for the organisation\n",
+          "type": "string"
+        },
+        "org_contacts": {
+          "$ref": "#/definitions/OrgContacts"
+        },
+        "org_jwks_endpoint": {
+          "description": "JWKS endpoint of the Organisation\n",
+          "type": "string"
+        },
+        "org_jwks_revoked_endpoint": {
+          "description": "JWKS revoked endpoint of the Organisation\n",
+          "type": "string"
+        },
+        "software_jwks_endpoint": {
+          "description": "JWKS endpoint of the software statement\n",
+          "type": "string"
+        },
+        "software_jwks_revoked_endpoint": {
+          "description": "JWKS revoked endpoint of the software statement\n",
+          "type": "string"
+        },
+        "software_policy_uri": {
+          "description": "A link to the usage policy (for the PSU) set up by the TP\n",
+          "type": "string"
+        },
+        "software_tos_uri": {
+          "description": "A link to the Terms of Service (for the PSU) set up by the TPP\n",
+          "type": "string"
+        },
+        "software_on_behalf_of_org": {
+          "description": "Allows TPPs to identify any other parties that provide services for this software statement.\n",
+          "type": "string"
+        },
+        "application_type": {
+          "type": "string",
+          "enum": [
+            "web",
+            "mobile"
+          ]
+        },
+        "id_token_signed_response_alg": {
+          "$ref": "#/definitions/SupportedAlgorithms"
+        },
+        "request_object_signing_alg": {
+          "$ref": "#/definitions/SupportedAlgorithms"
+        },
+        "token_endpoint_auth_signing_alg": {
+          "$ref": "#/definitions/SupportedAlgorithms"
+        },
+        "tls_client_auth_dn": {
+          "description": "The tls_client_auth_dn claim MUST contain the DN of the certificate that the TPP will present to the ASPSP token endpoint\n",
+          "type": "string",
+          "maxLength": 128
+        }
+      }
+    },
+    "OBClientRegistration1": {
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "exp",
+            "aud"
+          ],
+          "properties": {
+            "exp": {
+              "description": "The time at which the request expires expressed as seconds since 1970-01-01T00:00:00Z as measured in UTC",
+              "type": "integer",
+              "format": "int32"
+            },
+            "aud": {
+              "description": "The audience for the request. This should be the unique identifier\nfor the ASPSP issued by the issuer of the software statement.\nImplemented as Base62 encoded GUID\n",
+              "type": "string",
+              "pattern": "^[0-9a-zA-Z]{1,18}$",
+              "maxLength": 18
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/OBRegistrationProperties1"
+        }
+      ]
+    },
+    "RegistrationError": {
+      "type": "object",
+      "required": [
+        "error"
+      ],
+      "properties": {
+        "error": {
+          "type": "string",
+          "enum": [
+            "invalid_redirect_uri",
+            "invalid_client_metadata",
+            "invalid_software_statement",
+            "unapproved_software_statement"
+          ]
+        },
+        "error_description": {
+          "type": "string",
+          "maxLength": 500
+        }
+      }
+    },
+    "AuthorityClaims": {
+      "type": "object",
+      "properties": {
+        "authority_id": {
+          "type": "string"
+        },
+        "registration_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "authorisations": {
+          "$ref": "#/definitions/Authorizations"
+        }
+      }
+    },
+    "Authorizations": {
+      "type": "object",
+      "properties": {
+        "member_state": {
+          "type": "string",
+          "enum": [
+            "GB",
+            "IE",
+            "NL"
+          ]
+        },
+        "roles": {
+          "type": "string",
+          "enum": [
+            "AISP",
+            "PISP",
+            "CBPII"
+          ]
+        }
+      }
+    },
+    "OrgContacts": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

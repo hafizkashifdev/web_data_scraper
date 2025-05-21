@@ -1,1 +1,43 @@
- {"swagger":"2.0","info":{"version":"v2.2.1","title":"opendataPCA"},"host":"developer.caterallen.co.uk","basePath":"/open-banking/PCA/v2.2.1","schemes":["https"],"security":[{"default":[]}],"paths":{"/pcadetails":{"get":{"parameters":[],"responses":{"200":{"description":""}},"security":[{"default":[]}],"x-auth-type":"Application & Application User","x-throttling-tier":"Unlimited"}}},"securityDefinitions":{"default":{"type":"oauth2","authorizationUrl":"https://developer.caterallen.co.uk/authorize","flow":"implicit"}}}
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "v2.2.1",
+        "title": "opendataPCA"
+    },
+    "host": "developer.caterallen.co.uk",
+    "basePath": "/open-banking/PCA/v2.2.1",
+    "schemes": [
+        "https"
+    ],
+    "security": [
+        {
+            "default": []
+        }
+    ],
+    "paths": {
+        "/pcadetails": {
+            "get": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "security": [
+                    {
+                        "default": []
+                    }
+                ],
+                "x-auth-type": "Application & Application User",
+                "x-throttling-tier": "Unlimited"
+            }
+        }
+    },
+    "securityDefinitions": {
+        "default": {
+            "type": "oauth2",
+            "authorizationUrl": "https://developer.caterallen.co.uk/authorize",
+            "flow": "implicit"
+        }
+    }
+}

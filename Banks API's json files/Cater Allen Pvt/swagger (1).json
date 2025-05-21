@@ -1,1 +1,599 @@
- {"swagger":"2.0","info":{"description":"Swagger for Aggregated Polling API Specification","version":"v3.1.2","title":"AggregatedPollingAPI","termsOfService":"https://www.openbanking.org.uk/terms","contact":{"name":"Service Desk","email":"ServiceDesk@openbanking.org.uk"},"license":{"name":"open-licence","url":"https://www.openbanking.org.uk/open-licence"}},"host":"developer.caterallen.co.uk","basePath":"/open-banking/v3.1.2","schemes":["https"],"consumes":["application/json; charset=utf-8","application/jose+jwe"],"produces":["application/json; charset=utf-8","application/jose+jwe"],"security":[{"default":[]}],"paths":{"/events":{"post":{"tags":["Events"],"summary":"Create Events","operationId":"CreateEvents","parameters":[{"in":"body","name":"OBEventPolling1Param","description":"Default","required":true,"schema":{"$ref":"#/definitions/OBEventPolling1"}},{"name":"x-fapi-auth-date","in":"header","description":"The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC","required":false,"type":"string","pattern":"^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"},{"name":"x-fapi-customer-ip-address","in":"header","description":"The PSU's IP address if the PSU is currently logged in with the TPP.","required":false,"type":"string"},{"name":"x-fapi-interaction-id","in":"header","description":"An RFC4122 UID used as a correlation id.","required":false,"type":"string"},{"name":"Authorization","in":"header","description":"An Authorisation Token as per https://tools.ietf.org/html/rfc6750","required":true,"type":"string"}],"responses":{"201":{"description":"Events Created","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}},"schema":{"$ref":"#/definitions/OBEventPollingResponse1"}},"400":{"description":"Bad request","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}},"schema":{"$ref":"#/definitions/OBErrorResponse1"}},"401":{"description":"Unauthorized","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}}},"403":{"description":"Forbidden","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}},"schema":{"$ref":"#/definitions/OBErrorResponse1"}},"404":{"description":"Not found","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}}},"405":{"description":"Method Not Allowed","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}}},"406":{"description":"Not Acceptable","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}}},"429":{"description":"Too Many Requests","headers":{"Retry-After":{"type":"integer","description":"Number in seconds to wait"},"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}}},"500":{"description":"Internal Server Error","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}},"schema":{"$ref":"#/definitions/OBErrorResponse1"}}},"security":[{"TPPOAuth2Security":["eventpolling"]},{"default":[]}],"x-auth-type":"Application & Application User","x-throttling-tier":"Unlimited"}}},"securityDefinitions":{"TPPOAuth2Security":{"description":"TPP client credential authorisation flow with the ASPSP","type":"oauth2","tokenUrl":"https://authserver.example/token","flow":"application","scopes":{"eventpolling":"Ability to poll for, acknowledge and receive Security Event Tokens"}},"default":{"type":"oauth2","authorizationUrl":"https://developer.caterallen.co.uk/authorize","flow":"implicit"}},"definitions":{"ISODateTime":{"type":"string","format":"date-time","description":"All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"},"Links":{"type":"object","required":["Self"],"properties":{"Self":{"type":"string","format":"uri"},"First":{"type":"string","format":"uri"},"Prev":{"type":"string","format":"uri"},"Next":{"type":"string","format":"uri"},"Last":{"type":"string","format":"uri"}},"description":"Links relevant to the payload"},"Meta":{"type":"object","properties":{"TotalPages":{"type":"integer","format":"int32"},"FirstAvailableDateTime":{"$ref":"#/definitions/ISODateTime"},"LastAvailableDateTime":{"$ref":"#/definitions/ISODateTime"}},"title":"MetaData","description":"Meta Data relevant to the payload"},"OBError1":{"type":"object","required":["ErrorCode","Message"],"properties":{"ErrorCode":{"type":"string","description":"Low level textual error code, e.g., UK.OBIE.Field.Missing","x-namespaced-enum":["UK.OBIE.Field.Expected","UK.OBIE.Field.Invalid","UK.OBIE.Field.InvalidDate","UK.OBIE.Field.Missing","UK.OBIE.Field.Unexpected","UK.OBIE.Header.Invalid","UK.OBIE.Header.Missing","UK.OBIE.Reauthenticate","UK.OBIE.Resource.ConsentMismatch","UK.OBIE.Resource.InvalidConsentStatus","UK.OBIE.Resource.InvalidFormat","UK.OBIE.Resource.NotFound","UK.OBIE.Rules.AfterCutOffDateTime","UK.OBIE.Rules.DuplicateReference","UK.OBIE.Signature.Invalid","UK.OBIE.Signature.InvalidClaim","UK.OBIE.Signature.Malformed","UK.OBIE.Signature.Missing","UK.OBIE.Signature.MissingClaim","UK.OBIE.Signature.Unexpected","UK.OBIE.UnexpectedError","UK.OBIE.Unsupported.AccountIdentifier","UK.OBIE.Unsupported.AccountSecondaryIdentifier","UK.OBIE.Unsupported.Currency","UK.OBIE.Unsupported.Frequency","UK.OBIE.Unsupported.LocalInstrument","UK.OBIE.Unsupported.Scheme"]},"Message":{"type":"string","description":"A description of the error that occurred. e.g., 'A mandatory field isn't supplied' or 'RequestedExecutionDateTime must be in future'\nOBIE doesn't standardise this field","minLength":1,"maxLength":500},"Path":{"type":"string","description":"Recommended but optional reference to the JSON Path of the field with error, e.g., Data.Initiation.InstructedAmount.Currency","minLength":1,"maxLength":500},"Url":{"type":"string","description":"URL to help remediate the problem, or provide more information, or to API Reference, or help etc"}}},"OBErrorResponse1":{"type":"object","required":["Code","Errors","Message"],"properties":{"Code":{"type":"string","description":"High level textual error code, to help categorize the errors.","minLength":1,"maxLength":40},"Id":{"type":"string","description":"A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.","minLength":1,"maxLength":40},"Message":{"type":"string","description":"Brief Error message, e.g., 'There is something wrong with the request parameters provided'","minLength":1,"maxLength":500},"Errors":{"type":"array","items":{"$ref":"#/definitions/OBError1"},"minItems":1}},"description":"An array of detail error codes, and messages, and URLs to documentation to help remediation."},"OBEventPolling1":{"type":"object","properties":{"maxEvents":{"type":"integer","description":"Maximum number of events to be returned. A value of zero indicates the ASPSP should not return events even if available"},"returnImmediately":{"type":"boolean","description":"Indicates whether an ASPSP should return a response immediately or provide a long poll"},"ack":{"type":"array","items":{"type":"string","description":"An array of jti values indicating event notifications positively acknowledged by the TPP","minLength":1,"maxLength":128}},"setErrs":{"type":"object","description":"An object that encapsulates all negative acknowledgements transmitted by the TPP","additionalProperties":{"type":"object","properties":{"err":{"type":"string","description":"A value from the IANA \"Security Event Token Delivery Error Codes\" registry that identifies the error as defined here \nhttps://tools.ietf.org/id/draft-ietf-secevent-http-push-03.html#error_codes","minLength":1,"maxLength":40},"description":{"type":"string","description":"A human-readable string that provides additional diagnostic information","minLength":1,"maxLength":256}},"required":["description","err"]}}}},"OBEventPollingResponse1":{"type":"object","required":["moreAvailable","sets"],"properties":{"moreAvailable":{"type":"boolean","description":"A JSON boolean value that indicates if more unacknowledged event notifications are available to be returned."},"sets":{"type":"object","description":"A JSON object that contains zero or more nested JSON attributes. If there are no outstanding event notifications to be transmitted, the JSON object SHALL be empty.","additionalProperties":{"type":"string","description":"An object named with the jti of the event notification to be delivered. The value is the event notification, expressed as a string.\nThe payload of the event should be defined in the OBEventNotification2 format."}}}}},"parameters":{"OBEventPolling1Param":{"in":"body","name":"OBEventPolling1Param","description":"Default","required":true,"schema":{"$ref":"#/definitions/OBEventPolling1"}},"Authorization":{"name":"Authorization","in":"header","description":"An Authorisation Token as per https://tools.ietf.org/html/rfc6750","required":true,"type":"string"},"x-customer-user-agent":{"name":"x-customer-user-agent","in":"header","description":"Indicates the user-agent that the PSU is using.","required":false,"type":"string"},"x-fapi-customer-ip-address":{"name":"x-fapi-customer-ip-address","in":"header","description":"The PSU's IP address if the PSU is currently logged in with the TPP.","required":false,"type":"string"},"x-fapi-auth-date":{"name":"x-fapi-auth-date","in":"header","description":"The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC","required":false,"type":"string","pattern":"^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"},"x-fapi-interaction-id":{"name":"x-fapi-interaction-id","in":"header","description":"An RFC4122 UID used as a correlation id.","required":false,"type":"string"},"x-idempotency-key":{"name":"x-idempotency-key","in":"header","description":"Every request will be processed only once per x-idempotency-key.  The\nIdempotency Key will be valid for 24 hours.\n","required":true,"type":"string","maxLength":40,"pattern":"^(?!\\s)(.*)(\\S)$"},"x-jws-signature":{"name":"x-jws-signature","in":"header","description":"A detached JWS signature of the body of the payload.","required":true,"type":"string"}},"responses":{"201EventsCreated":{"description":"Events Created","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}},"schema":{"$ref":"#/definitions/OBEventPollingResponse1"}},"400Error":{"description":"Bad request","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}},"schema":{"$ref":"#/definitions/OBErrorResponse1"}},"401Error":{"description":"Unauthorized","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}}},"403Error":{"description":"Forbidden","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}},"schema":{"$ref":"#/definitions/OBErrorResponse1"}},"404Error":{"description":"Not found","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}}},"405Error":{"description":"Method Not Allowed","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}}},"406Error":{"description":"Not Acceptable","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}}},"415Error":{"description":"Unsupported Media Type","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}}},"429Error":{"description":"Too Many Requests","headers":{"Retry-After":{"type":"integer","description":"Number in seconds to wait"},"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}}},"500Error":{"description":"Internal Server Error","headers":{"x-fapi-interaction-id":{"type":"string","description":"An RFC4122 UID used as a correlation id."}},"schema":{"$ref":"#/definitions/OBErrorResponse1"}}}}
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Swagger for Aggregated Polling API Specification",
+        "version": "v3.1.2",
+        "title": "AggregatedPollingAPI",
+        "termsOfService": "https://www.openbanking.org.uk/terms",
+        "contact": {
+            "name": "Service Desk",
+            "email": "ServiceDesk@openbanking.org.uk"
+        },
+        "license": {
+            "name": "open-licence",
+            "url": "https://www.openbanking.org.uk/open-licence"
+        }
+    },
+    "host": "developer.caterallen.co.uk",
+    "basePath": "/open-banking/v3.1.2",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application/json; charset=utf-8",
+        "application/jose+jwe"
+    ],
+    "produces": [
+        "application/json; charset=utf-8",
+        "application/jose+jwe"
+    ],
+    "security": [
+        {
+            "default": []
+        }
+    ],
+    "paths": {
+        "/events": {
+            "post": {
+                "tags": [
+                    "Events"
+                ],
+                "summary": "Create Events",
+                "operationId": "CreateEvents",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "OBEventPolling1Param",
+                        "description": "Default",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/OBEventPolling1"
+                        }
+                    },
+                    {
+                        "name": "x-fapi-auth-date",
+                        "in": "header",
+                        "description": "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC",
+                        "required": false,
+                        "type": "string",
+                        "pattern": "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"
+                    },
+                    {
+                        "name": "x-fapi-customer-ip-address",
+                        "in": "header",
+                        "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "x-fapi-interaction-id",
+                        "in": "header",
+                        "description": "An RFC4122 UID used as a correlation id.",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Events Created",
+                        "headers": {
+                            "x-fapi-interaction-id": {
+                                "type": "string",
+                                "description": "An RFC4122 UID used as a correlation id."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/OBEventPollingResponse1"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "headers": {
+                            "x-fapi-interaction-id": {
+                                "type": "string",
+                                "description": "An RFC4122 UID used as a correlation id."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/OBErrorResponse1"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "headers": {
+                            "x-fapi-interaction-id": {
+                                "type": "string",
+                                "description": "An RFC4122 UID used as a correlation id."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "headers": {
+                            "x-fapi-interaction-id": {
+                                "type": "string",
+                                "description": "An RFC4122 UID used as a correlation id."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/OBErrorResponse1"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "headers": {
+                            "x-fapi-interaction-id": {
+                                "type": "string",
+                                "description": "An RFC4122 UID used as a correlation id."
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Method Not Allowed",
+                        "headers": {
+                            "x-fapi-interaction-id": {
+                                "type": "string",
+                                "description": "An RFC4122 UID used as a correlation id."
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable",
+                        "headers": {
+                            "x-fapi-interaction-id": {
+                                "type": "string",
+                                "description": "An RFC4122 UID used as a correlation id."
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "headers": {
+                            "Retry-After": {
+                                "type": "integer",
+                                "description": "Number in seconds to wait"
+                            },
+                            "x-fapi-interaction-id": {
+                                "type": "string",
+                                "description": "An RFC4122 UID used as a correlation id."
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "headers": {
+                            "x-fapi-interaction-id": {
+                                "type": "string",
+                                "description": "An RFC4122 UID used as a correlation id."
+                            }
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/OBErrorResponse1"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "TPPOAuth2Security": [
+                            "eventpolling"
+                        ]
+                    },
+                    {
+                        "default": []
+                    }
+                ],
+                "x-auth-type": "Application & Application User",
+                "x-throttling-tier": "Unlimited"
+            }
+        }
+    },
+    "securityDefinitions": {
+        "TPPOAuth2Security": {
+            "description": "TPP client credential authorisation flow with the ASPSP",
+            "type": "oauth2",
+            "tokenUrl": "https://authserver.example/token",
+            "flow": "application",
+            "scopes": {
+                "eventpolling": "Ability to poll for, acknowledge and receive Security Event Tokens"
+            }
+        },
+        "default": {
+            "type": "oauth2",
+            "authorizationUrl": "https://developer.caterallen.co.uk/authorize",
+            "flow": "implicit"
+        }
+    },
+    "definitions": {
+        "ISODateTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+        },
+        "Links": {
+            "type": "object",
+            "required": [
+                "Self"
+            ],
+            "properties": {
+                "Self": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "First": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "Prev": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "Next": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "Last": {
+                    "type": "string",
+                    "format": "uri"
+                }
+            },
+            "description": "Links relevant to the payload"
+        },
+        "Meta": {
+            "type": "object",
+            "properties": {
+                "TotalPages": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "FirstAvailableDateTime": {
+                    "$ref": "#/definitions/ISODateTime"
+                },
+                "LastAvailableDateTime": {
+                    "$ref": "#/definitions/ISODateTime"
+                }
+            },
+            "title": "MetaData",
+            "description": "Meta Data relevant to the payload"
+        },
+        "OBError1": {
+            "type": "object",
+            "required": [
+                "ErrorCode",
+                "Message"
+            ],
+            "properties": {
+                "ErrorCode": {
+                    "type": "string",
+                    "description": "Low level textual error code, e.g., UK.OBIE.Field.Missing",
+                    "x-namespaced-enum": [
+                        "UK.OBIE.Field.Expected",
+                        "UK.OBIE.Field.Invalid",
+                        "UK.OBIE.Field.InvalidDate",
+                        "UK.OBIE.Field.Missing",
+                        "UK.OBIE.Field.Unexpected",
+                        "UK.OBIE.Header.Invalid",
+                        "UK.OBIE.Header.Missing",
+                        "UK.OBIE.Reauthenticate",
+                        "UK.OBIE.Resource.ConsentMismatch",
+                        "UK.OBIE.Resource.InvalidConsentStatus",
+                        "UK.OBIE.Resource.InvalidFormat",
+                        "UK.OBIE.Resource.NotFound",
+                        "UK.OBIE.Rules.AfterCutOffDateTime",
+                        "UK.OBIE.Rules.DuplicateReference",
+                        "UK.OBIE.Signature.Invalid",
+                        "UK.OBIE.Signature.InvalidClaim",
+                        "UK.OBIE.Signature.Malformed",
+                        "UK.OBIE.Signature.Missing",
+                        "UK.OBIE.Signature.MissingClaim",
+                        "UK.OBIE.Signature.Unexpected",
+                        "UK.OBIE.UnexpectedError",
+                        "UK.OBIE.Unsupported.AccountIdentifier",
+                        "UK.OBIE.Unsupported.AccountSecondaryIdentifier",
+                        "UK.OBIE.Unsupported.Currency",
+                        "UK.OBIE.Unsupported.Frequency",
+                        "UK.OBIE.Unsupported.LocalInstrument",
+                        "UK.OBIE.Unsupported.Scheme"
+                    ]
+                },
+                "Message": {
+                    "type": "string",
+                    "description": "A description of the error that occurred. e.g., 'A mandatory field isn't supplied' or 'RequestedExecutionDateTime must be in future'\nOBIE doesn't standardise this field",
+                    "minLength": 1,
+                    "maxLength": 500
+                },
+                "Path": {
+                    "type": "string",
+                    "description": "Recommended but optional reference to the JSON Path of the field with error, e.g., Data.Initiation.InstructedAmount.Currency",
+                    "minLength": 1,
+                    "maxLength": 500
+                },
+                "Url": {
+                    "type": "string",
+                    "description": "URL to help remediate the problem, or provide more information, or to API Reference, or help etc"
+                }
+            }
+        },
+        "OBErrorResponse1": {
+            "type": "object",
+            "required": [
+                "Code",
+                "Errors",
+                "Message"
+            ],
+            "properties": {
+                "Code": {
+                    "type": "string",
+                    "description": "High level textual error code, to help categorize the errors.",
+                    "minLength": 1,
+                    "maxLength": 40
+                },
+                "Id": {
+                    "type": "string",
+                    "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+                    "minLength": 1,
+                    "maxLength": 40
+                },
+                "Message": {
+                    "type": "string",
+                    "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+                    "minLength": 1,
+                    "maxLength": 500
+                },
+                "Errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/OBError1"
+                    },
+                    "minItems": 1
+                }
+            },
+            "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+        },
+        "OBEventPolling1": {
+            "type": "object",
+            "properties": {
+                "maxEvents": {
+                    "type": "integer",
+                    "description": "Maximum number of events to be returned. A value of zero indicates the ASPSP should not return events even if available"
+                },
+                "returnImmediately": {
+                    "type": "boolean",
+                    "description": "Indicates whether an ASPSP should return a response immediately or provide a long poll"
+                },
+                "ack": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "description": "An array of jti values indicating event notifications positively acknowledged by the TPP",
+                        "minLength": 1,
+                        "maxLength": 128
+                    }
+                },
+                "setErrs": {
+                    "type": "object",
+                    "description": "An object that encapsulates all negative acknowledgements transmitted by the TPP",
+                    "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                            "err": {
+                                "type": "string",
+                                "description": "A value from the IANA \"Security Event Token Delivery Error Codes\" registry that identifies the error as defined here \nhttps://tools.ietf.org/id/draft-ietf-secevent-http-push-03.html#error_codes",
+                                "minLength": 1,
+                                "maxLength": 40
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "A human-readable string that provides additional diagnostic information",
+                                "minLength": 1,
+                                "maxLength": 256
+                            }
+                        },
+                        "required": [
+                            "description",
+                            "err"
+                        ]
+                    }
+                }
+            }
+        },
+        "OBEventPollingResponse1": {
+            "type": "object",
+            "required": [
+                "moreAvailable",
+                "sets"
+            ],
+            "properties": {
+                "moreAvailable": {
+                    "type": "boolean",
+                    "description": "A JSON boolean value that indicates if more unacknowledged event notifications are available to be returned."
+                },
+                "sets": {
+                    "type": "object",
+                    "description": "A JSON object that contains zero or more nested JSON attributes. If there are no outstanding event notifications to be transmitted, the JSON object SHALL be empty.",
+                    "additionalProperties": {
+                        "type": "string",
+                        "description": "An object named with the jti of the event notification to be delivered. The value is the event notification, expressed as a string.\nThe payload of the event should be defined in the OBEventNotification2 format."
+                    }
+                }
+            }
+        }
+    },
+    "parameters": {
+        "OBEventPolling1Param": {
+            "in": "body",
+            "name": "OBEventPolling1Param",
+            "description": "Default",
+            "required": true,
+            "schema": {
+                "$ref": "#/definitions/OBEventPolling1"
+            }
+        },
+        "Authorization": {
+            "name": "Authorization",
+            "in": "header",
+            "description": "An Authorisation Token as per https://tools.ietf.org/html/rfc6750",
+            "required": true,
+            "type": "string"
+        },
+        "x-customer-user-agent": {
+            "name": "x-customer-user-agent",
+            "in": "header",
+            "description": "Indicates the user-agent that the PSU is using.",
+            "required": false,
+            "type": "string"
+        },
+        "x-fapi-customer-ip-address": {
+            "name": "x-fapi-customer-ip-address",
+            "in": "header",
+            "description": "The PSU's IP address if the PSU is currently logged in with the TPP.",
+            "required": false,
+            "type": "string"
+        },
+        "x-fapi-auth-date": {
+            "name": "x-fapi-auth-date",
+            "in": "header",
+            "description": "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC",
+            "required": false,
+            "type": "string",
+            "pattern": "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"
+        },
+        "x-fapi-interaction-id": {
+            "name": "x-fapi-interaction-id",
+            "in": "header",
+            "description": "An RFC4122 UID used as a correlation id.",
+            "required": false,
+            "type": "string"
+        },
+        "x-idempotency-key": {
+            "name": "x-idempotency-key",
+            "in": "header",
+            "description": "Every request will be processed only once per x-idempotency-key.  The\nIdempotency Key will be valid for 24 hours.\n",
+            "required": true,
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(?!\\s)(.*)(\\S)$"
+        },
+        "x-jws-signature": {
+            "name": "x-jws-signature",
+            "in": "header",
+            "description": "A detached JWS signature of the body of the payload.",
+            "required": true,
+            "type": "string"
+        }
+    },
+    "responses": {
+        "201EventsCreated": {
+            "description": "Events Created",
+            "headers": {
+                "x-fapi-interaction-id": {
+                    "type": "string",
+                    "description": "An RFC4122 UID used as a correlation id."
+                }
+            },
+            "schema": {
+                "$ref": "#/definitions/OBEventPollingResponse1"
+            }
+        },
+        "400Error": {
+            "description": "Bad request",
+            "headers": {
+                "x-fapi-interaction-id": {
+                    "type": "string",
+                    "description": "An RFC4122 UID used as a correlation id."
+                }
+            },
+            "schema": {
+                "$ref": "#/definitions/OBErrorResponse1"
+            }
+        },
+        "401Error": {
+            "description": "Unauthorized",
+            "headers": {
+                "x-fapi-interaction-id": {
+                    "type": "string",
+                    "description": "An RFC4122 UID used as a correlation id."
+                }
+            }
+        },
+        "403Error": {
+            "description": "Forbidden",
+            "headers": {
+                "x-fapi-interaction-id": {
+                    "type": "string",
+                    "description": "An RFC4122 UID used as a correlation id."
+                }
+            },
+            "schema": {
+                "$ref": "#/definitions/OBErrorResponse1"
+            }
+        },
+        "404Error": {
+            "description": "Not found",
+            "headers": {
+                "x-fapi-interaction-id": {
+                    "type": "string",
+                    "description": "An RFC4122 UID used as a correlation id."
+                }
+            }
+        },
+        "405Error": {
+            "description": "Method Not Allowed",
+            "headers": {
+                "x-fapi-interaction-id": {
+                    "type": "string",
+                    "description": "An RFC4122 UID used as a correlation id."
+                }
+            }
+        },
+        "406Error": {
+            "description": "Not Acceptable",
+            "headers": {
+                "x-fapi-interaction-id": {
+                    "type": "string",
+                    "description": "An RFC4122 UID used as a correlation id."
+                }
+            }
+        },
+        "415Error": {
+            "description": "Unsupported Media Type",
+            "headers": {
+                "x-fapi-interaction-id": {
+                    "type": "string",
+                    "description": "An RFC4122 UID used as a correlation id."
+                }
+            }
+        },
+        "429Error": {
+            "description": "Too Many Requests",
+            "headers": {
+                "Retry-After": {
+                    "type": "integer",
+                    "description": "Number in seconds to wait"
+                },
+                "x-fapi-interaction-id": {
+                    "type": "string",
+                    "description": "An RFC4122 UID used as a correlation id."
+                }
+            }
+        },
+        "500Error": {
+            "description": "Internal Server Error",
+            "headers": {
+                "x-fapi-interaction-id": {
+                    "type": "string",
+                    "description": "An RFC4122 UID used as a correlation id."
+                }
+            },
+            "schema": {
+                "$ref": "#/definitions/OBErrorResponse1"
+            }
+        }
+    }
+}

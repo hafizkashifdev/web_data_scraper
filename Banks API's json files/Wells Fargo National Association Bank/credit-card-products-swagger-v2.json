@@ -1,0 +1,992 @@
+{
+  "swagger": "2.0",
+  "x-swagger-date": "2024-03-21",
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "in": "header",
+      "name": "Authorization",
+      "description": "Generate your initial API key on the developer portal (See https://developer.wellsfargo.com/portal/documentation/support/how-to#get-keys) and regenerate every 24 hours by calling the Token API. Make sure to specify \"Bearer\" as your token type.",
+      "type": "apiKey"
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "basePath": "/credit-cards/catalog/v2/",
+  "host": "api.wellsfargo.com",
+  "schemes": [
+    "https"
+  ],
+  "info": {
+    "title": "Credit Card Products API",
+    "version": "v2.0 Mar, 21 2024",
+    "description": "The credit card procucts API allows you to get the pricing and benefits details of the given product.",
+    "x-termsAndConditions": "https://developer.wellsfargo.com/tac/",
+    "contact": {
+      "name": "Wells Fargo Gateway Support",
+      "url": "https://developer.wellsfargo.com/portal/support",
+      "email": "gateway@wellsfargo.com"
+    }
+  },
+  "paths": {
+    "/products": {
+      "get": {
+        "operationId": "get_credit_card_products",
+        "description": "This resource returns the pricing and benefits details for given product",
+        "parameters": [
+          {
+            "$ref": "#/parameters/authorization_PARAM"
+          },
+          {
+            "$ref": "#/parameters/client_request_id_PARAM"
+          },
+          {
+            "$ref": "#/parameters/gateway_entity_id_PARAM"
+          },
+          {
+            "$ref": "#/parameters/content_type_PARAM"
+          },
+          {
+            "$ref": "#/parameters/product_code_QUERY"
+          },
+          {
+            "$ref": "#/parameters/channel_code_QUERY"
+          },
+          {
+            "$ref": "#/parameters/vendor_code_QUERY"
+          },
+          {
+            "$ref": "#/parameters/flexible_pricing_id_QUERY"
+          },
+          {
+            "$ref": "#/parameters/sub_channel_code_QUERY"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK or Successful operation",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/retrieve_pricing_response_200"
+            }
+          },
+          "400": {
+            "description": "Request could not be fulfilled because of incorrect syntax",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_400"
+            }
+          },
+          "401": {
+            "description": "Authentication error (proper authentication is required)",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_401"
+            }
+          },
+          "403": {
+            "description": "No authorization for the requested resource",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_403"
+            }
+          },
+          "404": {
+            "description": "Requested resource cannot be found",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_404"
+            }
+          },
+          "405": {
+            "description": "Requested method not supported",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_405"
+            }
+          },
+          "408": {
+            "description": "Request timed out",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_408"
+            }
+          },
+          "409": {
+            "description": "Requests conflicts with another request",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_409"
+            }
+          },
+          "429": {
+            "description": "Too many requests within a certain timeframe",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_429"
+            }
+          },
+          "451": {
+            "description": "Upgrade to service terms required",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_451"
+            }
+          },
+          "500": {
+            "description": "Internal system error",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_500"
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_503"
+            }
+          },
+          "520": {
+            "description": "Unknown error",
+            "headers": {
+              "client-request-id": {
+                "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "gateway-request-id": {
+                "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/error_response_520"
+            }
+          },
+          "default": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "tags": [
+          "Retrieve product pricing"
+        ],
+        "x-scope": "Credit_Card_Products",
+        "x-auth-type": "Application & Application User",
+        "x-throttling-tier": "Unlimited"
+      }
+    }
+  },
+  "parameters": {
+    "authorization_PARAM": {
+      "name": "Authorization",
+      "required": true,
+      "in": "header",
+      "description": "Generate your initial API key on the developer portal (See https://developer.wellsfargo.com/portal/documentation/support/how-to#get-keys) and regenerate every 24 hours by calling the Token API. Make sure to specify \u201cBearer\u201d as your token type.",
+      "type": "string"
+    },
+    "gateway_entity_id_PARAM": {
+      "in": "header",
+      "maxLength": 22,
+      "name": "gateway-entity-id",
+      "minLength": 22,
+      "type": "string",
+      "description": "An Entity ID describes on whose behalf the API request is being sent. This may represent your company, a division within your company, a third party, or something else.\n",
+      "required": true
+    },
+    "client_request_id_PARAM": {
+      "in": "header",
+      "maxLength": 36,
+      "name": "client-request-id",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "minLength": 36,
+      "type": "string",
+      "description": "Value you generate to track each API call. A UUID value compliant with RFC 4122 is required. The value is echoed back in the response header.",
+      "required": true
+    },
+    "content_type_PARAM": {
+      "name": "Content-Type",
+      "in": "header",
+      "description": "This header indicates the media (MIME) type of the content of the request (used with POST, PATCH and PUT requests) and the content of the response\n",
+      "type": "string",
+      "required": true,
+      "enum": [
+        "application/json"
+      ]
+    },
+    "product_code_QUERY": {
+      "name": "product_code",
+      "description": "A unique identifier for a credit card product.",
+      "in": "query",
+      "type": "string",
+      "required": true,
+      "minLength": 10,
+      "maxLength": 10
+    },
+    "channel_code_QUERY": {
+      "name": "channel_code",
+      "description": "This field is used to identify the front-end channel a consumer enters in the Wells Fargo credit card application.",
+      "in": "query",
+      "type": "string",
+      "required": true,
+      "pattern": "^[a-zA-Z0-9]{1,20}$"
+    },
+    "vendor_code_QUERY": {
+      "in": "query",
+      "description": "The digital paid marketing publisher network code or the vendor identifier for consumer credit card applications.",
+      "name": "vendor_code",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2
+    },
+    "flexible_pricing_id_QUERY": {
+      "in": "query",
+      "description": "An indicator used in the decision and pricing process.",
+      "name": "flexible_pricing_id",
+      "type": "string",
+      "minLength": 14,
+      "maxLength": 14
+    },
+    "sub_channel_code_QUERY": {
+      "in": "query",
+      "description": "The digital paid marketing channel identifier or code for consumer credit card applications presented through a URL.",
+      "name": "sub_channel_code",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 3
+    }
+  },
+  "definitions": {
+    "retrieve_pricing_response_200": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "pricing_details": {
+          "$ref": "#/definitions/pricing_details_200"
+        }
+      }
+    },
+    "pricing_details_200": {
+      "type": "array",
+      "description": "This object contains all of the product\u2019s pricing details.",
+      "items": {
+        "$ref": "#/definitions/pricing_info_200"
+      }
+    },
+    "pricing_info_200": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "mapping_attribute": {
+          "maxLength": 50,
+          "minimum": 1,
+          "description": "Name of the pricing attribute.",
+          "type": "string",
+          "example": "PURSPMIN"
+        },
+        "value": {
+          "type": "string",
+          "description": "Value of the pricing element.",
+          "example": "14.99"
+        }
+      }
+    },
+    "error_response_400": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_400"
+          }
+        }
+      }
+    },
+    "error_info_400": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "400-009",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "field_name is missing from the query string.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "A human-readable explanation. The message is not intended for algorithmic processing and is subject to change.\n"
+        },
+        "field_name": {
+          "type": "string",
+          "description": "The field name where the error occurred.",
+          "example": "first_name"
+        },
+        "field_value": {
+          "type": "string",
+          "description": "Field value entered in the request by the user.",
+          "example": 123456789
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_403": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_403"
+          }
+        }
+      }
+    },
+    "error_info_403": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "403-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "Account associated with API key does not have access to the requested API.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "A human-readable explanation. The message is not intended for algorithmic processing and is subject to change.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_401": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_401"
+          }
+        }
+      }
+    },
+    "error_info_401": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "401-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "API key is invalid or expired.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "API key is invalid or expired.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_405": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_405"
+          }
+        }
+      }
+    },
+    "error_info_405": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "405-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "Requested method is not supported. Check the API specification for supported methods.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "Requested method is not supported. Check the API specification for supported methods.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_404": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_404"
+          }
+        }
+      }
+    },
+    "error_info_404": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "404-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "Requested API does not exist.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "Requested API does not exist.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_408": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_408"
+          }
+        }
+      }
+    },
+    "error_info_408": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "408-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "Request timed out.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "Request timed out.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_409": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_409"
+          }
+        }
+      }
+    },
+    "error_info_409": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "409-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "Your request conflicts with another request.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "Your request conflicts with another request.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_429": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_429"
+          }
+        }
+      }
+    },
+    "error_info_429": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "429-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "Service is currently unavailable due to rate limiting.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "Service is currently unavailable due to rate limiting.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_451": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_451"
+          }
+        }
+      }
+    },
+    "error_info_451": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "451-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "Your service agreement has expired. Contact Wells Fargo Gateway Support at 1-844-WFG8WAY or gateway@wellsfargo.com to obtain an updated service agreement.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "Your service agreement has expired. Contact Wells Fargo Gateway Support at 1-844-WFG8WAY or gateway@wellsfargo.com to obtain an updated service agreement.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_500": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_500"
+          }
+        }
+      }
+    },
+    "error_info_500": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "500-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "Internal server error.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "Internal server error.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_503": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_503"
+          }
+        }
+      }
+    },
+    "error_info_503": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "503-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "Service unavailable.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "Service unavailable.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_504": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_504"
+          }
+        }
+      }
+    },
+    "error_info_504": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "504-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "Server timed out.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "Server timed out.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    },
+    "error_response_520": {
+      "description": "",
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "description": "",
+          "items": {
+            "$ref": "#/definitions/error_info_520"
+          }
+        }
+      }
+    },
+    "error_info_520": {
+      "description": "",
+      "type": "object",
+      "required": [
+        "error_code",
+        "description"
+      ],
+      "properties": {
+        "error_code": {
+          "example": "520-001",
+          "maxLength": 8,
+          "minLength": 7,
+          "type": "string",
+          "description": "A code describing the result of processing."
+        },
+        "description": {
+          "example": "Unknown error occurred.",
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "Unknown error occurred.\n"
+        },
+        "api_specification_url": {
+          "type": "string",
+          "description": "A link to the API specification.",
+          "example": "https://developer.wellsfargo.com/portal/documentation"
+        }
+      }
+    }
+  },
+  "x-security": {
+    "apim": {
+      "x-scopes": [
+        {
+          "name": "Credit_Card_Products",
+          "roles": "CREDIT-Pricing",
+          "description": "Pricing",
+          "key": "Credit_Card_Products"
+        }
+      ]
+    }
+  }
+}

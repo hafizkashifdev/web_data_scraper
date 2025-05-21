@@ -1,0 +1,301 @@
+{
+  "swagger": "2.0",
+  "host": "hostname",
+  "schemes": [
+    "https"
+  ],
+  "info": {
+    "title": "Generate Access Token API",
+    "description": "Swagger Specification for OAuth Access Token generation API. Please refer postman collection for sample request and response.",
+    "x-postman-collection-id": "d44d465b51f8553d7fa1",
+    "version": "v3.1.0"
+  },
+  "basePath": "/identity/open-banking/v3.1",
+  "paths": {
+    "/token": {
+      "post": {
+        "description": "<p>Returns the access token that needs be presented for Account Access API calls.</p>",
+        "summary": "Generates Access Token to initiate Account Access methods.",
+        "operationId": "token",
+        "tags": [
+          "Token"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TokenResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request:Example-Invalid grant_type or code or scope"
+          },
+          "401": {
+            "description": "Unauthorised:Example-Invalid ClientId or ClientSecret"
+          },
+          "404": {
+            "description": "Resource Not Found"
+          },
+          "415": {
+            "description": "Unsupported Media Type"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "grant_type",
+            "description": " authorization_code or client_credentials or refresh_token.",
+            "type": "string",
+            "required": true,
+            "enum": [
+              "client_credentials",
+              "authorization_code",
+              "refresh_token"
+            ],
+            "default": "client_credentials"
+          },
+          {
+            "in": "formData",
+            "name": "client_id",
+            "description": "Must be sent if authentication method is private_key_jwt,value is client_id of the OAuth Client",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "client_assertion_type",
+            "description": "Must be sent if authentication method is private_key_jwt,value is urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "formData",
+            "name": "client_assertion",
+            "description": "Must be sent if authentication method is private_key_jwt,value is authentication token",
+            "type": "string",
+            "required": false
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "required": false,
+            "default": "application/x-www-form-urlencoded",
+            "description": "Standard HTTP Header; Represents the format of the payload being provided in the request.This must be set to application/json. The TPP may provide additional information (e.g. a 'q' value and charset). If set to any other value, we will respond with a 415 Unsupported Media Type."
+          },
+          {
+            "in": "formData",
+            "name": "code",
+            "description": "Code returned from the authorize call. Applicable only on grant_type = authorization_code and the value is one fetched from /authorize API",
+            "type": "string",
+            "required": false,
+            "default": ""
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Authorisation header contains the credentials to authenticate a user. It should be a string starting with basic and base 64 encoded Consumer key:Consumer secret. eg: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==",
+            "type": "string",
+            "required": true,
+            "default": "Basic "
+          },
+          {
+            "in": "formData",
+            "name": "refresh_token",
+            "description": "The refresh token for the old access token.Example:2Jc9AqNHCYTWHwUKlWb8NqRPaBbJK10l",
+            "type": "string",
+            "required": false,
+            "default": ""
+          },
+          {
+            "in": "formData",
+            "name": "scope",
+            "description": "The scope defines the type of operations that the third-party will be performing.",
+            "type": "string",
+            "required": true,
+            "enum": [
+              "accounts",
+              "payments"
+            ]
+          }
+        ]
+      }
+    },
+    "/refreshtokens": {
+      "post": {
+        "description": "<p>Returns the renewed access token that needs be presented for Account Access API calls</p>",
+        "summary": "Generates renewed Access Token to initiate Account Access methods.",
+        "operationId": "refreshtokens",
+        "tags": [
+          "Token"
+        ],
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RefreshTokenResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request:Example-Invalid grant_type or code or scope"
+          },
+          "401": {
+            "description": "Unauthorised:Example-Invalid ClientId or ClientSecret"
+          },
+          "404": {
+            "description": "Resource Not Found"
+          },
+          "415": {
+            "description": "Unsupported Media Type"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "grant_type",
+            "description": "Value MUST be set to \"refresh_token\"",
+            "type": "string",
+            "required": true,
+            "default": ""
+          },
+          {
+            "in": "formData",
+            "name": "refresh_token",
+            "description": "The refresh token for the old access token.Example:2Jc9AqNHCYTWHwUKlWb8NqRPaBbJK10l",
+            "type": "string",
+            "required": true,
+            "default": ""
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "required": false,
+            "default": "application/x-www-form-urlencoded",
+            "description": "Standard HTTP Header; Represents the format of the payload being provided in the request.This must be set to application/json. The TPP may provide additional information (e.g. a 'q' value and charset). If set to any other value, we will respond with a 415 Unsupported Media Type."
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Authorisation header contains the credentials to authenticate a user. It should be a string starting with basic and base 64 encoded Consumer key:Consumer secret. eg: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==",
+            "type": "string",
+            "required": true,
+            "default": "Basic "
+          },
+          {
+            "in": "formData",
+            "name": "scope",
+            "description": "The scope defines the type of operations that the third-party will be performing.",
+            "type": "string",
+            "required": true,
+            "enum": [
+              "accounts",
+              "payments"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "TokenResponse": {
+      "description": "Response from the Token method",
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "description": "Unique string generated for the transaction"
+        },
+        "expires_in": {
+          "type": "integer",
+          "description": "Validity of the token"
+        },
+        "refresh_token": {
+          "type": "string",
+          "description": "Unique string generated for the transaction"
+        },
+        "refresh_token_expires_in": {
+          "type": "integer",
+          "description": "Validity of the refresh token."
+        },
+        "token_type": {
+          "type": "string",
+          "description": "Type of token.Default: Bearer"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Scope for which accesstoken is valid"
+        }
+      },
+      "required": [
+        "access_token",
+        "expires_in",
+        "refresh_token",
+        "refresh_token_expires_in",
+        "token_type",
+        "scope"
+      ]
+    },
+    "RefreshTokenResponse": {
+      "description": "Response from the Refreh Token method",
+      "type": "object",
+      "properties": {
+        "issued_at": {
+          "type": "integer",
+          "description": "Previous refresh token issued at time in milliseconds"
+        },
+        "access_token": {
+          "type": "string",
+          "description": "Unique string generated for the transaction"
+        },
+        "expires_in": {
+          "type": "integer",
+          "description": "Validity of the token"
+        },
+        "refresh_token": {
+          "type": "string",
+          "description": "Unique string generated for the transaction"
+        },
+        "refresh_token_expires_in": {
+          "type": "integer",
+          "description": "Validity of the refresh token"
+        },
+        "token_type": {
+          "type": "string",
+          "description": "Type of token.Default: Bearer"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Scope for which accesstoken is valid"
+        }
+      },
+      "required": [
+        "issued_at",
+        "access_token",
+        "expires_in",
+        "refresh_token",
+        "refresh_token_expires_in",
+        "token_type",
+        "scope"
+      ]
+    }
+  }
+}

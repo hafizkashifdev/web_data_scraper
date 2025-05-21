@@ -1,0 +1,872 @@
+{
+  "swagger": "2.0",
+  "host": "hostname",
+  "info": {
+    "title": "Event Subscriptions API",
+    "description": "Swagger Specification for Event Subscriptions API. Please refer postman collection for sample request and response.",
+    "x-postman-collection-id": "9eb0e9d04a12412aa080",
+    "version": "v3.1.2"
+  },
+  "basePath": "/open-banking/v3.1/events",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/event-subscriptions": {
+      "post": {
+        "tags": [
+          "Event Subscriptions"
+        ],
+        "summary": "Create Event Subscription",
+        "operationId": "CreateEventSubscription",
+        "consumes": [
+          "application/json; charset=utf-8"
+        ],
+        "produces": [
+          "application/json; charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "required": true,
+            "default": "application/json; charset=utf-8",
+            "description": "Standard HTTP Header; Represents the format of the payload being provided in the request.This must be set to application/json. The TPP may provide additional information (e.g. a 'q' value and charset). If set to any other value, we will respond with a 415 Unsupported Media Type."
+          },
+          {
+            "in": "header",
+            "name": "Accept",
+            "type": "string",
+            "required": false,
+            "default": "",
+            "description": "Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON.  The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json. If set to an unacceptable value we will respond with a 406 Not Acceptable."
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "type": "string",
+            "required": false,
+            "default": "",
+            "description": "A RFC4122 UID used as a correlation id."
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "required": true,
+            "default": "Bearer ",
+            "description": "Standard HTTP Header; Bearer Authentication Scheme."
+          },
+          {
+            "in": "header",
+            "name": "x-jws-signature",
+            "type": "string",
+            "required": true,
+            "default": "",
+            "description": "A detached JWS signature of the body of the payload."
+          },
+          {
+            "in": "body",
+            "name": "CreateEventSubscriptionRequest",
+            "description": "Create an Event Subscription. YBS supports one event - UK.OBIE.Consent-Authorization-Revoked",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateEventSubscriptionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Event Subscription Created Successfully",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "type": "string",
+                "description": "A RFC4122 UID used as a correlation id."
+              },
+              "x-jws-signature": {
+                "type": "string",
+                "description": "Header containing a detached JWS signature of the body of the payload."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/CreateEventSubscriptionResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "TPPOAuth2Security": [
+              "accounts",
+              "payments",
+              "fundsconfirmations"
+            ]
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Event Subscriptions"
+        ],
+        "summary": "Get Event Subscriptions",
+        "operationId": "GetEventSubscriptions",
+        "produces": [
+          "application/json; charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Accept",
+            "type": "string",
+            "required": false,
+            "default": "",
+            "description": "Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON.  The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json. If set to an unacceptable value we will respond with a 406 Not Acceptable."
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "type": "string",
+            "required": false,
+            "default": "",
+            "description": "A RFC4122 UID used as a correlation id."
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "required": true,
+            "default": "Bearer ",
+            "description": "Standard HTTP Header; Bearer Authentication Scheme."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event Subscriptions Retrieved Successfully",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "type": "string",
+                "description": "A RFC4122 UID used as a correlation id."
+              },
+              "x-jws-signature": {
+                "type": "string",
+                "description": "Header containing a detached JWS signature of the body of the payload."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GetEventSubscriptionResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "TPPOAuth2Security": [
+              "accounts",
+              "payments",
+              "fundsconfirmations"
+            ]
+          }
+        ]
+      }
+    },
+    "/event-subscriptions/{EventSubscriptionId}": {
+      "put": {
+        "tags": [
+          "Event Subscriptions"
+        ],
+        "summary": "Change Event Subscription.",
+        "operationId": "ChangeEventSubscription",
+        "consumes": [
+          "application/json; charset=utf-8"
+        ],
+        "produces": [
+          "application/json; charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "type": "string",
+            "required": true,
+            "default": "application/json; charset=utf-8",
+            "description": "Standard HTTP Header; Represents the format of the payload being provided in the request.This must be set to application/json. The TPP may provide additional information (e.g. a 'q' value and charset). If set to any other value, we will respond with a 415 Unsupported Media Type."
+          },
+          {
+            "in": "header",
+            "name": "Accept",
+            "type": "string",
+            "required": false,
+            "default": "",
+            "description": "Standard HTTP Header; Determine the Content-Type that is required from the Server.  If specified, it must indicate that the only a JSON response is accepted (e.g by setting the value to application/json) as a content header for all endpoints that respond with JSON.  The TPP may provide additional information (e.g. a 'q' value and charset). If not specified, default is application/json. If set to an unacceptable value we will respond with a 406 Not Acceptable."
+          },
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "type": "string",
+            "required": false,
+            "default": "",
+            "description": "A RFC4122 UID used as a correlation id."
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "required": true,
+            "default": "Bearer ",
+            "description": "Standard HTTP Header; Bearer Authentication Scheme."
+          },
+          {
+            "in": "header",
+            "name": "x-jws-signature",
+            "type": "string",
+            "required": true,
+            "default": "",
+            "description": "A detached JWS signature of the body of the payload."
+          },
+          {
+            "in": "body",
+            "name": "UpdateEventSubscriptionRequest",
+            "description": "Update an Event Subscription",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateEventSubscriptionRequest"
+            }
+          },
+          {
+            "name": "EventSubscriptionId",
+            "in": "path",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the callback url resource",
+            "required": true,
+            "default": "",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event Subscription Updated Successfully",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "type": "string",
+                "description": "A RFC4122 UID used as a correlation id."
+              },
+              "x-jws-signature": {
+                "type": "string",
+                "description": "Header containing a detached JWS signature of the body of the payload."
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/UpdateEventSubscriptionResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "TPPOAuth2Security": [
+              "accounts",
+              "payments",
+              "fundsconfirmations"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Event Subscriptions"
+        ],
+        "summary": "Delete Event Subscription",
+        "operationId": "DeleteEventSubscription",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-fapi-interaction-id",
+            "type": "string",
+            "required": false,
+            "default": "",
+            "description": "A RFC4122 UID used as a correlation id."
+          },
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "required": true,
+            "default": "Bearer ",
+            "description": "Standard HTTP Header; Bearer Authentication Scheme."
+          },
+          {
+            "name": "EventSubscriptionId",
+            "in": "path",
+            "description": "Unique identification as assigned by the ASPSP to uniquely identify the callback url resource",
+            "required": true,
+            "default": "",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Event Subscription Deleted Successfully",
+            "headers": {
+              "x-fapi-interaction-id": {
+                "type": "string",
+                "description": "An RFC4122 UID used as a correlation id."
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/OBErrorListResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "schema": {
+              "$ref": "#/definitions/OBErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "TPPOAuth2Security": [
+              "accounts",
+              "payments",
+              "fundsconfirmations"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "TPPOAuth2Security": {
+      "type": "oauth2",
+      "flow": "application",
+      "tokenUrl": "https://authserver.example/token",
+      "scopes": {
+        "accounts": "Ability to read Accounts information",
+        "fundsconfirmations": "Ability to confirm funds",
+        "payments": "Generic payment scope"
+      },
+      "description": "TPP client credential authorisation flow with the ASPSP"
+    }
+  },
+  "definitions": {
+    "ISODateTime": {
+      "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+      "type": "string",
+      "format": "date-time"
+    },
+    "Links": {
+      "type": "object",
+      "description": "Links relevant to the payload",
+      "properties": {
+        "Self": {
+          "type": "string",
+          "format": "uri"
+        },
+        "First": {
+          "type": "string",
+          "format": "uri"
+        },
+        "Prev": {
+          "type": "string",
+          "format": "uri"
+        },
+        "Next": {
+          "type": "string",
+          "format": "uri"
+        },
+        "Last": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "Self"
+      ]
+    },
+    "Meta": {
+      "title": "MetaData",
+      "type": "object",
+      "description": "Meta Data relevant to the payload",
+      "properties": {
+        "TotalPages": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "FirstAvailableDateTime": {
+          "$ref": "#/definitions/ISODateTime"
+        },
+        "LastAvailableDateTime": {
+          "$ref": "#/definitions/ISODateTime"
+        }
+      },
+      "additionalProperties": false
+    },
+    "OBErrorResponse": {
+      "type": "object",
+      "properties": {
+        "ErrorCode": {
+          "description": "Low level textual error code, e.g., UK.OBIE.Field.Missing",
+          "type": "string"
+        },
+        "Message": {
+          "description": "A description of the error that occurred. e.g., 'A mandatory field isn't supplied' or 'RequestedExecutionDateTime must be in future'\nOBIE doesn't standardise this field",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "Path": {
+          "description": "Recommended but optional reference to the JSON Path of the field with error, e.g., Data.Initiation.InstructedAmount.Currency",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "Url": {
+          "description": "URL to help remediate the problem, or provide more information, or to API Reference, or help etc",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ErrorCode",
+        "Message"
+      ],
+      "additionalProperties": false,
+      "minProperties": 1
+    },
+    "OBErrorListResponse": {
+      "description": "An array of detail error codes, and messages, and URLs to documentation to help remediation.",
+      "type": "object",
+      "properties": {
+        "Code": {
+          "description": "High level textual error code, to help categorize the errors.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "Id": {
+          "description": "A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "Message": {
+          "description": "Brief Error message, e.g., 'There is something wrong with the request parameters provided'",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "Errors": {
+          "items": {
+            "$ref": "#/definitions/OBErrorResponse"
+          },
+          "type": "array",
+          "minItems": 1
+        }
+      },
+      "required": [
+        "Code",
+        "Message",
+        "Errors"
+      ],
+      "additionalProperties": false
+    },
+    "CreateEventSubscriptionRequest": {
+      "type": "object",
+      "required": [
+        "Data"
+      ],
+      "properties": {
+        "Data": {
+          "type": "object",
+          "required": [
+            "Version",
+            "CallbackUrl"
+          ],
+          "properties": {
+            "CallbackUrl": {
+              "description": "Callback URL for a TPP hosted service. Will be used by ASPSPs, in conjunction with the resource name, to construct a URL to send event notifications to.",
+              "type": "string",
+              "format": "uri"
+            },
+            "Version": {
+              "$ref": "#/definitions/Version"
+            },
+            "EventTypes": {
+              "type": "array",
+              "items": {
+                "description": "Array of event types the subscription applies to.",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "CreateEventSubscriptionResponse": {
+      "type": "object",
+      "required": [
+        "Data"
+      ],
+      "properties": {
+        "Data": {
+          "type": "object",
+          "required": [
+            "EventSubscriptionId",
+            "Version",
+            "CallbackUrl"
+          ],
+          "properties": {
+            "EventSubscriptionId": {
+              "description": "Unique identification as assigned by the ASPSP to uniquely identify the callback URL resource.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "CallbackUrl": {
+              "description": "Callback URL for a TPP hosted service. Will be used by ASPSPs, in conjunction with the resource name, to construct a URL to send event notifications to.",
+              "type": "string",
+              "format": "uri"
+            },
+            "Version": {
+              "$ref": "#/definitions/Version"
+            },
+            "EventTypes": {
+              "type": "array",
+              "items": {
+                "description": "Array of event types the subscription applies to.",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "Links": {
+          "$ref": "#/definitions/Links"
+        },
+        "Meta": {
+          "$ref": "#/definitions/Meta"
+        }
+      }
+    },
+    "UpdateEventSubscriptionRequest": {
+      "type": "object",
+      "required": [
+        "Data"
+      ],
+      "properties": {
+        "Data": {
+          "type": "object",
+          "required": [
+            "Version",
+            "CallbackUrl"
+          ],
+          "properties": {
+            "CallbackUrl": {
+              "description": "Callback URL for a TPP hosted service. Will be used by ASPSPs, in conjunction with the resource name, to construct a URL to send event notifications to.",
+              "type": "string",
+              "format": "uri"
+            },
+            "Version": {
+              "$ref": "#/definitions/Version"
+            },
+            "EventTypes": {
+              "type": "array",
+              "items": {
+                "description": "Array of event types the subscription applies to.",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "UpdateEventSubscriptionResponse": {
+      "type": "object",
+      "required": [
+        "Data"
+      ],
+      "properties": {
+        "Data": {
+          "type": "object",
+          "required": [
+            "EventSubscriptionId",
+            "Version"
+          ],
+          "properties": {
+            "EventSubscriptionId": {
+              "description": "Unique identification as assigned by the ASPSP to uniquely identify the callback URL resource.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "CallbackUrl": {
+              "description": "Callback URL for a TPP hosted service. Will be used by ASPSPs, in conjunction with the resource name, to construct a URL to send event notifications to.",
+              "type": "string",
+              "format": "uri"
+            },
+            "Version": {
+              "$ref": "#/definitions/Version"
+            },
+            "EventTypes": {
+              "type": "array",
+              "items": {
+                "description": "Array of event types the subscription applies to.",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "Links": {
+          "$ref": "#/definitions/Links"
+        },
+        "Meta": {
+          "$ref": "#/definitions/Meta"
+        }
+      }
+    },
+    "GetEventSubscriptionResponse": {
+      "type": "object",
+      "required": [
+        "Data"
+      ],
+      "properties": {
+        "Data": {
+          "type": "object",
+          "properties": {
+            "EventSubscription": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "EventSubscriptionId",
+                  "Version",
+                  "CallbackUrl"
+                ],
+                "properties": {
+                  "EventSubscriptionId": {
+                    "description": "Unique identification as assigned by the ASPSP to uniquely identify the callback url resource.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 40
+                  },
+                  "CallbackUrl": {
+                    "description": "Callback URL for a TPP hosted service. Will be used by ASPSPs, in conjunction with the resource name, to construct a URL to send event notifications to.",
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "Version": {
+                    "$ref": "#/definitions/Version"
+                  },
+                  "EventTypes": {
+                    "type": "array",
+                    "items": {
+                      "description": "Array of event types the subscription applies to.",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Links": {
+          "$ref": "#/definitions/Links"
+        },
+        "Meta": {
+          "$ref": "#/definitions/Meta"
+        }
+      }
+    },
+    "Version": {
+      "description": "Version for the event notification.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 10
+    }
+  }
+}
